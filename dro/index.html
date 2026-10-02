@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuaderno del DRO · Grupo Alaris</title>
+<meta name="description" content="Herramienta de trabajo para Directores Responsables de Obra: lista de control por fase, reporte de validación del proyecto ejecutivo, carta responsiva y fichas descargables. Versión beta, gratuita.">
+<meta name="author" content="Arq. Alfonso Leal Vargas — Grupo Alaris">
+<link rel="canonical" href="https://grupoalaris.mx/dro/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cuaderno del DRO · Grupo Alaris">
+<meta property="og:description" content="Lista de control por fase, reporte de validación del proyecto ejecutivo y carta responsiva. Aplicable en cualquier estado o municipio. Versión beta.">
+<meta property="og:url" content="https://grupoalaris.mx/dro/">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rojo:#EC3237; --oro:#D1AE6C; --negro:#201E1F;
+    --fondo:#262324; --panel:#2E2B2C; --panel2:#363233; --panel3:#403B3C;
+    --texto:#EDE9E4; --texto2:#B8B2AC; --texto3:#8C8580; --linea:#453F40;
+    --ok:#8FBF7F; --proceso:#D1AE6C; --pendiente:#EC3237; --na:#7A7472; --azul:#7FA8D1;
+    --serif:'Archivo','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:var(--serif); background:var(--fondo); color:var(--texto); font-size:15px; line-height:1.55;
+       -webkit-font-smoothing:antialiased;}
+  .marco{max-width:960px; margin:0 auto; padding:0 22px 140px;}
+  a{color:var(--oro);}
+  :focus-visible{outline:2px solid var(--oro); outline-offset:2px;}
+
+  /* ---------- cabecera ---------- */
+  header.top{padding:34px 0 18px; border-bottom:3px solid var(--oro);}
+  .marca{font-family:var(--serif); font-variation-settings:'wdth' 118; font-weight:700; font-size:13px;
+         letter-spacing:.09em; color:var(--texto2);}
+  .marca b{color:var(--rojo);}
+  h1{font-variation-settings:'wdth' 112; font-weight:700; font-size:clamp(26px,4.4vw,38px);
+     line-height:1.1; margin-top:12px; text-wrap:balance;}
+  header.top .sub{color:var(--texto2); margin-top:9px; max-width:64ch; font-size:15.5px;}
+  .credito{margin-top:14px; font-size:12.5px; color:var(--texto3); letter-spacing:.02em;}
+
+  /* ---------- datos del proyecto ---------- */
+  .datos{display:grid; grid-template-columns:repeat(4,1fr); gap:11px; margin:22px 0 6px;}
+  .datos label{display:block; font-size:11px; color:var(--texto3); margin-bottom:4px;
+               letter-spacing:.06em; text-transform:uppercase;}
+  .datos input{width:100%; background:var(--panel); border:1px solid var(--linea); color:var(--texto);
+    padding:9px 11px; border-radius:6px; font-family:inherit; font-size:14px;}
+  .datos input::placeholder{color:#6F6965;}
+
+  /* ---------- navegación ---------- */
+  nav.secciones{display:flex; gap:2px; border-bottom:1px solid var(--linea); margin:22px 0 26px; flex-wrap:wrap;}
+  nav.secciones button{background:none; border:0; border-bottom:3px solid transparent; color:var(--texto2);
+    padding:12px 15px; font-family:inherit; font-size:13.5px; font-weight:600; cursor:pointer;
+    font-variation-settings:'wdth' 108; letter-spacing:.01em;}
+  nav.secciones button:hover{color:var(--texto);}
+  nav.secciones button.activo{color:var(--oro); border-bottom-color:var(--oro);}
+
+  .vista{display:none;} .vista.activa{display:block;}
+
+  h2.bloque{font-variation-settings:'wdth' 110; font-weight:700; font-size:19px; margin:34px 0 10px;
+            padding-bottom:8px; border-bottom:1px solid var(--linea);}
+  h2.bloque:first-of-type{margin-top:0;}
+  p.intro{color:var(--texto2); max-width:70ch; margin-bottom:16px;}
+
+  /* ---------- landing ---------- */
+  .lede{font-size:17px; color:var(--texto); max-width:66ch; margin-bottom:20px;}
+  .lede b{color:var(--oro);}
+  .modulos{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; margin:18px 0 6px;}
+  .mod{background:var(--panel); border:1px solid var(--linea); border-radius:10px; padding:16px 17px;}
+  .mod .n{font-size:11px; letter-spacing:.1em; color:var(--oro); font-weight:700; text-transform:uppercase;}
+  .mod h3{font-size:15.5px; font-weight:700; margin:5px 0 6px; font-variation-settings:'wdth' 106;}
+  .mod p{font-size:13.5px; color:var(--texto2);}
+  .fases{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin:18px 0; border:1px solid var(--linea);
+         border-radius:10px; overflow:hidden;}
+  .fase{padding:18px 18px 20px; border-right:1px solid var(--linea); background:var(--panel);}
+  .fase:last-child{border-right:0;}
+  .fase .et{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--rojo); font-weight:700;}
+  .fase .pregunta{font-size:15px; margin:7px 0 9px; font-weight:600;}
+  .fase .prueba{font-size:13px; color:var(--texto2);}
+  ul.lista{margin:6px 0 14px 18px;}
+  ul.lista li{margin-bottom:6px; color:var(--texto2);}
+  ul.lista li b{color:var(--texto);}
+  ol.decalogo{counter-reset:d; list-style:none; margin:10px 0 0;}
+  ol.decalogo li{counter-increment:d; position:relative; padding-left:38px; margin-bottom:9px; color:var(--texto);}
+  ol.decalogo li::before{content:counter(d,decimal-leading-zero); position:absolute; left:0; top:1px;
+    font-size:12px; font-weight:700; color:var(--oro); letter-spacing:.04em;}
+  .aviso-legal{margin-top:26px; padding:15px 17px; border-left:4px solid var(--rojo); background:var(--panel);
+    border-radius:0 8px 8px 0; font-size:13.5px; color:var(--texto2);}
+  .aviso-legal b{color:var(--rojo); display:block; margin-bottom:4px; font-size:13px;
+    letter-spacing:.04em; text-transform:uppercase;}
+
+  /* ---------- checklist ---------- */
+  .resumen{display:grid; grid-template-columns:repeat(4,1fr); gap:11px; margin-bottom:22px;}
+  .kpi{background:var(--panel); border:1px solid var(--linea); border-radius:9px; padding:13px 15px;}
+  .kpi .v{font-size:24px; font-weight:700; font-variation-settings:'wdth' 106; font-variant-numeric:tabular-nums;}
+  .kpi .l{font-size:11.5px; color:var(--texto3); letter-spacing:.05em; text-transform:uppercase; margin-top:2px;}
+  .kpi.ok .v{color:var(--ok);} .kpi.proceso .v{color:var(--proceso);}
+  .kpi.pendiente .v{color:var(--pendiente);} .kpi.total .v{color:var(--texto);}
+
+  details.grupo{border:1px solid var(--linea); border-radius:10px; margin-bottom:12px; background:var(--panel); overflow:hidden;}
+  details.grupo summary{list-style:none; cursor:pointer; padding:14px 17px; display:flex; align-items:center; gap:11px;
+    font-weight:700; font-size:14.5px; user-select:none; font-variation-settings:'wdth' 106;}
+  details.grupo summary::-webkit-details-marker{display:none;}
+  details.grupo summary:hover{background:var(--panel2);}
+  .flecha{color:var(--oro); font-size:11px; transition:transform .15s;}
+  details[open] .flecha{transform:rotate(90deg);}
+  .conteo{margin-left:auto; font-size:12.5px; color:var(--texto3); font-weight:400; font-variant-numeric:tabular-nums;}
+  .item{border-top:1px solid var(--linea); padding:13px 17px; display:grid; gap:9px;}
+  .item .nombre{font-size:14px; line-height:1.45;}
+  .item .nombre .tag{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.07em;
+    padding:2px 6px; border-radius:4px; margin-right:7px; vertical-align:1px;}
+  .tag.bit{background:rgba(236,50,55,.16); color:#F0888B;}
+  .tag.pd{background:rgba(209,174,108,.16); color:var(--oro);}
+  .tag.fl{background:rgba(127,168,209,.16); color:var(--azul);}
+  .estados{display:flex; flex-wrap:wrap; gap:6px;}
+  .estados button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:5px 12px; border-radius:20px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+  .estados button:hover{border-color:var(--texto3);}
+  .estados button[data-v="hecho"].sel{background:var(--ok); color:var(--negro); border-color:var(--ok); font-weight:700;}
+  .estados button[data-v="proceso"].sel{background:var(--proceso); color:var(--negro); border-color:var(--proceso); font-weight:700;}
+  .estados button[data-v="pendiente"].sel{background:var(--pendiente); color:#fff; border-color:var(--pendiente); font-weight:700;}
+  .estados button[data-v="na"].sel{background:var(--na); color:var(--negro); border-color:var(--na); font-weight:700;}
+  .item input.evid{background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 10px; border-radius:6px; font-family:inherit; font-size:13px; width:100%;}
+  .item input.evid::placeholder{color:#6F6965;}
+
+  /* ---------- formularios genéricos ---------- */
+  .campos{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  .campos label{font-size:11px; color:var(--texto3); display:block; margin-bottom:4px;
+    letter-spacing:.05em; text-transform:uppercase;}
+  .campos select,.campos input,.campos textarea{width:100%; background:var(--fondo); border:1px solid var(--linea);
+    color:var(--texto); padding:8px 10px; border-radius:6px; font-family:inherit; font-size:13.5px;}
+  .campos .ancho{grid-column:1/-1;} .campos .medio{grid-column:span 2;}
+  .campos textarea{resize:vertical; min-height:64px; line-height:1.5;}
+  .caja{background:var(--panel); border:1px solid var(--linea); border-radius:10px; padding:17px; margin-bottom:20px;}
+  .caja h3{font-size:14px; font-weight:700; margin-bottom:4px; font-variation-settings:'wdth' 106;}
+  .guia{font-size:12.5px; color:var(--texto2); margin-bottom:13px; max-width:74ch;}
+  .guia b{color:var(--texto);}
+  .btn{background:var(--rojo); color:#fff; border:0; padding:10px 20px; border-radius:7px;
+    font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; margin-top:12px;}
+  .btn.sec{background:transparent; color:var(--oro); border:1px solid var(--oro);}
+
+  /* ---------- tabla de documentos ---------- */
+  .tabla-docs{width:100%; border-collapse:collapse; font-size:13px;}
+  .tabla-docs th{text-align:left; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--texto3); font-weight:700; padding:0 0 7px;}
+  .tabla-docs td{padding:0 6px 6px 0; vertical-align:top;}
+  .tabla-docs td:last-child{padding-right:0;}
+  .tabla-docs input{width:100%; background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 9px; border-radius:5px; font-family:inherit; font-size:13px;}
+  .quitar{background:none; border:1px solid var(--linea); color:var(--texto3); border-radius:5px;
+    cursor:pointer; padding:6px 9px; font-family:inherit; font-size:12px;}
+  .quitar:hover{border-color:var(--rojo); color:var(--rojo);}
+
+  /* ---------- observaciones ---------- */
+  .obs{background:var(--panel); border:1px solid var(--linea); border-left:5px solid var(--linea);
+    border-radius:9px; padding:14px 16px; margin-bottom:11px;}
+  .obs.sev-alta{border-left-color:var(--rojo);}
+  .obs.sev-media{border-left-color:var(--oro);}
+  .obs.sev-info{border-left-color:var(--azul);}
+  .obs .fila1{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:7px;}
+  .folio{font-weight:700; font-size:13px; color:var(--oro); font-variant-numeric:tabular-nums;
+    font-variation-settings:'wdth' 104;}
+  .chip{font-size:11.5px; padding:3px 9px; border-radius:12px; background:var(--panel2); color:var(--texto2);}
+  .chip.est-abierta{background:rgba(236,50,55,.18); color:#F0888B;}
+  .chip.est-respondida{background:rgba(209,174,108,.18); color:var(--oro);}
+  .chip.est-cerrada{background:rgba(143,191,127,.16); color:var(--ok);}
+  .obs .texto{font-size:14px; margin-bottom:7px;}
+  .obs .meta{font-size:12.5px; color:var(--texto3); margin-bottom:9px;}
+  .obs .acciones{display:flex; gap:6px; flex-wrap:wrap;}
+  .obs .acciones button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:5px 11px; border-radius:6px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+  .obs .acciones button.on{background:var(--oro); color:var(--negro); font-weight:700; border-color:var(--oro);}
+  .vacio{color:var(--texto3); font-size:13.5px; padding:24px; text-align:center;
+    border:1px dashed var(--linea); border-radius:9px;}
+
+  .dictamen{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
+  .dictamen button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:9px 15px; border-radius:7px; font-family:inherit; font-size:13px; cursor:pointer;}
+  .dictamen button[data-v="aceptado"].sel{background:var(--ok); color:var(--negro); font-weight:700; border-color:var(--ok);}
+  .dictamen button[data-v="observaciones"].sel{background:var(--oro); color:var(--negro); font-weight:700; border-color:var(--oro);}
+  .dictamen button[data-v="no"].sel{background:var(--rojo); color:#fff; font-weight:700; border-color:var(--rojo);}
+
+  /* ---------- carta ---------- */
+  .carta{background:#FBF9F6; color:#231F1E; border-radius:10px; padding:44px 48px; margin-top:20px;
+    font-size:14px; line-height:1.65;}
+  .carta h4{font-size:14px; font-weight:700; margin:22px 0 7px; font-variation-settings:'wdth' 104;}
+  .carta p{margin-bottom:11px;}
+  .carta .lugar{text-align:right; margin-bottom:22px;}
+  .carta .dest{font-weight:700; margin-bottom:2px;}
+  .carta .pres{font-weight:700; letter-spacing:.24em; margin-bottom:20px;}
+  .carta ol{margin:0 0 12px 20px;}
+  .carta ol li{margin-bottom:8px;}
+  .carta table{width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:12.5px;}
+  .carta table th{background:#231F1E; color:#fff; text-align:left; padding:7px 9px; font-size:11px;
+    letter-spacing:.05em; text-transform:uppercase;}
+  .carta table td{border:1px solid #CFC8C0; padding:7px 9px;}
+  .carta .firmas{display:grid; grid-template-columns:1fr 1fr; gap:56px; margin-top:64px;}
+  .carta .firmas div{border-top:1px solid #231F1E; padding-top:7px; font-size:12.5px;}
+  .carta .firmas b{display:block; font-size:13px;}
+  .carta .pie{margin-top:26px; font-size:11.5px; color:#6C6560;}
+  .vacia{color:#A79E96;}
+
+  /* ---------- barra ---------- */
+  .barra{position:fixed; bottom:0; left:0; right:0; background:var(--negro); border-top:2px solid var(--oro);
+    padding:12px 22px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; z-index:10;}
+  .barra .prog{flex:1; min-width:180px;}
+  .prog .num{font-weight:700; font-size:13.5px; font-variant-numeric:tabular-nums;}
+  .prog .pista{height:6px; background:#3A3536; border-radius:3px; margin-top:6px; overflow:hidden;}
+  .prog .lleno{height:100%; background:var(--oro); width:0%; transition:width .25s;}
+  .barra button{font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;
+    padding:10px 16px; border-radius:8px; border:1px solid var(--oro); background:transparent; color:var(--oro);}
+  .barra button.primario{background:var(--rojo); border-color:var(--rojo); color:#fff;}
+  .barra input[type=file]{display:none;}
+
+  .solo-print{display:none;}
+
+  @media(max-width:820px){
+    .datos,.campos{grid-template-columns:1fr 1fr;}
+    .resumen{grid-template-columns:1fr 1fr;}
+    .fases{grid-template-columns:1fr;}
+    .fase{border-right:0; border-bottom:1px solid var(--linea);}
+    .carta{padding:28px 24px;}
+    .carta .firmas{grid-template-columns:1fr; gap:40px;}
+  }
+
+  @media print{
+    body{background:#fff; color:#111; font-size:10.5pt;}
+    .marco{max-width:none; padding:0;}
+    nav.secciones,.barra,.estados button:not(.sel),.dictamen button:not(.sel),
+    .obs .acciones,.flecha,.btn,.quitar,.conteo,.aviso-legal{display:none !important;}
+    header.top{border-color:#111; padding-top:0;} .marca b{color:#B5262A;}
+    h1{font-size:19pt;} header.top .sub{color:#444;} .credito{color:#555;}
+    .datos{grid-template-columns:repeat(4,1fr);}
+    .datos label{color:#555;} .datos input{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0;}
+    h2.bloque{color:#111; border-color:#999; break-after:avoid;}
+    p.intro,.guia{color:#444;}
+    details.grupo{border:1px solid #999; background:#fff; break-inside:avoid;}
+    details.grupo[open] .item,details.grupo:not([open]) .item{display:grid !important;}
+    .item{border-color:#ccc;} .item .nombre{color:#111;}
+    .estados button.sel{background:#fff !important; color:#111 !important; border:1.5px solid #111;}
+    .item input.evid{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0;}
+    .resumen{break-inside:avoid;} .kpi{background:#fff; border:1px solid #999;} .kpi .l{color:#555;}
+    .kpi.ok .v,.kpi.proceso .v,.kpi.pendiente .v,.kpi.total .v{color:#111;}
+    .caja{background:#fff; border:1px solid #999; break-inside:avoid;}
+    .campos input,.campos select,.campos textarea{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0;}
+    .tabla-docs input{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0;}
+    .tabla-docs th{color:#333;}
+    .obs{background:#fff; border:1px solid #999; break-inside:avoid;} .obs .meta{color:#444;}
+    .folio{color:#B5262A;} .chip{border:1px solid #999; color:#111; background:#fff;}
+    .mod,.fase,.fases{background:#fff; border-color:#999;} .mod p,.fase .prueba,ul.lista li{color:#333;}
+    body.print-carta header.top,body.print-carta .datos,body.print-carta .caja{display:none !important;}
+    .guia b{color:#111;}
+    .carta{background:#fff; padding:0; font-size:10.5pt;}
+    .carta .firmas{margin-top:70px; grid-template-columns:1fr 1fr !important; gap:56px !important;}
+    .solo-print{display:block; margin-top:32px; break-inside:avoid;}
+    .firmas-print{display:grid; grid-template-columns:1fr 1fr; gap:56px; margin-top:56px;}
+    .firmas-print div{border-top:1px solid #111; padding-top:7px; text-align:center; font-size:9.5pt;}
+    a{color:#111; text-decoration:none;}
+  }
+
+  /* ---------- normativa ---------- */
+  .estado-carpeta{display:flex; align-items:center; gap:10px; padding:11px 15px; border-radius:8px;
+    font-size:13px; margin-bottom:20px; border:1px solid var(--linea); background:var(--panel);}
+  .estado-carpeta .punto{width:9px; height:9px; border-radius:50%; flex:none;}
+  .estado-carpeta.ok .punto{background:var(--ok);} .estado-carpeta.no .punto{background:var(--oro);}
+  .estado-carpeta code{font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12px; color:var(--oro);}
+  .munis{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px; margin-bottom:24px;}
+  .muni{display:flex; gap:11px; align-items:flex-start; background:var(--panel); border:1px solid var(--linea);
+    border-radius:9px; padding:13px 14px; cursor:pointer; text-align:left; font-family:inherit; color:var(--texto);}
+  .muni:hover{border-color:var(--texto3);}
+  .muni.on{border-color:var(--oro); background:var(--panel2);}
+  .muni .caja-check{width:17px; height:17px; border:1.5px solid var(--texto3); border-radius:4px; flex:none;
+    margin-top:2px; display:grid; place-items:center; font-size:11px; color:var(--negro);}
+  .muni.on .caja-check{background:var(--oro); border-color:var(--oro);}
+  .muni > span:last-child{display:block; min-width:0;}
+  .muni .n{display:block; font-weight:700; font-size:14.5px;}
+  .muni .e{display:block; font-size:12px; color:var(--texto3); margin-top:2px;}
+  .muni .marca-ficha{display:block; font-size:10.5px; margin-top:7px; font-weight:700; letter-spacing:.05em;}
+  .muni .marca-ficha.si{color:var(--ok);} .muni .marca-ficha.no{color:var(--pendiente);}
+  .doc{display:flex; gap:13px; align-items:flex-start; padding:12px 0; border-top:1px solid var(--linea);}
+  .doc:first-child{border-top:0;}
+  .doc .cuerpo{flex:1; min-width:0;}
+  .doc .t{font-size:14px; font-weight:600;}
+  .doc .m{font-size:12.5px; color:var(--texto3); margin-top:2px;}
+  .doc .nota{font-size:12.5px; color:var(--oro); margin-top:4px;}
+  .doc .abrir{flex:none; background:var(--panel2); border:1px solid var(--linea); color:var(--oro);
+    padding:6px 13px; border-radius:6px; font-size:12.5px; text-decoration:none; font-weight:600;}
+  .doc .abrir:hover{border-color:var(--oro);}
+  .doc .sinruta{flex:none; font-size:12px; color:var(--texto3);}
+  .badge-hist{font-size:10px; font-weight:700; letter-spacing:.06em; color:var(--na);
+    border:1px solid var(--na); border-radius:4px; padding:1px 5px; margin-left:7px;}
+  .ficha-campo{border-top:1px solid var(--linea); padding:11px 0;}
+  .ficha-campo:first-child{border-top:0;}
+  .ficha-campo label{display:block; font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--texto3); margin-bottom:5px;}
+  .ficha-campo textarea{width:100%; background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:8px 10px; border-radius:6px; font-family:inherit; font-size:13.5px; resize:vertical; min-height:42px; line-height:1.5;}
+  .avisa{padding:12px 15px; border-radius:8px; font-size:13.5px; margin-bottom:18px;
+    border:1px solid var(--pendiente); background:rgba(236,50,55,.12); color:#F0888B;}
+  .avisa b{color:#FFB3B5;}
+
+  /* ---------- fichas ---------- */
+  .fichas-lista{display:grid; gap:10px; margin-bottom:24px;}
+  .fichaf{display:flex; gap:14px; align-items:flex-start; background:var(--panel); border:1px solid var(--linea);
+    border-left:4px solid var(--linea); border-radius:9px; padding:14px 16px;}
+  .fichaf.aplica{border-left-color:var(--ok);}
+  .fichaf.demanda{border-left-color:var(--oro);}
+  .fichaf.noaplica{opacity:.55;}
+  .fichaf .cuerpo{flex:1; min-width:0;}
+  .fichaf .t{font-weight:700; font-size:14.5px;}
+  .fichaf .r{font-size:12.5px; color:var(--texto2); margin-top:3px;}
+  .fichaf .acc{display:flex; gap:7px; flex:none;}
+  .fichaf button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:7px 13px; border-radius:6px; font-family:inherit; font-size:12.5px; cursor:pointer; font-weight:600;}
+  .fichaf button.gen{background:var(--rojo); border-color:var(--rojo); color:#fff;}
+  .fichaf button:disabled{opacity:.4; cursor:not-allowed;}
+
+  @media print{
+    body.print-doc header.top,body.print-doc .datos,body.print-doc .caja,
+    body.print-doc .fichas-lista,body.print-doc .estado-carpeta,body.print-doc .munis,
+    body.print-doc h2.bloque,body.print-doc p.intro,body.print-doc .avisa{display:none !important;}
+    .doc .abrir{display:none !important;}
+    .doc{border-color:#ccc;} .doc .m,.doc .nota{color:#444;}
+    .ficha-campo{border-color:#ccc;} .ficha-campo label{color:#555;}
+    .ficha-campo textarea{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0;}
+    .muni{background:#fff; border:1px solid #999;} .muni .e{color:#444;}
+    .estado-carpeta{background:#fff; border:1px solid #999;}
+  }
+
+
+  /* ---------- beta ---------- */
+  .beta{display:flex; gap:14px; align-items:flex-start; background:rgba(209,174,108,.1);
+    border:1px solid var(--oro); border-radius:10px; padding:14px 17px; margin:22px 0 0;}
+  .beta .et{font-size:10.5px; letter-spacing:.11em; font-weight:700; color:var(--negro);
+    background:var(--oro); padding:3px 9px; border-radius:5px; flex:none; margin-top:2px;}
+  .beta .c{flex:1; min-width:0; font-size:14px; color:var(--texto2);}
+  .beta .c b{color:var(--texto);}
+  .beta a.cta{display:inline-block; margin-top:9px; background:var(--rojo); color:#fff; text-decoration:none;
+    padding:8px 16px; border-radius:7px; font-size:13px; font-weight:700;}
+  .beta a.cta:hover{filter:brightness(1.08);}
+
+  .descargas{display:flex; gap:9px; flex-wrap:wrap; margin-top:13px;}
+  .descargas a{display:inline-block; background:var(--panel2); border:1px solid var(--linea); color:var(--oro);
+    padding:9px 15px; border-radius:7px; font-size:13px; font-weight:700; text-decoration:none;}
+  .descargas a:hover{border-color:var(--oro);}
+  .descargas a.primaria{background:var(--rojo); border-color:var(--rojo); color:#fff;}
+
+  footer.pie{margin-top:46px; padding:26px 0 0; border-top:1px solid var(--linea); font-size:13.5px; color:var(--texto3);}
+  footer.pie a{color:var(--oro);}
+  footer.pie p{margin-bottom:9px;}
+  footer.pie .marca-pie{font-weight:700; color:var(--texto2); font-size:13px; letter-spacing:.05em;}
+
+  @media print{
+    .beta,.descargas,footer.pie{display:none !important;}
+  }
+
+  @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important;}}
+</style>
+</head>
+<body>
+<div class="marco">
+  <div class="beta">
+    <span class="et">BETA</span>
+    <div class="c">
+      <b>Esto es una versión en pruebas y es gratuita.</b> La estoy afinando con DRO en ejercicio: úsala en una obra real,
+      rómpela y dime qué le falta o qué está mal. Todo lo que captures se queda en tu navegador —
+      no se envía a ningún servidor, no hay cuenta ni registro.
+      <br><a class="cta" href="mailto:contacto@grupoalaris.mx?subject=Cuaderno%20del%20DRO%20beta%20%E2%80%94%20comentarios&amp;body=%C2%BFQu%C3%A9%20municipio%20y%20qu%C3%A9%20tipo%20de%20obra%20probaste%3F%0A%0A%C2%BFQu%C3%A9%20te%20sirvi%C3%B3%3F%0A%0A%C2%BFQu%C3%A9%20le%20falta%20o%20qu%C3%A9%20est%C3%A1%20mal%3F%0A%0A">Enviar comentarios</a>
+    </div>
+  </div>
+  <header class="top">
+    <div class="marca">GRUPO <b>ALARIS</b> · CONSTRUCCIÓN VIRTUAL</div>
+    <h1>Cuaderno del Director Responsable de Obra</h1>
+    <p class="sub">Herramientas operativas del <i>Manual del DRO</i>: la lista de control por fase, el reporte de validación del proyecto ejecutivo y la carta responsiva de constructibilidad. Aplicable en cualquier estado o municipio.</p>
+    <div class="credito">Arq. Alfonso Leal Vargas · Director Responsable de Obra en diversos municipios de Puebla · Grupo Alaris</div>
+  </header>
+
+  <div class="datos">
+    <div><label for="d-proy">Obra</label><input id="d-proy" data-campo="proyecto" placeholder="Nombre de la obra"></div>
+    <div><label for="d-ubi">Ubicación</label><input id="d-ubi" data-campo="ubicacion" placeholder="Municipio, estado"></div>
+    <div><label for="d-lic">Licencia / expediente</label><input id="d-lic" data-campo="licencia" placeholder="Número"></div>
+    <div><label for="d-fecha">Fecha</label><input id="d-fecha" data-campo="fecha" type="date"></div>
+  </div>
+
+  <nav class="secciones">
+    <button id="tab-manual" class="activo" onclick="ir('manual')">El manual</button>
+    <button id="tab-checklist" onclick="ir('checklist')">Lista de control del DRO</button>
+    <button id="tab-reporte" onclick="ir('reporte')">Reporte de validación</button>
+    <button id="tab-carta" onclick="ir('carta')">Carta responsiva</button>
+    <button id="tab-normativa" onclick="ir('normativa')">Normativa</button>
+    <button id="tab-fichas" onclick="ir('fichas')">Fichas</button>
+  </nav>
+
+  <!-- ================= MANUAL ================= -->
+  <section class="vista activa" id="v-manual">
+    <p class="lede">La responsabilidad del DRO es personal, se ejerce durante años y se juzga después, cuando algo salió mal. En ese momento no se evalúa lo que usted supo, sino <b>lo que puede probar</b>. Este manual convierte el ejercicio del cargo en un sistema de evidencia.</p>
+
+    <div class="fases">
+      <div class="fase">
+        <div class="et">Antes</div>
+        <div class="pregunta">¿Es construible y seguro lo que me piden firmar?</div>
+        <div class="prueba">Prueba: reporte de validación del proyecto ejecutivo y carta responsiva con relación de documentos.</div>
+      </div>
+      <div class="fase">
+        <div class="et">Durante</div>
+        <div class="pregunta">¿Se construye lo autorizado, y con seguridad?</div>
+        <div class="prueba">Prueba: bitácora, liberaciones de puntos de detención, ensayes y reportes de visita.</div>
+      </div>
+      <div class="fase">
+        <div class="et">Después</div>
+        <div class="pregunta">¿Puedo acreditar que lo construido es lo autorizado?</div>
+        <div class="prueba">Prueba: aviso de terminación con acuse, planos as-built y expediente cerrado.</div>
+      </div>
+    </div>
+
+    <h2 class="bloque">Los cinco módulos</h2>
+    <div class="modulos">
+      <div class="mod"><div class="n">Módulo 1</div><h3>El marco de actuación</h3><p>Qué es y qué no es el DRO, las figuras que lo rodean, la jerarquía normativa y la ficha del reglamento local.</p></div>
+      <div class="mod"><div class="n">Módulo 2</div><h3>Antes, durante y después</h3><p>El cuerpo del manual: la decisión de aceptar, la revisión del proyecto, la bitácora, los puntos de detención y el cierre.</p></div>
+      <div class="mod"><div class="n">Módulo 3</div><h3>Procesos administrativos</h3><p>Expediente único, checklists por trámite, cómo se atiende una inspección y cómo se comunica formalmente.</p></div>
+      <div class="mod"><div class="n">Módulo 4</div><h3>Criterios técnicos</h3><p>Focos rojos por disciplina, puntos de detención y el guion de recorrido de obra.</p></div>
+      <div class="mod"><div class="n">Módulo 5</div><h3>Ética y sanciones</h3><p>Conflicto de interés, la firma de favor, cómo se renuncia bien a una responsiva y cinco casos prácticos.</p></div>
+      <div class="mod"><div class="n">Anexos</div><h3>Formatos de trabajo</h3><p>Ficha de reglamento local, checklist de completitud, reporte de validación, carta responsiva, liberación de punto de detención y padrón de obras.</p></div>
+    </div>
+
+    <h2 class="bloque">Por qué funciona en cualquier municipio</h2>
+    <p class="intro">Los reglamentos de construcciones son locales y cambian mucho de un lugar a otro. Por eso el manual separa dos cosas:</p>
+    <ul class="lista">
+      <li><b>Lo que no cambia: el proceso.</b> Revisar antes de firmar, registrar lo que se instruye, verificar antes de cubrir y cerrar con evidencia. Es igual en Tijuana y en Tehuacán.</li>
+      <li><b>Lo que sí cambia: los datos.</b> Plazos, artículos, trámites y autoridades. Se capturan una sola vez por municipio en la <b>Ficha de reglamento local</b> y se archivan al frente del expediente.</li>
+    </ul>
+    <p class="intro">Donde el manual dice «según el reglamento local», usted debe tener el dato en su ficha. Si no lo tiene, todavía no está listo para firmar ahí.</p>
+
+    <h2 class="bloque">Las diez preguntas de la ficha local</h2>
+    <ul class="lista">
+      <li>Reglamento vigente y fecha de su última reforma.</li>
+      <li>Autoridad que expide la licencia y autoridad que inspecciona.</li>
+      <li>Corresponsables reconocidos y umbral a partir del cual son obligatorios.</li>
+      <li>Obras que requieren licencia, cuáles solo aviso y cuáles están exentas.</li>
+      <li>Vigencia de la licencia y forma de prorrogarla.</li>
+      <li>Bitácora: física o digital, quién la abre, cada cuándo se firma y dónde se resguarda.</li>
+      <li>Plazo para el aviso de terminación de obra y anexos exigibles.</li>
+      <li>Visto bueno de seguridad y operación: usos que lo requieren y periodicidad de renovación.</li>
+      <li>Duración de la responsabilidad del DRO después de terminada la obra.</li>
+      <li>Régimen de sanciones y autoridad que las impone.</li>
+    </ul>
+
+    <h2 class="bloque">Decálogo del DRO en ejercicio</h2>
+    <ol class="decalogo">
+      <li>No firmo lo que no revisé, ni superviso lo que no puedo visitar.</li>
+      <li>Cada responsiva se emite sobre documentos con clave, revisión y fecha.</li>
+      <li>Toda instrucción se asienta en bitácora el mismo día.</li>
+      <li>Nada estructural se cubre sin liberación registrada.</li>
+      <li>Todo cambio se evalúa antes de ejecutarse y se autoriza donde corresponde.</li>
+      <li>Todo resultado no conforme genera acción correctiva documentada.</li>
+      <li>El estado inicial de las colindancias se levanta antes de la primera máquina.</li>
+      <li>La obra no se da por terminada hasta que el aviso está presentado y acusado.</li>
+      <li>Mi honorario no depende del avance de la obra que debo poder detener.</li>
+      <li>Mi expediente debe poder explicarse sin mí.</li>
+    </ol>
+
+    <h2 class="bloque">Llévatelo</h2>
+    <p class="intro">El Cuaderno es un solo archivo: lo guardas en tu computadora y funciona sin internet. La carpeta de normas es la que te permite tener los reglamentos de cada municipio a la mano y que se carguen al activar la localidad.</p>
+    <div class="descargas">
+      <a class="primaria" href="index.html" download="Cuaderno_DRO_Alaris.html">Descargar el Cuaderno</a>
+      <a href="kit-normativa.zip" download>Descargar la carpeta de normas</a>
+    </div>
+
+    <div class="aviso-legal">
+      <b>Advertencia de uso</b>
+      Estas herramientas son una guía de buena práctica profesional, no una asesoría jurídica ni un dictamen. Las consecuencias legales de la responsiva se determinan por la legislación aplicable en cada caso. Ante un conflicto, un accidente o un requerimiento de la autoridad, consulte a un abogado y avise a su colegio y a su aseguradora antes de emitir cualquier declaración.
+    </div>
+  </section>
+
+  <!-- ================= CHECKLIST ================= -->
+  <section class="vista" id="v-checklist">
+    <div class="resumen">
+      <div class="kpi ok"><div class="v" id="k-hecho">0</div><div class="l">Hecho</div></div>
+      <div class="kpi proceso"><div class="v" id="k-proceso">0</div><div class="l">En proceso</div></div>
+      <div class="kpi pendiente"><div class="v" id="k-pendiente">0</div><div class="l">Pendiente</div></div>
+      <div class="kpi total"><div class="v" id="k-total">0</div><div class="l">Sin responder</div></div>
+    </div>
+    <p class="intro">Lista de control del ejercicio de la responsiva, por fase. En cada punto anote la evidencia que lo respalda: número de nota de bitácora, nombre de archivo, folio de acuse. Un punto marcado como hecho sin evidencia no sirve de nada en un peritaje.</p>
+    <div id="lista-check"></div>
+  </section>
+
+  <!-- ================= REPORTE ================= -->
+  <section class="vista" id="v-reporte">
+    <div class="caja">
+      <h3>Documentos revisados</h3>
+      <p class="guia">La relación de documentos es la parte más importante del reporte y de la responsiva: define <b>exactamente</b> sobre qué se emitió su firma. Registre clave, título, revisión y fecha de cada plano y memoria.</p>
+      <table class="tabla-docs">
+        <thead><tr><th style="width:15%">Clave</th><th>Documento</th><th style="width:11%">Rev.</th><th style="width:16%">Fecha</th><th style="width:8%"></th></tr></thead>
+        <tbody id="tb-docs"></tbody>
+      </table>
+      <button class="btn sec" onclick="addDoc()">Agregar documento</button>
+    </div>
+
+    <div class="caja">
+      <h3>Registrar observación</h3>
+      <p class="guia">Escriba la observación en función de <b>lo que la obra necesita</b>, no de lo que el proyecto omitió: «requerimos el nivel de desplante en el eje C-4 para cuantificar la excavación» en lugar de «falta el nivel». Primera persona plural, con ubicación, y cerrando siempre con la información concreta que se solicita.</p>
+      <div class="campos">
+        <div>
+          <label for="f-disc">Disciplina</label>
+          <select id="f-disc">
+            <option value="ARQ">ARQ · Arquitectura</option>
+            <option value="EST">EST · Estructura</option>
+            <option value="ELE">ELE · Eléctrica</option>
+            <option value="HID">HID · Hidráulica</option>
+            <option value="SAN">SAN · Sanitaria</option>
+            <option value="GAS">GAS · Gas</option>
+            <option value="VOZ">VOZ · Voz y datos</option>
+            <option value="ESP">ESP · Especiales</option>
+            <option value="NOR">NOR · Normatividad</option>
+          </select>
+        </div>
+        <div><label for="f-plano">Plano / lámina</label><input id="f-plano" placeholder="A-04"></div>
+        <div><label for="f-ubi">Ubicación (nivel y ejes)</label><input id="f-ubi" placeholder="N+3.20, ejes C-4"></div>
+        <div>
+          <label for="f-sev">Severidad</label>
+          <select id="f-sev">
+            <option value="alta">Detiene obra o seguridad</option>
+            <option value="media">Impacta costo o tiempo</option>
+            <option value="info">Precisión de información</option>
+          </select>
+        </div>
+        <div class="ancho">
+          <label for="f-txt">Observación</label>
+          <textarea id="f-txt" placeholder="Para cuantificar la excavación y verificar el desplante requerimos el nivel de desplante de la zapata en el eje C-4."></textarea>
+        </div>
+      </div>
+      <button class="btn" onclick="agregarObs()">Agregar observación</button>
+    </div>
+
+    <h2 class="bloque">Observaciones</h2>
+    <div id="lista-obs"></div>
+
+    <div class="caja" style="margin-top:22px">
+      <h3>Dictamen</h3>
+      <p class="guia">La revisión termina en un dictamen explícito, nunca en silencio.</p>
+      <div class="dictamen">
+        <button data-v="aceptado" onclick="setDictamen('aceptado')">Aceptado</button>
+        <button data-v="observaciones" onclick="setDictamen('observaciones')">Aceptado con observaciones</button>
+        <button data-v="no" onclick="setDictamen('no')">No aceptado</button>
+      </div>
+      <div class="campos" style="margin-top:13px">
+        <div class="ancho">
+          <label for="f-dict">Condiciones del dictamen</label>
+          <textarea id="f-dict" placeholder="Las observaciones de severidad alta deberán quedar cerradas antes del inicio de la partida correspondiente."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="solo-print">
+      <div class="firmas-print">
+        <div>Grupo Alaris · Revisó<br>Arq. Alfonso Leal Vargas — DRO<br>Nombre y firma</div>
+        <div>Recibe<br>Nombre y firma</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CARTA ================= -->
+  <section class="vista" id="v-carta">
+    <div class="caja">
+      <h3>Datos de la carta</h3>
+      <p class="guia">La carta se arma con los datos de la obra capturados arriba y con la relación de documentos del reporte de validación. Revise el texto, ajústelo a la terminología de su reglamento local y <b>fírmela en todas sus hojas</b>.</p>
+      <div class="campos">
+        <div class="medio"><label for="c-dro">Nombre del DRO</label><input id="c-dro" data-campo="dro" placeholder="Arq. Alfonso Leal Vargas"></div>
+        <div><label for="c-reg">Registro DRO</label><input id="c-reg" data-campo="registro" placeholder="DROM-940/18"></div>
+        <div><label for="c-vig">Vigencia del registro</label><input id="c-vig" data-campo="vigencia" placeholder="31/12/2026"></div>
+        <div class="medio"><label for="c-dom">Domicilio para notificaciones</label><input id="c-dom" data-campo="domicilio" placeholder="Calle, número, colonia, ciudad"></div>
+        <div class="medio"><label for="c-dest">Destinatario</label><input id="c-dest" data-campo="destinatario" placeholder="Dirección de Desarrollo Urbano / Nombre del propietario"></div>
+        <div class="medio"><label for="c-suelos">Estudio de mecánica de suelos</label><input id="c-suelos" data-campo="suelos" placeholder="Clave, laboratorio y fecha"></div>
+        <div class="medio"><label for="c-memoria">Memoria de cálculo estructural</label><input id="c-memoria" data-campo="memoria" placeholder="Clave, autor y fecha"></div>
+        <div class="medio"><label for="c-ciudad">Ciudad de emisión</label><input id="c-ciudad" data-campo="ciudad" placeholder="Puebla, Puebla"></div>
+        <div class="medio"><label for="c-recibe">Recibe / propietario</label><input id="c-recibe" data-campo="recibe" placeholder="Nombre y cargo"></div>
+      </div>
+      <button class="btn" onclick="pintarCarta()">Actualizar carta</button>
+    </div>
+    <div class="carta" id="carta"></div>
+  </section>
+
+  <!-- ================= NORMATIVA ================= -->
+  <section class="vista" id="v-normativa">
+    <div class="estado-carpeta" id="estado-carpeta"></div>
+    <p class="intro">Activa el municipio de la obra. Se cargan las normas que aplican en tres ámbitos —federal, estatal y municipal— y la ficha del reglamento local, que es la que amarra los plazos y los trámites del resto del cuaderno.</p>
+    <div class="munis" id="munis"></div>
+    <div id="normas-salida"></div>
+  </section>
+
+  <!-- ================= FICHAS ================= -->
+  <section class="vista" id="v-fichas">
+    <p class="intro">El cuaderno revisa cómo vas y marca qué formatos te tocan ahora. Cada uno se genera con los datos de la obra ya puestos: lo imprimes para firma o lo descargas como archivo.</p>
+    <div class="fichas-lista" id="fichas-lista"></div>
+    <div class="carta" id="ficha-salida" style="display:none"></div>
+  </section>
+  <footer class="pie">
+    <p class="marca-pie">GRUPO ALARIS · CONSTRUCCIÓN VIRTUAL</p>
+    <p>Cuaderno del DRO, versión beta. Hecho por el Arq. Alfonso Leal Vargas, Director Responsable de Obra en ejercicio, como material de apoyo del <i>Manual del Director Responsable de Obra</i>.</p>
+    <p>Es una guía de buena práctica profesional, no asesoría jurídica ni un dictamen. Los formatos son modelos: antes de usarlos en un trámite, verifícalos contra el reglamento de tu municipio y hazlos revisar por un abogado.</p>
+    <p>Comentarios y erratas: <a href="mailto:contacto@grupoalaris.mx?subject=Cuaderno%20del%20DRO%20beta%20%E2%80%94%20comentarios">contacto@grupoalaris.mx</a> · <a href="https://grupoalaris.mx/">grupoalaris.mx</a></p>
+  </footer>
+</div>
+
+<div class="barra">
+  <div class="prog">
+    <span class="num" id="prog-num">0 de 0 puntos respondidos</span>
+    <div class="pista"><div class="lleno" id="prog-lleno"></div></div>
+  </div>
+  <button onclick="exportarJSON()">Descargar avance</button>
+  <button onclick="document.getElementById('carga').click()">Cargar</button>
+  <input type="file" id="carga" accept=".json" onchange="importarJSON(event)">
+  <button class="primario" onclick="window.print()">Imprimir esta sección</button>
+</div>
+
+<script>if(location.protocol==='file:')document.write('<scr'+'ipt src="_SISTEMA/indice.js"><\/scr'+'ipt>');</script>
+<script>
+/* ================= Catálogo de la lista de control ================= */
+const FASES = [
+  { fase:'ANTES DE LA OBRA', grupos:[
+    { t:'A1 · La decisión de aceptar la responsiva', items:[
+      {x:'Puedo visitar esta obra con la frecuencia que exige su complejidad y el reglamento local'},
+      {x:'Existe proyecto ejecutivo completo, no un anteproyecto'},
+      {x:'El propietario acepta por escrito que puedo detener trabajos'},
+      {x:'Hay corresponsables contratados donde el reglamento o la magnitud los exigen', tag:'FL'},
+      {x:'Si la obra ya inició: acta de recepción con levantamiento fotográfico y reservas expresas'},
+      {x:'Contrato de DRO firmado, con honorario independiente del avance de obra'}
+    ]},
+    { t:'A2 · Ficha de reglamento local', items:[
+      {x:'Ficha del municipio llenada, sin campos en blanco', tag:'FL'},
+      {x:'PDF fechado del reglamento aplicado, archivado en la carpeta 00', tag:'FL'},
+      {x:'Coeficientes, alturas, restricciones y dotación de cajones capturados', tag:'FL'}
+    ]},
+    { t:'A3 · Predio y normatividad urbana', items:[
+      {x:'Escritura y certificado de libertad de gravamen'},
+      {x:'Constancia de uso de suelo vigente y compatible con el giro real'},
+      {x:'Alineamiento y número oficial, sin afectación no considerada'},
+      {x:'COS, CUS, altura máxima y restricciones verificados contra el proyecto'},
+      {x:'Cajones de estacionamiento: número, dimensión, maniobra y cajones accesibles'},
+      {x:'Factibilidades de agua, drenaje y energía, con sus condicionantes identificadas'},
+      {x:'Riesgo y protección civil revisados (atlas de riesgo, dictamen cuando aplique)'},
+      {x:'Levantamiento topográfico con poligonal, curvas de nivel y colindancias'},
+      {x:'Estudio de mecánica de suelos con recomendación de cimentación'}
+    ]},
+    { t:'A4 · Revisión del proyecto ejecutivo', items:[
+      {x:'Filtro 1 · Completitud: checklist aplicado y requerimientos de información emitidos'},
+      {x:'Filtro 2 · Congruencia entre disciplinas y contra el proyecto autorizado'},
+      {x:'Filtro 3 · Cumplimiento de reglamento, normas técnicas y NOM aplicables'},
+      {x:'Filtro 4 · Constructibilidad verificada con los medios y la secuencia reales'},
+      {x:'Observaciones emitidas con folio, ubicación y severidad'},
+      {x:'Reporte de validación entregado al cliente, con acuse'},
+      {x:'Dictamen emitido: aceptado, aceptado con observaciones o no aceptado'}
+    ]},
+    { t:'A5 · Emisión de la responsiva', items:[
+      {x:'Relación de documentos con clave, revisión y fecha, anexa a la carta'},
+      {x:'Carta responsiva firmada en todas sus hojas'},
+      {x:'Régimen de visitas y puntos de detención acordado por escrito con la contratista'},
+      {x:'Póliza de responsabilidad civil profesional vigente'},
+      {x:'Obra dada de alta en mi padrón personal'}
+    ]}
+  ]},
+  { fase:'DURANTE LA OBRA', grupos:[
+    { t:'D1 · Bitácora', items:[
+      {x:'Nota de apertura con licencia, proyecto autorizado, corresponsables y facultados', tag:'BIT'},
+      {x:'Notas consecutivas, fechadas y firmadas, sin renglones en blanco ni hojas sustituidas', tag:'BIT'},
+      {x:'Toda instrucción asentada el mismo día, con plazo y destinatario explícitos', tag:'BIT'},
+      {x:'Instrucciones no atendidas reiteradas por escrito, con consecuencia técnica descrita', tag:'BIT'},
+      {x:'Digitalización de la bitácora actualizada al menos cada mes'}
+    ]},
+    { t:'D2 · Puntos de detención', items:[
+      {x:'Trazo y niveles verificados y liberados', tag:'PD'},
+      {x:'Fondo de excavación verificado antes de plantilla', tag:'PD'},
+      {x:'Armado de cimentación liberado antes del colado', tag:'PD'},
+      {x:'Armados estructurales liberados antes de cada colado', tag:'PD'},
+      {x:'Colados con ficha, revenimiento, muestreo y remisión archivada', tag:'PD'},
+      {x:'Rellenos con prueba de compactación por capa', tag:'PD'},
+      {x:'Pruebas de estanqueidad de albañales e impermeabilización antes de cubrir', tag:'PD'},
+      {x:'Instalaciones liberadas antes de cerrar muros y losas', tag:'PD'},
+      {x:'Protocolos de prueba de instalaciones firmados (presión, hermeticidad, tierras)', tag:'PD'},
+      {x:'Estructura metálica: soldaduras, torque y montaje verificados', tag:'PD'}
+    ]},
+    { t:'D3 · Calidad de materiales', items:[
+      {x:'Plan de ensayes definido y asentado en bitácora'},
+      {x:'Ensayes de concreto a 7, 14 y 28 días recibidos y evaluados'},
+      {x:'Certificados de calidad del acero por colada'},
+      {x:'Fichas técnicas y certificaciones NOM de materiales de instalaciones'},
+      {x:'No conformidades registradas, con material aislado y acción correctiva cerrada', tag:'BIT'}
+    ]},
+    { t:'D4 · Gestión de cambios', items:[
+      {x:'Solicitud de cambio por escrito, con causa'},
+      {x:'Evaluación de impacto en seguridad, normatividad, costo y plazo'},
+      {x:'Autorización de propietario y DRO, y de corresponsable cuando toca su materia'},
+      {x:'Modificación de licencia gestionada cuando el cambio altera lo autorizado', tag:'FL'},
+      {x:'Plano revisado con nueva clave y fecha, y nota de bitácora que lo asienta', tag:'BIT'},
+      {x:'Relación de documentos de la responsiva actualizada'}
+    ]},
+    { t:'D5 · Seguridad, higiene y terceros', items:[
+      {x:'Estado inicial de colindancias levantado antes de la primera máquina'},
+      {x:'Delimitación del predio, señalización y protección de la vía pública'},
+      {x:'Protecciones perimetrales en niveles, huecos y bordes'},
+      {x:'Estabilidad de excavaciones y taludes, con ademe cuando corresponde'},
+      {x:'Instalación eléctrica provisional protegida y equipo de izaje con certificación vigente'},
+      {x:'Equipo de protección personal en uso efectivo'},
+      {x:'Extintores, botiquín, ruta de evacuación y responsable de primeros auxilios'},
+      {x:'Incidentes y accidentes asentados el mismo día', tag:'BIT'}
+    ]},
+    { t:'D6 · Régimen de visitas', items:[
+      {x:'Frecuencia de visita acordada y cumplida', tag:'FL'},
+      {x:'Reporte de visita con fotografías fechadas, aun cuando no haya novedad'},
+      {x:'Visitas de la autoridad asentadas en bitácora y actas archivadas', tag:'BIT'}
+    ]}
+  ]},
+  { fase:'DESPUÉS DE LA OBRA', grupos:[
+    { t:'P1 · Cierre técnico', items:[
+      {x:'Recorrido final con lista de pendientes, responsable y fecha'},
+      {x:'Pruebas finales de instalaciones y protocolos entregados'},
+      {x:'Planos as-built integrados: trazos reales, instalaciones ocultas y profundidades'},
+      {x:'Memorias técnicas, fichas, garantías y manuales de operación entregados'}
+    ]},
+    { t:'P2 · Cierre administrativo', items:[
+      {x:'Nota de terminación en bitácora y cierre formal del libro', tag:'BIT'},
+      {x:'Aviso de terminación de obra presentado dentro del plazo, con acuse', tag:'FL'},
+      {x:'Visto bueno de seguridad y operación gestionado cuando el uso lo requiere', tag:'FL'},
+      {x:'Acta de entrega del expediente al propietario, con acuse'}
+    ]},
+    { t:'P3 · Resguardo y responsabilidad viva', items:[
+      {x:'Expediente digitalizado íntegro, con nombres de archivo consistentes'},
+      {x:'Padrón personal de obras actualizado, con la obra marcada como terminada'},
+      {x:'Fecha de fin de responsabilidad calculada y registrada', tag:'FL'},
+      {x:'Propietario informado de las renovaciones periódicas a su cargo'},
+      {x:'Póliza de responsabilidad civil vigente para el periodo de cola'}
+    ]}
+  ]}
+];
+
+const ESTADOS = [
+  {v:'hecho', t:'Hecho'}, {v:'proceso', t:'En proceso'},
+  {v:'pendiente', t:'Pendiente'}, {v:'na', t:'No aplica'}
+];
+const TAGS = { BIT:['bit','BITÁCORA'], PD:['pd','PUNTO DE DETENCIÓN'], FL:['fl','FICHA LOCAL'] };
+const SEV_TXT = { alta:'Detiene obra o seguridad', media:'Impacta costo o tiempo', info:'Precisión de información' };
+const EST_TXT = { abierta:'Abierta', respondida:'Respondida', cerrada:'Cerrada' };
+const DICT_TXT = {
+  aceptado:'ACEPTADO',
+  observaciones:'ACEPTADO CON OBSERVACIONES',
+  no:'NO ACEPTADO'
+};
+
+/* ================= Estado ================= */
+const R = {};                 // respuestas de la lista de control
+let OBS = [];                 // observaciones
+let DOCS = [];                // documentos revisados
+const CONT = {};              // consecutivo por disciplina
+let DICTAMEN = '';
+let vista = 'manual';
+
+const esc = s => String(s == null ? '' : s).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+/* ================= Lista de control ================= */
+function itemHTML(id, it){
+  const tag = it.tag ? `<span class="tag ${TAGS[it.tag][0]}">${TAGS[it.tag][1]}</span>` : '';
+  return `<div class="item" data-id="${id}">
+    <div class="nombre">${tag}${esc(it.x)}</div>
+    <div class="estados" role="group" aria-label="Estado">
+      ${ESTADOS.map(e => `<button type="button" data-v="${e.v}" onclick="setEstado('${id}','${e.v}')">${e.t}</button>`).join('')}
+    </div>
+    <input class="evid" placeholder="Evidencia: nota de bitácora, archivo, folio de acuse…"
+           oninput="setEvidencia('${id}',this.value)" aria-label="Evidencia">
+  </div>`;
+}
+
+function renderCheck(){
+  let html = '';
+  FASES.forEach((f, fi) => {
+    html += `<h2 class="bloque">${f.fase}</h2>`;
+    f.grupos.forEach((g, gi) => {
+      html += `<details class="grupo" ${fi === 0 && gi === 0 ? 'open' : ''}>
+        <summary><span class="flecha">▶</span>${esc(g.t)}<span class="conteo" id="c-${fi}-${gi}"></span></summary>
+        ${g.items.map((it, ii) => itemHTML(`f${fi}g${gi}i${ii}`, it)).join('')}
+      </details>`;
+    });
+  });
+  document.getElementById('lista-check').innerHTML = html;
+  document.querySelectorAll('#lista-check .item').forEach(el => pintarItem(el.dataset.id));
+  refrescar();
+}
+
+function setEstado(id, v){ R[id] = R[id] || {}; R[id].estado = v; pintarItem(id); refrescar(); }
+function setEvidencia(id, v){ R[id] = R[id] || {}; R[id].evid = v; }
+
+function pintarItem(id){
+  const el = document.querySelector(`.item[data-id="${id}"]`); if(!el) return;
+  el.querySelectorAll('.estados button').forEach(b =>
+    b.classList.toggle('sel', !!R[id] && R[id].estado === b.dataset.v));
+  const inp = el.querySelector('input.evid');
+  if(inp && R[id]) inp.value = R[id].evid || '';
+}
+
+function totalItems(){
+  return FASES.reduce((a, f) => a + f.grupos.reduce((b, g) => b + g.items.length, 0), 0);
+}
+
+function refrescar(){
+  const total = totalItems();
+  const vals = Object.values(R).map(r => r.estado).filter(Boolean);
+  const cuenta = v => vals.filter(x => x === v).length;
+  document.getElementById('k-hecho').textContent = cuenta('hecho');
+  document.getElementById('k-proceso').textContent = cuenta('proceso');
+  document.getElementById('k-pendiente').textContent = cuenta('pendiente');
+  document.getElementById('k-total').textContent = total - vals.length;
+  FASES.forEach((f, fi) => f.grupos.forEach((g, gi) => {
+    const n = g.items.filter((_, ii) => R[`f${fi}g${gi}i${ii}`] && R[`f${fi}g${gi}i${ii}`].estado).length;
+    const el = document.getElementById(`c-${fi}-${gi}`);
+    if(el) el.textContent = `${n}/${g.items.length}`;
+  }));
+  document.getElementById('prog-num').textContent = `${vals.length} de ${total} puntos respondidos`;
+  document.getElementById('prog-lleno').style.width = (vals.length / total * 100) + '%';
+}
+
+/* ================= Documentos revisados ================= */
+function addDoc(d){
+  DOCS.push(d && d.clave !== undefined ? d : {clave:'', doc:'', rev:'', fecha:''});
+  renderDocs();
+}
+function delDoc(i){ DOCS.splice(i, 1); renderDocs(); pintarCarta(); }
+function setDoc(i, c, v){ DOCS[i][c] = v; }
+function renderDocs(){
+  document.getElementById('tb-docs').innerHTML = DOCS.map((d, i) => `<tr>
+    <td><input value="${esc(d.clave)}" placeholder="EST-01" oninput="setDoc(${i},'clave',this.value)" aria-label="Clave"></td>
+    <td><input value="${esc(d.doc)}" placeholder="Planta de cimentación" oninput="setDoc(${i},'doc',this.value)" aria-label="Documento"></td>
+    <td><input value="${esc(d.rev)}" placeholder="C" oninput="setDoc(${i},'rev',this.value)" aria-label="Revisión"></td>
+    <td><input value="${esc(d.fecha)}" placeholder="20/03/2026" oninput="setDoc(${i},'fecha',this.value)" aria-label="Fecha"></td>
+    <td><button class="quitar" onclick="delDoc(${i})" aria-label="Quitar documento">Quitar</button></td>
+  </tr>`).join('');
+}
+
+/* ================= Observaciones ================= */
+function agregarObs(){
+  const disc = document.getElementById('f-disc').value;
+  const txt = document.getElementById('f-txt').value.trim();
+  if(!txt){ document.getElementById('f-txt').focus(); return; }
+  CONT[disc] = (CONT[disc] || 0) + 1;
+  OBS.push({
+    folio:`OBS-${disc}-${String(CONT[disc]).padStart(3,'0')}`, disc,
+    plano:document.getElementById('f-plano').value.trim(),
+    ubi:document.getElementById('f-ubi').value.trim(),
+    sev:document.getElementById('f-sev').value, txt, estado:'abierta'
+  });
+  document.getElementById('f-txt').value = '';
+  document.getElementById('f-plano').value = '';
+  document.getElementById('f-ubi').value = '';
+  renderObs();
+}
+function setObsEstado(i, e){ OBS[i].estado = e; renderObs(); }
+function renderObs(){
+  const cont = document.getElementById('lista-obs');
+  if(!OBS.length){
+    cont.innerHTML = '<div class="vacio">Todavía no hay observaciones registradas para esta obra.</div>';
+    return;
+  }
+  cont.innerHTML = OBS.map((o, i) => `<div class="obs sev-${o.sev}">
+    <div class="fila1">
+      <span class="folio">${esc(o.folio)}</span>
+      <span class="chip est-${o.estado}">${EST_TXT[o.estado]}</span>
+      <span class="chip">${SEV_TXT[o.sev]}</span>
+    </div>
+    <div class="texto">${esc(o.txt)}</div>
+    <div class="meta">${[o.plano ? 'Plano ' + esc(o.plano) : '', esc(o.ubi)].filter(Boolean).join(' · ') || 'Sin ubicación indicada'}</div>
+    <div class="acciones">
+      ${['abierta','respondida','cerrada'].map(e =>
+        `<button type="button" class="${o.estado === e ? 'on' : ''}" onclick="setObsEstado(${i},'${e}')">${EST_TXT[e]}</button>`).join('')}
+    </div>
+  </div>`).join('');
+}
+
+function setDictamen(v){
+  DICTAMEN = v;
+  document.querySelectorAll('.dictamen button').forEach(b => b.classList.toggle('sel', b.dataset.v === v));
+  pintarCarta();
+}
+
+/* ================= Carta responsiva ================= */
+function g(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function campo(v, ph){ return v ? esc(v) : `<span class="vacia">[${ph}]</span>`; }
+
+function pintarCarta(){
+  const hoy = g('d-fecha') || new Date().toISOString().slice(0,10);
+  const [a, m, d] = hoy.split('-');
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const fechaTxt = (a && m && d) ? `${Number(d)} de ${meses[Number(m)-1]} de ${a}` : '__ de __________ de 20__';
+
+  const llenos = DOCS.filter(x => (x.clave || x.doc || x.rev || x.fecha));
+  const filas = llenos.length
+    ? llenos.map(x => `<tr><td>${campo(x.clave,'clave')}</td><td>${campo(x.doc,'documento')}</td><td>${campo(x.rev,'rev')}</td><td>${campo(x.fecha,'fecha')}</td></tr>`).join('')
+    : `<tr><td colspan="4" class="vacia">Capture los documentos revisados en la pestaña «Reporte de validación».</td></tr>`;
+
+  const altas = OBS.filter(o => o.sev === 'alta' && o.estado !== 'cerrada');
+  const condicion = DICTAMEN === 'observaciones' || altas.length
+    ? `<li>Las observaciones de severidad alta señaladas en el reporte de validación de esta obra${altas.length ? ` (${altas.map(o => esc(o.folio)).join(', ')})` : ''} deberán quedar cerradas antes del inicio de la partida correspondiente.</li>`
+    : '';
+
+  document.getElementById('carta').innerHTML = `
+    <p class="lugar">${campo(g('c-ciudad'),'ciudad')}, a ${fechaTxt}.</p>
+    <p class="dest">${campo(g('c-dest'),'autoridad competente o nombre del propietario')}</p>
+    <p class="pres">PRESENTE</p>
+    <p>El que suscribe, <b>${campo(g('c-dro'),'nombre completo')}</b>, Director Responsable de Obra con registro
+      <b>${campo(g('c-reg'),'número de registro')}</b> vigente al ${campo(g('c-vig'),'fecha')}, con domicilio para oír y recibir
+      notificaciones en ${campo(g('c-dom'),'domicilio')}, en relación con la obra denominada
+      <b>${campo(g('d-proy'),'nombre de la obra')}</b>, ubicada en ${campo(g('d-ubi'),'ubicación')}, con número de licencia o
+      expediente ${campo(g('d-lic'),'número')}, comparezco para manifestar lo siguiente:</p>
+
+    <h4>I. Documentos sobre los que se emite esta responsiva</h4>
+    <p>Esta responsiva se emite exclusivamente sobre los documentos relacionados a continuación, identificados por clave,
+      título, número de revisión y fecha, que forman parte integrante de la presente. Cualquier modificación posterior a
+      dichos documentos requerirá evaluación y, en su caso, la emisión de responsiva complementaria.</p>
+    <table><thead><tr><th>Clave</th><th>Documento</th><th>Rev.</th><th>Fecha</th></tr></thead><tbody>${filas}</tbody></table>
+
+    <h4>II. Declaraciones</h4>
+    <ol>
+      <li>Que he revisado el proyecto ejecutivo relacionado en el apartado anterior y que, conforme a mi criterio
+        profesional, es congruente entre sus disciplinas, cumple con la normatividad aplicable en la localidad y es
+        constructible con los procedimientos y medios previstos.</li>
+      <li>Que el proyecto estructural se sustenta en el estudio de mecánica de suelos ${campo(g('c-suelos'),'clave, laboratorio y fecha')},
+        que la memoria de cálculo estructural ${campo(g('c-memoria'),'clave, autor y fecha')} es congruente con dicho estudio, y que
+        la solución de cimentación y estructura es adecuada para las condiciones del sitio y para el uso previsto.</li>
+      <li>Que asumo la responsabilidad que la normatividad aplicable atribuye al Director Responsable de Obra respecto de
+        la ejecución de la obra descrita, y que la supervisaré conforme al régimen de visitas y puntos de detención acordado.</li>
+      <li>Que la obra, ejecutada conforme al proyecto relacionado y a las instrucciones que se asienten en la bitácora,
+        reúne las condiciones de seguridad estructural exigibles para su uso.</li>
+    </ol>
+
+    <h4>III. Exclusiones y condiciones</h4>
+    <ol>
+      <li>Esta responsiva no cubre trabajos ejecutados con anterioridad a su fecha de emisión que no me hayan sido
+        presentados para verificación, ni elementos ocultos cuya ejecución no presencié y que no fueron objeto de
+        verificación instrumentada.</li>
+      <li>No cubre modificaciones al proyecto ejecutadas sin la autorización previa prevista en el procedimiento de
+        gestión de cambios ni, en su caso, sin la modificación de licencia correspondiente.</li>
+      <li>No cubre defectos derivados de materiales o procedimientos no conformes que hayan sido rechazados por escrito
+        y ejecutados en contra de instrucción asentada en bitácora.</li>
+      <li>No cubre el mantenimiento del inmueble ni las consecuencias de cambios de uso, sobrecargas o intervenciones
+        posteriores a la terminación de la obra.</li>
+      ${condicion}
+    </ol>
+
+    ${DICTAMEN ? `<p><b>Dictamen de la revisión del proyecto ejecutivo: ${DICT_TXT[DICTAMEN]}.</b></p>` : ''}
+
+    <p>Manifiesto que lo declarado es verdad y estoy enterado de las consecuencias que la normatividad aplicable prevé
+      para las declaraciones falsas ante autoridad.</p>
+
+    <div class="firmas">
+      <div><b>${campo(g('c-dro'),'nombre del DRO')}</b>Director Responsable de Obra · Registro ${campo(g('c-reg'),'registro')}<br>Nombre y firma</div>
+      <div><b>${campo(g('c-recibe'),'nombre y cargo')}</b>Recibe / Propietario<br>Nombre y firma</div>
+    </div>
+    <p class="pie">Anexo: relación de documentos revisados. Fírmese en todas sus hojas.</p>`;
+}
+
+/* ================= Navegación ================= */
+function ir(v){
+  vista = v;
+  ['manual','checklist','reporte','carta','normativa','fichas'].forEach(k => {
+    document.getElementById('v-' + k).classList.toggle('activa', k === v);
+    document.getElementById('tab-' + k).classList.toggle('activo', k === v);
+  });
+  document.body.classList.toggle('print-carta', v === 'carta');
+  document.body.classList.toggle('print-doc', v === 'carta' || v === 'fichas' || v === 'normativa');
+  if(v === 'normativa') renderNormativa();
+  if(v === 'fichas') renderFichas();
+  if(v === 'carta') pintarCarta();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ================= Exportar / importar ================= */
+function generales(){
+  const o = {};
+  document.querySelectorAll('[data-campo]').forEach(i => o[i.dataset.campo] = i.value);
+  return o;
+}
+function exportarJSON(){
+  const p = { formato:'ALARIS-DRO-CUADERNO', version:1, generales:generales(),
+    control:R, documentos:DOCS, observaciones:OBS, contadores:CONT,
+    dictamen:DICTAMEN, condiciones:g('f-dict'), municipio:MUNI, fichas:FICHA_EDIT,
+    exportado:new Date().toISOString() };
+  const nombre = `dro_${(p.generales.proyecto || 'obra').replace(/\s+/g,'_')}.json`;
+  const datos = JSON.stringify(p, null, 2);
+  guardarArchivo(nombre, datos);
+}
+
+/* Guarda el archivo por el canal disponible: en la página publicada usa el
+   guardado del visor; en el archivo local, una descarga normal del navegador. */
+async function guardarArchivo(filename, data){
+  try{
+    if(window.claude && typeof window.claude.use === 'function'){
+      const dl = await window.claude.use('downloads');
+      if(dl){ await dl.save({filename, data}); return; }
+    }
+  }catch(e){ /* el visor rechazó o canceló: se intenta la descarga normal */ }
+  const b = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = filename;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importarJSON(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const lec = new FileReader();
+  lec.onload = () => {
+    try{
+      const d = JSON.parse(lec.result);
+      if(d.formato !== 'ALARIS-DRO-CUADERNO') throw 0;
+      Object.keys(R).forEach(k => delete R[k]);
+      Object.assign(R, d.control || {});
+      DOCS = d.documentos || [];
+      OBS = d.observaciones || [];
+      Object.assign(CONT, d.contadores || {});
+      Object.entries(d.generales || {}).forEach(([k, v]) => {
+        const el = document.querySelector(`[data-campo="${k}"]`); if(el) el.value = v;
+      });
+      const fd = document.getElementById('f-dict'); if(fd) fd.value = d.condiciones || '';
+      document.querySelectorAll('#lista-check .item').forEach(el => pintarItem(el.dataset.id));
+      refrescar(); renderDocs(); renderObs();
+      Object.assign(FICHA_EDIT, d.fichas || {});
+      MUNI = d.municipio || '';
+      renderNormativa(); renderFichas();
+      if(d.dictamen) setDictamen(d.dictamen); else pintarCarta();
+    }catch(e){
+      alert('El archivo no corresponde al formato del Cuaderno del DRO de Grupo Alaris.');
+    }
+  };
+  lec.readAsText(f); ev.target.value = '';
+}
+
+
+/* ================= Normativa ================= */
+const CATALOGO_BASE = {
+ "puebla": {
+  "municipio": "Puebla",
+  "estado": "Puebla",
+  "clave": "puebla",
+  "completa": true,
+  "ordenamiento": "Código Reglamentario para el Municipio de Puebla (COREMUN), Capítulo de Desarrollo Urbano y Obras",
+  "ultimaReforma": "Última reforma publicada en el Periódico Oficial del Estado el 10 de diciembre de 2025",
+  "autoridadLicencias": "Dirección de Desarrollo Urbano del Municipio de Puebla (en el COREMUN, «la Dirección»)",
+  "autoridadInspeccion": "La misma Dirección. Todas las obras en proceso, públicas o privadas, son supervisadas por la Dirección hasta su terminación",
+  "organoRegistro": "CAADROC — Comisión de Asesoría y Admisión de Directores Responsables de Obra y Corresponsables: órgano colegiado con representantes del Ayuntamiento, colegios de profesionistas y consejos de participación ciudadana",
+  "corresponsables": "Ocho ámbitos reconocidos: seguridad estructural; desarrollo urbano sustentable; diseño arquitectónico; instalaciones hidráulicas y sanitarias; instalaciones eléctricas; instalaciones mecánicas; instalaciones de gas; geotecnia. El DRO debe comprobar que cada corresponsable tenga registro vigente ante la CAADROC",
+  "cuandoOtorgaResponsiva": "El DRO otorga responsiva, entre otros casos, al suscribir la solicitud de licencia de construcción y los planos del proyecto (Art. 678)",
+  "vigenciaLicencia": "Depende del tipo de obra; la Dirección fija el plazo. Trabajos preliminares (limpia, trazo, nivelación, excavación mayor a 60 cm) con licencia específica: vigencia máxima de 45 días",
+  "prorroga": "Se concede prórroga de vigencia a permisos y licencias cuando exista justificación técnica o causa fortuita o de fuerza mayor, siempre que la licencia esté vigente (Arts. 1098 y 1099)",
+  "bitacora": "La Dirección indica EN LA LICENCIA el tipo de bitácora autorizada para cada obra. Debe mantenerse actualizada y su liberación sirve para expedir la constancia de terminación de obra. El corresponsable también participa en su registro",
+  "frecuenciaVisita": "Mínimo UNA VEZ A LA SEMANA, registrando los eventos en la bitácora (obligación VIII del DRO)",
+  "letrero": "Letrero visible en obra de 90 × 60 cm mínimo, con nombre del proyecto, alineamiento y número oficial, número y vigencia de la licencia, y nombre y registro del DRO y de los corresponsables",
+  "avisoTerminacion": "Los propietarios, poseedores o el DRO (si así se pactó en el contrato de prestación de servicios) deben notificar a la Dirección, CON LA BITÁCORA, la terminación de la obra, para que se programe la supervisión. La constancia se expide en 3 días hábiles contados desde la visita de supervisión (Art. 1116)",
+  "toleranciaObraEjecutada": "Se permiten diferencias respecto al proyecto aprobado hasta del 20%, siempre que no se afecten seguridad, estabilidad, destinos, servicio y salubridad, se respeten restricciones, número de niveles y tolerancias, y se cubran los derechos (Art. 1117)",
+  "riesgoEnSupervision": "Si en la supervisión de terminación se detecta incongruencia entre el proyecto autorizado y la obra ejecutada, o irregularidades no plasmadas en la bitácora, se inicia procedimiento por probables infracciones (Art. 1118)",
+  "duracionResponsabilidad": "La responsabilidad administrativa del DRO y del corresponsable concluye a los 5 AÑOS contados desde la fecha en que la Dirección expida la constancia de terminación de obra (Art. 684)",
+  "renuncia": "El DRO notifica por escrito a la Dirección la renuncia voluntaria, presenta carta de motivos y la manifiesta en la bitácora a la fecha de renuncia. Solo puede renunciar ANTES de que la Dirección expida la constancia de terminación y ocupación de obra",
+  "refrendo": "Refrendo anual del registro de DRO",
+  "contratoObligatorio": "Para tramitar la licencia es documento indispensable el contrato de prestación de servicios entre propietario y DRO, con las obligaciones de este último. El propietario elige libremente al DRO, que puede ser o no el ejecutor de la obra",
+  "cierreDocumental": "El DRO coadyuva a que, concluida la obra, el propietario cuente con planos registrados actualizados del proyecto completo en original, la bitácora, memorias de cálculo y los originales de licencias y permisos; el DRO puede conservar copia",
+  "sanciones": "Régimen de infracciones del propio COREMUN; omitir actualizar la bitácora se sanciona con amonestación por escrito en primera instancia. La Dirección da vista a la CAADROC en los procedimientos contra DRO",
+  "verificarAntesDeFirmar": [
+   "Confirmar el tipo de bitácora que la Dirección asignó en ESTA licencia",
+   "Confirmar el plazo de vigencia que la Dirección fijó para ESTA obra",
+   "Confirmar los corresponsables exigibles según la magnitud y el uso",
+   "Confirmar COS, CUS, altura y cajones aplicables al polígono en el instrumento de zonificación vigente"
+  ],
+  "notas": [
+   "Datos tomados del COREMUN, reforma del 10 de diciembre de 2025, archivado en esta misma carpeta.",
+   "El texto del COREMUN publicado en portal municipal es de carácter informativo; la fuente original es el Periódico Oficial del Estado de Puebla.",
+   "Verificar reformas posteriores antes de usar la ficha en un trámite."
+  ]
+ },
+ "san-andres-cholula": {
+  "municipio": "San Andrés Cholula",
+  "estado": "Puebla",
+  "clave": "san-andres-cholula",
+  "completa": false,
+  "notas": [
+   "Ficha sin llenar. Complétala aquí y descarga el ficha.json para dejarlo en MUNICIPIOS/san-andres-cholula/."
+  ]
+ },
+ "san-pedro-cholula": {
+  "municipio": "San Pedro Cholula",
+  "estado": "Puebla",
+  "clave": "san-pedro-cholula",
+  "completa": false,
+  "notas": [
+   "Ficha sin llenar. Complétala aquí y descarga el ficha.json para dejarlo en MUNICIPIOS/san-pedro-cholula/."
+  ]
+ },
+ "cuautlancingo": {
+  "municipio": "Cuautlancingo",
+  "estado": "Puebla",
+  "clave": "cuautlancingo",
+  "completa": false,
+  "notas": [
+   "Ficha sin llenar. Complétala aquí y descarga el ficha.json para dejarlo en MUNICIPIOS/cuautlancingo/."
+  ]
+ },
+ "atlixco": {
+  "municipio": "Atlixco",
+  "estado": "Puebla",
+  "clave": "atlixco",
+  "completa": false,
+  "notas": [
+   "Ficha sin llenar. Complétala aquí y descarga el ficha.json para dejarlo en MUNICIPIOS/atlixco/."
+  ]
+ },
+ "tehuacan": {
+  "municipio": "Tehuacán",
+  "estado": "Puebla",
+  "clave": "tehuacan",
+  "completa": false,
+  "notas": [
+   "Ficha sin llenar. Complétala aquí y descarga el ficha.json para dejarlo en MUNICIPIOS/tehuacan/."
+  ]
+ }
+};
+
+const CAMPOS_FICHA = [
+  ['ordenamiento','Reglamento u ordenamiento aplicable'],
+  ['ultimaReforma','Última reforma'],
+  ['autoridadLicencias','Autoridad que expide licencias'],
+  ['autoridadInspeccion','Autoridad que inspecciona'],
+  ['organoRegistro','Órgano de registro del DRO'],
+  ['corresponsables','Corresponsables reconocidos'],
+  ['cuandoOtorgaResponsiva','Cuándo se entiende otorgada la responsiva'],
+  ['vigenciaLicencia','Vigencia de la licencia'],
+  ['prorroga','Prórroga'],
+  ['bitacora','Bitácora'],
+  ['frecuenciaVisita','Frecuencia mínima de visita'],
+  ['letrero','Letrero de obra'],
+  ['avisoTerminacion','Aviso y constancia de terminación'],
+  ['toleranciaObraEjecutada','Tolerancia entre proyecto y obra ejecutada'],
+  ['riesgoEnSupervision','Qué pasa si hay incongruencias en la supervisión'],
+  ['duracionResponsabilidad','Duración de la responsabilidad del DRO'],
+  ['renuncia','Renuncia a la responsiva'],
+  ['refrendo','Refrendo del registro'],
+  ['contratoObligatorio','Contrato obligatorio'],
+  ['cierreDocumental','Cierre documental'],
+  ['sanciones','Régimen de sanciones']
+];
+
+let MUNI = '';
+const FICHA_EDIT = {};
+
+function idxNormativa(){ return (typeof window.NORMATIVA === 'object' && window.NORMATIVA) ? window.NORMATIVA : null; }
+
+function municipios(){
+  const out = {};
+  Object.entries(CATALOGO_BASE).forEach(([k, f]) => {
+    out[k] = { clave:k, nombre:f.municipio || k, estado:f.estado || '', completa:!!f.completa,
+               ficha:f, normas:[], historico:[] };
+  });
+  const N = idxNormativa();
+  if(N && N.municipios){
+    Object.entries(N.municipios).forEach(([k, v]) => {
+      const base = out[k] || {};
+      out[k] = { clave:k, nombre:v.nombre || base.nombre || k, estado:v.estado || base.estado || '',
+                 completa: v.completa !== undefined ? !!v.completa : !!base.completa,
+                 ficha: v.ficha || base.ficha || null,
+                 normas: v.normas || [], historico: v.historico || [] };
+    });
+  }
+  return out;
+}
+
+function valorFicha(clave, campo){
+  if(FICHA_EDIT[clave] && FICHA_EDIT[clave][campo] !== undefined) return FICHA_EDIT[clave][campo];
+  const m = municipios()[clave];
+  return (m && m.ficha && m.ficha[campo]) ? m.ficha[campo] : '';
+}
+function setFicha(clave, campo, v){ FICHA_EDIT[clave] = FICHA_EDIT[clave] || {}; FICHA_EDIT[clave][campo] = v; }
+
+function setMunicipio(k){
+  MUNI = (MUNI === k) ? '' : k;
+  const m = municipios()[MUNI];
+  const ubi = document.getElementById('d-ubi');
+  if(m && ubi && !ubi.value.trim()) ubi.value = m.nombre + (m.estado ? ', ' + m.estado : '');
+  renderNormativa(); renderFichas(); pintarCarta();
+}
+
+function filaDoc(d){
+  const ruta = d.ruta ? d.ruta.split('/').map(encodeURIComponent).join('/') : '';
+  const meta = [d.emisor, d.vigencia, d.mb ? d.mb + ' MB' : ''].filter(Boolean).join(' · ');
+  return `<div class="doc">
+    <div class="cuerpo">
+      <div class="t">${esc(d.titulo || d.archivo)}${d.historico ? '<span class="badge-hist">SUPERADA</span>' : ''}</div>
+      ${meta ? `<div class="m">${esc(meta)}</div>` : ''}
+      ${d.nota ? `<div class="nota">${esc(d.nota)}</div>` : ''}
+    </div>
+    ${ruta ? `<a class="abrir" href="${ruta}" target="_blank" rel="noopener">Abrir</a>`
+           : '<span class="sinruta">sin archivo</span>'}
+  </div>`;
+}
+
+function bloqueDocs(titulo, docs, vacio){
+  return `<h2 class="bloque">${esc(titulo)}</h2>` +
+    (docs && docs.length ? `<div class="caja">${docs.map(filaDoc).join('')}</div>`
+                         : `<div class="vacio">${esc(vacio)}</div>`);
+}
+
+const EN_LINEA = location.protocol === 'http:' || location.protocol === 'https:';
+
+function renderNormativa(){
+  const N = idxNormativa();
+  const est = document.getElementById('estado-carpeta');
+  if(N){
+    est.className = 'estado-carpeta ok';
+    est.innerHTML = `<span class="punto"></span><span>Carpeta de normativa conectada · índice generado el ${esc(N.generado || 'sin fecha')}. Cuando agregues o quites un documento, ejecuta <code>_SISTEMA\\Actualizar indice.bat</code>.</span>`;
+  } else if(EN_LINEA){
+    est.className = 'estado-carpeta no';
+    est.innerHTML = '<span class="punto"></span><span>Estás en la versión en línea. La biblioteca de reglamentos por municipio vive en tu computadora, no aquí: descarga el Cuaderno y la carpeta de normas para tenerla. En línea puedes consultar y editar las fichas y descargarlas.' +
+      '<span class="descargas">' +
+      '<a class="primaria" href="index.html" download="Cuaderno_DRO_Alaris.html">Descargar el Cuaderno</a>' +
+      '<a href="kit-normativa.zip" download>Descargar la carpeta de normas</a>' +
+      '</span></span>';
+  } else {
+    est.className = 'estado-carpeta no';
+    est.innerHTML = '<span class="punto"></span><span>No encuentro el índice de la carpeta. Deja este archivo en la raíz de <code>NORMAS</code> y ejecuta <code>_SISTEMA\\Actualizar indice.bat</code> una vez. Mientras tanto puedes usar las fichas, pero sin enlaces a los PDF.</span>';
+  }
+
+  const M = municipios();
+  document.getElementById('munis').innerHTML = Object.values(M).map(m => `
+    <button type="button" class="muni ${MUNI === m.clave ? 'on' : ''}" onclick="setMunicipio('${m.clave}')"
+            aria-pressed="${MUNI === m.clave}">
+      <span class="caja-check">${MUNI === m.clave ? '✓' : ''}</span>
+      <span>
+        <span class="n">${esc(m.nombre)}</span>
+        <span class="e">${esc(m.estado)}${m.normas.length ? ' · ' + m.normas.length + ' documento' + (m.normas.length === 1 ? '' : 's') : ''}</span>
+        <span class="marca-ficha ${m.completa ? 'si' : 'no'}">${m.completa ? 'FICHA COMPLETA' : 'FICHA INCOMPLETA'}</span>
+      </span>
+    </button>`).join('');
+
+  const sal = document.getElementById('normas-salida');
+  if(!MUNI){ sal.innerHTML = '<div class="vacio">Activa un municipio para ver la normativa aplicable y su ficha.</div>'; return; }
+
+  const m = M[MUNI];
+  const estadoClave = (m.estado || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+  const generales = (N && N.generales) || [];
+  const estatales = (N && N.estatal && (N.estatal[estadoClave] || N.estatal[m.estado])) || [];
+  const referencia = (N && N.referencia) || [];
+
+  let html = '';
+  if(!m.completa){
+    html += `<div class="avisa"><b>Ficha incompleta.</b> Todavía no estás listo para firmar una responsiva en ${esc(m.nombre)}. Llena los campos de abajo con el reglamento vigente, descarga el <code>ficha.json</code> y déjalo en <code>MUNICIPIOS\\${esc(m.clave)}\\</code>.</div>`;
+  }
+  html += bloqueDocs('Siempre aplican · federal', generales, 'Sin documentos federales en la carpeta _GENERALES.');
+  html += bloqueDocs('Estado de ' + (m.estado || '—'), estatales, 'Sin documentos estatales en la carpeta _ESTATAL.');
+  html += bloqueDocs('Municipio de ' + m.nombre, m.normas, 'Sin documentos en la carpeta de este municipio.');
+  if(m.historico && m.historico.length) html += bloqueDocs('Versiones superadas · ' + m.nombre, m.historico, '');
+  if(referencia.length) html += bloqueDocs('Referencia técnica · no obligatoria aquí', referencia, '');
+
+  html += `<h2 class="bloque">Ficha de reglamento local · ${esc(m.nombre)}</h2>
+    <p class="intro">Estos son los datos que el manual llama <b>FICHA LOCAL</b>. Edítalos aquí y descarga el archivo para dejarlo en la carpeta del municipio: así el dato queda guardado para la próxima obra.</p>
+    <div class="caja">
+      ${CAMPOS_FICHA.map(([k, l]) => `<div class="ficha-campo">
+        <label for="fc-${k}">${esc(l)}</label>
+        <textarea id="fc-${k}" oninput="setFicha('${m.clave}','${k}',this.value)">${esc(valorFicha(m.clave, k))}</textarea>
+      </div>`).join('')}
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn" onclick="descargarFichaJson()">Descargar ficha.json</button>
+        <button class="btn sec" onclick="verFicha('ficha-local')">Ver ficha imprimible</button>
+      </div>
+    </div>`;
+  sal.innerHTML = html;
+}
+
+function descargarFichaJson(){
+  const m = municipios()[MUNI]; if(!m) return;
+  const base = Object.assign({}, m.ficha || {});
+  CAMPOS_FICHA.forEach(([k]) => { base[k] = valorFicha(MUNI, k); });
+  base.municipio = m.nombre; base.estado = m.estado; base.clave = m.clave;
+  base.completa = CAMPOS_FICHA.every(([k]) => String(valorFicha(MUNI, k)).trim() !== '');
+  base.actualizada = new Date().toISOString().slice(0, 10);
+  guardarArchivo('ficha.json', JSON.stringify(base, null, 2));
+}
+
+/* ================= Fichas generables ================= */
+function estadoDe(id){ return (R[id] && R[id].estado) || ''; }
+
+const FICHAS = [
+  {
+    id:'ficha-local', t:'Ficha de reglamento local',
+    cuando(){ return MUNI ? {a:true, r:'Municipio activo: ' + municipios()[MUNI].nombre + '.'}
+                          : {a:false, r:'Activa primero un municipio en la pestaña Normativa.'}; },
+    doc(){
+      const m = municipios()[MUNI];
+      return tituloDoc('Ficha de reglamento local', m.nombre + (m.estado ? ', ' + m.estado : '')) +
+        '<table><tbody>' + CAMPOS_FICHA.map(([k, l]) =>
+          `<tr><td style="width:32%"><b>${esc(l)}</b></td><td>${esc(valorFicha(MUNI, k)) || '<span class="vacia">por confirmar</span>'}</td></tr>`).join('') +
+        '</tbody></table>' + pieFirma('Integró', 'Revisó');
+    }
+  },
+  {
+    id:'req-info', t:'Requerimiento de información al proyectista',
+    cuando(){
+      const abiertas = OBS.filter(o => o.estado === 'abierta');
+      const faltantes = [0,1,2,3,4,5,6,7,8].filter(i => estadoDe('f0g2i' + i) === 'pendiente').length;
+      if(abiertas.length || faltantes) return {a:true, r:`${abiertas.length} observación(es) abierta(s) y ${faltantes} requisito(s) de predio pendiente(s).`};
+      return {a:false, r:'No hay observaciones abiertas ni requisitos de entrada marcados como pendientes.'};
+    },
+    doc(){
+      const abiertas = OBS.filter(o => o.estado === 'abierta');
+      return tituloDoc('Requerimiento de información', 'Revisión del proyecto ejecutivo') +
+        `<p>Con el fin de continuar la revisión del proyecto ejecutivo de la obra referida y poder emitir la responsiva correspondiente, solicitamos la información que se relaciona a continuación. Mientras estos puntos no queden resueltos, la revisión permanece detenida en los apartados que dependen de ellos.</p>` +
+        (abiertas.length ? '<table><thead><tr><th>Folio</th><th>Ubicación</th><th>Lo que solicitamos</th></tr></thead><tbody>' +
+          abiertas.map(o => `<tr><td>${esc(o.folio)}</td><td>${esc([o.plano ? 'Plano ' + o.plano : '', o.ubi].filter(Boolean).join(' · '))}</td><td>${esc(o.txt)}</td></tr>`).join('') +
+          '</tbody></table>' : '') +
+        `<p>Agradecemos indicar fecha compromiso de entrega para cada punto.</p>` + pieFirma('Solicita · DRO', 'Recibe · Proyectista');
+    }
+  },
+  {
+    id:'liberacion-pd', t:'Registro de liberación de punto de detención',
+    cuando(){ return {a:true, r:'Se usa en cada colado, armado o elemento que se va a cubrir. Imprime varias.'}; },
+    doc(){
+      const filas = [
+        'Elemento y ubicación (nivel y ejes)', 'Punto de detención', 'Documento de referencia (plano y revisión)',
+        'Geometría y niveles', 'Armado: diámetros, separación, traslapes, estribos', 'Recubrimientos y limpieza',
+        'Pasos e instalaciones ahogadas', 'Ensayes o pruebas asociadas',
+        'Resultado: LIBERADO / LIBERADO CON CONDICIÓN / NO LIBERADO', 'Condiciones o correcciones instruidas',
+        'Nota de bitácora número'
+      ];
+      return tituloDoc('Liberación de punto de detención', 'Fecha y hora: ________________') +
+        '<table><tbody>' + filas.map(f => `<tr><td style="width:44%"><b>${esc(f)}</b></td><td style="height:26px"></td></tr>`).join('') +
+        '</tbody></table>' + pieFirma('DRO', 'Contratista');
+    }
+  },
+  {
+    id:'acta-recepcion', t:'Acta de recepción de obra en proceso (DRO sustituto)',
+    cuando(){
+      const e = estadoDe('f0g0i4');
+      if(e && e !== 'na') return {a:true, r:'Marcaste que la obra ya había iniciado. Sin esta acta asumes lo que hizo tu antecesor.'};
+      return {a:false, r:'Solo aplica si entras a una obra ya iniciada. Márcalo en la lista de control, bloque A1.'};
+    },
+    doc(){
+      const p = [
+        'Identificación de la obra, licencia, DRO saliente y motivo de la sustitución.',
+        'Relación de trabajos ejecutados a la fecha, por partida y porcentaje aproximado.',
+        'Documentación recibida: proyecto y revisiones, bitácora anterior, ensayes, liberaciones. Hacer constar lo NO entregado.',
+        'Levantamiento fotográfico fechado del estado de la obra y de las colindancias.',
+        'Elementos ocultos no verificables y verificación instrumentada propuesta o realizada.',
+        'Reservas expresas: trabajos respecto de los cuales el DRO entrante no asume responsabilidad por no haberlos presenciado ni podido verificar.',
+        'Condiciones para el inicio de su intervención: puntos de detención, régimen de visitas, información pendiente.'
+      ];
+      return tituloDoc('Acta de recepción de obra en proceso', 'DRO sustituto') +
+        '<ol>' + p.map(x => `<li>${esc(x)}<div style="border-bottom:1px solid #CFC8C0; height:30px; margin-top:6px"></div></li>`).join('') + '</ol>' +
+        pieFirma('DRO entrante', 'Propietario');
+    }
+  },
+  {
+    id:'nota-reiteracion', t:'Nota de bitácora · reiteración de instrucción no atendida',
+    cuando(){
+      const e = estadoDe('f1g0i3');
+      if(e === 'pendiente' || e === 'proceso') return {a:true, r:'Tienes instrucciones no atendidas sin reiterar. La segunda nota es la que cambia tu situación jurídica.'};
+      return {a:false, r:'Se genera cuando marques que hay instrucciones no atendidas (bloque D1).'};
+    },
+    doc(){
+      return tituloDoc('Nota de bitácora', 'Reiteración de instrucción no atendida') +
+        `<p><b>Nota número:</b> ________   <b>Fecha:</b> ________   <b>Hora:</b> ________</p>
+         <p><b>1. Antecedente.</b> Mediante nota número ________ de fecha ________ se instruyó lo siguiente:</p>
+         <div style="border-bottom:1px solid #CFC8C0; height:28px"></div><div style="border-bottom:1px solid #CFC8C0; height:28px"></div>
+         <p><b>2. Hecho.</b> A la fecha de la presente, la instrucción anterior no ha sido atendida. Se hace constar el estado en que se encuentran los trabajos:</p>
+         <div style="border-bottom:1px solid #CFC8C0; height:28px"></div><div style="border-bottom:1px solid #CFC8C0; height:28px"></div>
+         <p><b>3. Consecuencia técnica de no atenderla.</b></p>
+         <div style="border-bottom:1px solid #CFC8C0; height:28px"></div><div style="border-bottom:1px solid #CFC8C0; height:28px"></div>
+         <p><b>4. Instrucción que se reitera y plazo.</b> Se reitera la instrucción y se fija como plazo el ________. En caso de no atenderse, se suspenderán los trabajos afectados y se dará aviso por escrito al propietario y, de ameritarlo el riesgo, a la autoridad.</p>
+         <div style="border-bottom:1px solid #CFC8C0; height:28px"></div>` +
+        pieFirma('DRO', 'Enterado · Contratista');
+    }
+  },
+  {
+    id:'caratula', t:'Carátula e índice del expediente de obra',
+    cuando(){ return {a:true, r:'Va al frente del expediente, físico y digital.'}; },
+    doc(){
+      const c = [
+        ['00', 'Ficha local', 'Ficha de reglamento local y PDF fechado del reglamento aplicado'],
+        ['01', 'Predio', 'Escritura, libertad de gravamen, uso de suelo, alineamiento, factibilidades, topografía, mecánica de suelos'],
+        ['02', 'Proyecto', 'Proyecto ejecutivo por disciplina, una carpeta por revisión'],
+        ['03', 'Revisión y responsiva', 'Checklist, reporte de validación, observaciones, carta responsiva'],
+        ['04', 'Licencia y trámites', 'Solicitud, licencia, modificaciones, pagos, prórrogas, acuses'],
+        ['05', 'Bitácora', 'Digitalización de la bitácora, al menos mensual'],
+        ['06', 'Calidad', 'Liberaciones, ensayes, certificados, protocolos, no conformidades'],
+        ['07', 'Visitas', 'Reportes de visita y reporte fotográfico fechado'],
+        ['08', 'Cambios', 'Solicitudes, evaluaciones, autorizaciones, planos revisados'],
+        ['09', 'Seguridad', 'Estado inicial de colindancias, verificaciones, incidentes'],
+        ['10', 'Cierre', 'As-built, memorias, garantías, aviso de terminación, acta de entrega'],
+        ['11', 'Correspondencia', 'Oficios enviados y recibidos, con acuse']
+      ];
+      return tituloDoc('Expediente de obra', 'Carátula e índice') +
+        '<table><thead><tr><th style="width:9%">Carpeta</th><th style="width:26%">Nombre</th><th>Contenido</th><th style="width:11%">Completa</th></tr></thead><tbody>' +
+        c.map(r => `<tr><td>${r[0]}</td><td><b>${esc(r[1])}</b></td><td>${esc(r[2])}</td><td></td></tr>`).join('') +
+        '</tbody></table><p style="font-size:12px">Nombrado de archivos: <b>AAAAMMDD_TIPO_TEMA_rev.ext</b></p>' +
+        pieFirma('Integró', 'Entregado a');
+    }
+  },
+  {
+    id:'renuncia', t:'Oficio de renuncia a la responsiva',
+    cuando(){ return {a:'demanda', r:'Solo si procede. Se emite cuando se ejecutan trabajos contra instrucción, se te impide el acceso o hay riesgo no atendido.'}; },
+    doc(){
+      const m = MUNI ? municipios()[MUNI] : null;
+      const reglaLocal = m && valorFicha(MUNI, 'renuncia') ? valorFicha(MUNI, 'renuncia') : '';
+      return tituloDoc('Renuncia a la responsiva de Director Responsable de Obra', '') +
+        `<p>El que suscribe, ${campo(g('c-dro'), 'nombre completo')}, Director Responsable de Obra con registro ${campo(g('c-reg'), 'registro')}, en relación con la obra ${campo(g('d-proy'), 'nombre de la obra')}, ubicada en ${campo(g('d-ubi'), 'ubicación')}, con licencia o expediente ${campo(g('d-lic'), 'número')}, manifiesto lo siguiente:</p>
+         <p><b>Hechos</b></p>
+         <ol><li>Mediante nota(s) de bitácora número ________ de fecha(s) ________ instruí lo siguiente: ____________________________________________</li>
+         <li>La instrucción fue reiterada mediante nota número ________ de fecha ________, sin que a la fecha haya sido atendida.</li>
+         <li>Lo anterior configura una condición que no me permite seguir asumiendo la responsabilidad que la normatividad atribuye al Director Responsable de Obra.</li></ol>
+         <p><b>Renuncia</b></p>
+         <p>Por lo expuesto, presento mi renuncia a la responsiva de la obra señalada, con efectos a partir del ________. Anexo carta de motivos y copia de los antecedentes. La renuncia queda manifestada en la bitácora a esta misma fecha.</p>
+         ${reglaLocal ? `<p style="font-size:12px"><b>Regla local aplicable:</b> ${esc(reglaLocal)}</p>` : ''}
+         <p>Hago entrega formal de la documentación y de la bitácora conforme al inventario anexo, conservando copia íntegra.</p>` +
+        pieFirma('DRO', 'Recibe');
+    }
+  }
+];
+
+function tituloDoc(t, sub){
+  const m = MUNI ? municipios()[MUNI] : null;
+  return `<p class="lugar">${esc(g('c-ciudad') || (m ? m.nombre : ''))}${(g('c-ciudad') || m) ? ', a ' : ''}${esc(fechaLarga())}</p>
+    <h4 style="font-size:16px; margin-top:0">${esc(t)}</h4>
+    ${sub ? `<p style="margin-top:-4px; color:#6C6560">${esc(sub)}</p>` : ''}
+    <table><tbody>
+      <tr><td style="width:22%"><b>Obra</b></td><td>${campo(g('d-proy'), 'nombre de la obra')}</td>
+          <td style="width:18%"><b>Licencia</b></td><td>${campo(g('d-lic'), 'número')}</td></tr>
+      <tr><td><b>Ubicación</b></td><td>${campo(g('d-ubi'), 'ubicación')}</td>
+          <td><b>DRO</b></td><td>${campo(g('c-dro'), 'nombre')} ${g('c-reg') ? '· ' + esc(g('c-reg')) : ''}</td></tr>
+    </tbody></table>`;
+}
+function pieFirma(a, b){
+  return `<div class="firmas"><div><b>${esc(a)}</b>Nombre y firma</div><div><b>${esc(b)}</b>Nombre y firma</div></div>`;
+}
+function fechaLarga(){
+  const hoy = g('d-fecha') || new Date().toISOString().slice(0, 10);
+  const [a, m, d] = hoy.split('-');
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return (a && m && d) ? `${Number(d)} de ${meses[Number(m) - 1]} de ${a}` : '__ de __________ de 20__';
+}
+
+let FICHA_ACTIVA = '';
+function renderFichas(){
+  document.getElementById('fichas-lista').innerHTML = FICHAS.map(f => {
+    const c = f.cuando();
+    const cls = c.a === true ? 'aplica' : (c.a === 'demanda' ? 'demanda' : 'noaplica');
+    const etiqueta = c.a === true ? 'Aplica' : (c.a === 'demanda' ? 'Bajo demanda' : 'No aplica ahora');
+    return `<div class="fichaf ${cls}">
+      <div class="cuerpo">
+        <div class="t">${esc(f.t)}</div>
+        <div class="r"><b>${etiqueta}.</b> ${esc(c.r)}</div>
+      </div>
+      <div class="acc">
+        <button class="gen" onclick="verFicha('${f.id}')" ${c.a === false ? 'disabled' : ''}>Generar</button>
+        <button onclick="descargarFicha('${f.id}')" ${c.a === false ? 'disabled' : ''}>Descargar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cuerpoFicha(id){
+  const f = FICHAS.find(x => x.id === id); if(!f) return '';
+  return f.doc();
+}
+function verFicha(id){
+  FICHA_ACTIVA = id;
+  ir('fichas');
+  const sal = document.getElementById('ficha-salida');
+  sal.innerHTML = cuerpoFicha(id);
+  sal.style.display = 'block';
+  sal.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function descargarFicha(id){
+  const f = FICHAS.find(x => x.id === id); if(!f) return;
+  const estilo = `body{font-family:Segoe UI,Calibri,sans-serif;color:#231F1E;max-width:18cm;margin:2cm auto;line-height:1.6;font-size:11pt}
+    h4{font-size:15px;margin:18px 0 7px}.lugar{text-align:right}table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:10.5pt}
+    th{background:#231F1E;color:#fff;text-align:left;padding:7px 9px;font-size:9.5pt;text-transform:uppercase;letter-spacing:.05em}
+    td{border:1px solid #CFC8C0;padding:7px 9px;vertical-align:top}ol{margin:0 0 12px 20px}ol li{margin-bottom:8px}
+    .firmas{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:64px}
+    .firmas div{border-top:1px solid #231F1E;padding-top:7px;font-size:10pt}.firmas b{display:block;font-size:11pt}
+    .vacia{color:#A79E96}`;
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${f.t}</title><style>${estilo}</style></head><body>${cuerpoFicha(id)}</body></html>`;
+  const nombre = (f.id + '_' + (generales().proyecto || 'obra')).replace(/[^\w\-]+/g, '_') + '.html';
+  guardarArchivo(nombre, html);
+}
+
+/* ================= Arranque ================= */
+document.querySelectorAll('#v-carta input, .datos input').forEach(el => {
+  el.addEventListener('input', () => { if(vista === 'carta') pintarCarta(); });
+});
+renderCheck();
+DOCS = [{clave:'',doc:'',rev:'',fecha:''},{clave:'',doc:'',rev:'',fecha:''},{clave:'',doc:'',rev:'',fecha:''}];
+renderDocs();
+renderObs();
+pintarCarta();
+renderNormativa();
+renderFichas();
+</script>
+</body>
+</html>
