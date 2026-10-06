@@ -237,6 +237,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
     <li>Acero de cimentación incluye el tiro de 12 m de las columnas de PB, que se cuela con contratrabes y cabezales.</li>
     <li>Solo se paga lo que está en el modelo: el avance reportado en el control (o los elementos marcados EJECUTADO en Revit) se aplica a la cantidad del modelo y se multiplica por el P.U. del catálogo, sin exceder la cantidad de catálogo. En el visor, verde = colado o terminado; ámbar = en proceso (acero o cimbra con avance). Conceptos sin modelo (pilas, rellenos, sardineles, escaleras) se reportan por porcentaje.</li>
     <li>Volumen nuevo: concreto, cimbra, losa y muros desde Revit; acero desde el despiece de los planos E-1 a E-10 aplicado a cada elemento del modelo. Los conceptos que no salen del modelo conservan la cantidad del presupuesto.</li>
+    <li>Columnas: solo existen C-1, C-2 y C-3. La marca «C-5» del plano E-4 (eje NS-06) es error de dibujo; esas columnas se cuantifican con el tipo del modelo.</li>
     <li>05-oct-2026: trabe T-21 corregida en el modelo a 30×60 según plano (antes 45×80; −1.7 m³ de concreto y −5.2 m² de cimbra por pieza, niveles N2 y N3).</li>
     <li>En el visor, «Capas» prende y apaga los elementos por partida y por concepto; el ojo de cada renglón del catálogo hace lo mismo. Un elemento se ve mientras al menos uno de sus conceptos esté encendido.</li>
   </ul></div>
@@ -334,7 +335,6 @@ function draw(){
 $('#alerts').innerHTML=[
  ['Nivel N6 del catálogo','No existe en el modelo actualizado. Sus conceptos ($5.1 M) quedan con volumen nuevo 0 y fuera de avance hasta ajustar el catálogo con el cliente.'],
  ['Actualización estructural 05-oct','El DWG «ACTUALIZACION ESTRUCTURA 051026» es idéntico al juego de planos vigente (17,572 entidades comparadas): no cambia secciones, armados ni ejes.'],
- ['Columnas C-5 en plano E-4','Tres columnas del eje NS-06 están marcadas C-5, pero la tabla de armados solo trae C-1, C-2 y C-3. Se cuantifican con el tipo del modelo; falta confirmar con el calculista.'],
  ['Acero de contratrabes en Revit','Las corridas 4#6 + 4#6 + 4#4 solo están modeladas en los ejes EO-01 a EO-07; los 7 ejes NS (≈190 m) tienen estribos pero no varilla longitudinal, y 4 tramos de NS-01 a NS-04 no tienen estribos. El control paga con el despiece del plano CT-1 aplicado a todas las contratrabes del modelo.']
 ].map(a=>`<div class="alert"><b>⚠</b><div><b>${a[0]}.</b> ${a[1]}</div></div>`).join('');
 $('#ver').textContent='Corte '+META.corte+' · '+META.modelo;
