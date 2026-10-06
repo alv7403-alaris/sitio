@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modelo DEPAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: visor 3D a pantalla completa + panel lateral (abajo en teléfono) con filtros, cantidades y ficha del elemento */
+:root{
+  --bg:#141213; --panel:#1d1a1b; --line:#332e2f; --fg:#efe9e2; --muted:#a59c94;
+  --gold:#D1AE6C; --red:#EC3237;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--f-body);overflow:hidden}
+.app{display:grid;grid-template-columns:1fr 340px;height:100%}
+#view{position:relative;min-width:0;min-height:0}
+#view canvas{display:block;width:100%;height:100%;outline:none}
+.brand{position:absolute;left:16px;top:14px;pointer-events:none}
+.brand b{font:800 22px/1 var(--f-display);letter-spacing:.02em}
+.brand span{display:block;font:500 11px var(--f-mono);color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.hint{position:absolute;left:16px;bottom:14px;font:12px var(--f-mono);color:var(--muted);pointer-events:none}
+[hidden]{display:none!important}
+#loading{position:absolute;inset:0;display:grid;place-items:center;font:500 13px var(--f-mono);color:var(--gold);letter-spacing:.1em}
+aside{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding-block:18px;padding-inline:18px;display:flex;flex-direction:column;gap:20px;min-width:0}
+h2{font:700 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;color:var(--muted);font:500 13px var(--f-body);padding:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--gold);color:#201E1F}
+button:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+label.f{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+select{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px;font:14px var(--f-body)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--line);font-size:13px}
+th{font:500 11px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+td:first-child,th:first-child{text-align:left}
+td .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+tr.tot td{font-weight:500;color:var(--gold);border-bottom:0}
+tbody tr{cursor:pointer} tbody tr:hover td{background:#262223}
+.card{border:1px solid var(--line);border-radius:8px;padding:12px}
+.card .t{font:700 16px var(--f-display);margin-bottom:8px;overflow-wrap:anywhere}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:13px}
+dt{color:var(--muted)} dd{margin:0;text-align:right;font-family:var(--f-mono);overflow-wrap:anywhere}
+.empty{color:var(--muted);font-size:13px}
+.foot{margin-top:auto;font-size:11px;color:var(--muted);font-family:var(--f-mono)}
+@media (max-width:760px){
+  body{overflow:auto}
+  .app{grid-template-columns:1fr;grid-template-rows:62vh auto;height:auto}
+  aside{border-left:0;border-top:1px solid var(--line);padding-inline:16px}
+}
+</style>
+
+<div class="app">
+  <div id="view">
+    <div id="loading">CARGANDO MODELO…</div>
+    <div class="brand"><b>DEPAS</b><span>Grupo Alaris · ALR-2026-003</span></div>
+    <div class="hint">Arrastra para girar · rueda para acercar · clic en un elemento</div>
+  </div>
+  <aside>
+    <section>
+      <h2>Colorear por</h2>
+      <div class="seg" role="group" aria-label="Colorear por">
+        <button id="byCat" aria-pressed="true">Categoría</button>
+        <button id="byLvl" aria-pressed="false">Nivel</button>
+      </div>
+      <label class="f" for="lvl">Mostrar hasta el nivel</label>
+      <select id="lvl"></select>
+    </section>
+    <section>
+      <h2>Cantidades visibles</h2>
+      <div style="overflow-x:auto"><table id="qty"><thead><tr><th>Grupo</th><th>Pzas</th><th>m³</th><th>Acero kg</th></tr></thead><tbody></tbody></table></div>
+    </section>
+    <section>
+      <h2>Elemento seleccionado</h2>
+      <div id="sel" class="empty">Haz clic en un elemento del modelo para ver su marca, eje, volumen y peso de acero.</div>
+    </section>
+    <div class="foot">Datos: parámetros ALARIS-07 del modelo Revit · Solo se paga lo que está en el modelo</div>
+  </aside>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+
+const CAT={IfcColumn:['Columnas y dados','#D1AE6C'],IfcBeam:['Trabes y contratrabes','#EC3237'],IfcSlab:['Losas','#8f9aa3'],IfcReinforcingBar:['Acero de refuerzo','#5fb3a1'],IfcBuildingElementProxy:['Placas y anclajes','#b48ad6']};
+const view=document.getElementById('view');
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+view.appendChild(renderer.domElement);
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#141213');
+const cam=new THREE.PerspectiveCamera(45,1,0.1,2000);
+const ctr=new OrbitControls(cam,renderer.domElement); ctr.enableDamping=true;
+scene.add(new THREE.HemisphereLight(0xffffff,0x332e2f,1.6));
+const dl=new THREE.DirectionalLight(0xffffff,1.6); dl.position.set(40,80,30); scene.add(dl);
+
+function size(){const r=view.getBoundingClientRect();renderer.setSize(r.width,r.height,false);cam.aspect=r.width/r.height;cam.updateProjectionMatrix();}
+new ResizeObserver(size).observe(view); size();
+
+async function loadModel(){
+  let buf; try{const r=await fetch('depas_q.glb'); if(!r.ok)throw 0; buf=await r.arrayBuffer();}
+  catch{const t=await (await fetch('depas_glb.txt')).text(); buf=Uint8Array.from(atob(t),c=>c.charCodeAt(0)).buffer;}
+  return new GLTFLoader().parseAsync(buf,'');
+}
+const [meta,gltf]=await Promise.all([fetch('depas.json').then(r=>r.json()),loadModel()]);
+document.getElementById('loading').hidden=true;
+const root=gltf.scene; scene.add(root);
+const box=new THREE.Box3().setFromObject(root), c=box.getCenter(new THREE.Vector3()), s=box.getSize(new THREE.Vector3());
+root.position.sub(c); const R=Math.max(s.x,s.y,s.z);
+cam.position.set(R*.9,R*.6,R*.9); ctr.target.set(0,0,0); ctr.update();
+const grid=new THREE.GridHelper(R*1.6,32,0x3a3435,0x262223); grid.position.y=-s.y/2; scene.add(grid);
+
+// niveles ordenados por elevación (Y del centro)
+const meshes=[]; const lvlY={};
+root.traverse(o=>{ if(o.isMesh){ let n=o; while(n&&!meta[n.name])n=n.parent; if(!n)return;
+  if(!o.geometry.attributes.normal)o.geometry.computeVertexNormals(); o.userData.id=n.name; o.userData.m=meta[n.name]; meshes.push(o);
+  const b=new THREE.Box3().setFromObject(o); const y=b.min.y; const L=o.userData.m.lv||'—';
+  lvlY[L]=Math.min(lvlY[L]??Infinity,y);
+}});
+const levels=Object.keys(lvlY).sort((a,b)=>lvlY[a]-lvlY[b]);
+const lvlColor={}; levels.forEach((l,i)=>lvlColor[l]=new THREE.Color().setHSL(.08+.6*i/Math.max(1,levels.length-1),.55,.55).getStyle());
+const sel=document.getElementById('lvl');
+sel.innerHTML=levels.map((l,i)=>`<option value="${i}">${l}</option>`).join(''); sel.value=levels.length-1;
+
+let mode='cat', picked=null;
+const mats={};
+function mat(col){return mats[col]??=new THREE.MeshStandardMaterial({color:col,roughness:.7,metalness:.05});}
+const hi=new THREE.MeshStandardMaterial({color:'#ffffff',emissive:'#EC3237',emissiveIntensity:.6});
+function paint(){ meshes.forEach(o=>{const m=o.userData.m; o.material= o===picked?hi: mat(mode==='cat'?(CAT[m.c]?.[1]||'#777'):lvlColor[m.lv||'—']);}); }
+function filter(){ const k=+sel.value; meshes.forEach(o=>o.visible=levels.indexOf(o.userData.m.lv||'—')<=k); table(); }
+const f1=n=>n.toLocaleString('es-MX',{maximumFractionDigits:1}), f2=n=>n.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+function table(){
+  const g={}, seen=new Set();
+  meshes.forEach(o=>{ if(!o.visible||seen.has(o.userData.id))return; seen.add(o.userData.id); const m=o.userData.m;
+    const key=mode==='cat'?m.c:(m.lv||'—'); const r=g[key]??={n:0,v:0,kg:0}; r.n++; r.v+=m.V||0; r.kg+=m.kg||0; });
+  const keys=mode==='cat'?Object.keys(CAT).filter(k=>g[k]):levels.filter(l=>g[l]);
+  let T={n:0,v:0,kg:0};
+  document.querySelector('#qty tbody').innerHTML=keys.map(k=>{const r=g[k];T.n+=r.n;T.v+=r.v;T.kg+=r.kg;
+    const lab=mode==='cat'?CAT[k][0]:k, col=mode==='cat'?CAT[k][1]:lvlColor[k];
+    return `<tr data-k="${k}"><td><span class="sw" style="background:${col}"></span>${lab}</td><td>${r.n}</td><td>${f2(r.v)}</td><td>${f1(r.kg)}</td></tr>`}).join('')
+    +`<tr class="tot"><td>Total</td><td>${T.n}</td><td>${f2(T.v)}</td><td>${f1(T.kg)}</td></tr>`;
+}
+function setMode(m){mode=m;document.getElementById('byCat').setAttribute('aria-pressed',m==='cat');document.getElementById('byLvl').setAttribute('aria-pressed',m==='lvl');paint();table();}
+document.getElementById('byCat').onclick=()=>setMode('cat');
+document.getElementById('byLvl').onclick=()=>setMode('lvl');
+sel.onchange=filter;
+
+function show(m){
+  if(!m){document.getElementById('sel').className='empty';document.getElementById('sel').textContent='Haz clic en un elemento del modelo para ver su marca, eje, volumen y peso de acero.';return;}
+  const row=(k,v)=>v!==undefined&&v!==''?`<dt>${k}</dt><dd>${v}</dd>`:'';
+  const el=document.getElementById('sel'); el.className='card';
+  el.innerHTML=`<div class="t">${m.mk||m.tp||m.n||'Elemento'}</div><dl>${row('Categoría',CAT[m.c]?.[0]||m.c)}${row('Tipo',m.tp||m.n)}${row('Nivel',m.lv)}${row('Eje',m.eje)}${row('Longitud',m.L!=null?f2(m.L)+' m':undefined)}${row('Área',m.A!=null?f2(m.A)+' m²':undefined)}${row('Volumen',m.V!=null?f2(m.V)+' m³':undefined)}${row('Acero',m.kg!=null?f1(m.kg)+' kg':undefined)}</dl>`;
+}
+const ray=new THREE.Raycaster(), p=new THREE.Vector2(); let down;
+renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>4)return;
+  const r=renderer.domElement.getBoundingClientRect(); p.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+  ray.setFromCamera(p,cam); const h=ray.intersectObjects(meshes.filter(o=>o.visible),false)[0];
+  picked=h?h.object:null; paint(); show(picked?.userData.m);
+});
+paint(); filter();
+renderer.setAnimationLoop(()=>{ctr.update();renderer.render(scene,cam);});
+</script>
+</html>
