@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Propuesta conceptual · 9 y 13 · Grupo Alaris</title>
+<meta name="description" content="Propuesta conceptual del proyecto 9 y 13: residencia estudiantil con restaurante, terraza y lavandería en el Centro Histórico de Puebla.">
+<link rel="icon" href="img/logo_w.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#141213; --panel:#1d1a1b; --panel2:#242021; --line:#332e2f; --fg:#efe9e2; --muted:#a59c94;
+  --gold:#D1AE6C; --red:#EC3237;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body)}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.k{font:500 12px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.k::before{content:"";display:inline-block;width:22px;height:2px;background:var(--red);vertical-align:middle;margin-right:10px}
+h2{font:800 clamp(26px,3.4vw,38px)/1.12 var(--f-display);letter-spacing:-.01em;margin:10px 0 14px}
+.lead{color:var(--muted);font-size:18px;max-width:760px;margin:0}
+section{padding:72px 0;border-top:1px solid var(--line)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(20,18,19,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:24px;height:58px}
+nav .lg{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 15px var(--f-display);letter-spacing:.08em;flex:none}
+nav .lg img{width:26px}
+nav ul{display:flex;gap:20px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+nav ul a{text-decoration:none;color:var(--muted);font-size:14px;white-space:nowrap}
+nav ul a:hover{color:var(--fg)}
+
+/* hero */
+.hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:flex-end;overflow:hidden}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,18,19,.15) 30%,rgba(20,18,19,.96))}
+.hero .wrap{position:relative;z-index:1;padding-bottom:56px;width:100%}
+.hero h1{font:800 clamp(44px,8vw,96px)/.95 var(--f-display);letter-spacing:-.03em;margin:14px 0 10px}
+.hero .sub{font-size:clamp(18px,2.2vw,23px);max-width:720px;margin:0}
+.hero .loc{color:#cfc6bc;font-size:15px;margin-top:10px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:6px;font:600 15px var(--f-body);text-decoration:none;border:1px solid var(--gold);color:var(--fg)}
+.btn.pri{background:var(--gold);color:#201E1F}
+.btn:hover{filter:brightness(1.08)}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+
+/* figures */
+.figs{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line)}
+.fig{padding:26px 20px;border-right:1px solid var(--line)}
+.fig:last-child{border-right:0}
+.fig b{display:block;font:800 30px/1 var(--f-display);color:var(--gold)}
+.fig span{display:block;color:var(--muted);font-size:13.5px;margin-top:8px}
+
+/* concept */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.ideas{display:grid;gap:22px;margin-top:28px}
+.idea{display:grid;grid-template-columns:44px 1fr}
+.idea i{font:800 22px var(--f-display);color:var(--gold);font-style:normal}
+.idea b{display:block;font:700 18px var(--f-display);margin-bottom:2px}
+.idea p{margin:0;color:var(--muted)}
+.stackimg{display:grid;gap:12px}
+.stackimg img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:4px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:28px}
+.tbl th{text-align:left;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 16px 12px 0;border-bottom:2px solid var(--gold)}
+.tbl td{padding:16px 16px 16px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.tbl td:nth-child(2){color:var(--muted);white-space:nowrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:10px}
+.d-a{background:var(--gold)}.d-g{background:var(--red)}.d-k{background:#8f8a86}
+
+/* diagram */
+.dia{margin-top:32px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:28px}
+.dia svg{width:100%;height:auto}
+.legend{display:flex;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin-top:16px}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:28px}
+.gal button{padding:0;border:0;background:none;cursor:zoom-in;position:relative;border-radius:4px;overflow:hidden}
+.gal button:first-child{grid-column:span 2;grid-row:span 2}
+.gal img{width:100%;height:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .4s}
+.gal button:hover img{transform:scale(1.03)}
+.gal button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+dialog{border:0;padding:0;background:transparent;max-width:94vw}
+dialog::backdrop{background:rgba(10,9,9,.92)}
+dialog img{max-height:86vh;width:auto;border-radius:4px}
+dialog p{color:var(--muted);text-align:center;margin:10px 0 0;font-size:14px}
+dialog form{position:absolute;top:-44px;right:0}
+dialog .x{background:none;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer;font:14px var(--f-body)}
+
+/* tour */
+.tour{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;margin-top:28px}
+.tour .ph{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:6px}
+.qrbox{display:flex;gap:24px;align-items:center;margin:24px 0}
+.qrbox img{width:150px;background:#fff;padding:8px;border-radius:6px;flex:none}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:10px;color:var(--muted)}
+.steps b{color:var(--fg)}
+
+/* model */
+.viewer{position:relative;margin-top:28px;height:min(72vh,640px);background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.viewer canvas{display:block;width:100%;height:100%;outline:none}
+.vmsg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font:500 14px var(--f-mono);letter-spacing:.06em}
+.vhint{position:absolute;left:16px;bottom:12px;font:12px var(--f-mono);color:var(--muted);pointer-events:none}
+.vtools{position:absolute;right:12px;top:12px;display:flex;gap:8px}
+.vtools button{background:rgba(29,26,27,.9);border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:7px 12px;font:13px var(--f-body);cursor:pointer}
+.vtools button:focus-visible{outline:2px solid var(--gold)}
+.dl{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+
+/* data */
+.data{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px;margin-top:28px}
+.data div{display:grid;grid-template-columns:200px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.data dt{color:var(--muted);font-size:14px}
+.data dd{margin:0}
+
+footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer b{color:var(--fg);font:800 15px var(--f-display);letter-spacing:.08em}
+
+@media (max-width:900px){
+  .figs{grid-template-columns:repeat(3,1fr)}
+  .fig:nth-child(3){border-right:0}
+  .fig:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .two,.tour,.data{grid-template-columns:1fr}
+  .gal{grid-template-columns:repeat(2,1fr)}
+  .data div{grid-template-columns:140px 1fr}
+  nav ul{display:none}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .figs{grid-template-columns:repeat(2,1fr)}
+  .fig{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}
+  .fig:nth-child(2n){border-right:0!important}
+  .tbl td:nth-child(2){white-space:normal}
+  .tbl td:first-child{white-space:normal}
+  .qrbox{flex-direction:column;align-items:flex-start}
+  section{padding:52px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gal img{transition:none}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Secciones">
+  <div class="wrap">
+    <a class="lg" href="https://www.grupoalaris.mx/"><img src="img/logo_w.png" alt="">GRUPO ALARIS</a>
+    <ul>
+      <li><a href="#concepto">Concepto</a></li>
+      <li><a href="#programa">Programa</a></li>
+      <li><a href="#esquema">Esquema</a></li>
+      <li><a href="#galeria">Imágenes</a></li>
+      <li><a href="#recorrido">Recorrido 3D</a></li>
+      <li><a href="#modelo">Modelo</a></li>
+      <li><a href="#predio">Predio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <img src="img/r6.webp" alt="Volumen nuevo con celosía detrás del muro de piedra de la crujía histórica">
+  <div class="wrap">
+    <div class="k">9 y 13 · ALR-2026-006</div>
+    <h1>Propuesta conceptual</h1>
+    <p class="sub">Residencia estudiantil de 24 habitaciones con restaurante, terraza y lavandería, en un monumento histórico del Centro Histórico de Puebla.</p>
+    <p class="loc">Av. 9 Poniente 1301 · Barrio de Santiago · Puebla, Pue. · Octubre 2026</p>
+    <div class="btns">
+      <a class="btn pri" href="https://cloud.chaos.com/collaboration/n/6fjmDcDQYDoWyqmThXA9io?t=enw" target="_blank" rel="noopener">Recorrido virtual 3D ↗</a>
+      <a class="btn" href="#modelo">Explorar el modelo</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="figs">
+    <div class="fig"><b>24</b><span>habitaciones individuales con baño completo</span></div>
+    <div class="fig"><b>3</b><span>niveles de habitaciones sobre el estacionamiento</span></div>
+    <div class="fig"><b>393.91</b><span>m² de terreno, frente a dos calles</span></div>
+    <div class="fig"><b>4</b><span>elevadores de autos de doble nivel</span></div>
+    <div class="fig"><b>INAH</b><span>monumento histórico; la crujía se conserva</span></div>
+    <div class="fig"><b>✓</b><span>autorizada por el Consejo del Centro Histórico</span></div>
+  </div>
+</div>
+
+<section id="concepto">
+  <div class="wrap two">
+    <div>
+      <div class="k">Concepto</div>
+      <h2>La casa que guarda</h2>
+      <p class="lead">Al frente, la crujía histórica se conserva y se abre al barrio con el restaurante y su terraza. Al fondo crece un bloque contemporáneo, ligero y velado por una celosía, donde viven los estudiantes.</p>
+      <div class="ideas">
+        <div class="idea"><i>01</i><div><b>Conservar y no imitar</b><p>La fachada rosa con vano en arco se mantiene. La obra nueva usa estructura limpia, celosía metálica oscura y muro de piedra como transición.</p></div></div>
+        <div class="idea"><i>02</i><div><b>La terraza como mirador</b><p>La azotea de la crujía se vuelve terraza del restaurante, con vista a la calle y a las cúpulas del Centro Histórico.</p></div></div>
+        <div class="idea"><i>03</i><div><b>El patio como pausa</b><p>Entre la crujía y el bloque nuevo, un espacio abierto da luz y aire y separa la vida pública de la privada.</p></div></div>
+        <div class="idea"><i>04</i><div><b>La celosía como piel</b><p>Filtra el sol, da privacidad a las habitaciones y se lee como un velo detrás de la fachada histórica.</p></div></div>
+        <div class="idea"><i>05</i><div><b>Un módulo que se repite</b><p>24 habitaciones de un solo tipo en 3 niveles: se modela por proceso constructivo y se cuantifica por pieza.</p></div></div>
+      </div>
+    </div>
+    <div class="stackimg">
+      <img src="img/r3_s.webp" alt="Patio de transición entre la crujía y el bloque nuevo" loading="lazy">
+      <img src="img/r1_s.webp" alt="Esquina con la crujía rosa y la terraza en su azotea" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="programa">
+  <div class="wrap">
+    <div class="k">Programa arquitectónico</div>
+    <h2>24 habitaciones sobre el estacionamiento; lo público, en la crujía</h2>
+    <p class="lead">Programa tomado del modelo conceptual. Las áreas y el detalle de cada espacio se definen en anteproyecto.</p>
+    <div style="overflow-x:auto">
+    <table class="tbl">
+      <thead><tr><th>Zona</th><th>Nivel</th><th>Espacios</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot d-a"></span>Residencia</td><td>Niveles 1 a 3, bloque posterior</td><td>8 habitaciones individuales por nivel, 24 en total y de un solo tipo, cada una con baño completo · zona común con cocina por nivel · pasillo central</td></tr>
+        <tr><td><span class="dot d-a"></span>Residencia</td><td>Planta baja</td><td>Acceso y recepción de residentes · escalera</td></tr>
+        <tr><td><span class="dot d-g"></span>Restaurante</td><td>Planta baja, crujía histórica</td><td>Espacio para restaurante</td></tr>
+        <tr><td><span class="dot d-g"></span>Terraza</td><td>Azotea de la crujía</td><td>Terraza del restaurante con sombrillas y pérgola</td></tr>
+        <tr><td><span class="dot d-g"></span>Lavandería</td><td>Planta baja</td><td>Espacio para lavandería abierta al público</td></tr>
+        <tr><td><span class="dot d-k"></span>Estacionamiento</td><td>Planta baja, bloque posterior</td><td>Cajones del modelo con 4 elevadores de autos de doble nivel, más contrato con un estacionamiento cercano</td></tr>
+        <tr><td><span class="dot d-k"></span>Patio</td><td>Entre crujía y bloque</td><td>Espacio abierto de luz y ventilación</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="esquema">
+  <div class="wrap">
+    <div class="k">Esquema funcional</div>
+    <h2>Tres franjas: habitaciones al fondo, patio al centro, lo público al frente</h2>
+    <div class="dia">
+      <svg viewBox="-4 80 768 315" role="img" aria-label="Corte esquemático de zonificación" font-family="IBM Plex Sans, sans-serif" font-size="13">
+        <g fill="#a59c94" font-size="11.5"><text x="0" y="119">Nivel 3</text><text x="0" y="177">Nivel 2</text><text x="0" y="235">Nivel 1</text><text x="0" y="301">Planta baja</text></g>
+        <g fill="#D1AE6C" fill-opacity=".16" stroke="#D1AE6C" stroke-width="1.6">
+          <rect x="96" y="90" width="300" height="50" rx="6"/><rect x="96" y="148" width="300" height="50" rx="6"/><rect x="96" y="206" width="300" height="50" rx="6"/>
+        </g>
+        <g text-anchor="middle" fill="#efe9e2">
+          <text x="246" y="112" font-weight="600">8 habitaciones con baño</text><text x="246" y="129" font-size="11.5" fill="#a59c94">zona común con cocina</text>
+          <text x="246" y="170" font-weight="600">8 habitaciones con baño</text><text x="246" y="187" font-size="11.5" fill="#a59c94">zona común con cocina</text>
+          <text x="246" y="228" font-weight="600">8 habitaciones con baño</text><text x="246" y="245" font-size="11.5" fill="#a59c94">zona común con cocina</text>
+        </g>
+        <g fill="none" stroke="#8f8a86" stroke-width="1.2">
+          <rect x="96" y="264" width="196" height="66" rx="6"/><rect x="300" y="264" width="96" height="66" rx="6"/>
+        </g>
+        <g fill="none" stroke="#EC3237" stroke-width="1.4">
+          <rect x="524" y="206" width="236" height="50" rx="6"/><rect x="524" y="264" width="128" height="66" rx="6"/><rect x="660" y="264" width="100" height="66" rx="6"/>
+        </g>
+        <rect x="404" y="90" width="112" height="240" rx="6" fill="#242021" stroke="#5a5354" stroke-dasharray="4 4"/>
+        <g text-anchor="middle" fill="#efe9e2">
+          <text x="194" y="293" font-weight="600">Estacionamiento</text><text x="194" y="311" font-size="11.5" fill="#a59c94">4 elevadores de autos</text>
+          <text x="348" y="293" font-weight="600">Acceso</text><text x="348" y="311" font-size="11.5" fill="#a59c94">residentes</text>
+          <text x="460" y="206" font-weight="600">Patio</text><text x="460" y="224" font-size="11.5" fill="#a59c94">luz y aire</text>
+          <text x="642" y="228" font-weight="600">Terraza del restaurante</text><text x="642" y="245" font-size="11.5" fill="#a59c94">sobre la crujía histórica</text>
+          <text x="588" y="293" font-weight="600">Restaurante</text><text x="588" y="311" font-size="11.5" fill="#a59c94">en la crujía</text>
+          <text x="710" y="293" font-weight="600">Lavandería</text><text x="710" y="311" font-size="11.5" fill="#a59c94">por definir</text>
+        </g>
+        <g stroke="#5a5354"><line x1="96" y1="348" x2="396" y2="348"/><line x1="524" y1="348" x2="760" y2="348"/></g>
+        <g text-anchor="middle" font-size="11.5" fill="#efe9e2"><text x="246" y="368">Bloque nuevo con celosía · fondo poniente</text><text x="642" y="368">Crujía histórica conservada</text><text x="642" y="385" fill="#a59c94">frente a 9 Poniente, esquina</text></g>
+      </svg>
+      <div class="legend"><span><span class="dot d-a"></span>Residencia</span><span><span class="dot d-g"></span>Restaurante, terraza y lavandería</span><span><span class="dot d-k"></span>Acceso y estacionamiento</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="galeria">
+  <div class="wrap">
+    <div class="k">Imagen conceptual</div>
+    <h2>Perspectivas volumétricas</h2>
+    <div class="gal" id="gal">
+      <button data-i="6" aria-label="Ampliar: celosía y muro de piedra"><img src="img/r6_s.webp" alt="Celosía y muro de piedra" loading="lazy"></button>
+      <button data-i="1" aria-label="Ampliar: esquina con la crujía y la terraza"><img src="img/r1_s.webp" alt="Esquina con la crujía y la terraza" loading="lazy"></button>
+      <button data-i="2" aria-label="Ampliar: terraza del restaurante"><img src="img/r2_s.webp" alt="Terraza del restaurante" loading="lazy"></button>
+      <button data-i="3" aria-label="Ampliar: patio y transición"><img src="img/r3_s.webp" alt="Patio y transición al bloque nuevo" loading="lazy"></button>
+      <button data-i="4" aria-label="Ampliar: vano en arco y muro de piedra"><img src="img/r4_s.webp" alt="Vano en arco y muro de piedra" loading="lazy"></button>
+      <button data-i="5" aria-label="Ampliar: corte volumétrico"><img src="img/r5_s.webp" alt="Corte volumétrico con estacionamiento y habitaciones" loading="lazy"></button>
+      <button data-i="7" aria-label="Ampliar: vista aérea"><img src="img/r7_s.webp" alt="Vista aérea" loading="lazy"></button>
+      <button data-i="8" aria-label="Ampliar: fachada a la 9 Poniente"><img src="img/r8_s.webp" alt="Fachada a la Av. 9 Poniente" loading="lazy"></button>
+    </div>
+  </div>
+</section>
+<dialog id="lb"><form method="dialog"><button class="x">Cerrar ✕</button></form><img id="lbimg" alt=""><p id="lbcap"></p></dialog>
+
+<section id="recorrido">
+  <div class="wrap">
+    <div class="k">Recorrido virtual 3D</div>
+    <h2>Recorra el proyecto desde su celular o computadora</h2>
+    <div class="tour">
+      <img class="ph" src="img/r2_s.webp" alt="Terraza del restaurante" loading="lazy">
+      <div>
+        <div class="qrbox">
+          <img src="img/qr.png" alt="Código QR del recorrido virtual">
+          <ol class="steps">
+            <li><b>1.</b> Escanee el código con la cámara del celular.</li>
+            <li><b>2.</b> El recorrido abre en el navegador, sin instalar programas ni iniciar sesión.</li>
+            <li><b>3.</b> Muévase por el proyecto y cambie de vista libremente.</li>
+          </ol>
+        </div>
+        <a class="btn pri" href="https://cloud.chaos.com/collaboration/n/6fjmDcDQYDoWyqmThXA9io?t=enw" target="_blank" rel="noopener">Abrir recorrido en Chaos Cloud ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modelo">
+  <div class="wrap">
+    <div class="k">Modelo volumétrico</div>
+    <h2>Explore el volumen de la propuesta</h2>
+    <p class="lead">Modelo conceptual exportado de SketchUp. Gire, acerque y recorra el volumen desde cualquier ángulo.</p>
+    <div class="viewer" id="viewer">
+      <div class="vmsg" id="vmsg">CARGANDO MODELO…</div>
+      <div class="vtools" id="vtools" hidden><button id="vreset">Vista inicial</button></div>
+      <div class="vhint">Arrastra para girar · rueda o pellizca para acercar · clic derecho para desplazar</div>
+    </div>
+  </div>
+</section>
+
+<section id="predio">
+  <div class="wrap">
+    <div class="k">Datos del predio</div>
+    <h2>Un monumento histórico con frente a dos calles</h2>
+    <dl class="data">
+      <div><dt>Superficie del terreno</dt><dd>393.91 m², predio fusionado</dd></div>
+      <div><dt>Frentes</dt><dd>36.79 m a la Av. 9 Poniente · 7.10 m al oriente</dd></div>
+      <div><dt>Colindancias</dt><dd>Sur con otros predios · poniente con servidumbre de paso</dd></div>
+      <div><dt>Condición patrimonial</dt><dd>Monumento histórico en la Zona de Monumentos (INAH)</dd></div>
+      <div><dt>Autorización</dt><dd>Propuesta revisada y autorizada por el Consejo del Centro Histórico</dd></div>
+      <div><dt>Siguiente etapa</dt><dd>Anteproyecto, sobre el levantamiento topográfico de ITASA</dd></div>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>GRUPO ALARIS</b><br>Construcción virtual · Puebla, México</div>
+    <div>Propuesta conceptual · 9 y 13 · ALR-2026-006 · Octubre 2026<br><a href="mailto:contacto@grupoalaris.mx">contacto@grupoalaris.mx</a></div>
+  </div>
+</footer>
+
+<script>
+// galería con visor ampliado
+const caps={1:'Esquina con la crujía y la terraza',2:'Terraza del restaurante',3:'Patio y transición al bloque nuevo',4:'Vano en arco y muro de piedra',5:'Corte volumétrico: estacionamiento y habitaciones',6:'Celosía y muro de piedra',7:'Vista aérea',8:'Fachada a la Av. 9 Poniente'};
+const lb=document.getElementById('lb');
+document.getElementById('gal').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return; const i=b.dataset.i;
+  document.getElementById('lbimg').src='img/r'+i+'.webp'; document.getElementById('lbimg').alt=caps[i];
+  document.getElementById('lbcap').textContent=caps[i]; lb.showModal();
+});
+lb.addEventListener('click',e=>{if(e.target===lb)lb.close();});
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+// visor del modelo: carga perezosa cuando la sección entra en pantalla
+const box=document.getElementById('viewer'), msg=document.getElementById('vmsg');
+let started=false;
+new IntersectionObserver((es,ob)=>{ if(es.some(e=>e.isIntersecting)&&!started){started=true;ob.disconnect();start();} },{rootMargin:'300px'}).observe(box);
+async function start(){
+  try{
+    const THREE=await import('three');
+    const {OrbitControls}=await import('three/addons/controls/OrbitControls.js');
+    const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
+    const {MeshoptDecoder}=await import('three/addons/libs/meshopt_decoder.module.js');
+    const head=await fetch('modelo/9y13.glb',{method:'HEAD'}).catch(()=>null);
+    if(!head||!head.ok){msg.textContent='MODELO EN PREPARACIÓN';return;}
+    const r=new THREE.WebGLRenderer({antialias:true}); r.setPixelRatio(Math.min(devicePixelRatio,2));
+    r.outputColorSpace=THREE.SRGBColorSpace; r.toneMapping=THREE.ACESFilmicToneMapping;
+    box.prepend(r.domElement);
+    const scene=new THREE.Scene(); scene.background=new THREE.Color('#1d1a1b');
+    const cam=new THREE.PerspectiveCamera(40,1,0.1,5000);
+    const ctr=new OrbitControls(cam,r.domElement); ctr.enableDamping=true; ctr.maxPolarAngle=Math.PI*0.495;
+    scene.add(new THREE.HemisphereLight(0xffffff,0x3a3435,1.7));
+    const sun=new THREE.DirectionalLight(0xfff3e0,2.2); sun.position.set(60,90,40); scene.add(sun);
+    const size=()=>{const b=box.getBoundingClientRect();r.setSize(b.width,b.height,false);cam.aspect=b.width/b.height;cam.updateProjectionMatrix();};
+    new ResizeObserver(size).observe(box); size();
+    const loader=new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+    const g=await loader.loadAsync('modelo/9y13.glb',ev=>{ if(ev.total) msg.textContent='CARGANDO MODELO… '+Math.round(ev.loaded/ev.total*100)+'%'; });
+    const root=g.scene; scene.add(root);
+    const bb=new THREE.Box3().setFromObject(root), c=bb.getCenter(new THREE.Vector3()), s=bb.getSize(new THREE.Vector3());
+    root.position.sub(c); root.position.y+=s.y/2;
+    const R=Math.max(s.x,s.z);
+    const home=()=>{cam.position.set(R*.75,R*.55,R*.85); ctr.target.set(0,s.y*.3,0); ctr.update();};
+    home(); document.getElementById('vreset').onclick=home; document.getElementById('vtools').hidden=false;
+    msg.hidden=true;
+    r.setAnimationLoop(()=>{ctr.update();r.render(scene,cam);});
+  }catch(e){ msg.textContent='NO SE PUDO CARGAR EL MODELO'; console.error(e); }
+}
+</script>
+</body>
+</html>
