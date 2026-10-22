@@ -389,8 +389,15 @@ async function start(){
     const root=g.scene; scene.add(root);
     const bb=new THREE.Box3().setFromObject(root), c=bb.getCenter(new THREE.Vector3()), s=bb.getSize(new THREE.Vector3());
     root.position.sub(c); root.position.y+=s.y/2;
-    const R=Math.max(s.x,s.z);
-    const home=()=>{cam.position.set(R*.75,R*.55,R*.85); ctr.target.set(0,s.y*.3,0); ctr.update();};
+    root.updateMatrixWorld(true);
+    const fb=new THREE.Box3(); const tmp=new THREE.Box3();
+    const v=new THREE.Vector3(); const y0=bb.min.y-c.y+s.y/2;
+    root.traverse(o=>{ if(o.isMesh){ const pa=o.geometry.attributes.position; const st=Math.max(1,Math.floor(pa.count/4000));
+      for(let i=0;i<pa.count;i+=st){ v.fromBufferAttribute(pa,i).applyMatrix4(o.matrixWorld); if(v.y>3) fb.expandByPoint(v); } } });
+    const fc=fb.isEmpty()?new THREE.Vector3(0,s.y*.3,0):fb.getCenter(new THREE.Vector3());
+    const fs=fb.isEmpty()?s:fb.getSize(new THREE.Vector3());
+    const R=Math.max(fs.x,fs.y,fs.z);
+    const home=()=>{cam.position.set(fc.x+R*.55,fc.y+R*.38,fc.z+R*.62); ctr.target.copy(fc); ctr.update();};
     home(); document.getElementById('vreset').onclick=home; document.getElementById('vtools').hidden=false;
     msg.hidden=true;
     r.setAnimationLoop(()=>{ctr.update();r.render(scene,cam);});
