@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Arboleda · Revisión para ejecución · Grupo Alaris</title>
+<meta name="description" content="Revisión documental del Fraccionamiento Arboleda (33 viviendas, Ocotlán, Tlaxcala): faltantes para cuantificar, presupuestar y programar la obra.">
+<link rel="icon" href="../9y13/img/logo_w.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#141213;--panel:#1d1a1b;--panel2:#242021;--line:#332e2f;--fg:#efe9e2;--muted:#a59c94;
+  --gold:#D1AE6C;--red:#EC3237;--ok:#5fb37a;--mid:#e0a33a;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body)}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.k{font:500 12px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.k::before{content:"";display:inline-block;width:22px;height:2px;background:var(--red);vertical-align:middle;margin-right:10px}
+h2{font:800 clamp(26px,3.4vw,38px)/1.12 var(--f-display);letter-spacing:-.01em;margin:10px 0 14px}
+h3{font:700 19px/1.25 var(--f-display);margin:0 0 6px}
+.lead{color:var(--muted);font-size:18px;max-width:780px;margin:0}
+section{padding:64px 0;border-top:1px solid var(--line)}
+.mono{font-family:var(--f-mono)}
+.num{font-variant-numeric:tabular-nums}
+nav{position:sticky;top:0;z-index:20;background:rgba(20,18,19,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:24px;height:58px}
+nav .lg{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 15px var(--f-display);letter-spacing:.08em;flex:none}
+nav .lg img{width:26px}
+nav ul{display:flex;gap:20px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+nav ul a{text-decoration:none;color:var(--muted);font-size:14px;white-space:nowrap}
+nav ul a:hover{color:var(--fg)}
+.hero{position:relative;min-height:min(64vh,560px);display:flex;align-items:flex-end;overflow:hidden}
+.hero{background:radial-gradient(900px 420px at 85% 10%,rgba(236,50,55,.16),transparent 60%),radial-gradient(700px 400px at 10% 0%,rgba(209,174,108,.12),transparent 60%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 60px),repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 60px),var(--bg)}
+.hero .wrap{position:relative;z-index:1;padding-bottom:48px;width:100%}
+.hero h1{font:800 clamp(40px,7vw,84px)/.95 var(--f-display);letter-spacing:-.03em;margin:14px 0 10px}
+.hero .sub{font-size:clamp(17px,2vw,21px);max-width:760px;margin:0}
+.hero .loc{color:#cfc6bc;font-size:14px;margin-top:10px}
+.verdict{display:inline-flex;gap:10px;align-items:center;margin-top:22px;padding:10px 16px;border:1px solid var(--red);background:rgba(236,50,55,.12);font:600 14px var(--f-body)}
+.verdict b{color:var(--red);font:700 12px var(--f-mono);letter-spacing:.14em}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.g3,.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+@media(max-width:560px){.g3,.g4{grid-template-columns:1fr}.wrap{padding:0 16px}nav ul{display:none}}
+.card{background:var(--panel);border:1px solid var(--line);padding:20px}
+.gauge .lbl{font:500 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.gauge .pct{font:800 52px/1 var(--f-display);margin:10px 0 8px}
+.bar{height:8px;background:var(--panel2);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--red)}
+.gauge p{color:var(--muted);font-size:14px;margin:12px 0 0}
+.stat .v{font:800 28px/1.1 var(--f-display)}
+.stat .v small{font:500 14px var(--f-mono);color:var(--muted);margin-left:4px}
+.stat .l{color:var(--muted);font-size:13px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--panel)}
+.pill{display:inline-block;font:600 11px var(--f-mono);letter-spacing:.08em;padding:3px 8px;border:1px solid;white-space:nowrap}
+.s-falta{color:var(--red);border-color:rgba(236,50,55,.6)}
+.s-parcial{color:var(--mid);border-color:rgba(224,163,58,.6)}
+.s-ok{color:var(--ok);border-color:rgba(95,179,122,.6)}
+.s-ajeno{color:var(--muted);border-color:var(--line)}
+.dots{white-space:nowrap;font:600 11px var(--f-mono)}
+.dots span{display:inline-block;width:22px;text-align:center;padding:2px 0;margin-right:3px;border:1px solid var(--line);color:#5a5253}
+.dots span.on{color:var(--fg);border-color:var(--gold);background:rgba(209,174,108,.14)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 16px}
+.filters button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:7px 12px;font:500 13px var(--f-body);cursor:pointer}
+.filters button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.note{color:var(--muted);font-size:13px}
+.find{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.find .n{font:800 22px var(--f-display);color:var(--red)}
+.find p{margin:4px 0 0;color:#d6cec6;font-size:15px}
+.find .ref{font:500 12px var(--f-mono);color:var(--muted);margin-top:6px}
+.sev{font:600 11px var(--f-mono);letter-spacing:.1em;margin-left:8px;vertical-align:middle}
+.sev.c{color:var(--red)}.sev.a{color:var(--mid)}.sev.m{color:var(--muted)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);padding:16px 18px 16px 64px;position:relative}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:18px;top:14px;font:800 22px var(--f-display);color:var(--gold)}
+.steps li p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.chk td:first-child{color:var(--ok);font-weight:600}
+.rfi{background:var(--panel);border:1px solid var(--line);padding:20px}
+.rfi ol{margin:0;padding-left:22px}
+.rfi li{margin:6px 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;background:var(--red);color:#fff;border:0;font:600 14px var(--f-body);cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+figure{margin:0}
+figcaption{color:var(--muted);font-size:13px;margin-top:8px}
+footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--muted);font-size:14px}
+.split{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:10px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="lg" href="/"><img src="../9y13/img/logo_w.png" alt="">GRUPO ALARIS</a>
+  <ul>
+    <li><a href="#estado">Estado</a></li>
+    <li><a href="#hallazgos">Hallazgos</a></li>
+    <li><a href="#faltantes">Faltantes</a></li>
+    <li><a href="#hoy">Cuantificable hoy</a></li>
+    <li><a href="#ruta">Ruta</a></li>
+    <li><a href="#rfi">Solicitud</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="k">Revisión documental · Construcción virtual</div>
+    <h1>Fraccionamiento Arboleda</h1>
+    <p class="sub">33 casas habitación en régimen de propiedad en condominio. Revisamos la documentación recibida para saber si alcanza para cuantificar, presupuestar y programar la obra en etapa de ejecución.</p>
+    <p class="loc">Calle De las Flores s/n, Col. Loma Bonita (La Cañada), Ocotlán, Tlaxcala · Planos fechados 02-dic-2024 · Revisión Grupo Alaris 22-oct-2026</p>
+    <div class="verdict"><b>DICTAMEN</b> El paquete es un anteproyecto con instalaciones parciales; no es todavía un proyecto ejecutivo.</div>
+  </div>
+</header>
+
+<section id="estado"><div class="wrap">
+  <div class="k">Estado</div>
+  <h2>¿Qué tan listos estamos?</h2>
+  <p class="lead">Índice calculado sobre los entregables mínimos de un proyecto ejecutivo de vivienda y urbanización. Completo vale 1, parcial 0.5 y faltante 0; cada entregable cuenta en las capacidades que habilita.</p>
+  <div class="grid g3" style="margin-top:28px" id="gauges"></div>
+
+  <div class="grid g4" style="margin-top:28px">
+    <div class="card stat"><div class="v num">33<small>viv.</small></div><div class="l">Lotes de 6.00 × 15.00 m (90.00 m²)</div></div>
+    <div class="card stat"><div class="v num">112.44<small>m²</small></div><div class="l">Construido por casa según A-1 (PB 51.60 + PA 60.84)</div></div>
+    <div class="card stat"><div class="v num">3,710.52<small>m²</small></div><div class="l">Construcción total de vivienda (33 × 112.44)</div></div>
+    <div class="card stat"><div class="v num">4,689.85<small>m²</small></div><div class="l">Terreno según proyecto (topografía: 4,674.71)</div></div>
+    <div class="card stat"><div class="v num">3,032.66<small>m²</small></div><div class="l">Superficie de venta</div></div>
+    <div class="card stat"><div class="v num">1,274.39<small>m²</small></div><div class="l">Vialidad interior (+500.00 m² exterior)</div></div>
+    <div class="card stat"><div class="v num">344.41<small>ml</small></div><div class="l">Barda perimetral · 380.04 ml de guarnición</div></div>
+    <div class="card stat"><div class="v num">367.17<small>m²</small></div><div class="l">Área de donación (7.8 % del terreno)</div></div>
+  </div>
+</div></section>
+
+<section id="inventario"><div class="wrap">
+  <div class="k">Inventario</div>
+  <h2>Lo que se recibió</h2>
+  <p class="lead">17 archivos, incluidos 4 de topografía 3D generados por Alaris. Los 10 PDF corresponden a Arboleda; los dos DWG editables son de otro proyecto.</p>
+  <div class="tbl" style="margin-top:24px"><table>
+    <thead><tr><th>Archivo</th><th>Contenido</th><th>Clave</th><th>Utilidad para ejecución</th></tr></thead>
+    <tbody id="inv"></tbody>
+  </table></div>
+</div></section>
+
+<section id="hallazgos"><div class="wrap">
+  <div class="k">Hallazgos</div>
+  <h2>Inconsistencias que frenan el presupuesto</h2>
+  <p class="lead">Un plano es un instructivo: si dos láminas dicen cosas distintas, el ejecutante interpreta y el costo se vuelve incierto. Estas son las contradicciones encontradas.</p>
+  <div id="finds" style="margin-top:18px"></div>
+</div></section>
+
+<section id="faltantes"><div class="wrap">
+  <div class="k">Matriz de faltantes</div>
+  <h2>Entregable por entregable</h2>
+  <p class="lead">Cada fila indica qué capacidad bloquea: <b>C</b> cuantificar, <b>P</b> presupuestar, <b>G</b> programar.</p>
+  <div class="filters" id="filters"></div>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Especialidad</th><th>Entregable</th><th>Estado</th><th>Bloquea</th><th>Observación</th></tr></thead>
+    <tbody id="mtx"></tbody>
+  </table></div>
+  <p class="note" style="margin-top:10px" id="mtxcount"></p>
+</div></section>
+
+<section id="normativa"><div class="wrap">
+  <div class="k">Revisión normativa</div>
+  <h2>Prototipo contra mínimos de habitabilidad</h2>
+  <div class="split" style="margin-top:20px">
+    <div class="tbl"><table class="chk">
+      <thead><tr><th></th><th>Local</th><th class="r">Proyecto</th><th class="r">Mínimo CEV</th></tr></thead>
+      <tbody>
+        <tr><td>✓</td><td>Recámara 1</td><td class="r num">15.00 m²</td><td class="r num">7.29 m² · lado 2.70</td></tr>
+        <tr><td>✓</td><td>Recámara 2</td><td class="r num">9.69 m²</td><td class="r num">7.29 m² · lado 2.70</td></tr>
+        <tr><td>✓</td><td>Recámara 3</td><td class="r num">8.87 m²</td><td class="r num">7.29 m² · lado 2.70</td></tr>
+        <tr><td>✓</td><td>Sala</td><td class="r num">10.32 m²</td><td class="r num">7.29 m²</td></tr>
+        <tr><td>✓</td><td>Cocina</td><td class="r num">10.84 m²</td><td class="r num">3.30 m²</td></tr>
+        <tr><td>✓</td><td>Baños 1 y 2</td><td class="r num">4.09 / 3.63 m²</td><td class="r num">2.73 m²</td></tr>
+        <tr><td>✓</td><td>Medio baño</td><td class="r num">2.00 m²</td><td class="r num">1.69 m²</td></tr>
+        <tr><td style="color:var(--mid)">?</td><td>Comedor</td><td class="r num">sin dato</td><td class="r num">4.41 m²</td></tr>
+        <tr><td style="color:var(--mid)">?</td><td>Altura libre</td><td class="r num">≈2.63 m (NPT 2.75 − losa)</td><td class="r num">2.30 m</td></tr>
+      </tbody>
+    </table></div>
+    <div>
+      <h3>Puntos a verificar con la autoridad</h3>
+      <ul class="note" style="font-size:15px;color:#d6cec6;padding-left:18px;line-height:1.6">
+        <li>COS 0.57 (51.60/90.00) y CUS 1.25 (112.44/90.00) contra el programa de desarrollo urbano de Ocotlán.</li>
+        <li>Área de donación de 7.8 % contra la Ley de Asentamientos Humanos, Ordenamiento Territorial y Desarrollo Urbano del Estado de Tlaxcala.</li>
+        <li>Restricción por la barranca colindante (zona federal) antes de fijar el sembrado.</li>
+        <li>Dotación de agua: el CEV pide 195 L/hab/día para vivienda mayor de 100 m²; el cálculo usa 200 L con 9 personas.</li>
+        <li>Cisterna: CEV 4112.2 pide 3.00 m a aguas negras y 1.00 m a lindero; en un lote de 6.00 m hay que demostrarlo en planta.</li>
+        <li>Registro y vigencia del DRO firmante y de los corresponsables ante el municipio, y licencia vigente.</li>
+      </ul>
+      <p class="note">Referencias: Código de Edificación de Vivienda (CONAVI, tabla 808.1, secc. 4103 y 4112), Ley de la Construcción del Estado de Tlaxcala y Ley de Asentamientos Humanos, Ordenamiento Territorial y Desarrollo Urbano del Estado de Tlaxcala.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="hoy"><div class="wrap">
+  <div class="k">Cuantificable hoy</div>
+  <h2>Lo que sí podemos medir ya</h2>
+  <p class="lead">Cantidades preliminares tomadas directamente de los planos. Sirven para un paramétrico y para dimensionar el modelo; no sustituyen la cuantificación del modelo de ejecución.</p>
+  <div class="split" style="margin-top:24px">
+    <div class="tbl"><table>
+      <thead><tr><th>Concepto</th><th class="r">Por casa</th><th class="r">33 casas / conjunto</th><th>Fuente</th></tr></thead>
+      <tbody id="qty"></tbody>
+    </table></div>
+    <figure class="card">
+      <svg viewBox="0 0 274 454" role="img" aria-label="Curvas de nivel del predio" style="width:100%;height:auto"><path d="M149,265L156,263L161,256L165,236L175,219L181,200L180,192L173,185L175,181L170,176L158,177L154,189L156,198L153,211L141,218L138,224L136,258L149,265ZM177,121L183,121L187,114L197,116L199,112L186,104L175,102L164,110L165,116L176,121Z" fill="#1f4e9c" fill-rule="evenodd" opacity=".9"/><path d="M93,433L103,429L106,416L116,409L127,390L130,373L128,362L144,339L156,286L169,269L174,241L183,224L190,198L189,194L181,192L176,218L167,232L163,252L156,263L149,265L136,260L140,218L153,211L157,177L169,176L175,181L178,172L174,157L176,146L178,142L188,142L197,116L188,114L183,121L176,121L165,116L164,110L175,102L199,110L214,71L212,70L201,73L199,78L191,81L190,93L185,98L175,95L140,71L120,125L135,127L141,164L141,207L125,248L126,269L116,286L112,314L102,327L107,347L91,360L73,414L74,421L87,424L93,433Z" fill="#2b7fd0" fill-rule="evenodd" opacity=".9"/><path d="M66,435L71,435L77,425L91,437L103,435L111,429L121,407L131,394L135,364L148,345L158,302L167,288L181,242L186,235L205,235L205,230L191,220L192,196L189,194L187,213L175,239L169,267L157,284L145,338L128,362L130,373L127,390L116,410L106,416L105,427L93,433L84,422L73,420L73,416L91,359L106,349L107,340L102,330L104,323L111,317L118,282L125,274L125,249L135,218L141,209L141,161L136,129L132,126L120,127L82,239L117,252L119,265L117,276L110,284L108,312L98,325L100,345L89,355L85,364L67,417L64,431L66,435ZM188,194L189,194L188,194L188,194ZM178,171L188,144L183,142L178,142L174,153L178,170ZM193,131L193,131L193,131L192,131L193,131ZM181,97L189,95L191,81L199,78L201,73L214,69L225,39L220,34L159,15L140,71L180,97ZM177,93L163,82L161,75L165,71L181,72L188,77L186,93L177,93Z" fill="#3aa6c9" fill-rule="evenodd" opacity=".9"/><path d="M91,438L106,436L119,424L135,396L136,383L144,375L154,371L149,351L161,316L169,317L173,325L176,347L171,358L175,366L181,366L228,233L234,211L231,209L202,198L199,198L196,206L193,205L191,194L191,220L205,233L201,236L185,236L182,241L169,284L157,306L150,340L134,366L130,396L111,429L93,437L87,435L79,425L70,435L67,436L64,431L85,364L89,355L100,345L98,325L110,306L110,284L117,276L119,261L117,252L80,241L80,247L114,258L115,261L114,272L98,291L107,297L100,319L91,328L93,344L78,353L74,375L63,401L40,411L24,405L14,435L72,437L79,430L83,436L90,438ZM181,165L181,164L181,161L182,160L181,165ZM178,93L185,94L188,88L187,75L177,71L162,73L162,81L178,93Z" fill="#3fb58a" fill-rule="evenodd" opacity=".9"/><path d="M91,439L108,438L125,427L135,414L143,392L156,386L175,383L181,367L174,364L171,355L176,349L176,336L169,317L160,317L154,332L149,357L155,370L137,381L132,404L111,433L91,439ZM152,353L158,327L165,325L170,336L168,347L161,354L152,353ZM72,437L76,435L87,437L77,430L72,437ZM37,410L63,401L74,375L78,353L93,344L91,328L100,319L107,297L98,291L114,272L114,258L79,248L69,277L79,284L77,291L83,305L93,304L95,314L80,323L82,340L61,349L55,355L53,366L47,369L40,362L25,404L36,409ZM194,205L197,205L199,198L196,196L193,196L193,205Z" fill="#86c96b" fill-rule="evenodd" opacity=".9"/><path d="M91,439L95,439L98,439L101,439L104,439L124,439L127,432L140,420L146,407L164,400L169,403L173,384L156,386L143,392L135,414L125,427L108,438L91,439ZM74,437L77,437L80,437L78,435L74,437ZM47,369L55,364L55,355L61,349L82,340L80,323L95,314L96,310L93,304L83,305L77,291L79,284L69,277L40,358L40,363L46,368ZM153,354L164,352L167,348L170,338L164,324L157,330L151,351L153,354ZM196,198L197,198L196,196L196,196L196,198Z" fill="#cfd76a" fill-rule="evenodd" opacity=".9"/><path d="M125,439L154,439L168,403L164,400L146,407L125,439Z" fill="#e2b85a" fill-rule="evenodd" opacity=".9"/><polygon points="159,13 226,36 173,187 236,210 155,442 13,437" fill="none" stroke="#efe9e2" stroke-width="2"/><text x="165" y="17" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V1</text><text x="232" y="40" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V2</text><text x="179" y="191" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V3</text><text x="242" y="214" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V4</text><text x="161" y="446" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V5</text><text x="19" y="441" fill="#efe9e2" font-size="13" font-family="IBM Plex Mono,monospace">V6</text></svg><div class="legend"><span><i style="display:inline-block;width:10px;height:10px;background:#1f4e9c"></i> 2,290.75</span><span><i style="display:inline-block;width:10px;height:10px;background:#3fb58a"></i> 2,292.0</span><span><i style="display:inline-block;width:10px;height:10px;background:#c98a4f"></i> 2,293.5 +</span></div>
+      <figcaption>Topografía reconstruida del PDF de curvas: desnivel total ≈3 m (2,291.0 a 2,294.0). Un escurrimiento natural corre por el centro del predio, justo donde va la vialidad. Precisión apta para volumetría, no para trazo.</figcaption>
+    </figure>
+  </div>
+</div></section>
+
+<section id="ruta"><div class="wrap">
+  <div class="k">Ruta</div>
+  <h2>De anteproyecto a obra presupuestada</h2>
+  <div class="grid g2" style="margin-top:22px">
+    <div>
+      <h3 style="margin-bottom:14px">Secuencia de trabajo Alaris</h3>
+      <ol class="steps">
+        <li><b>Solicitud de información al cliente</b><p>Editables DWG reales de Arboleda, estructural, mecánica de suelos y definiciones de alcance (lista abajo).</p></li>
+        <li><b>Modelo del prototipo en Revit</b><p>Muros, losas, cimentación e instalaciones modelados según proceso constructivo, con parámetros medibles por concepto.</p></li>
+        <li><b>Modelo de conjunto</b><p>Toposólido georreferenciado, plataformas de lotes, vialidad, redes y barda.</p></li>
+        <li><b>Cuantificación y catálogo de conceptos</b><p>Generadores desde el modelo: solo se paga lo que está en el modelo.</p></li>
+        <li><b>Presupuesto</b><p>Análisis de precios unitarios con ingeniería de costos de la alianza.</p></li>
+        <li><b>Programa de obra</b><p>Tren de obra por paquetes de casas, ligado a las cantidades del modelo para controlar avance por cantidad ejecutada.</p></li>
+      </ol>
+    </div>
+    <div>
+      <h3 style="margin-bottom:14px">Frentes del programa (estructura propuesta)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Frente</th><th>Alcance</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">F0</td><td>Gestión: licencias, régimen de condominio, factibilidades de agua y CFE</td></tr>
+          <tr><td class="mono">F1</td><td>Preliminares, trazo, despalme, terracerías y plataformas de lotes</td></tr>
+          <tr><td class="mono">F2</td><td>Redes subterráneas: drenaje sanitario y pluvial, agua potable, ductos eléctricos</td></tr>
+          <tr><td class="mono">F3</td><td>Vivienda en tren de obra por paquetes: cimentación → muros PB → losa entrepiso → muros PA → losa azotea → instalaciones → acabados</td></tr>
+          <tr><td class="mono">F4</td><td>Pavimento, guarniciones y banquetas</td></tr>
+          <tr><td class="mono">F5</td><td>Barda perimetral, área de donación, juegos y jardinería</td></tr>
+          <tr><td class="mono">F6</td><td>Pruebas, limpieza y entrega por vivienda</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note" style="margin-top:10px">Duraciones y tamaño de paquete se fijan cuando exista estructural, catálogo y ritmo de venta del cliente.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="rfi"><div class="wrap">
+  <div class="k">Solicitud de información</div>
+  <h2>Lo que necesitamos del cliente</h2>
+  <p class="lead">Para enviar tal cual, ordenada por prioridad.</p>
+  <div class="rfi" style="margin-top:22px">
+    <ol id="rfilist"></ol>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <button class="btn" id="copy">Copiar lista</button>
+      <a class="btn ghost" href="mailto:contacto@grupoalaris.mx?subject=Arboleda%20-%20informaci%C3%B3n%20para%20ejecuci%C3%B3n">contacto@grupoalaris.mx</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <b style="color:var(--fg)">Grupo Alaris</b> · Construcción virtual y BIM · Puebla, México · 221 329 6868<br>
+  Revisión de constructibilidad documental; no constituye dictamen de DRO ni sustituye las autorizaciones municipales o estatales.
+</div></footer>
+
+<script>
+const ITEMS=[
+ // [especialidad, entregable, estado, C,P,G, prioridad(1 crítica,2 alta,3 media), observación]
+ ["Arquitectura","Plantas arquitectónicas PB, PA y azotea acotadas","parcial",1,1,0,2,"Lámina A-1 completa en planta, pero su cuadro de áreas contradice a P-1 y no lista el comedor."],
+ ["Arquitectura","Cortes X-X' y Y-Y'","falta",1,1,0,1,"Están referidos en A-1 pero no se entregaron. Sin cortes no hay alturas de muros, pretiles ni escalera."],
+ ["Arquitectura","Fachadas","falta",1,1,0,2,"Solo hay render; no hay fachadas acotadas con materiales."],
+ ["Arquitectura","Plano y tabla de acabados (pisos, muros, plafones, zoclos)","falta",1,1,0,1,"Sin acabados no se puede costear el 25–35 % típico de la vivienda."],
+ ["Arquitectura","Cancelería, puertas y herrería (tabla de vanos)","falta",1,1,0,2,"Hay vanos en planta, pero sin dimensiones de altura, tipo ni material."],
+ ["Arquitectura","Detalles constructivos (escalera, balcón, pretiles, impermeabilización)","falta",1,1,1,2,"La escalera interior y el balcón definen cimbra y armado."],
+ ["Arquitectura","Especificaciones generales de obra","falta",0,1,0,2,"Las notas sanitarias remiten a «ver especificaciones de obra», que no existen en el paquete."],
+ ["Estructura","Estudio de mecánica de suelos","falta",1,1,1,1,"Crítico: predio con escurrimiento central y colindancia con barranca."],
+ ["Estructura","Planos estructurales: cimentación, muros de carga, castillos, cadenas, losas y armados","falta",1,1,1,1,"No existe ninguna lámina estructural. Es el primer bloqueo para cuantificar."],
+ ["Estructura","Memoria de cálculo y corresponsable en seguridad estructural","falta",0,1,1,1,"Necesaria para licencia y para fijar secciones y acero."],
+ ["Instalaciones","Hidráulica de vivienda (IH-1, IH-2)","parcial",1,1,0,2,"Material contradictorio (Tubo Plus vs Kitec) y cisterna indefinida. El plano se declara «propuesta de criterio»."],
+ ["Instalaciones","Sanitaria de vivienda (IS-1, IS-2)","parcial",1,1,0,2,"Trayectorias declaradas «representativas»; sin profundidades de registro ni niveles de arrastre."],
+ ["Instalaciones","Pluvial de vivienda","falta",1,1,0,3,"Bajadas BAP marcadas, sin plano ni diámetros a descarga."],
+ ["Instalaciones","Eléctrica: planta, cuadro de cargas y diagrama unifilar","falta",1,1,0,1,"Solo existe en el DWG de otro proyecto."],
+ ["Instalaciones","Gas y calentador de agua","falta",1,1,0,2,"No se indica tanque, ruta de tubería ni tipo de calentador."],
+ ["Instalaciones","Voz, datos y TV","falta",1,1,0,3,"Ductería vacía mínima."],
+ ["Conjunto","Levantamiento topográfico","parcial",1,1,0,2,"PDF de curvas reconstruido en 3D; para obra se requiere el archivo de puntos original del topógrafo."],
+ ["Conjunto","Lotificación y sembrado georreferenciado","parcial",1,1,1,1,"P-1 no coincide con el polígono topográfico (forma y superficie)."],
+ ["Conjunto","Rasantes, terracerías y niveles de desplante por lote","falta",1,1,1,1,"Sin rasantes no hay volúmenes de corte y relleno."],
+ ["Conjunto","Proyecto geométrico y estructura de pavimento","falta",1,1,1,2,"Se conocen 1,274.39 m² y 380.04 ml de guarnición, pero no la sección tipo."],
+ ["Conjunto","Red de agua potable, tomas y medidores","falta",1,1,1,2,"El plano dice «viene de red general presurizada» sin red dibujada."],
+ ["Conjunto","Red de drenaje sanitario y punto de descarga","falta",1,1,1,1,"La simbología cita PVC estructurado de 8\" sin plano de red."],
+ ["Conjunto","Drenaje pluvial del conjunto","falta",1,1,1,1,"El escurrimiento natural cruza el eje de la vialidad."],
+ ["Conjunto","Red eléctrica de media y baja tensión y alumbrado","falta",1,1,1,2,"Requiere proyecto aprobado por CFE."],
+ ["Conjunto","Barda perimetral: sección y cimentación","falta",1,1,0,2,"344.41 ml sin detalle."],
+ ["Conjunto","Área de donación, juegos y jardinería","falta",1,1,0,3,"El render ofrece cancha, juegos, pérgolas y arbolado: alcance visible sin cantidades."],
+ ["Gestión","Uso de suelo, licencia y autorización del régimen de condominio","falta",0,0,1,1,"No hay evidencia en la carpeta."],
+ ["Gestión","Delimitación de zona federal de la barranca","falta",1,0,1,1,"Puede mover el lindero útil y el sembrado."],
+ ["Gestión","Factibilidades de agua y energía","falta",0,1,1,2,"Definen obras de cabeza que pueden caer en el presupuesto."],
+ ["Gestión","Editables DWG del proyecto Arboleda","falta",1,0,0,1,"Los DWG recibidos son de otro proyecto (Puebla, 2019)."],
+ ["Gestión","Alcance contractual, etapas y ritmo de venta","falta",0,1,1,2,"¿Casas + urbanización? ¿Cuántas casas por etapa?"]
+];
+const W={ok:1,parcial:.5,falta:0};
+const dims=[["C","Cuantificar","Faltan estructural, cortes, acabados y editables reales."],["P","Presupuestar","Sin especificaciones ni materiales definidos, no hay precio unitario defendible."],["G","Programar","Sin estructural, rasantes ni etapas, no hay secuencia ni rendimientos."]];
+const g=document.getElementById('gauges');
+dims.forEach((d,i)=>{const sel=ITEMS.filter(r=>r[3+i]);const v=Math.round(100*sel.reduce((a,r)=>a+W[r[2]],0)/sel.length);
+ g.insertAdjacentHTML('beforeend',`<div class="card gauge"><div class="lbl">${d[1]}</div><div class="pct num">${v}%</div><div class="bar"><i style="width:${v}%"></i></div><p>${sel.length} entregables evaluados. ${d[2]}</p></div>`)});
+
+const INV=[
+ ["ARQUITECTONICOS 1.pdf","Plantas baja, alta y azotea del prototipo, 1:50","A-1","Base del modelo de vivienda","parcial"],
+ ["LOTES.pdf","Lotes y poligonal: 33 lotes en predio B, manzanas 1–5 en predio A","P-1","Sembrado y conteo","parcial"],
+ ["HIDRAULICAS 1.pdf","Instalación hidráulica PB, PA, azotea","IH-1","Parcial, material indefinido","parcial"],
+ ["HIDRAULICAS 2.pdf","Isométrico, cálculo de cisterna, notas","IH-2","Parcial, cálculo inconsistente","parcial"],
+ ["SANITARIAS 1.pdf","Instalación sanitaria PB, PA y detalles de registro","IS-1","Parcial, trayectorias representativas","parcial"],
+ ["SANITARIAS 2.pdf","Isométrico sanitario y notas","IS-2","Parcial","parcial"],
+ ["PERIMETROOCOTLANTLAX-Model.pdf","Poligonal UTM de 6 vértices, 4,674.71 m²","Topo","Útil: georreferencia","ok"],
+ ["CURVASDENIVEL-Model.pdf","Curvas a cada 0.50 m","Topo","Útil para volumetría","parcial"],
+ ["PERFILYSECCIONES-Model.pdf","Perfiles de 2 ejes y secciones transversales","Topo","Útil para rasantes preliminares","parcial"],
+ ["4.pdf","Perspectivas del fraccionamiento y área de juegos","Render","Referencia de alcance, no cuantificable","parcial"],
+ ["TOPOGRAFIA_3D (4 archivos)","Puntos X,Y,Z, curvas 3D y vista previa generados por Alaris","Alaris","Toposólido para Revit","ok"],
+ ["ARQUIT. e INSTALACIONES 2023 final FINAL.dwg","Casa de otro proyecto (Puebla, 2019): arquitectura, IE, IH, IS, gas","—","No corresponde a Arboleda","ajeno"],
+ ["CONJUNTO SEMBRADO LOTIFICACIÓN 2023 final FINAL.dwg","Cerrada de 15 lotes en 1,241.40 m², Puebla, 2019","—","No corresponde a Arboleda","ajeno"],
+ ["poliza1 (2).pdf","Póliza de seguro vehicular de un particular","—","Ajeno al proyecto; retirar de la carpeta","ajeno"]
+];
+const lab={ok:"ÚTIL",parcial:"PARCIAL",falta:"FALTA",ajeno:"NO APLICA"};
+document.getElementById('inv').innerHTML=INV.map(r=>`<tr><td class="mono" style="font-size:13px">${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td><span class="pill s-${r[4]}">${lab[r[4]]}</span> <span class="note">${r[3]}</span></td></tr>`).join('');
+
+const FINDS=[
+ ["c","Dos cuadros de áreas distintos para la misma casa","A-1, IH e IS declaran PB 51.60 + PA 60.84 = 112.44 m². P-1 declara PB 61.25 + PA 60.57 = 121.82 m², con otros locales (sala 14.41, recámara 1 16.30). Son 9.38 m² por casa: 309.5 m² en las 33 casas.","A-1 vs P-1"],
+ ["c","Los archivos editables son de otro proyecto","Ambos DWG «2023 final FINAL» contienen una casa y una cerrada de 15 lotes en Puebla (junio 2019), con otro propietario y otro DRO. No hay editable de Arboleda.","DWG × 2"],
+ ["c","No existe proyecto estructural","No hay cimentación, losas, castillos, cadenas ni armados. La única referencia es la simbología «muro de carga» en A-1.","Paquete completo"],
+ ["c","El polígono del proyecto no coincide con la topografía","Topografía: 6 vértices y 4,674.71 m². Proyecto: 4,689.85 m² y un polígono de 4 vértices sin la muesca de V3. Venta + vialidad + donación suman 4,674.22 m², lo que coincide con la topografía y no con el proyecto.","P-1 vs PERIMETRO"],
+ ["a","Escurrimiento natural y barranca","Las curvas muestran un cauce bajo (2,290.75–2,291.50) a lo largo del predio y una barranca colindante. Afecta el pluvial, las rasantes y la cimentación.","CURVAS + PERIMETRO"],
+ ["a","Material hidráulico indefinido","Las notas piden Kitec PE-AL-PE y PEX-AL-PEX; la planta dibuja Tubo Plus de 13, 19 y 25 mm. Son sistemas con precio y mano de obra diferentes.","IH-1 vs IH-2"],
+ ["a","Cálculo de cisterna inconsistente","Usa 9 personas para 3 recámaras; 1,800 L × 2 días se escribe 3.20 m³ (son 3.60); concluye 5.00 m³ y la planta dibuja 6,000 L. No se aclara si cisterna e hidroneumático son por casa o comunes.","IH-2"],
+ ["a","Planos que no son instructivos","IS-1 dice que la posición de salidas y trayectorias «es representativa» y se definirá en obra; IH-2 dice que la propuesta es «meramente de criterio». Así no se puede cuantificar ni cobrar.","IS-1, IH-2"],
+ ["m","Azotea rotulada como superficie de construcción","A-1 indica «superficie de construcción = 56.10 m²» en azotea; es área de losa (sirve para impermeabilización), no construcción adicional.","A-1"],
+ ["m","Alcance visible sin proyecto","El render muestra cancha, juegos, pérgolas, arbolado y luminarias. Si se ofrece, debe tener proyecto y cantidades.","4.pdf"],
+ ["m","Documento ajeno en la carpeta","Hay una póliza de seguro vehicular con datos personales de un tercero. Conviene retirarla del expediente.","poliza1 (2).pdf"]
+];
+const sl={c:"CRÍTICO",a:"ALTO",m:"MEDIO"};
+document.getElementById('finds').innerHTML=FINDS.map((f,i)=>`<div class="find"><div class="n">${String(i+1).padStart(2,'0')}</div><div><h3>${f[1]}<span class="sev ${f[0]}">${sl[f[0]]}</span></h3><p>${f[2]}</p><div class="ref">${f[3]}</div></div></div>`).join('');
+
+const esp=["Todas",...new Set(ITEMS.map(r=>r[0]))];let cur="Todas";
+const fl=document.getElementById('filters');
+function drawF(){fl.innerHTML=esp.map(e=>`<button aria-pressed="${e===cur}" data-e="${e}">${e}${e==="Todas"?"":" ("+ITEMS.filter(r=>r[0]===e).length+")"}</button>`).join('')}
+function drawM(){const rows=ITEMS.map((r,i)=>[i+1,...r]).filter(r=>cur==="Todas"||r[1]===cur);
+ document.getElementById('mtx').innerHTML=rows.map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}${r[7]===1?' <span class="sev c">CRÍTICO</span>':''}</td><td><span class="pill s-${r[3]}">${lab[r[3]]}</span></td><td class="dots"><span class="${r[4]?'on':''}">C</span><span class="${r[5]?'on':''}">P</span><span class="${r[6]?'on':''}">G</span></td><td class="note" style="color:#d6cec6">${r[8]}</td></tr>`).join('');
+ const f=rows.filter(r=>r[3]==="falta").length,p=rows.filter(r=>r[3]==="parcial").length;
+ document.getElementById('mtxcount').textContent=`${rows.length} entregables · ${f} faltan · ${p} parciales · ${rows.length-f-p} completos`;}
+fl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cur=b.dataset.e;drawF();drawM()});
+drawF();drawM();
+
+const fmt=n=>n.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const QTY=[
+ ["Superficie construida","112.44 m²",fmt(33*112.44)+" m²","A-1"],
+ ["Desplante / firme de PB","51.60 m²",fmt(33*51.60)+" m²","A-1"],
+ ["Losa de entrepiso (área bruta PA)","60.84 m²",fmt(33*60.84)+" m²","A-1"],
+ ["Losa de azotea / impermeabilización","56.10 m²",fmt(33*56.10)+" m²","A-1"],
+ ["Inodoros","3 pzas","99 pzas","A-1, IS-1"],
+ ["Lavabos","3 pzas","99 pzas","A-1, IS-1"],
+ ["Regaderas","2 pzas","66 pzas","A-1, IH-1"],
+ ["Fregadero y lavadero","1 + 1","33 + 33 pzas","A-1"],
+ ["Tinaco 1,100 L","1 pza","33 pzas","A-1, IH-2"],
+ ["Vialidad interior","—","1,274.39 m²","P-1"],
+ ["Vialidad exterior","—","500.00 m²","P-1"],
+ ["Guarnición","—","380.04 ml","P-1"],
+ ["Barda perimetral","—","344.41 ml","P-1"],
+ ["Área de donación","—","367.17 m²","P-1"]
+];
+document.getElementById('qty').innerHTML=QTY.map(q=>`<tr><td>${q[0]}</td><td class="r num">${q[1]}</td><td class="r num">${q[2]}</td><td class="mono note">${q[3]}</td></tr>`).join('');
+
+const RFI=[
+ "Archivos DWG editables del proyecto Arboleda (prototipo y conjunto). Los recibidos corresponden a otro proyecto.",
+ "Proyecto estructural completo con memoria de cálculo y firma de corresponsable.",
+ "Estudio de mecánica de suelos con capacidad de carga y recomendaciones de cimentación.",
+ "Archivo de puntos o DWG original del levantamiento topográfico, y aclaración de la superficie oficial del predio (4,674.71 vs 4,689.85 m²).",
+ "Cuadro de áreas definitivo del prototipo (A-1 = 112.44 m² o P-1 = 121.82 m²).",
+ "Cortes, fachadas, plano de acabados y tabla de cancelería y puertas.",
+ "Proyecto eléctrico (planta, cuadro de cargas, unifilar) y de gas.",
+ "Definición del sistema hidráulico (Tubo Plus o Kitec) y del esquema de almacenamiento (cisterna e hidroneumático por casa o común).",
+ "Proyecto de urbanización: rasantes, terracerías, pavimento, agua potable, drenaje sanitario y pluvial, red eléctrica y alumbrado.",
+ "Licencia, uso de suelo, autorización del régimen de condominio, factibilidades de agua y CFE, y delimitación de la zona federal de la barranca.",
+ "Alcance contractual: casas, urbanización y amenidades; etapas y número de casas por etapa.",
+ "Especificaciones generales de obra o marcas y líneas de referencia para acabados y muebles."
+];
+document.getElementById('rfilist').innerHTML=RFI.map(r=>`<li>${r}</li>`).join('');
+document.getElementById('copy').addEventListener('click',async e=>{const t="Fraccionamiento Arboleda – información requerida para ejecución\n\n"+RFI.map((r,i)=>`${i+1}. ${r}`).join('\n');try{await navigator.clipboard.writeText(t);e.target.textContent="Copiada ✓"}catch(_){e.target.textContent="No se pudo copiar"}});
+</script>
+</body>
+</html>
