@@ -72,8 +72,8 @@ a{color:inherit}
 .hero .copy{max-width:640px;pointer-events:auto}
 .hero h1{font-weight:850;font-variation-settings:"wdth" 118;font-size:clamp(40px,5.6vw,84px);line-height:.95;letter-spacing:-1.5px;text-wrap:balance}
 .hero h1 .l2{display:block;font-weight:300;font-variation-settings:"wdth" 62;color:var(--gold);letter-spacing:-.5px;margin-top:.08em}
-.hero p{margin-top:28px;font-size:clamp(17px,1.6vw,20px);max-width:520px;color:var(--muted)}
-.hero p strong{color:var(--ink);font-weight:600}
+.hero .copy p{margin-top:28px;font-size:clamp(17px,1.6vw,20px);max-width:520px;color:var(--muted)}
+.hero .copy p strong{color:var(--ink);font-weight:600}
 .btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
 .btn{display:inline-block;text-decoration:none;font-weight:700;padding:15px 26px;border-radius:2px;font-size:16px;transition:transform .15s,background .2s}
 .btn.primary{background:#C8252B;color:#fff}
@@ -94,7 +94,7 @@ h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw
 /* propuesta de valor */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 13px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
 .eyebrow::before{content:"";width:22px;height:2px;background:var(--red)}
-.trust{margin-top:18px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+.hero .copy .trust{margin-top:18px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
 .trust span::before{content:"✓";color:var(--gold);margin-right:6px}
 .lema h2{max-width:20ch}
 .gains{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
@@ -123,6 +123,63 @@ h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw
 .btn.wa:hover{background:#E0C285}
 /* barra fija en celular */
 .mbar{display:none}
+
+/* panel de cuantificación en vivo */
+.qto{position:absolute;right:24px;bottom:22px;width:300px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.qto .qh{font:500 12px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qto dl{display:grid;gap:4px;margin-top:10px}
+.qto dl>div{display:flex;justify-content:space-between;gap:12px;padding:3px 6px;margin:0 -6px;transition:background .3s}
+.qto dl>div.on{background:color-mix(in srgb,var(--gold) 20%,transparent)}
+.qto dt{color:var(--muted)}
+.qto dd{font-family:"IBM Plex Mono",ui-monospace,monospace;color:var(--ink)}
+.qto dd b{font-weight:500;font-variant-numeric:tabular-nums}
+.qto .qf{margin-top:10px;font-size:11px;color:var(--muted);letter-spacing:.04em}
+/* ejemplo de entrega */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.kpis{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line)}
+.kpi{padding:22px 24px}
+.kpi+.kpi{border-left:1px solid var(--line)}
+.kpi>span{display:block;font-size:14px;color:var(--muted)}
+.kpi b{display:block;margin-top:6px;font:700 clamp(26px,3vw,38px)/1.1 Archivo,sans-serif;font-variation-settings:"wdth" 100;font-variant-numeric:tabular-nums}
+.kpi b small{font:500 15px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted);margin-left:4px}
+.tabs{margin-top:40px;display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
+.tabs [role=tab]{min-height:48px;padding:12px 20px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--muted);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer}
+.tabs [role=tab][aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
+.tabs [role=tab]:hover{color:var(--ink)}
+.tpanel{padding-top:28px}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:680px;height:auto}
+#t-cant{width:100%;min-width:620px;border-collapse:collapse;font-size:15px}
+#t-cant th,#t-cant td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+#t-cant thead th{font-size:13px;color:var(--muted);font-weight:500}
+#t-cant tbody th{font-weight:600}
+#t-cant td:nth-child(3),#t-cant td:nth-child(4){font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;text-align:right}
+#t-cant thead th:nth-child(3),#t-cant thead th:nth-child(4){text-align:right}
+#t-cant tfoot th,#t-cant tfoot td{border-bottom:none;font-weight:700;color:var(--gold)}
+.barc{width:34%}
+.bar{display:block;height:8px;background:var(--gold);border-radius:1px}
+.pct{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.pnote{margin-top:16px;font-size:14px;color:var(--muted);max-width:70ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:12px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:16px;height:10px;display:inline-block;border-radius:1px}
+.ln{width:26px;height:0;display:inline-block;border-top:3px solid}
+.ln.plan{border-color:var(--gold);border-top-style:dashed}
+.ln.real{border-color:var(--ink)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .tick{fill:var(--muted);font:12px "IBM Plex Mono",ui-monospace,monospace}
+.chart .lbl{fill:var(--ink);font:13px "IBM Plex Sans",sans-serif}
+.b-cim{fill:#8E8780;background:#8E8780}
+.b-est{fill:var(--gold);background:var(--gold)}
+.b-fac{fill:#7F9AAB;background:#7F9AAB}
+.b-azo{fill:#B3ACA4;background:#B3ACA4}
+.c-plan{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:8 6}
+.c-real{fill:none;stroke:var(--ink);stroke-width:3}
+.corte{stroke:#FF5A5F;stroke-width:1.5;stroke-dasharray:4 4}
+.avk{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:8px 40px;margin-bottom:20px}
+.avk dt{font-size:13px;color:var(--muted)}
+.avk dd{font:600 20px "IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.disc{margin-top:28px;font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
 
 /* proceso */
 .steps{margin-top:64px;display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line)}
@@ -204,15 +261,24 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
   .hero{min-height:auto;display:block}
   #bim{position:relative;inset:auto;width:100%;height:52svh;display:block}
   .hero .wrap{padding:8px 0 64px}
-  .readout{top:calc(52svh - 36px);bottom:auto}
+  .qto{position:relative;right:auto;bottom:auto;width:auto;margin:0 24px 8px}
+  .qto dl{grid-template-columns:repeat(4,1fr);gap:8px}
+  .qto dl>div{flex-direction:column;gap:2px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi:nth-child(3){border-left:none}
+  .kpi:nth-child(n+3){border-top:1px solid var(--line)}
   .drag{display:none}
 }
 @media (max-width:680px){
   body{font-size:16px}
   .wrap{width:calc(100% - 36px)}
-  #bim{height:46svh}
   .hero .wrap{padding:8px 0 56px}
-  .readout{top:calc(46svh - 36px);right:18px}
+  .qto{margin:0 18px 4px;padding:10px 12px}
+  .qto dl{grid-template-columns:1fr 1fr;margin-top:6px}
+  .qto [data-row="pzas"],.qto [data-row="av"],.qto .qf{display:none}
+  #bim{height:38svh}
+  .avk{grid-template-columns:1fr 1fr}
+  .kpi{padding:16px}
   .drag{display:none}
   section{padding:80px 0}
   .steps{grid-template-columns:1fr}
@@ -247,6 +313,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
     <ul id="menu-principal">
       <li><a href="#revision">Revisión gratuita</a></li>
       <li><a href="#proceso">Cómo trabajamos</a></li>
+      <li><a href="#ejemplo">Ejemplo de entrega</a></li>
       <li><a href="#obra">Obra</a></li>
       <li><a href="#dro">Respaldo DRO</a></li>
       <li><a href="#equipo">Equipo</a></li>
@@ -260,9 +327,18 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
 </nav>
 
 <header class="hero" id="inicio">
-  <canvas id="bim" role="img" aria-label="Modelo BIM animado de un edificio de ocho niveles construyéndose: cimentación, columnas, losas, fachada de vidrio y grúa torre"></canvas>
+  <canvas id="bim" role="img" aria-label="Modelo BIM animado de un edificio de ocho niveles que se arma elemento por elemento mientras se cuantifican el concreto, el vidrio y las piezas"></canvas>
   <div class="drag" aria-hidden="true">Arrastra para girar el modelo</div>
-  <div class="readout" id="readout" aria-hidden="true"><i></i><span>Trazando ejes</span></div>
+  <div class="qto" id="qto" aria-hidden="true">
+    <p class="qh">Trazando ejes</p>
+    <dl>
+      <div data-row="con"><dt>Concreto</dt><dd><b data-q="con">0.0</b> m³</dd></div>
+      <div data-row="vid"><dt>Vidrio</dt><dd><b data-q="vid">0.0</b> m²</dd></div>
+      <div data-row="pzas"><dt>Elementos</dt><dd><b data-q="pzas">0</b> pzas</dd></div>
+      <div data-row="av"><dt>Modelado</dt><dd><b data-q="av">0</b> %</dd></div>
+    </dl>
+    <p class="qf">Cuantificación del modelo, en vivo</p>
+  </div>
   <div class="wrap">
     <div class="copy">
       <h1>Construimos tu obra dos veces.<span class="l2">La primera, en virtual.</span></h1>
@@ -332,6 +408,48 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
       <div class="step"><b>5</b><h3>Validación normativa</h3><p>Revisión del proyecto contra el reglamento, con Director Responsable de Obra propio.</p></div>
       <div class="step"><b>6</b><h3>Obra y control</h3><p>Ejecución en campo con avance físico y financiero en tableros de Power BI.</p></div>
     </div>
+  </div>
+</section>
+
+<section id="ejemplo">
+  <div class="wrap">
+    <p class="eyebrow">Ejemplo de entrega</p>
+    <h2>Así recibes tu proyecto</h2>
+    <p class="lead">Proyecto de muestra: edificio de oficinas de ocho niveles. Las cantidades, el programa y la curva de avance salen del mismo modelo que ves en la portada. Nada se captura a mano.</p>
+    <div class="kpis">
+      <div class="kpi"><span>Concreto</span><b><span data-k="con">—</span><small>m³</small></b></div>
+      <div class="kpi"><span>Fachada de vidrio</span><b><span data-k="vid">—</span><small>m²</small></b></div>
+      <div class="kpi"><span>Elementos modelados</span><b><span data-k="pzas">—</span><small>pzas</small></b></div>
+      <div class="kpi"><span>Duración estimada</span><b><span data-k="dur">—</span><small>semanas</small></b></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Contenido del tablero de muestra">
+      <button type="button" role="tab" id="tab-cant" aria-controls="p-cant" aria-selected="true">Cantidades</button>
+      <button type="button" role="tab" id="tab-prog" aria-controls="p-prog" aria-selected="false" tabindex="-1">Programa de obra</button>
+      <button type="button" role="tab" id="tab-av" aria-controls="p-av" aria-selected="false" tabindex="-1">Control de avance</button>
+    </div>
+    <div class="tpanel" id="p-cant" role="tabpanel" aria-labelledby="tab-cant">
+      <div class="chart" tabindex="0" role="region" aria-label="Tabla de cantidades, se puede desplazar">
+        <table id="t-cant"><caption class="sr">Cantidades por partida del proyecto de muestra</caption>
+          <thead><tr><th scope="col">Partida</th><th scope="col">Unidad</th><th scope="col">Cantidad</th><th scope="col">Piezas</th><th scope="col">Participación</th></tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><th scope="row">Concreto total</th><td>m³</td><td data-k="tcon"></td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+      <p class="pnote">Cada cantidad está ligada a elementos del modelo: si un elemento no está modelado, no se cuantifica ni se cobra.</p>
+    </div>
+    <div class="tpanel" id="p-prog" role="tabpanel" aria-labelledby="tab-prog" hidden>
+      <div class="legend"><span><i class="sw b-cim"></i>Cimentación</span><span><i class="sw b-est"></i>Estructura</span><span><i class="sw b-fac"></i>Fachada</span><span><i class="sw b-azo"></i>Azotea</span></div>
+      <div class="chart" id="g-prog" tabindex="0" role="region" aria-label="Programa de obra, se puede desplazar"></div>
+      <p class="pnote">La fachada avanza dos niveles detrás de la estructura, la misma secuencia que ves en la animación de la portada.</p>
+    </div>
+    <div class="tpanel" id="p-av" role="tabpanel" aria-labelledby="tab-av" hidden>
+      <dl class="avk"><div><dt>Corte</dt><dd>Semana <span data-k="corte"></span></dd></div><div><dt>Programado</dt><dd data-k="pp"></dd></div><div><dt>Real</dt><dd data-k="pr"></dd></div><div><dt>Desviación</dt><dd data-k="dv"></dd></div></dl>
+      <div class="legend"><span><i class="ln plan"></i>Programado</span><span><i class="ln real"></i>Real</span></div>
+      <div class="chart" id="g-av" tabindex="0" role="region" aria-label="Curva de avance, se puede desplazar"></div>
+      <p class="pnote">El avance real se registra en los elementos del modelo y de ahí sale la curva: ves de inmediato si la obra va adelantada o atrasada.</p>
+    </div>
+    <p class="disc">Ejemplo ilustrativo con datos de muestra. No corresponde a ningún cliente ni a una obra real.</p>
+    <div class="btns"><a class="btn primary" href="#revision">Quiero este control para mi proyecto</a></div>
   </div>
 </section>
 
@@ -416,149 +534,252 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
   nav.querySelectorAll('#menu-principal a').forEach(a=>a.addEventListener('click',close));
   addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){close();btn.focus();}});
 })();
+/* Proyecto de muestra: geometría única de la que salen la animación y el tablero */
+window.ALR=(function(){
+  const BX=4, BZ=3, SX=6, SZ=5.5, H=3.4, N=8, SET=2;
+  const W=BX*SX, D=BZ*SZ;
+  const COL=.6, SLAB=.32, CORE_X=SX*.8, CORE_Z=SZ*.75, CORE_T=.25, GH=H-.4;
+  const r2=v=>Math.round(v*100)/100;
+  const niveles=[];
+  for(let f=0;f<N;f++){
+    const set=f>=N-SET?1:0, bays=BX-2*set, sw=bays*SX;
+    const cols=(bays+1)*(BZ+1);
+    const vCol=cols*COL*COL*H;
+    const vCore=2*(CORE_X+CORE_Z)*H*CORE_T;
+    const vSlab=(sw+.8)*(D+.8)*SLAB;
+    const aGlass=(bays*2*(SX-.6)+BZ*2*(SZ-.6))*GH;
+    const panels=bays*2+BZ*2;
+    niveles.push({f,set,bays,sw,cols,vCol,vCore,vSlab,aGlass,panels});
+  }
+  const vFound=(W+2.4)*(D+2.4)*.6;
+  const sum=k=>niveles.reduce((a,n)=>a+n[k],0);
+  const partidas=[
+    {id:'cim', nombre:'Losa de cimentación', unidad:'m³', cant:vFound, piezas:1},
+    {id:'col', nombre:'Columnas de concreto', unidad:'m³', cant:sum('vCol'), piezas:sum('cols')},
+    {id:'nuc', nombre:'Muros de núcleo', unidad:'m³', cant:sum('vCore'), piezas:N*4},
+    {id:'los', nombre:'Losas de entrepiso', unidad:'m³', cant:sum('vSlab'), piezas:N},
+    {id:'fac', nombre:'Fachada de vidrio', unidad:'m²', cant:sum('aGlass'), piezas:sum('panels')}
+  ];
+  partidas.forEach(p=>p.cant=r2(p.cant));
+  /* programa en semanas: cimentación 3; estructura 2 sem por nivel con traslape de 0.5; fachada 2 niveles atrás, 1.5 sem por nivel; azotea 2 */
+  const prog=[{t:'Cimentación',i:0,ini:0,dur:3,tipo:'cim'}];
+  for(let f=0;f<N;f++){
+    const ini=3+f*1.5;
+    prog.push({t:'Nivel '+(f+1),i:f+1,ini,dur:2,tipo:'est'});
+    prog.push({t:'Nivel '+(f+1),i:f+1,ini:ini+3.5,dur:1.5,tipo:'fac'});
+  }
+  const finEst=3+(N-1)*1.5+2;
+  prog.push({t:'Azotea',i:N+1,ini:finEst,dur:2,tipo:'azo'});
+  const dur=Math.ceil(Math.max(...prog.map(p=>p.ini+p.dur)));
+  return {BX,BZ,SX,SZ,H,N,W,D,COL,SLAB,CORE_X,CORE_Z,CORE_T,GH,niveles,partidas,prog,dur,
+    concreto:r2(vFound+sum('vCol')+sum('vCore')+sum('vSlab')), vidrio:r2(sum('aGlass'))};
+})();
+
 (function(){
-  const canvas=document.getElementById('bim'), readout=document.getElementById('readout'), rtxt=readout.querySelector('span');
-  if(!window.THREE){canvas.style.display='none';return;}
+  const M=window.ALR, canvas=document.getElementById('bim'), qto=document.getElementById('qto');
+  const q=k=>qto.querySelector('[data-q="'+k+'"]');
+  const fmt=(v,d)=>v.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const totalPzas=M.partidas.reduce((a,p)=>a+p.piezas,0);
+  function finalPanel(){q('con').textContent=fmt(M.concreto,1);q('vid').textContent=fmt(M.vidrio,1);q('pzas').textContent=fmt(totalPzas,0);q('av').textContent='100';}
+  if(!window.THREE){canvas.style.display='none';finalPanel();return;}
   let renderer;
-  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){canvas.style.display='none';rtxt.textContent='Modelo coordinado';readout.classList.add('done');return;}
+  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){canvas.style.display='none';finalPanel();return;}
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  const scene=new THREE.Scene();
-  const cam=new THREE.PerspectiveCamera(34,1,0.1,500);
-  const GOLD=0xD1AE6C, RED=0xEC3237, DIM=0x5a524a, CONC=0x8E8780, CONC2=0x6E6862, EDGE=0x1c1a1b;
-  scene.add(new THREE.HemisphereLight(0xfff4e6,0x2a2627,0.75));
-  const sun=new THREE.DirectionalLight(0xffffff,0.75); sun.position.set(45,40,15); scene.add(sun);
-  const fill=new THREE.DirectionalLight(0xD1AE6C,0.25); fill.position.set(-40,20,-30); scene.add(fill);
+  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(32,1,0.1,500);
+  const GOLD=0xD1AE6C, DIM=0x4a4440, EDGE=0x1a1819;
+  scene.add(new THREE.HemisphereLight(0xfff4e6,0x2a2627,0.62));
+  const sun=new THREE.DirectionalLight(0xffffff,0.7); sun.position.set(45,36,10); scene.add(sun);
+  const rim=new THREE.DirectionalLight(0xD1AE6C,0.35); rim.position.set(-40,25,-35); scene.add(rim);
   const root=new THREE.Group(); scene.add(root);
-
-  const BX=4, BZ=3, SX=6, SZ=5.5, H=3.4, N=8;
-  const W=BX*SX, D=BZ*SZ, ox=-W/2, oz=-D/2;
+  const {BX,BZ,SX,SZ,H,N,W,D}=M, ox=-W/2, oz=-D/2;
+  const gold=new THREE.Color(0xC8962E), black=new THREE.Color(0);
   const lines=(pts,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));return new THREE.LineSegments(g,mat);};
-  const mat=(c,o)=>new THREE.MeshStandardMaterial({color:c,roughness:.85,metalness:0,transparent:true,opacity:o});
+  const smat=(c,o)=>new THREE.MeshStandardMaterial({color:c,roughness:.82,metalness:0,transparent:true,opacity:o});
   const lmat=(c,o)=>new THREE.LineBasicMaterial({color:c,transparent:true,opacity:o});
-  const withEdges=(geo,m,em)=>{const g=new THREE.Group();g.add(new THREE.Mesh(geo,m));g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),em));return g;};
+  const solid=(geo,m,em)=>{const g=new THREE.Group();g.add(new THREE.Mesh(geo,m));g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),em));return g;};
+  const cat={col:[],nuc:[],los:[],fac:[],cim:[]};
 
-  // ejes del terreno
+  // retícula de ejes
   const ap=[];
   for(let i=-1;i<=BX+1;i++){const x=ox+i*SX;ap.push(x,0,oz-5,x,0,oz+D+5);}
   for(let j=-1;j<=BZ+1;j++){const z=oz+j*SZ;ap.push(ox-5,0,z,ox+W+5,0,z);}
-  const axesMat=lmat(DIM,0); root.add(lines(ap,axesMat));
+  const axM=lmat(DIM,0); root.add(lines(ap,axM));
 
-  // cimentación
-  const fM=mat(CONC2,0), fE=lmat(EDGE,0);
-  const found=withEdges(new THREE.BoxGeometry(W+2.4,.6,D+2.4),fM,fE); found.position.y=-.3; root.add(found);
+  const fM=smat(0x6E6862,0), fE=lmat(EDGE,0); cat.cim.push(fM);
+  const found=solid(new THREE.BoxGeometry(W+2.4,.6,D+2.4),fM,fE); found.position.y=-.3; root.add(found);
 
-  const colGeo=new THREE.BoxGeometry(.6,H,.6); colGeo.translate(0,H/2,0);
-  const coreGeo=new THREE.BoxGeometry(SX*.8,H,SZ*.75); coreGeo.translate(0,H/2,0);
+  const colGeo=new THREE.BoxGeometry(M.COL,H,M.COL); colGeo.translate(0,H/2,0);
+  const wx=new THREE.BoxGeometry(M.CORE_X,H,M.CORE_T); wx.translate(0,H/2,0);
+  const wz=new THREE.BoxGeometry(M.CORE_T,H,M.CORE_Z); wz.translate(0,H/2,0);
   const floors=[];
-  for(let f=0;f<N;f++){
-    const set=f>=N-2?1:0, x0=ox+set*SX, x1=ox+(BX-set)*SX, sw=x1-x0;
-    const g=new THREE.Group(); g.position.y=f*H; root.add(g);
-    // columnas y núcleo
-    const cM=mat(CONC,1), cE=lmat(EDGE,.6), struct=new THREE.Group(); g.add(struct);
-    for(let i=set;i<=BX-set;i++)for(let j=0;j<=BZ;j++){const c=withEdges(colGeo,cM,cE);c.position.set(ox+i*SX,0,oz+j*SZ);struct.add(c);}
-    const core=withEdges(coreGeo,mat(CONC2,1),cE); core.children[0].material=cM; core.position.set(ox+1.5*SX,0,0); struct.add(core);
-    struct.scale.y=.0001;
-    // losa
-    const sM=mat(CONC,0), sE=lmat(EDGE,0);
-    const slab=withEdges(new THREE.BoxGeometry(sw+.8,.32,D+.8),sM,sE); slab.position.set((x0+x1)/2,H,0); g.add(slab);
-    // fachada: vidrio con manguetes dorados, perímetro completo
-    const gM=new THREE.MeshStandardMaterial({color:0x40525e,roughness:.15,metalness:.35,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
-    const mM=lmat(GOLD,0), fac=new THREE.Group(); g.add(fac);
-    const gh=H-.4, mp=[];
-    const panel=(cx,cz,len,alongX)=>{
-      const p=new THREE.Mesh(new THREE.BoxGeometry(alongX?len:.08,gh,alongX?.08:len),gM); p.position.set(cx,.2+gh/2,cz); fac.add(p);
-      const n=3; for(let k=0;k<=n;k++){const t=-len/2+k*len/n; alongX?mp.push(cx+t,.2,cz,cx+t,.2+gh,cz):mp.push(cx,.2,cz+t,cx,.2+gh,cz+t);}
-      alongX?mp.push(cx-len/2,.2+gh*.5,cz,cx+len/2,.2+gh*.5,cz):mp.push(cx,.2+gh*.5,cz-len/2,cx,.2+gh*.5,cz+len/2);
+  M.niveles.forEach(n=>{
+    const set=n.set, x0=ox+set*SX, x1=ox+(BX-set)*SX;
+    const g=new THREE.Group(); g.position.y=n.f*H; root.add(g);
+    const cM=smat(0x9A948D,1), kM=smat(0x847E78,1), eM=lmat(EDGE,.55);
+    cat.col.push(cM); cat.nuc.push(kM);
+    const st=new THREE.Group(); g.add(st);
+    for(let i=set;i<=BX-set;i++)for(let j=0;j<=BZ;j++){const c=solid(colGeo,cM,eM);c.position.set(ox+i*SX,0,oz+j*SZ);st.add(c);}
+    const cx=ox+1.5*SX;
+    [[wx,cx,-M.CORE_Z/2],[wx,cx,M.CORE_Z/2],[wz,cx-M.CORE_X/2,0],[wz,cx+M.CORE_X/2,0]].forEach(([geo,x,z])=>{const w=solid(geo,kM,eM);w.position.set(x,0,z);st.add(w);});
+    st.scale.y=.0001;
+    const sM=smat(0x9C958D,0), sE=lmat(EDGE,0); cat.los.push(sM);
+    const slab=solid(new THREE.BoxGeometry(n.sw+.8,M.SLAB,D+.8),sM,sE); slab.position.set((x0+x1)/2,H,0); g.add(slab);
+    const gM=new THREE.MeshStandardMaterial({color:0x3E5260,roughness:.12,metalness:.4,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
+    const mM=lmat(GOLD,0), fac=new THREE.Group(); g.add(fac); cat.fac.push(gM);
+    const gh=M.GH, mp=[];
+    const panel=(px,pz,len,alongX)=>{
+      const p=new THREE.Mesh(new THREE.BoxGeometry(alongX?len:.08,gh,alongX?.08:len),gM); p.position.set(px,.2+gh/2,pz); fac.add(p);
+      for(let k=0;k<=3;k++){const t=-len/2+k*len/3; alongX?mp.push(px+t,.2,pz,px+t,.2+gh,pz):mp.push(px,.2,pz+t,px,.2+gh,pz+t);}
+      alongX?mp.push(px-len/2,1.1,pz,px+len/2,1.1,pz):mp.push(px,1.1,pz-len/2,px,1.1,pz+len/2);
     };
-    for(let i=set;i<BX-set;i++){const cx=ox+(i+.5)*SX;panel(cx,oz-.05,SX-.6,true);panel(cx,oz+D+.05,SX-.6,true);}
-    for(let j=0;j<BZ;j++){const cz=oz+(j+.5)*SZ;panel(x0-.05,cz,SZ-.6,false);panel(x1+.05,cz,SZ-.6,false);}
+    for(let i=set;i<BX-set;i++){const px=ox+(i+.5)*SX;panel(px,oz-.05,SX-.6,true);panel(px,oz+D+.05,SX-.6,true);}
+    for(let j=0;j<BZ;j++){const pz=oz+(j+.5)*SZ;panel(x0-.05,pz,SZ-.6,false);panel(x1+.05,pz,SZ-.6,false);}
     fac.add(lines(mp,mM));
-    floors.push({struct,cM,sM,sE,slab,gM,mM,fac,sy:H});
-  }
-  // azotea: pretil y cuarto de máquinas
-  const rM=mat(CONC2,0), rE=lmat(EDGE,0), roof=new THREE.Group(); root.add(roof);
-  const top=N*H+.16, rx0=ox+SX, rx1=ox+(BX-1)*SX;
-  const par=withEdges(new THREE.BoxGeometry(rx1-rx0+.8,.9,D+.8),rM,rE); par.position.set((rx0+rx1)/2,top+.45,0);
-  par.children[0].material=new THREE.MeshStandardMaterial({color:CONC2,transparent:true,opacity:0,side:THREE.BackSide});
-  const mach=withEdges(new THREE.BoxGeometry(SX*.8,2.2,SZ*.75),rM,rE); mach.position.set(ox+1.5*SX,top+1.1,0);
+    floors.push({n,st,cM,kM,sM,sE,slab,gM,mM,fac,sy:H});
+  });
+  // pretil de azotea
+  const rM=smat(0x6E6862,0), rE=lmat(EDGE,0), top=N*H+.16;
+  const roof=new THREE.Group(); root.add(roof);
+  const lastN=M.niveles[N-1], rx0=ox+lastN.set*SX, rx1=ox+(BX-lastN.set)*SX;
+  const par=solid(new THREE.BoxGeometry(rx1-rx0+.8,.9,D+.8),rM,rE); par.position.set((rx0+rx1)/2,top+.45,0);
+  par.children[0].material=new THREE.MeshStandardMaterial({color:0x6E6862,transparent:true,opacity:0,side:THREE.BackSide});
+  const mach=solid(new THREE.BoxGeometry(M.CORE_X,2.2,M.CORE_Z),rM,rE); mach.position.set(ox+1.5*SX,top+1.1,0);
   roof.add(par,mach);
 
-  // grúa torre
-  const crane=new THREE.Group(), kM=lmat(GOLD,0), kpts=[];
-  const cx=ox-4.5, cz=oz-4.5, mh=N*H+5, s=.8;
-  for(let y=0;y<mh;y+=1.8){
-    const y2=Math.min(y+1.8,mh);
-    [[-s,-s],[s,-s],[s,s],[-s,s]].forEach(([a,b],k,arr)=>{const [c,d]=arr[(k+1)%4];kpts.push(a,y,b,a,y2,b, a,y,b,c,y,d, a,y,b,c,y2,d);});
-  }
-  crane.add(lines(kpts,kM)); crane.position.set(cx,0,cz); root.add(crane);
-  const jib=new THREE.Group(); jib.position.y=mh; crane.add(jib);
-  const jp=[], JL=20, CL=7;
-  for(let x=-CL;x<JL;x+=2){const x2=Math.min(x+2,JL);jp.push(x,0,-.6,x2,0,-.6, x,0,.6,x2,0,.6, x,0,-.6,x,0,.6, x,0,-.6,x2,1.4*(1-x2/JL),0, x,0,.6,x2,1.4*(1-x2/JL),0);}
-  jp.push(0,0,0,0,4,0, 0,4,0,JL,0,0, 0,4,0,-CL,0,0);
-  jib.add(lines(jp,kM));
-  const cwM=mat(CONC2,0), cw=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.6,1.6),cwM); cw.position.set(-CL+1.4,-.8,0); jib.add(cw);
-  const cabM=mat(GOLD,0), cab=new THREE.Mesh(new THREE.BoxGeometry(1.6,1.4,1.4),cabM); cab.position.set(1.2,-.7,1.4); jib.add(cab);
-  const hookMat=lmat(RED,0), hookGeo=new THREE.BufferGeometry(); hookGeo.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,0,-1,0],3));
-  const hook=new THREE.LineSegments(hookGeo,hookMat); jib.add(hook);
-
   function size(){
-    const r=canvas.getBoundingClientRect(); const w=Math.max(1,r.width), h=Math.max(1,r.height);
+    const r=canvas.getBoundingClientRect(), w=Math.max(1,r.width), h=Math.max(1,r.height);
     renderer.setSize(w,h,false); cam.aspect=w/h;
-    const mobile=w<680;
-    cam.position.set(mobile?70:64, mobile?40:36, mobile?70:64);
-    cam.lookAt(0,N*H*0.5,0); cam.updateProjectionMatrix();
+    const k=w/h<1.1?1.12:1;
+    const wide=w>1000;cam.position.set(58*k,30*k,58*k); cam.lookAt(wide?5:0,N*H*(wide?.42:.47),wide?-5:0); cam.updateProjectionMatrix();
   }
   addEventListener('resize',size); size();
 
-  // interacción: arrastre horizontal gira
-  let rot=-.5, vel=0, dragging=false, lastX=0;
+  let rot=-.55, vel=0, dragging=false, lastX=0;
   canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId);});
   canvas.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX;lastX=e.clientX;rot+=dx*.008;vel=dx*.0008;});
   canvas.addEventListener('pointerup',()=>dragging=false);
   canvas.addEventListener('pointercancel',()=>dragging=false);
 
   const cl=t=>Math.min(Math.max(t,0),1), ease=t=>1-Math.pow(1-cl(t),3);
-  const T_AX=.8, T_FO=.7, T_FL=.62, LAG=2, F0=T_AX+T_FO;
-  const T_STR=F0+N*T_FL, T_FAC=F0+(N-1+LAG)*T_FL+.55, T_END=T_FAC+.5;
-  const cc=new THREE.Color(), cConc=new THREE.Color(CONC), cRed=new THREE.Color(RED);
-  let start=null, lastLabel='';
-  function setLabel(s,done){if(s!==lastLabel){rtxt.textContent=s;lastLabel=s;readout.classList.toggle('done',!!done);}}
+  const T_AX=.7, T_FO=.7, T_FL=.6, LAG=2, F0=T_AX+T_FO;
+  const T_STR=F0+N*T_FL, T_END=F0+(N-1+LAG)*T_FL+.6+.4;
+  const cycle=['col','nuc','los','fac'], CY=2.4;
+  const head=qto.querySelector('.qh'), rows=qto.querySelectorAll('[data-row]');
+  let start=null, lastHead='';
+  const setHead=s=>{if(s!==lastHead){head.textContent=s;lastHead=s;}};
+  const glow=(m,v)=>{m.emissive.copy(gold).multiplyScalar(v);};
 
   function frame(ts){
     if(start===null)start=ts;
     const t=reduce?99:(ts-start)/1000;
-    axesMat.opacity=.5*ease(t/T_AX);
-    const kf=ease((t-T_AX*.6)/T_FO); fM.opacity=kf; fE.opacity=.7*kf; found.position.y=-.3-(1-kf)*1.2;
-    const kc=ease((t-T_AX*.4)/.8); kM.opacity=.9*kc; cwM.opacity=kc; cabM.opacity=kc;
-    let label='', stage=-1;
-    floors.forEach((f,i)=>{
-      const t0=F0+i*T_FL; let k2=ease((t-t0-T_FL*.45)/(T_FL*.55)), k3=ease((t-t0-LAG*T_FL)/.55);
-      const k1=ease((t-t0)/(T_FL*.7)); f.struct.scale.y=Math.max(k1,.0001); f.struct.visible=k1>.01; f.slab.visible=k2>.01; f.fac.visible=k3>.01;
-      const act=t>=t0 && t<t0+T_FL*.9;
-      cc.copy(cConc).lerp(cRed,act?1-ease((t-t0-T_FL*.45)/(T_FL*.45)):0); f.cM.color.copy(cc);
-      k2=ease((t-t0-T_FL*.45)/(T_FL*.55)); f.sM.opacity=k2; f.sE.opacity=.6*k2; f.slab.position.y=f.sy+(1-k2)*1.6;
-      const tf=t0+LAG*T_FL; k3=ease((t-tf)/.55); f.gM.opacity=.62*k3; f.mM.opacity=.85*k3; f.fac.position.y=-(1-k3)*.8;
-      if(t>=t0 && t<t0+T_FL){stage=i;label=(k2>0?'Colando losa del nivel ':'Columnas del nivel ')+(i+1);}
+    axM.opacity=.5*ease(t/T_AX);
+    const kf=ease((t-T_AX*.6)/T_FO); fM.opacity=kf; fE.opacity=.6*kf; found.position.y=-.3-(1-kf)*1.2;
+    let con=M.partidas[0].cant*kf, vid=0, pz=kf>.99?1:0, stage='';
+    floors.forEach((F,i)=>{
+      const t0=F0+i*T_FL, n=F.n;
+      const k1=ease((t-t0)/(T_FL*.7)); F.st.scale.y=Math.max(k1,.0001); F.st.visible=k1>.01;
+      const k2=ease((t-t0-T_FL*.45)/(T_FL*.55)); F.sM.opacity=k2; F.sE.opacity=.55*k2; F.slab.position.y=F.sy+(1-k2)*1.6; F.slab.visible=k2>.01;
+      const k3=ease((t-t0-LAG*T_FL)/.6); F.gM.opacity=.6*k3; F.mM.opacity=.85*k3; F.fac.position.y=-(1-k3)*.8; F.fac.visible=k3>.01;
+      const act=Math.max(0,1-Math.abs((t-t0-T_FL*.35)/(T_FL*.6)));
+      if(t<T_END+.2){glow(F.cM,.45*act);glow(F.kM,.45*act);glow(F.sM,.35*Math.max(0,1-Math.abs((t-t0-T_FL*.8)/(T_FL*.5))));}
+      con+=(n.vCol+n.vCore)*k1+n.vSlab*k2; vid+=n.aGlass*k3;
+      pz+=Math.round((n.cols+4)*k1)+(k2>.99?1:0)+Math.round(n.panels*k3);
+      if(t>=t0&&t<t0+T_FL) stage='Modelando nivel '+(i+1)+' de '+N;
     });
     const kr=ease((t-T_STR)/.5); rM.opacity=kr; rE.opacity=.6*kr; par.children[0].material.opacity=kr; roof.position.y=(1-kr)*1.2; roof.visible=kr>.01;
-    // grúa: gira hacia el frente de obra y sube el gancho
-    const lvl=stage>=0?stage:(t<F0?0:N-1);
-    jib.rotation.y=reduce?-.6:-.75+Math.sin(t*.9)*.45;
-    const trolley=11+Math.sin(t*1.3)*3, drop=Math.max(mh-((lvl+1)*H+1.5),1);
-    hookGeo.attributes.position.setXYZ(0,trolley,0,0); hookGeo.attributes.position.setXYZ(1,trolley,-drop,0); hookGeo.attributes.position.needsUpdate=true;
-    hookMat.opacity=t<T_STR?.9*kc:Math.max(0,.9-(t-T_STR));
-    if(t<T_AX) setLabel('Trazando ejes');
-    else if(t<F0) setLabel('Cimentación');
-    else if(label) setLabel(label);
-    else if(t<T_END) setLabel('Montando fachada');
-    else setLabel('Modelo coordinado, listo para cuantificar',true);
-    if(!dragging){ vel*=.95; rot+= vel + (reduce?0:.0014); }
+    if(t<T_END){
+      q('con').textContent=fmt(con,1); q('vid').textContent=fmt(vid,1); q('pzas').textContent=fmt(pz,0); q('av').textContent=fmt(Math.min(99,pz/totalPzas*100),0);
+      setHead(t<T_AX?'Trazando ejes':t<F0?'Cimentación':stage||'Montando fachada');
+      rows.forEach(r=>r.classList.remove('on'));
+    }else{
+      finalPanel();
+      const ci=reduce?-1:Math.floor((t-T_END)/CY)%cycle.length, id=cycle[ci];
+      const ph=reduce?0:((t-T_END)%CY)/CY, amp=Math.sin(Math.min(ph*4,1)*Math.PI/2)*Math.min(1,(1-ph)*4);
+      Object.keys(cat).forEach(k=>cat[k].forEach(m=>m.emissive&&glow(m,k===id?.38*amp:0)));
+      const p=M.partidas.find(p=>p.id===id);
+      setHead(p?p.nombre+' · '+fmt(p.cant,2)+' '+p.unidad:'Modelo cuantificado');
+      rows.forEach(r=>r.classList.toggle('on',r.dataset.row===(id==='fac'?'vid':'con')&&amp>.2));
+    }
+    if(!dragging){vel*=.95; rot+=vel+(reduce?0:.0013);}
     root.rotation.y=rot;
     renderer.render(scene,cam);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+})();
+
+(function(){
+  const M=window.ALR, root=document.getElementById('ejemplo'); if(!root) return;
+  const fmt=(v,d)=>v.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const $=s=>root.querySelector(s);
+  const totalPzas=M.partidas.reduce((a,p)=>a+p.piezas,0);
+  // indicadores
+  $('[data-k="con"]').textContent=fmt(M.concreto,1);
+  $('[data-k="vid"]').textContent=fmt(M.vidrio,1);
+  $('[data-k="pzas"]').textContent=fmt(totalPzas,0);
+  $('[data-k="dur"]').textContent=M.dur;
+
+  // cantidades
+  const conc=M.partidas.filter(p=>p.unidad==='m³'), maxC=Math.max(...conc.map(p=>p.cant));
+  const tb=$('#t-cant tbody');
+  M.partidas.forEach(p=>{
+    const tr=document.createElement('tr');
+    const pct=p.unidad==='m³'?p.cant/M.concreto*100:null;
+    const cells=[p.nombre,p.unidad,fmt(p.cant,2),fmt(p.piezas,0)];
+    cells.forEach((c,i)=>{const td=document.createElement(i?'td':'th');if(!i)td.scope='row';td.textContent=c;tr.appendChild(td);});
+    const td=document.createElement('td'); td.className='barc';
+    if(pct!==null){const b=document.createElement('span');b.className='bar';b.style.width=(p.cant/maxC*100).toFixed(1)+'%';td.appendChild(b);const s=document.createElement('span');s.className='pct';s.textContent=fmt(pct,1)+' % del concreto';td.appendChild(s);}
+    else{const s=document.createElement('span');s.className='pct';s.textContent='Cancelería y vidrio';td.appendChild(s);}
+    tr.appendChild(td); tb.appendChild(tr);
+  });
+  $('#t-cant tfoot [data-k="tcon"]').textContent=fmt(M.concreto,2);
+
+  const NS='http://www.w3.org/2000/svg';
+  const el=(n,a,txt)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+
+  // programa (Gantt)
+  (function(){
+    const rows=['Cimentación',...Array.from({length:M.N},(_,i)=>'Nivel '+(i+1)),'Azotea'];
+    const L=110, R=20, T=34, RH=26, Wd=900, Hd=T+rows.length*RH+16, sx=(Wd-L-R)/M.dur;
+    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,role:'img','aria-labelledby':'g-t'});
+    s.appendChild(el('title',{id:'g-t'},`Programa de obra de ${M.dur} semanas: cimentación, estructura nivel por nivel y fachada dos niveles atrás.`));
+    for(let w=0;w<=M.dur;w+=2){const x=L+w*sx;s.appendChild(el('line',{x1:x,y1:T-6,x2:x,y2:Hd-14,class:'grid'}));s.appendChild(el('text',{x,y:T-12,class:'tick','text-anchor':'middle'},'S'+w));}
+    rows.forEach((r,i)=>{const y=T+i*RH;s.appendChild(el('text',{x:L-12,y:y+RH/2+4,class:'lbl','text-anchor':'end'},r));});
+    M.prog.forEach(p=>{const y=T+p.i*RH+(p.tipo==='fac'?RH*.5:RH*.18), h=p.tipo==='est'||p.tipo==='fac'?RH*.32:RH*.6;
+      s.appendChild(el('rect',{x:L+p.ini*sx,y,width:p.dur*sx,height:h,rx:2,class:'b-'+p.tipo}));});
+    $('#g-prog').appendChild(s);
+  })();
+
+  // avance (curva S)
+  (function(){
+    const steps=M.dur*4, plan=[];
+    for(let s=0;s<=steps;s++){const w=s/4;let a=0,tot=0;M.prog.forEach(p=>{tot+=p.dur;a+=Math.min(Math.max(w-p.ini,0),p.dur);});plan.push([w,a/tot*100]);}
+    const at=w=>{const i=Math.min(Math.round(w*4),steps);return plan[i][1];};
+    const CORTE=Math.round(M.dur*.55), DELAY=1;
+    const real=plan.filter(([w])=>w<=CORTE).map(([w])=>[w,at(Math.max(w-DELAY*(w/CORTE),0))]);
+    const pP=at(CORTE), pR=real[real.length-1][1];
+    const L=50,R=20,T=20,B=34,Wd=900,Hd=320,sx=(Wd-L-R)/M.dur,sy=(Hd-T-B)/100;
+    const X=w=>L+w*sx, Y=v=>Hd-B-v*sy;
+    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,role:'img','aria-labelledby':'s-t'});
+    s.appendChild(el('title',{id:'s-t'},`Curva de avance. Al corte de la semana ${CORTE}: programado ${fmt(pP,0)} %, real ${fmt(pR,0)} %.`));
+    for(let v=0;v<=100;v+=25){s.appendChild(el('line',{x1:L,y1:Y(v),x2:Wd-R,y2:Y(v),class:'grid'}));s.appendChild(el('text',{x:L-8,y:Y(v)+4,class:'tick','text-anchor':'end'},v+'%'));}
+    for(let w=0;w<=M.dur;w+=2)s.appendChild(el('text',{x:X(w),y:Hd-B+18,class:'tick','text-anchor':'middle'},'S'+w));
+    s.appendChild(el('polyline',{points:plan.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-plan'}));
+    s.appendChild(el('polyline',{points:real.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-real'}));
+    s.appendChild(el('line',{x1:X(CORTE),y1:T,x2:X(CORTE),y2:Hd-B,class:'corte'}));
+    s.appendChild(el('text',{x:X(CORTE)+8,y:T+12,class:'lbl'},'Corte semana '+CORTE));
+    $('#g-av').appendChild(s);
+    $('[data-k="corte"]').textContent=CORTE;
+    $('[data-k="pp"]').textContent=fmt(pP,0)+' %';
+    $('[data-k="pr"]').textContent=fmt(pR,0)+' %';
+    $('[data-k="dv"]').textContent=fmt(pR-pP,0)+' puntos';
+  })();
+
+  // pestañas accesibles
+  const tabs=[...root.querySelectorAll('[role="tab"]')];
+  const show=t=>{tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});};
+  tabs.forEach((t,i)=>{t.addEventListener('click',()=>show(t));t.addEventListener('keydown',e=>{let j=null;if(e.key==='ArrowRight')j=(i+1)%tabs.length;if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;if(e.key==='Home')j=0;if(e.key==='End')j=tabs.length-1;if(j!==null){e.preventDefault();show(tabs[j]);tabs[j].focus();}});});
 })();
 </script>
 </body>
