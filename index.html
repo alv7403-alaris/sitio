@@ -225,6 +225,11 @@ h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw
 .reg dd{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;font-feature-settings:"tnum"}
 .vig{margin-top:18px;font-size:14px;color:var(--muted)}
 .vig strong{color:var(--ink)}
+.firma{margin-top:32px;display:flex;align-items:center;gap:24px}
+.firma img{width:160px;height:200px;object-fit:cover;border-radius:4px;border:1px solid var(--line);flex:none}
+.firma .fn{font:700 20px/1.2 Archivo,sans-serif;font-variation-settings:"wdth" 108}
+.firma .fr{margin-top:6px;font-size:14px;color:var(--muted)}
+.firma .link{margin-top:14px}
 .link{display:inline-block;margin-top:28px;font-weight:700;color:var(--gold);text-underline-offset:5px}
 
 /* obra */
@@ -327,6 +332,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
   body{padding-bottom:76px}
   .nav .cta{display:none}
   .reg{grid-template-columns:1fr}
+  .firma img{width:120px;height:150px}
+  .firma{gap:16px}
   .reg dl{grid-column:1;grid-row:auto;text-align:left;margin-top:8px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
@@ -512,7 +519,14 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
     <div>
       <h2>Firmamos lo que modelamos</h2>
       <p class="lead">Detrás de cada modelo hay un responsable con registro. El Arq. Alfonso Leal Vargas, director de Grupo Alaris, es Director Responsable de Obra y Corresponsable en Diseño Arquitectónico y Urbano: lo que validamos en virtual tiene respaldo técnico.</p>
-      <a class="link" href="cv/">Ver trayectoria completa</a>
+      <div class="firma">
+        <img src="alfonso-leal.webp" width="160" height="200" loading="lazy" decoding="async" alt="Arq. Alfonso Leal Vargas, director general de Grupo Alaris">
+        <div>
+          <p class="fn">Arq. Alfonso Leal Vargas</p>
+          <p class="fr">Director general · Director Responsable de Obra y Corresponsable</p>
+          <a class="link" href="cv/">Ver trayectoria completa</a>
+        </div>
+      </div>
     </div>
     <div>
       <div class="regs">
