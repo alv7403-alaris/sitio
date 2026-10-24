@@ -142,14 +142,14 @@ h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw
 .kpi>span{display:block;font-size:14px;color:var(--muted)}
 .kpi b{display:block;margin-top:6px;font:700 clamp(26px,3vw,38px)/1.1 Archivo,sans-serif;font-variation-settings:"wdth" 100;font-variant-numeric:tabular-nums}
 .kpi b small{font:500 15px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted);margin-left:4px}
-.tabs{margin-top:40px;display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
+.tabs{margin-top:0;display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
 .tabs [role=tab]{min-height:48px;padding:12px 20px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--muted);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer}
 .tabs [role=tab][aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
 .tabs [role=tab]:hover{color:var(--ink)}
 .tpanel{padding-top:28px}
 .chart{overflow-x:auto}
-.chart svg{display:block;width:100%;min-width:680px;height:auto}
-#t-cant{width:100%;min-width:620px;border-collapse:collapse;font-size:15px}
+.chart svg{display:block;width:100%;min-width:600px;height:auto}
+#t-cant{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
 #t-cant th,#t-cant td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
 #t-cant thead th{font-size:13px;color:var(--muted);font-weight:500}
 #t-cant tbody th{font-weight:600}
@@ -176,9 +176,33 @@ h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw
 .c-plan{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:8 6}
 .c-real{fill:none;stroke:var(--ink);stroke-width:3}
 .corte{stroke:#FF5A5F;stroke-width:1.5;stroke-dasharray:4 4}
-.avk{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:8px 40px;margin-bottom:20px}
+.avk{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:8px 28px;margin-bottom:20px}
 .avk dt{font-size:13px;color:var(--muted)}
 .avk dd{font:600 20px "IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.dash{margin-top:40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:start}
+.viewer{position:sticky;top:88px;height:560px;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line)}
+.viewer canvas{flex:1;min-height:0;width:100%;display:block;cursor:grab;touch-action:pan-y}
+.viewer canvas:active{cursor:grabbing}
+.vleg{display:flex;flex-wrap:wrap;gap:6px 16px;padding:10px 16px 0;font-size:13px;color:var(--muted)}
+.vleg[hidden],.vall[hidden],.viewer[hidden]{display:none}
+.vleg span{display:inline-flex;align-items:center;gap:6px}
+.st-n{background:#9A948D}.st-h{background:var(--gold)}.st-g{background:transparent;border:1px solid #8E8780}
+.vbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--line);min-height:64px}
+.vsel{font-size:14px;line-height:1.45}
+.vall{flex:none;min-height:44px;padding:0 14px;background:none;border:1.5px solid var(--gold);color:var(--gold);font:600 14px "IBM Plex Sans",sans-serif;border-radius:2px;cursor:pointer}
+.vall:hover{background:var(--gold);color:var(--black)}
+.vhint{padding:0 16px 12px;font-size:12px;color:var(--muted)}
+.rowbtn{display:block;width:100%;min-height:44px;margin:-12px -10px;padding:12px 10px;box-sizing:content-box;background:none;border:none;color:inherit;font:inherit;font-weight:600;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.rowbtn:hover{text-decoration-color:var(--gold)}
+#t-cant tr.sel>*{background:color-mix(in srgb,var(--gold) 14%,transparent)}
+#t-cant tr.sel .rowbtn{color:var(--gold)}
+.grow{cursor:pointer}
+.grow .hit{fill:transparent}
+.grow:hover .hit{fill:color-mix(in srgb,var(--ink) 6%,transparent)}
+.grow.sel .hit{fill:color-mix(in srgb,var(--gold) 16%,transparent)}
+.grow.sel .lbl{fill:var(--gold);font-weight:600}
+.grow:focus{outline:none}
+.grow:focus-visible .hit{stroke:var(--gold);stroke-width:2}
 .disc{margin-top:28px;font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
 
 /* proceso */
@@ -265,6 +289,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
   .qto dl{grid-template-columns:repeat(4,1fr);gap:8px}
   .qto dl>div{flex-direction:column;gap:2px}
   .kpis{grid-template-columns:1fr 1fr}
+  .dash{grid-template-columns:minmax(0,1fr);gap:28px}
+  .viewer{position:relative;top:auto;height:440px}
   .kpi:nth-child(3){border-left:none}
   .kpi:nth-child(n+3){border-top:1px solid var(--line)}
   .drag{display:none}
@@ -279,6 +305,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
   #bim{height:38svh}
   .avk{grid-template-columns:1fr 1fr}
   .kpi{padding:16px}
+  .viewer{height:380px}
+  .avk{grid-template-columns:1fr 1fr}
   .drag{display:none}
   section{padding:80px 0}
   .steps{grid-template-columns:1fr}
@@ -422,6 +450,14 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
       <div class="kpi"><span>Elementos modelados</span><b><span data-k="pzas">—</span><small>pzas</small></b></div>
       <div class="kpi"><span>Duración estimada</span><b><span data-k="dur">—</span><small>semanas</small></b></div>
     </div>
+    <div class="dash">
+    <div class="viewer">
+      <canvas id="v3d" role="img" aria-label="Modelo 3D del proyecto de muestra. Al seleccionar una partida o un nivel se resaltan sus elementos."></canvas>
+      <div class="vleg" hidden><span><i class="sw st-n"></i>Terminado</span><span><i class="sw st-h"></i>En proceso</span><span><i class="sw st-g"></i>Pendiente</span></div>
+      <div class="vbar"><p class="vsel" aria-live="polite"></p><button type="button" class="vall" hidden>Ver todo</button></div>
+      <p class="vhint">Arrastra para girar · toca un elemento para ver su partida</p>
+    </div>
+    <div class="dpanel">
     <div class="tabs" role="tablist" aria-label="Contenido del tablero de muestra">
       <button type="button" role="tab" id="tab-cant" aria-controls="p-cant" aria-selected="true">Cantidades</button>
       <button type="button" role="tab" id="tab-prog" aria-controls="p-prog" aria-selected="false" tabindex="-1">Programa de obra</button>
@@ -435,18 +471,20 @@ footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap
           <tfoot><tr><th scope="row">Concreto total</th><td>m³</td><td data-k="tcon"></td><td></td><td></td></tr></tfoot>
         </table>
       </div>
-      <p class="pnote">Cada cantidad está ligada a elementos del modelo: si un elemento no está modelado, no se cuantifica ni se cobra.</p>
+      <p class="pnote">Selecciona una partida para encender sus elementos en el modelo. Cada cantidad está ligada a elementos modelados: si no está en el modelo, no se cuantifica ni se cobra.</p>
     </div>
     <div class="tpanel" id="p-prog" role="tabpanel" aria-labelledby="tab-prog" hidden>
       <div class="legend"><span><i class="sw b-cim"></i>Cimentación</span><span><i class="sw b-est"></i>Estructura</span><span><i class="sw b-fac"></i>Fachada</span><span><i class="sw b-azo"></i>Azotea</span></div>
       <div class="chart" id="g-prog" tabindex="0" role="region" aria-label="Programa de obra, se puede desplazar"></div>
-      <p class="pnote">La fachada avanza dos niveles detrás de la estructura, la misma secuencia que ves en la animación de la portada.</p>
+      <p class="pnote">Selecciona un nivel para verlo en el modelo. La fachada avanza dos niveles detrás de la estructura, la misma secuencia de la animación de la portada.</p>
     </div>
     <div class="tpanel" id="p-av" role="tabpanel" aria-labelledby="tab-av" hidden>
       <dl class="avk"><div><dt>Corte</dt><dd>Semana <span data-k="corte"></span></dd></div><div><dt>Programado</dt><dd data-k="pp"></dd></div><div><dt>Real</dt><dd data-k="pr"></dd></div><div><dt>Desviación</dt><dd data-k="dv"></dd></div></dl>
       <div class="legend"><span><i class="ln plan"></i>Programado</span><span><i class="ln real"></i>Real</span></div>
       <div class="chart" id="g-av" tabindex="0" role="region" aria-label="Curva de avance, se puede desplazar"></div>
       <p class="pnote">El avance real se registra en los elementos del modelo y de ahí sale la curva: ves de inmediato si la obra va adelantada o atrasada.</p>
+    </div>
+    </div>
     </div>
     <p class="disc">Ejemplo ilustrativo con datos de muestra. No corresponde a ningún cliente ni a una obra real.</p>
     <div class="btns"><a class="btn primary" href="#revision">Quiero este control para mi proyecto</a></div>
@@ -552,12 +590,15 @@ window.ALR=(function(){
     niveles.push({f,set,bays,sw,cols,vCol,vCore,vSlab,aGlass,panels});
   }
   const vFound=(W+2.4)*(D+2.4)*.6;
+  const top=niveles[N-1], wr=top.sw+.8, dr=D+.8, PT=.2, PH=.9, MH=2.2;
+  const vAzo=2*(wr+dr)*PH*PT+2*(CORE_X+CORE_Z)*MH*PT+CORE_X*CORE_Z*.15;
   const sum=k=>niveles.reduce((a,n)=>a+n[k],0);
   const partidas=[
     {id:'cim', nombre:'Losa de cimentación', unidad:'m³', cant:vFound, piezas:1},
     {id:'col', nombre:'Columnas de concreto', unidad:'m³', cant:sum('vCol'), piezas:sum('cols')},
     {id:'nuc', nombre:'Muros de núcleo', unidad:'m³', cant:sum('vCore'), piezas:N*4},
     {id:'los', nombre:'Losas de entrepiso', unidad:'m³', cant:sum('vSlab'), piezas:N},
+    {id:'azo', nombre:'Pretil y cuarto de máquinas', unidad:'m³', cant:vAzo, piezas:2},
     {id:'fac', nombre:'Fachada de vidrio', unidad:'m²', cant:sum('aGlass'), piezas:sum('panels')}
   ];
   partidas.forEach(p=>p.cant=r2(p.cant));
@@ -572,7 +613,7 @@ window.ALR=(function(){
   prog.push({t:'Azotea',i:N+1,ini:finEst,dur:2,tipo:'azo'});
   const dur=Math.ceil(Math.max(...prog.map(p=>p.ini+p.dur)));
   return {BX,BZ,SX,SZ,H,N,W,D,COL,SLAB,CORE_X,CORE_Z,CORE_T,GH,niveles,partidas,prog,dur,
-    concreto:r2(vFound+sum('vCol')+sum('vCore')+sum('vSlab')), vidrio:r2(sum('aGlass'))};
+    concreto:r2(vFound+sum('vCol')+sum('vCore')+sum('vSlab')+vAzo), vAzo, PT, PH, MH, vidrio:r2(sum('aGlass'))};
 })();
 
 (function(){
@@ -688,6 +729,7 @@ window.ALR=(function(){
       if(t>=t0&&t<t0+T_FL) stage='Modelando nivel '+(i+1)+' de '+N;
     });
     const kr=ease((t-T_STR)/.5); rM.opacity=kr; rE.opacity=.6*kr; par.children[0].material.opacity=kr; roof.position.y=(1-kr)*1.2; roof.visible=kr>.01;
+    con+=M.vAzo*kr; pz+=kr>.99?2:0;
     if(t<T_END){
       q('con').textContent=fmt(con,1); q('vid').textContent=fmt(vid,1); q('pzas').textContent=fmt(pz,0); q('av').textContent=fmt(Math.min(99,pz/totalPzas*100),0);
       setHead(t<T_AX?'Trazando ejes':t<F0?'Cimentación':stage||'Montando fachada');
@@ -714,61 +756,193 @@ window.ALR=(function(){
   const fmt=(v,d)=>v.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
   const $=s=>root.querySelector(s);
   const totalPzas=M.partidas.reduce((a,p)=>a+p.piezas,0);
-  // indicadores
+  const CORTE=Math.round(M.dur*.55), DELAY=1, REALW=CORTE-DELAY;
+  const CONC=['cim','col','nuc','los','azo'];
+  const vsel=$('.vsel'), vall=$('.vall'), vleg=$('.vleg');
+
+  // ---------- visor 3D ----------
+  const V=(function(){
+    const cv=document.getElementById('v3d'); if(!window.THREE||!cv) return null;
+    let R; try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});}catch(e){return null;}
+    R.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(30,1,.1,500);
+    scene.add(new THREE.HemisphereLight(0xfff4e6,0x2a2627,.62));
+    const sun=new THREE.DirectionalLight(0xffffff,.7); sun.position.set(45,36,10); scene.add(sun);
+    const rim=new THREE.DirectionalLight(0xD1AE6C,.3); rim.position.set(-40,25,-35); scene.add(rim);
+    const g=new THREE.Group(); scene.add(g);
+    const {BX,BZ,SX,SZ,H,N,W,D}=M, ox=-W/2, oz=-D/2;
+    const std=c=>new THREE.MeshStandardMaterial({color:c,roughness:.82});
+    const base={cim:std(0x6E6862),col:std(0x9A948D),nuc:std(0x847E78),los:std(0x9C958D),azo:std(0x7A746E),
+      fac:new THREE.MeshStandardMaterial({color:0x3E5260,roughness:.12,metalness:.4,transparent:true,opacity:.6,depthWrite:false,side:THREE.DoubleSide})};
+    const hi=new THREE.MeshStandardMaterial({color:0xD1AE6C,roughness:.6,emissive:0x5a3f0c});
+    const hiG=new THREE.MeshStandardMaterial({color:0xD1AE6C,roughness:.3,emissive:0x5a3f0c,transparent:true,opacity:.75,depthWrite:false,side:THREE.DoubleSide});
+    const ghost=new THREE.MeshStandardMaterial({color:0x8E8780,transparent:true,opacity:.07,depthWrite:false});
+    const L=(c,o)=>new THREE.LineBasicMaterial({color:c,transparent:true,opacity:o});
+    const eN=L(0x1a1819,.55), eG=L(0x8E8780,.12), eH=L(0x2a1f08,.8), mN=L(0xD1AE6C,.85), mG=L(0xD1AE6C,.06), mH=L(0xFFE3A6,1);
+    const items=[], picks=[];
+    const EG=new Map(); const edges=geo=>{if(!EG.has(geo))EG.set(geo,new THREE.EdgesGeometry(geo));return EG.get(geo);};
+    function add(geo,p,row,x,y,z){const m=new THREE.Mesh(geo,base[p]);m.position.set(x,y,z);const e=new THREE.LineSegments(edges(geo),eN);m.add(e);m.userData={p,row,e};g.add(m);items.push(m);picks.push(m);}
+    // ejes
+    const ap=[];for(let i=-1;i<=BX+1;i++){const x=ox+i*SX;ap.push(x,0,oz-5,x,0,oz+D+5);}for(let j=-1;j<=BZ+1;j++){const z=oz+j*SZ;ap.push(ox-5,0,z,ox+W+5,0,z);}
+    const ag=new THREE.BufferGeometry();ag.setAttribute('position',new THREE.Float32BufferAttribute(ap,3));g.add(new THREE.LineSegments(ag,L(0x4a4440,.5)));
+    add(new THREE.BoxGeometry(W+2.4,.6,D+2.4),'cim',0,0,-.3,0);
+    const colG=new THREE.BoxGeometry(M.COL,H,M.COL); colG.translate(0,H/2,0);
+    const wx=new THREE.BoxGeometry(M.CORE_X,H,M.CORE_T); wx.translate(0,H/2,0);
+    const wz=new THREE.BoxGeometry(M.CORE_T,H,M.CORE_Z); wz.translate(0,H/2,0);
+    const gh=M.GH, pX=new THREE.BoxGeometry(SX-.6,gh,.08), pZ=new THREE.BoxGeometry(.08,gh,SZ-.6);
+    const slabs={};
+    M.niveles.forEach(n=>{
+      const f=n.f,row=f+1,y=f*H,set=n.set,x0=ox+set*SX,x1=ox+(BX-set)*SX;
+      for(let i=set;i<=BX-set;i++)for(let j=0;j<=BZ;j++)add(colG,'col',row,ox+i*SX,y,oz+j*SZ);
+      const cx=ox+1.5*SX;
+      add(wx,'nuc',row,cx,y,-M.CORE_Z/2);add(wx,'nuc',row,cx,y,M.CORE_Z/2);add(wz,'nuc',row,cx-M.CORE_X/2,y,0);add(wz,'nuc',row,cx+M.CORE_X/2,y,0);
+      const k=n.sw; if(!slabs[k])slabs[k]=new THREE.BoxGeometry(k+.8,M.SLAB,D+.8);
+      add(slabs[k],'los',row,(x0+x1)/2,y+H,0);
+      const mp=[], py=y+.2+gh/2;
+      for(let i=set;i<BX-set;i++){const px=ox+(i+.5)*SX;add(pX,'fac',row,px,py,oz-.05);add(pX,'fac',row,px,py,oz+D+.05);
+        [oz-.05,oz+D+.05].forEach(pz=>{for(let q=0;q<=3;q++){const t=-(SX-.6)/2+q*(SX-.6)/3;mp.push(px+t,y+.2,pz,px+t,y+.2+gh,pz);}});}
+      for(let j=0;j<BZ;j++){const pz=oz+(j+.5)*SZ;add(pZ,'fac',row,x0-.05,py,pz);add(pZ,'fac',row,x1+.05,py,pz);
+        [x0-.05,x1+.05].forEach(px=>{for(let q=0;q<=3;q++){const t=-(SZ-.6)/2+q*(SZ-.6)/3;mp.push(px,y+.2,pz+t,px,y+.2+gh,pz+t);}});}
+      const mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.Float32BufferAttribute(mp,3));
+      const ml=new THREE.LineSegments(mg,mN);ml.userData={p:'fac',row,line:true};g.add(ml);items.push(ml);
+    });
+    // azotea: pretil (4 muros) y cuarto de máquinas
+    const tn=M.niveles[N-1], top=N*H+M.SLAB/2, rx0=ox+tn.set*SX-.4, rx1=ox+(BX-tn.set)*SX+.4, rz0=oz-.4, rz1=oz+D+.4, PT=M.PT, PH=M.PH;
+    const parX=new THREE.BoxGeometry(rx1-rx0,PH,PT), parZ=new THREE.BoxGeometry(PT,PH,rz1-rz0);
+    // el pretil cuenta como una sola pieza: un grupo con sus cuatro muros
+    const par=new THREE.Group();
+    [[parX,(rx0+rx1)/2,rz0+PT/2],[parX,(rx0+rx1)/2,rz1-PT/2],[parZ,rx0+PT/2,(rz0+rz1)/2],[parZ,rx1-PT/2,(rz0+rz1)/2]].forEach(([geo,x,z])=>{
+      const m=new THREE.Mesh(geo,base.azo);m.position.set(x,top+PH/2,z);const e=new THREE.LineSegments(edges(geo),eN);m.add(e);m.userData={p:'azo',row:N+1,e};par.add(m);items.push(m);picks.push(m);});
+    g.add(par);
+    add(new THREE.BoxGeometry(M.CORE_X,M.MH,M.CORE_Z),'azo',N+1,ox+1.5*SX,top+M.MH/2,0);
+
+    function setS(m,s){
+      const u=m.userData;
+      if(u.line){m.material=s==='h'?mH:s==='g'?mG:mN;return;}
+      const gl=u.p==='fac';
+      m.material=s==='n'?base[u.p]:s==='h'?(gl?hiG:hi):ghost;
+      u.e.material=s==='n'?eN:s==='h'?eH:eG;
+    }
+    let need=true, rot=-.55, auto=!matchMedia('(prefers-reduced-motion: reduce)').matches, visible=false;
+    const api={
+      apply(fn){items.forEach(m=>setS(m,fn(m.userData)));need=true;},
+      all(){api.apply(()=>'n');},
+      onPick:null
+    };
+    function size(){const r=cv.getBoundingClientRect(),w=Math.max(1,r.width),h=Math.max(1,r.height);R.setSize(w,h,false);cam.aspect=w/h;
+      const k=w/h<1?1.35:w/h<1.3?1.12:1; cam.position.set(56*k,30*k,56*k);cam.lookAt(0,N*H*.44,0);cam.updateProjectionMatrix();need=true;}
+    new ResizeObserver(size).observe(cv); size();
+    new IntersectionObserver(es=>{visible=es[0].isIntersecting;}).observe(cv);
+    let down=null,lastX=0,moved=0;
+    cv.addEventListener('pointerdown',e=>{down=e.pointerId;lastX=e.clientX;moved=0;auto=false;cv.setPointerCapture(e.pointerId);});
+    cv.addEventListener('pointermove',e=>{if(down===null)return;const dx=e.clientX-lastX;lastX=e.clientX;moved+=Math.abs(dx);rot+=dx*.008;need=true;});
+    const ray=new THREE.Raycaster(), v2=new THREE.Vector2();
+    cv.addEventListener('pointerup',e=>{
+      if(down===null)return; down=null;
+      if(moved>5||!api.onPick)return;
+      const r=cv.getBoundingClientRect(); v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+      ray.setFromCamera(v2,cam); const hit=ray.intersectObjects(picks,false).find(h=>h.object.material!==ghost);
+      api.onPick(hit?hit.object.userData:null);
+    });
+    cv.addEventListener('pointercancel',()=>{down=null;});
+    (function loop(){ if(visible&&(need||auto)){ if(auto)rot+=.0016; g.rotation.y=rot; R.render(scene,cam); need=false; } requestAnimationFrame(loop); })();
+    return api;
+  })();
+  if(!V){ root.querySelector('.viewer').hidden=true; }
+
+  // ---------- indicadores ----------
   $('[data-k="con"]').textContent=fmt(M.concreto,1);
   $('[data-k="vid"]').textContent=fmt(M.vidrio,1);
   $('[data-k="pzas"]').textContent=fmt(totalPzas,0);
   $('[data-k="dur"]').textContent=M.dur;
 
-  // cantidades
+  // ---------- selección ----------
+  let sel=null; // {tipo:'p',ids:[...]} | {tipo:'r',row}
+  const say=t=>{vsel.textContent=t;};
+  function rowInfo(i){
+    const ts=M.prog.filter(p=>p.i===i), w=a=>'S'+fmt(a,1).replace('.0','');
+    if(i===0){const p=M.partidas[0];return 'Cimentación · '+fmt(p.cant,2)+' m³ · semanas '+w(ts[0].ini)+' a '+w(ts[0].ini+ts[0].dur);}
+    if(i===M.N+1){const p=M.partidas.find(p=>p.id==='azo');return 'Azotea · '+fmt(p.cant,2)+' m³ · semanas '+w(ts[0].ini)+' a '+w(ts[0].ini+ts[0].dur);}
+    const n=M.niveles[i-1], e=ts.find(t=>t.tipo==='est'), f=ts.find(t=>t.tipo==='fac');
+    return 'Nivel '+i+' · '+fmt(n.vCol+n.vCore+n.vSlab,2)+' m³ de concreto · '+fmt(n.aGlass,1)+' m² de vidrio · estructura '+w(e.ini)+'–'+w(e.ini+e.dur)+', fachada '+w(f.ini)+'–'+w(f.ini+f.dur);
+  }
+  function select(s){
+    sel=s;
+    root.querySelectorAll('#t-cant tr').forEach(tr=>{const on=!!(s&&s.tipo==='p'&&tr.dataset.ids&&tr.dataset.ids===s.ids.join(','));tr.classList.toggle('sel',on);const b=tr.querySelector('.rowbtn');if(b)b.setAttribute('aria-pressed',on);});
+    root.querySelectorAll('.grow').forEach(gr=>{const on=!!(s&&s.tipo==='r'&&+gr.dataset.row===s.row);gr.classList.toggle('sel',on);gr.setAttribute('aria-pressed',on);});
+    vall.hidden=!s;
+    if(!s){ V&&V.all(); say('Modelo completo · '+fmt(totalPzas,0)+' elementos. Selecciona una partida o un nivel.'); return; }
+    if(s.tipo==='p'){
+      V&&V.apply(u=>s.ids.includes(u.p)?'h':'g');
+      if(s.ids.length>1) say('Concreto total · '+fmt(M.concreto,2)+' m³ · '+fmt(M.partidas.filter(p=>CONC.includes(p.id)).reduce((a,p)=>a+p.piezas,0),0)+' elementos');
+      else{const p=M.partidas.find(p=>p.id===s.ids[0]); say(p.nombre+' · '+fmt(p.cant,2)+' '+p.unidad+' · '+fmt(p.piezas,0)+' '+(p.piezas===1?'pieza':'piezas'));}
+    }else{ V&&V.apply(u=>u.row===s.row?'h':'g'); say(rowInfo(s.row)); }
+  }
+  function estado(){
+    const st=(u)=>{const t=M.prog.find(p=>p.i===u.row&&(u.p==='fac'?p.tipo==='fac':p.tipo!=='fac'));const fin=t.ini+t.dur;return fin<=REALW?'n':t.ini<REALW?'h':'g';};
+    V&&V.apply(st); vall.hidden=true;
+    say('Avance real al corte de la semana '+CORTE+': terminado, en proceso (dorado) y pendiente (transparente).');
+  }
+  vall.addEventListener('click',()=>select(null));
+
+  // ---------- cantidades ----------
   const conc=M.partidas.filter(p=>p.unidad==='m³'), maxC=Math.max(...conc.map(p=>p.cant));
   const tb=$('#t-cant tbody');
+  const rowBtn=(txt,ids)=>{const b=document.createElement('button');b.type='button';b.className='rowbtn';b.textContent=txt;b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',()=>select(sel&&sel.tipo==='p'&&sel.ids.join(',')===ids.join(',')?null:{tipo:'p',ids}));return b;};
   M.partidas.forEach(p=>{
-    const tr=document.createElement('tr');
-    const pct=p.unidad==='m³'?p.cant/M.concreto*100:null;
-    const cells=[p.nombre,p.unidad,fmt(p.cant,2),fmt(p.piezas,0)];
-    cells.forEach((c,i)=>{const td=document.createElement(i?'td':'th');if(!i)td.scope='row';td.textContent=c;tr.appendChild(td);});
+    const tr=document.createElement('tr'); tr.dataset.ids=p.id;
+    const th=document.createElement('th'); th.scope='row'; th.appendChild(rowBtn(p.nombre,[p.id])); tr.appendChild(th);
+    [p.unidad,fmt(p.cant,2),fmt(p.piezas,0)].forEach(c=>{const td=document.createElement('td');td.textContent=c;tr.appendChild(td);});
     const td=document.createElement('td'); td.className='barc';
-    if(pct!==null){const b=document.createElement('span');b.className='bar';b.style.width=(p.cant/maxC*100).toFixed(1)+'%';td.appendChild(b);const s=document.createElement('span');s.className='pct';s.textContent=fmt(pct,1)+' % del concreto';td.appendChild(s);}
+    if(p.unidad==='m³'){const b=document.createElement('span');b.className='bar';b.style.width=(p.cant/maxC*100).toFixed(1)+'%';td.appendChild(b);const s=document.createElement('span');s.className='pct';s.textContent=fmt(p.cant/M.concreto*100,1)+' % del concreto';td.appendChild(s);}
     else{const s=document.createElement('span');s.className='pct';s.textContent='Cancelería y vidrio';td.appendChild(s);}
     tr.appendChild(td); tb.appendChild(tr);
   });
+  const ft=$('#t-cant tfoot tr'); ft.dataset.ids=CONC.join(',');
+  const fth=ft.querySelector('th'); fth.textContent=''; fth.appendChild(rowBtn('Concreto total',CONC));
   $('#t-cant tfoot [data-k="tcon"]').textContent=fmt(M.concreto,2);
 
   const NS='http://www.w3.org/2000/svg';
   const el=(n,a,txt)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
 
-  // programa (Gantt)
+  // ---------- programa ----------
   (function(){
     const rows=['Cimentación',...Array.from({length:M.N},(_,i)=>'Nivel '+(i+1)),'Azotea'];
-    const L=110, R=20, T=34, RH=26, Wd=900, Hd=T+rows.length*RH+16, sx=(Wd-L-R)/M.dur;
-    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,role:'img','aria-labelledby':'g-t'});
-    s.appendChild(el('title',{id:'g-t'},`Programa de obra de ${M.dur} semanas: cimentación, estructura nivel por nivel y fachada dos niveles atrás.`));
-    for(let w=0;w<=M.dur;w+=2){const x=L+w*sx;s.appendChild(el('line',{x1:x,y1:T-6,x2:x,y2:Hd-14,class:'grid'}));s.appendChild(el('text',{x,y:T-12,class:'tick','text-anchor':'middle'},'S'+w));}
-    rows.forEach((r,i)=>{const y=T+i*RH;s.appendChild(el('text',{x:L-12,y:y+RH/2+4,class:'lbl','text-anchor':'end'},r));});
-    M.prog.forEach(p=>{const y=T+p.i*RH+(p.tipo==='fac'?RH*.5:RH*.18), h=p.tipo==='est'||p.tipo==='fac'?RH*.32:RH*.6;
-      s.appendChild(el('rect',{x:L+p.ini*sx,y,width:p.dur*sx,height:h,rx:2,class:'b-'+p.tipo}));});
+    const L=96,R=14,T=30,RH=26,Wd=640,Hd=T+rows.length*RH+10,sx=(Wd-L-R)/M.dur;
+    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,'aria-labelledby':'g-t'});
+    s.appendChild(el('title',{id:'g-t'},`Programa de obra de ${M.dur} semanas. Selecciona un renglón para resaltar ese nivel en el modelo.`));
+    for(let w=0;w<=M.dur;w+=2){const x=L+w*sx;s.appendChild(el('line',{x1:x,y1:T-4,x2:x,y2:Hd-6,class:'grid'}));s.appendChild(el('text',{x,y:T-10,class:'tick','text-anchor':'middle'},'S'+w));}
+    rows.forEach((r,i)=>{
+      const y=T+i*RH, gr=el('g',{class:'grow',tabindex:'0',role:'button','aria-pressed':'false','aria-label':r+': resaltar en el modelo','data-row':i});
+      gr.appendChild(el('rect',{x:0,y,width:Wd,height:RH,class:'hit'}));
+      gr.appendChild(el('text',{x:L-10,y:y+RH/2+4,class:'lbl','text-anchor':'end'},r));
+      M.prog.filter(p=>p.i===i).forEach(p=>{const by=y+(p.tipo==='fac'?RH*.52:p.tipo==='est'?RH*.16:RH*.2), h=(p.tipo==='est'||p.tipo==='fac')?RH*.32:RH*.6;
+        gr.appendChild(el('rect',{x:L+p.ini*sx,y:by,width:p.dur*sx,height:h,rx:2,class:'b-'+p.tipo}));});
+      const act=()=>select(sel&&sel.tipo==='r'&&sel.row===i?null:{tipo:'r',row:i});
+      gr.addEventListener('click',act);
+      gr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}});
+      s.appendChild(gr);
+    });
     $('#g-prog').appendChild(s);
   })();
 
-  // avance (curva S)
+  // ---------- avance ----------
   (function(){
     const steps=M.dur*4, plan=[];
-    for(let s=0;s<=steps;s++){const w=s/4;let a=0,tot=0;M.prog.forEach(p=>{tot+=p.dur;a+=Math.min(Math.max(w-p.ini,0),p.dur);});plan.push([w,a/tot*100]);}
-    const at=w=>{const i=Math.min(Math.round(w*4),steps);return plan[i][1];};
-    const CORTE=Math.round(M.dur*.55), DELAY=1;
-    const real=plan.filter(([w])=>w<=CORTE).map(([w])=>[w,at(Math.max(w-DELAY*(w/CORTE),0))]);
+    for(let k=0;k<=steps;k++){const w=k/4;let a=0,tot=0;M.prog.forEach(p=>{tot+=p.dur;a+=Math.min(Math.max(w-p.ini,0),p.dur);});plan.push([w,a/tot*100]);}
+    const at=w=>plan[Math.min(Math.round(Math.max(w,0)*4),steps)][1];
+    const real=plan.filter(([w])=>w<=CORTE).map(([w])=>[w,at(w-DELAY*(w/CORTE))]);
     const pP=at(CORTE), pR=real[real.length-1][1];
-    const L=50,R=20,T=20,B=34,Wd=900,Hd=320,sx=(Wd-L-R)/M.dur,sy=(Hd-T-B)/100;
-    const X=w=>L+w*sx, Y=v=>Hd-B-v*sy;
+    const L=44,R=14,T=18,B=30,Wd=640,Hd=280,sx=(Wd-L-R)/M.dur,sy=(Hd-T-B)/100,X=w=>L+w*sx,Y=v=>Hd-B-v*sy;
     const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,role:'img','aria-labelledby':'s-t'});
     s.appendChild(el('title',{id:'s-t'},`Curva de avance. Al corte de la semana ${CORTE}: programado ${fmt(pP,0)} %, real ${fmt(pR,0)} %.`));
-    for(let v=0;v<=100;v+=25){s.appendChild(el('line',{x1:L,y1:Y(v),x2:Wd-R,y2:Y(v),class:'grid'}));s.appendChild(el('text',{x:L-8,y:Y(v)+4,class:'tick','text-anchor':'end'},v+'%'));}
-    for(let w=0;w<=M.dur;w+=2)s.appendChild(el('text',{x:X(w),y:Hd-B+18,class:'tick','text-anchor':'middle'},'S'+w));
+    for(let v=0;v<=100;v+=25){s.appendChild(el('line',{x1:L,y1:Y(v),x2:Wd-R,y2:Y(v),class:'grid'}));s.appendChild(el('text',{x:L-6,y:Y(v)+4,class:'tick','text-anchor':'end'},v+'%'));}
+    for(let w=0;w<=M.dur;w+=2)s.appendChild(el('text',{x:X(w),y:Hd-B+16,class:'tick','text-anchor':'middle'},'S'+w));
     s.appendChild(el('polyline',{points:plan.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-plan'}));
     s.appendChild(el('polyline',{points:real.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-real'}));
     s.appendChild(el('line',{x1:X(CORTE),y1:T,x2:X(CORTE),y2:Hd-B,class:'corte'}));
-    s.appendChild(el('text',{x:X(CORTE)+8,y:T+12,class:'lbl'},'Corte semana '+CORTE));
+    s.appendChild(el('text',{x:X(CORTE)+6,y:T+12,class:'lbl'},'Corte S'+CORTE));
     $('#g-av').appendChild(s);
     $('[data-k="corte"]').textContent=CORTE;
     $('[data-k="pp"]').textContent=fmt(pP,0)+' %';
@@ -776,10 +950,20 @@ window.ALR=(function(){
     $('[data-k="dv"]').textContent=fmt(pR-pP,0)+' puntos';
   })();
 
-  // pestañas accesibles
-  const tabs=[...root.querySelectorAll('[role="tab"]')];
-  const show=t=>{tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});};
+  // ---------- pestañas ----------
+  const tabs=[...root.querySelectorAll('[role="tab"]')]; let cur='p-cant';
+  const show=t=>{tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
+    cur=t.getAttribute('aria-controls'); vleg.hidden=cur!=='p-av'; if(cur==='p-av')estado(); else select(null);};
   tabs.forEach((t,i)=>{t.addEventListener('click',()=>show(t));t.addEventListener('keydown',e=>{let j=null;if(e.key==='ArrowRight')j=(i+1)%tabs.length;if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;if(e.key==='Home')j=0;if(e.key==='End')j=tabs.length-1;if(j!==null){e.preventDefault();show(tabs[j]);tabs[j].focus();}});});
+
+  // ---------- clic en el modelo ----------
+  if(V) V.onPick=u=>{
+    if(!u){select(null);return;}
+    if(cur==='p-prog'){select({tipo:'r',row:u.row});return;}
+    if(cur==='p-av'){show(tabs[0]);}
+    select({tipo:'p',ids:[u.p]});
+  };
+  select(null);
 })();
 </script>
 </body>
