@@ -10,6 +10,13 @@ Léelo completo antes de cualquier cambio. El diseño visual está en `DESIGN.md
 - Sitio **estático**: HTML, CSS y JavaScript sin servidor, sin base de datos y sin paso de compilación. No agregues frameworks (Next.js, React, Vue), gestores de paquetes ni `node_modules` salvo que el Arq. Leal lo pida expresamente.
 - Idioma: **español de México** en todo el contenido (`<html lang="es-MX">`). Sistema métrico.
 
+### Discurso comercial (obligatorio)
+
+- **Grupo Alaris vende construcción virtual, no BIM.** Construcción virtual = construir el proyecto en virtual, elemento por elemento y en el orden del proceso constructivo, para validar que sea construible y saber cuánto cuesta y cuánto tarda antes de invertir.
+- BIM, Revit, Navisworks, Synchro y Power BI son **herramientas**: pueden mencionarse al explicar el método, nunca como el producto ni en titulares o descripciones.
+- El fuerte de la empresa no es la gestión de licencias. El DRO se presenta como **respaldo técnico** de lo que se valida en virtual, no como servicio de trámites.
+- Lema: **"Solo se paga lo que está en el modelo."**
+
 ## 2. Mapa del sitio
 
 | Ruta | Contenido | Notas |
@@ -87,7 +94,7 @@ Cada página pública lleva:
 - `<title>` único (máx. 60 caracteres) y `<meta name="description">` (máx. 155).
 - `<link rel="canonical" href="https://grupoalaris.mx/ruta/">`.
 - Open Graph: `og:title`, `og:description`, `og:image` (1200 × 630), `og:url`, `og:locale` = `es_MX`.
-- En la portada, datos estructurados JSON-LD tipo `LocalBusiness` con teléfono 221 329 6868, correo contacto@grupoalaris.mx y domicilio en Villa Universitaria, Puebla.
+- En la portada, datos estructurados JSON-LD tipo `LocalBusiness` con teléfono 222 618 4760, correo contacto@grupoalaris.mx y domicilio en Villa Universitaria, Puebla.
 - Las páginas de `/sitio/` llevan `<meta name="robots" content="noindex, nofollow">`.
 
 ## 9. Antes de dar por terminado un cambio
@@ -102,5 +109,12 @@ Cada página pública lleva:
 
 ## 10. Datos de contacto (fuente única)
 
-Grupo Alaris · Tel. 221 329 6868 · contacto@grupoalaris.mx
+Grupo Alaris · contacto@grupoalaris.mx
 Privada 63 D Oriente 1409 Int. 1A, Villa Universitaria, C.P. 72589, Puebla, Pue.
+
+| Teléfono | Uso | Dónde va |
+|---|---|---|
+| **222 618 4760** (WhatsApp `wa.me/522226184760`) | Contacto general, cotizaciones de proyecto, construcción virtual y DRO | Página de inicio, CV, datos estructurados (JSON-LD) y cualquier página de servicios |
+| **221 329 6868** | Ventas de casas y terrenos (comercialización) | Solo en páginas y publicidad de venta de inmuebles |
+
+No mezcles los dos números: una página lleva uno u otro según su tema.
