@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Tablero Primera Línea</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sala de control de obra — barra de corte arriba, pestañas, conjunto 3D como pieza central, todo coloreado por estatus */
+:root{
+  --bg:#F3F1EC; --panel:#FFFFFF; --panel2:#ECE9E2; --line:#D9D4C9; --fg:#201E1F; --muted:#6B655C;
+  --gold:#A9843C; --gold-soft:#E9DDC3;
+  --ok:#1E9E5A; --late:#D93A3F; --done:#2F6FDB; --idle:#9A948A;
+  --ok-bg:#E2F3E9; --late-bg:#FBE3E3; --done-bg:#E2EBFB; --idle-bg:#ECEAE5;
+  --ground:#DCD6CA; --road:#B9B3A8; --green3d:#9CC59A; --ghost:#C9C3B8;
+  --f-disp:"Archivo","Arial Narrow",Arial,sans-serif; --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161415; --panel:#201E1F; --panel2:#2A2728; --line:#3A3637; --fg:#F1ECE3; --muted:#A79F93;
+  --gold:#D1AE6C; --gold-soft:#3A3226;
+  --ok:#3CC47A; --late:#F2555A; --done:#5B93F0; --idle:#7D776E;
+  --ok-bg:#16301F; --late-bg:#3A1A1B; --done-bg:#172540; --idle-bg:#2A2728;
+  --ground:#2E2B2A; --road:#46423F; --green3d:#3E6B47; --ghost:#55504B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161415; --panel:#201E1F; --panel2:#2A2728; --line:#3A3637; --fg:#F1ECE3; --muted:#A79F93;
+  --gold:#D1AE6C; --gold-soft:#3A3226;
+  --ok:#3CC47A; --late:#F2555A; --done:#5B93F0; --idle:#7D776E;
+  --ok-bg:#16301F; --late-bg:#3A1A1B; --done-bg:#172540; --idle-bg:#2A2728;
+  --ground:#2E2B2A; --road:#46423F; --green3d:#3E6B47; --ghost:#55504B; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;max-width:1440px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-disp);text-wrap:balance;margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:12px 0;display:flex;flex-direction:column;gap:10px}
+.brandrow{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;justify-content:space-between}
+.brand .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.brand h1{font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.01em}
+.brand .sub{font-size:12px;color:var(--muted)}
+.corte{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.corte label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.corte input[type=range]{width:min(320px,52vw);accent-color:var(--gold)}
+.corte .fecha{font-family:var(--f-mono);font-weight:500;min-width:96px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:5px 10px;cursor:pointer;font-size:12px}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.linkbtn{border:1px solid var(--line);background:transparent;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{padding:10px 14px;text-decoration:none;color:var(--muted);font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--gold)}
+main{display:block;padding-top:18px}
+section.view{display:flex;flex-direction:column;gap:18px}
+/* chips & legend */
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px 2px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-bg)} .s-late{color:var(--late);background:var(--late-bg)} .s-done{color:var(--done);background:var(--done-bg)} .s-idle{color:var(--idle);background:var(--idle-bg)}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi .val{font-family:var(--f-disp);font-weight:800;font-size:clamp(22px,2.6vw,30px);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .foot{font-size:12px;color:var(--muted)}
+.kpi.late .val{color:var(--late)} .kpi.ok .val{color:var(--ok)} .kpi.done .val{color:var(--done)}
+/* panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+.panel h2{font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.panel h2 small{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+/* 3d */
+.scene{position:relative;width:100%;aspect-ratio:16/8;max-width:100%;border-radius:10px;overflow:hidden;background:var(--panel2);margin-top:10px;touch-action:none}
+@media (max-width:600px){.scene{aspect-ratio:4/3}}
+.scene canvas{display:block;width:100%;height:100%}
+.scene .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
+.scene .nogl{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);padding:20px;text-align:center}
+.edpanel{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.edpanel .row{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.bar{position:relative;height:8px;border-radius:4px;background:var(--panel2);overflow:hidden;min-width:80px}
+.bar .p{position:absolute;inset:0 auto 0 0;background:var(--ghost)}
+.bar .r{position:absolute;inset:0 auto 0 0;height:4px;top:2px;border-radius:2px}
+/* lists/tables */
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.li:last-child{border-bottom:0}
+.li .t{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .d{font-size:12px;color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--panel2);text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;white-space:nowrap}
+td{padding:7px 10px;border-top:1px solid var(--line);vertical-align:middle}
+td.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sel td{background:var(--gold-soft)}
+.qty{width:88px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);text-align:right;font-family:var(--f-mono)}
+.qty.saved{border-color:var(--ok)} .qty.err{border-color:var(--late)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters select,.filters input[type=search]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);max-width:100%}
+.counts{display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:8px 0}
+/* hitos grid */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.hcard{border:1px solid var(--line);border-left:5px solid var(--idle);border-radius:10px;padding:10px 12px;background:var(--panel);display:flex;flex-direction:column;gap:6px;cursor:pointer;min-width:0}
+.hcard.ok{border-left-color:var(--ok)} .hcard.late{border-left-color:var(--late)} .hcard.done{border-left-color:var(--done)}
+.hcard .h{display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.hcard .h b{font-family:var(--f-disp);font-size:16px}
+.hcard .meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+/* responsables */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.rcard{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel);display:flex;flex-direction:column;gap:8px;min-width:0}
+.rcard .who{display:flex;align-items:center;gap:10px;min-width:0}
+.rcard img{width:32px;height:32px;border-radius:50%}
+.rcard .who b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker{position:relative}
+.picker input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);width:170px;max-width:100%}
+.picker .menu{position:absolute;z-index:20;left:0;top:100%;margin-top:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.18);max-height:260px;overflow:auto}
+.picker .menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border:0;padding:7px 10px;cursor:pointer}
+.picker .menu button:hover{background:var(--panel2)}
+.picker .menu img{width:22px;height:22px;border-radius:50%}
+.person{display:inline-flex;align-items:center;gap:6px}
+.person img{width:20px;height:20px;border-radius:50%}
+.tin{box-sizing:border-box;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);width:100%;min-width:120px}
+.btn{border:1px solid var(--fg);background:var(--fg);color:var(--bg);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.notice{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:13px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.formgrid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.formgrid input{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+/* curva */
+.chart{position:relative;width:100%;margin-top:8px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.15);min-width:180px;z-index:3}
+.tip .r{display:flex;justify-content:space-between;gap:12px}
+.gate{position:fixed;inset:0;z-index:40;background:var(--bg);display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px))}
+.gatebox{width:min(400px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;z-index:30;max-width:min(420px,calc(100vw - 32px))}
+@media (prefers-reduced-motion: no-preference){.hcard,.li{transition:background .15s}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="brand">
+        <div class="eyebrow">Grupo Alaris · Construcción virtual</div>
+        <h1>Primera Línea · Control de obra</h1>
+        <div class="sub">INFONAVIT Nopalucan de la Granja · 17 manzanas · 34 edificios · 544 viviendas · Contrato CO-PVB-244-2026</div>
+      </div>
+      <div class="corte" role="group" aria-label="Fecha de corte">
+        <label for="slider">Corte</label>
+        <input type="range" id="slider" min="0" max="365" step="1">
+        <span class="fecha" id="fechaTxt">—</span>
+        <button class="linkbtn" id="hoyBtn" type="button">Hoy</button>
+        <div class="seg" role="group" aria-label="Qué mostrar">
+          <button type="button" id="mReal" aria-pressed="true">Real</button>
+          <button type="button" id="mProg" aria-pressed="false">Programado</button>
+        </div>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="#resumen">Resumen</a><a href="#hitos">Hitos</a><a href="#tareas">Tareas</a><a href="#responsables">Responsables</a><a href="#estimaciones">Estimaciones</a><a href="#usuarios" id="navUsuarios" hidden>Usuarios</a><span style="flex:1"></span><span id="userBox" class="person" style="font-size:12px;padding:0 4px;white-space:nowrap"></span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- RESUMEN -->
+  <section class="view" id="v-resumen">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Conjunto en 3D <small>Clic en un edificio para ver su detalle</small></h2>
+        <div class="legend" style="margin-top:8px">
+          <span class="chip s-ok">A tiempo</span><span class="chip s-late">Atrasado</span><span class="chip s-done">Entregado</span><span class="chip s-idle">Por iniciar</span>
+          <span class="muted" style="font-size:12px;align-self:center">Niveles sólidos = obra negra ejecutada</span>
+        </div>
+        <div class="scene" id="scene"><span class="hint">Arrastra para girar · rueda o pellizco para acercar · clic derecho para desplazar</span><button class="linkbtn" id="homeBtn" type="button" style="position:absolute;right:10px;top:10px;background:var(--panel)">Vista general</button></div>
+        <div class="edpanel" id="edpanel"><div class="muted">Selecciona un edificio en el modelo o en la lista de hitos.</div></div>
+      </div>
+      <div class="panel">
+        <h2>Hitos que requieren atención <small id="attnCount"></small></h2>
+        <div class="list" id="attn" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Curva S <small>Acumulado vs. importe contratado</small></h2>
+      <div class="legend" id="curvaLegend" style="margin-top:6px"></div>
+      <div class="chart" id="curva"></div>
+    </div>
+  </section>
+
+  <!-- HITOS -->
+  <section class="view" id="v-hitos" hidden>
+    <div class="panel">
+      <h2>Hitos de vivienda <small>Un hito por edificio terminado (16 viviendas)</small></h2>
+      <div class="counts" id="hCounts" style="margin:8px 0"></div>
+      <div class="hgrid" id="hViv"></div>
+    </div>
+    <div class="panel">
+      <h2>Hitos de urbanización y áreas comunes</h2>
+      <div class="hgrid" id="hUrb" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <!-- TAREAS -->
+  <section class="view" id="v-tareas" hidden>
+    <div class="panel">
+      <h2>Tareas <small id="tCountTxt"></small></h2>
+      <div class="filters" style="margin-top:10px">
+        <select id="fVentana" aria-label="Ventana"><option value="activas">En ejecución al corte</option><option value="prox">Próximas 2 semanas</option><option value="atr">Solo atrasadas</option><option value="todas">Todas</option></select>
+        <select id="fResp" aria-label="Responsable"><option value="">Todos los responsables</option></select>
+        <select id="fFrente" aria-label="Frente"><option value="">Todos los frentes</option></select>
+        <select id="fPartida" aria-label="Partida"><option value="">Todas las partidas</option></select>
+        <select id="fEstatus" aria-label="Estatus"><option value="">Todos los estatus</option><option value="late">Atrasado</option><option value="ok">A tiempo</option><option value="done">Entregado</option><option value="idle">Por iniciar</option></select>
+        <input type="search" id="fTexto" placeholder="Buscar concepto o clave" aria-label="Buscar">
+      </div>
+      <div class="notice" id="capNotice" style="margin-top:10px"></div>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Estatus</th><th>Frente</th><th>Concepto</th><th>Responsable</th><th>Programa</th><th style="text-align:right">Cantidad</th><th style="text-align:right">Ejecutado</th><th>Avance real vs prog.</th><th style="text-align:right">Monto ejecutado</th></tr></thead>
+        <tbody id="tBody"></tbody>
+      </table>
+    </div>
+    <div class="pager"><span class="muted" id="pgTxt"></span><button class="linkbtn" id="pgPrev" type="button">Anterior</button><button class="linkbtn" id="pgNext" type="button">Siguiente</button></div>
+  </section>
+
+  <!-- RESPONSABLES -->
+  <section class="view" id="v-responsables" hidden>
+    <div class="panel">
+      <h2>Equipos y líderes <small>Avance de lo que tiene asignado cada líder al corte</small></h2>
+      <div class="rgrid" id="rCards" style="margin-top:10px"></div>
+    </div>
+    <div class="panel">
+      <h2>Asignación por frente <small id="asigHint"></small></h2>
+      <div class="filters" style="margin:10px 0">
+        <select id="aFiltro" aria-label="Filtrar frentes"><option value="">Todos los frentes</option><option value="OC">Edificios · Obra civil</option><option value="IN">Edificios · Instalaciones</option><option value="AC">Edificios · Acabados</option><option value="PL">Plataformas</option><option value="UR">Calles</option><option value="JA">Jardines y áreas recreativas</option><option value="sin">Sin líder</option></select>
+        <span id="bulkBox" hidden style="display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="muted" id="bulkTxt"></span>
+          <input class="tin" id="bulkEquipo" placeholder="Equipo (p. ej. Cuadrilla obra negra 1)" style="width:240px">
+          <span class="picker" id="bulkPicker"></span>
+          <button class="btn" id="bulkApply" type="button">Asignar a seleccionados</button>
+        </span>
+      </div>
+      <div class="tablewrap"><table><thead><tr><th><input type="checkbox" id="aAll" aria-label="Seleccionar todos"></th><th>Frente</th><th>Especialidad</th><th>Equipo</th><th>Líder</th><th style="text-align:right">Tareas</th></tr></thead><tbody id="aBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ESTIMACIONES -->
+  <section class="view" id="v-estimaciones" hidden>
+    <div class="kpis" id="eKpis"></div>
+    <div class="panel" id="eFormPanel">
+      <h2>Registrar estimación</h2>
+      <form id="eForm" class="formgrid" style="margin-top:10px">
+        <label>No.<input id="eNo" type="text" required placeholder="E-01"></label>
+        <label>Periodo del<input id="eIni" type="date" required></label>
+        <label>al<input id="eFin" type="date" required></label>
+        <label>Monto estimado ($)<input id="eMonto" type="number" min="0" step="0.01" required></label>
+        <label>Monto cobrado ($)<input id="eCobrado" type="number" min="0" step="0.01"></label>
+        <label>Fecha de cobro<input id="eFCobro" type="date"></label>
+        <label style="grid-column:1/-1">Nota<input id="eNota" type="text" placeholder="Opcional"></label>
+        <div style="display:flex;gap:8px"><button class="btn" type="submit" id="eSave">Guardar</button><button class="btn ghost" type="button" id="eCancel" hidden>Cancelar edición</button></div>
+      </form>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Estimado</th><th style="text-align:right">Cobrado</th><th>Fecha de cobro</th><th style="text-align:right">Por cobrar</th><th>Nota</th><th></th></tr></thead><tbody id="eBody"></tbody></table></div>
+  </section>
+  <section class="view" id="v-usuarios" hidden>
+    <div class="panel">
+      <h2>Usuarios del tablero <small>Aprueba solicitudes y asigna el rol de cada persona</small></h2>
+      <div class="notice" style="margin-top:10px">Roles: <b>Pendiente</b> (no ve nada) · <b>Consulta</b> (solo ve) · <b>Líder</b> (captura avance en los frentes donde es líder) · <b>Administrador</b> (asigna líderes, registra estimaciones y aprueba usuarios).</div>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Alta</th><th></th></tr></thead><tbody id="uBody"></tbody></table></div>
+  </section>
+</main>
+<div id="gate" class="gate">
+  <div class="gatebox">
+    <div class="eyebrow" style="font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Grupo Alaris · Construcción virtual</div>
+    <h1 style="font-size:24px;font-weight:800">Primera Línea · Control de obra</h1>
+    <div id="gMsg" class="muted">Inicia sesión para ver el tablero y capturar avance.</div>
+    <div id="gLogin" style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn" id="gGoogle" type="button">Entrar con Google</button>
+      <div class="muted" style="text-align:center;font-size:12px">o con correo</div>
+      <form id="gForm" style="display:flex;flex-direction:column;gap:8px">
+        <input class="tin" id="gNombre" type="text" placeholder="Nombre completo (solo al registrarte)" autocomplete="name" hidden>
+        <input class="tin" id="gEmail" type="email" placeholder="Correo" autocomplete="email" required>
+        <input class="tin" id="gPass" type="password" placeholder="Contraseña (mínimo 6 caracteres)" autocomplete="current-password" required minlength="6">
+        <button class="btn ghost" type="submit" id="gSubmit">Entrar</button>
+      </form>
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px">
+        <button class="linkbtn" id="gToggle" type="button">Crear cuenta</button>
+        <button class="linkbtn" id="gReset" type="button">Olvidé mi contraseña</button>
+      </div>
+    </div>
+    <div id="gPend" hidden style="display:flex;flex-direction:column;gap:10px">
+      <div class="notice">Tu cuenta quedó registrada. El administrador de Grupo Alaris debe aprobar tu acceso; recarga esta página cuando te avisen.</div>
+      <button class="btn ghost" id="gOut" type="button">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script type="application/json" id="data">{"d0":"2026-10-01","conc":{"P-001-1":["1. Preliminares","1.3. Terracerías","Trazo y nivelación","PLATAFORMA",50000],"UV-003-1":["2. Urbanización","2.1. Vialidades","Terracerías en vialidad","LOTE",128000],"P-001-2":["1. Preliminares","1.3. Terracerías","Despalme","PLATAFORMA",72000],"P-001-3":["1. Preliminares","1.3. Terracerías","Excavación","PLATAFORMA",505000],"P-001-5":["1. Preliminares","1.3. Terracerías","terraplenes","PLATAFORMA",604817.34],"INF-D-002-1":["3. Infraestructura","3.1. Drenajes","Drenaje sanitario","LOTE",288122.25],"P-001-4":["1. Preliminares","1.3. Terracerías","Compactación","PLATAFORMA",40000],"VIV-CIM-4.1.1-1":["4. Vivienda","4.1. Cimentación","Cimentación","TORRE",1968314.8],"INF-RD-001-1":["3. Infraestructura","3.2. Red hidráulica","Red de agua potable","LOTE",54853.34],"VIV-SAN-4.3.4-1":["4. Vivienda","4.3. Instalaciones","Sanitario","VIVIENDA",11621.95],"INF-RD-002-1":["3. Infraestructura","3.2. Red hidráulica","Cisterna","TORRE",203017.15],"INF-RE-001-1":["3. Infraestructura","3.3. Red Eléctrica","Instalación Eléctrica del Conjunto media tensión","LOTE",256232.76],"VIV-MU-4.2.1-1":["4. Vivienda","4.2. Obra civil - Muros y losas","Muros-Entrepisos","NIVEL",853922.29],"VIV-EL-4.3.1-1":["4. Vivienda","4.3. Instalaciones","Instalación Eléctrica baja tensión","NIVEL",234811.67],"VIV-MU-4.2.2-1":["4. Vivienda","4.2. Obra civil - Muros y losas","Losas de entrepiso","NIVEL",638258.37],"UV-003-2":["2. Urbanización","2.1. Vialidades","base hidráulica en vialidad","LOTE",121000],"VIV-CR-4.5.1-1":["4. Vivienda","4.5. Circulaciones","Verticales","NIVEL",94186.31],"VIV-CR-4.5.2-1":["4. Vivienda","4.5. Circulaciones","Horizontales","NIVEL",24155.47],"VIV-HI-4.3.3-1":["4. Vivienda","4.3. Instalaciones","Hidráulico","VIVIENDA",11741.57],"UV-001-1":["2. Urbanización","2.1. Vialidades","Guarniciones Vialidad 1","LOTE",51259.58],"VIV-GA-4.3.2-1":["4. Vivienda","4.3. Instalaciones","Gas","VIVIENDA",5227.42],"VIV-AC-4.4.1-2":["4. Vivienda","4.4. Acabados","Repellado sobre muros","VIVIENDA",3035.48],"VIV-AC-4.4.1-1":["4. Vivienda","4.4. Acabados","Aplanado fino en muros","VIVIENDA",16460.8],"UV-002-1":["2. Urbanización","2.1. Vialidades","Banquetas Vialidad 1","LOTE",133998.86],"INF-RE-001-5":["3. Infraestructura","3.3. Red Eléctrica","Iluminación conjunto","LOTE",572597.7],"VIV-MU-4.2.1-2":["4. Vivienda","4.2. Obra civil - Muros y losas","Muros-Celosía de Barro","NIVEL",46599.16],"UV-002-2":["2. Urbanización","2.1. Vialidades","Andadores","LOTE",12913.52],"INF-RE-001-4":["3. Infraestructura","3.3. Red Eléctrica","Iluminación vialidades","LOTE",80685.35],"VIV-AC-4.4.2-1":["4. Vivienda","4.4. Acabados","Pisos","VIVIENDA",17984.98],"INF-D-001-1":["3. Infraestructura","3.1. Drenajes","Drenaje pluvial","TORRE",17011.04],"VIV-MU-4.2.1-3":["4. Vivienda","4.2. Obra civil - Muros y losas","Muros-Celosía de pvc","NIVEL",24417.24],"UV-003-3":["2. Urbanización","2.1. Vialidades","Vialidad con Carpeta asfáltica","LOTE",208726.11],"VIV-AC-4.4.5-2":["4. Vivienda","4.4. Acabados","Herrerías barandal","VIVIENDA",9093.03],"VIV-AC-4.4.2-2":["4. Vivienda","4.4. Acabados","Pisos cerámicos","VIVIENDA",5355.85],"UV-003-4":["2. Urbanización","2.1. Vialidades","Cajones de estacionamiento","LOTE",125295.03],"VIV-MU-4.2.2-2":["4. Vivienda","4.2. Obra civil - Muros y losas","Losas de azotea","TORRE",1173068.25],"INF-RE-002-1":["3. Infraestructura","3.3. Red Eléctrica","Instalación eléctrica Baja tensión","TORRE",93509.86],"VIV-PLU-4.3.5-1":["4. Vivienda","4.3. Instalaciones","Pluvial","VIVIENDA",4639.8],"U-AC-003-1":["2. Urbanización","2.2. Áreas comunes","Señalización vertical","LOTE",62022.52],"VIV-AC-4.4.4-1":["4. Vivienda","4.4. Acabados","Ventanas V-1","VIVIENDA",13206.08],"VIV-AC-4.4.4-2":["4. Vivienda","4.4. Acabados","Ventanas V-2","VIVIENDA",1440.19],"U-AC-002-1":["2. Urbanización","2.2. Áreas comunes","Vialidad 1 Pintura Estacionamiento","LOTE",25099.31],"U-AC-002-2":["2. Urbanización","2.2. Áreas comunes","Vialidad 2 Pintura Estacionamiento","LOTE",11748.95],"VIV-AC-4.4.5-3":["4. Vivienda","4.4. Acabados","Herrerías escaleras marinas","TORRE",55466.06],"INF-RE-002-2":["3. Infraestructura","3.3. Red Eléctrica","Concentración de medidores","TORRE",78007.3],"VIV-AC-4.4.3-1":["4. Vivienda","4.4. Acabados","Puertas P-1","VIVIENDA",12121.17],"VIV-AC-4.4.3-2":["4. Vivienda","4.4. Acabados","Puertas P-2","VIVIENDA",3030.29],"VIV-AC-4.4.3-3":["4. Vivienda","4.4. Acabados","Puertas P-3","VIVIENDA",784.45],"U-AC-003-2":["2. Urbanización","2.2. Áreas comunes","Señalización horizontal","LOTE",8184.03],"VIV-EL-4.3.1-2":["4. Vivienda","4.3. Instalaciones","Instalación Eléctrica para bomba tinacos","TORRE",317810.76],"VIV-AC-4.4.6-2":["4. Vivienda","4.4. Acabados","Pintura vinílica exterior","TORRE",46534.72],"VIV-AC-4.4.5-1":["4. Vivienda","4.4. Acabados","Cancel de aluminio","VIVIENDA",2061.58],"VIV-AC-4.4.6-1":["4. Vivienda","4.4. Acabados","Pintura vinílica interior","VIVIENDA",7885.88],"VIV-MO-4.3.7-1":["4. Vivienda","4.3. Instalaciones","Mobiliario","VIVIENDA",23120.31],"U-AC-001-1":["2. Urbanización","2.2. Áreas comunes","Áreas de Jardinería","LOTE",280985.29],"U-AC-004-6":["2. Urbanización","2.2. Áreas comunes","Contenedores","LOTE",22221.53],"U-AC-004-3":["2. Urbanización","2.2. Áreas comunes","Área recreativa 3","LOTE",624398.8],"U-AC-004-2":["2. Urbanización","2.2. Áreas comunes","Área recreativa 2","LOTE",155718.39],"U-AC-004-4":["2. Urbanización","2.2. Áreas comunes","Área recreativa 4","LOTE",118120.34],"U-AC-004-1":["2. Urbanización","2.2. Áreas comunes","Área recreativa 1","LOTE",550011.41],"U-AC-004-5":["2. Urbanización","2.2. Áreas comunes","Área recreativa 5","LOTE",482298.5]},"tasks":[["T-0001","P-001-1","M01","ED-1-A / ED-1-B",1,6,8],["T-0002","UV-003-1","Tramo C1","Manzanas M01, M02, M03",3,6,43],["T-0003","P-001-2","M01","ED-1-A / ED-1-B",1,7,10],["T-0004","P-001-3","M01","ED-1-A / ED-1-B",1,9,15],["T-0005","P-001-5","M01","ED-1-A / ED-1-B",1,12,20],["T-0006","INF-D-002-1","Tramo C1","Manzanas M01, M02, M03",3,12,61],["T-0007","P-001-4","M01","ED-1-A / ED-1-B",1,14,18],["T-0008","P-001-1","M02","ED-1-C / ED-1-D",1,17,19],["T-0009","P-001-2","M02","ED-1-C / ED-1-D",1,18,21],["T-0010","P-001-3","M02","ED-1-C / ED-1-D",1,20,26],["T-0011","VIV-CIM-4.1.1-1","ED-1-A","M01 · 16 viv",0.5,21,42],["T-0012","P-001-5","M02","ED-1-C / ED-1-D",1,23,31],["T-0013","INF-RD-001-1","Tramo C1","Manzanas M01, M02, M03",3,24,68],["T-0014","P-001-4","M02","ED-1-C / ED-1-D",1,25,29],["T-0015","VIV-SAN-4.3.4-1","ED-1-A","M01 · 16 viv",16,26,111],["T-0016","INF-RD-002-1","ED-1-A","M01 · 16 viv",0.5,28,56],["T-0017","VIV-CIM-4.1.1-1","ED-1-B","M01 · 16 viv",0.5,28,49],["T-0018","P-001-1","M03","ED-1-E / ED-1-F",1,28,30],["T-0019","P-001-2","M03","ED-1-E / ED-1-F",1,29,32],["T-0020","INF-RE-001-1","Tramo C1","Manzanas M01, M02, M03",3,31,80],["T-0021","P-001-3","M03","ED-1-E / ED-1-F",1,31,37],["T-0022","VIV-CIM-4.1.1-1","ED-1-C","M02 · 16 viv",0.5,32,53],["T-0023","VIV-SAN-4.3.4-1","ED-1-B","M01 · 16 viv",16,33,118],["T-0024","P-001-5","M03","ED-1-E / ED-1-F",1,34,42],["T-0025","INF-RD-002-1","ED-1-B","M01 · 16 viv",0.5,35,63],["T-0026","P-001-4","M03","ED-1-E / ED-1-F",1,36,40],["T-0027","VIV-SAN-4.3.4-1","ED-1-C","M02 · 16 viv",16,37,122],["T-0028","VIV-MU-4.2.1-1","ED-1-A","M01 · 16 viv",2,39,105],["T-0029","INF-RD-002-1","ED-1-C","M02 · 16 viv",0.5,39,67],["T-0030","VIV-CIM-4.1.1-1","ED-1-D","M02 · 16 viv",0.5,39,60],["T-0031","P-001-1","M04","ED-1-G / ED-1-H",1,39,41],["T-0032","P-001-2","M04","ED-1-G / ED-1-H",1,40,43],["T-0033","VIV-EL-4.3.1-1","ED-1-A","M01 · 16 viv",2,42,116],["T-0034","P-001-3","M04","ED-1-G / ED-1-H",1,42,48],["T-0035","VIV-CIM-4.1.1-1","ED-1-E","M03 · 16 viv",0.5,43,64],["T-0036","VIV-SAN-4.3.4-1","ED-1-D","M02 · 16 viv",16,44,129],["T-0037","P-001-5","M04","ED-1-G / ED-1-H",1,45,53],["T-0038","VIV-MU-4.2.1-1","ED-1-B","M01 · 16 viv",2,46,112],["T-0039","INF-RD-002-1","ED-1-D","M02 · 16 viv",0.5,46,74],["T-0040","P-001-4","M04","ED-1-G / ED-1-H",1,47,51],["T-0041","VIV-SAN-4.3.4-1","ED-1-E","M03 · 16 viv",16,48,133],["T-0042","VIV-MU-4.2.2-1","ED-1-A","M01 · 16 viv",1.5,49,91],["T-0043","VIV-EL-4.3.1-1","ED-1-B","M01 · 16 viv",2,49,123],["T-0044","UV-003-2","Tramo C1","Manzanas M01, M02, M03",3,49,80],["T-0045","VIV-MU-4.2.1-1","ED-1-C","M02 · 16 viv",2,50,116],["T-0046","INF-RD-002-1","ED-1-E","M03 · 16 viv",0.5,50,78],["T-0047","VIV-CIM-4.1.1-1","ED-1-F","M03 · 16 viv",0.5,50,71],["T-0048","P-001-1","M05","ED-1-I / ED-1-J",1,50,52],["T-0049","VIV-CR-4.5.1-1","ED-1-A","M01 · 16 viv",1.5,51,96],["T-0050","VIV-CR-4.5.2-1","ED-1-A","M01 · 16 viv",1.5,51,93],["T-0051","P-001-2","M05","ED-1-I / ED-1-J",1,51,54],["T-0052","VIV-EL-4.3.1-1","ED-1-C","M02 · 16 viv",2,53,127],["T-0053","P-001-3","M05","ED-1-I / ED-1-J",1,53,59],["T-0054","VIV-CIM-4.1.1-1","ED-1-G","M04 · 16 viv",0.5,54,75],["T-0055","VIV-SAN-4.3.4-1","ED-1-F","M03 · 16 viv",16,55,140],["T-0056","VIV-HI-4.3.3-1","ED-1-A","M01 · 16 viv",16,56,121],["T-0057","VIV-MU-4.2.2-1","ED-1-B","M01 · 16 viv",1.5,56,98],["T-0058","P-001-5","M05","ED-1-I / ED-1-J",1,56,64],["T-0059","VIV-MU-4.2.1-1","ED-1-D","M02 · 16 viv",2,57,123],["T-0060","INF-RD-002-1","ED-1-F","M03 · 16 viv",0.5,57,85],["T-0061","VIV-CR-4.5.1-1","ED-1-B","M01 · 16 viv",1.5,58,103],["T-0062","VIV-CR-4.5.2-1","ED-1-B","M01 · 16 viv",1.5,58,100],["T-0063","P-001-4","M05","ED-1-I / ED-1-J",1,58,62],["T-0064","VIV-SAN-4.3.4-1","ED-1-G","M04 · 16 viv",16,59,144],["T-0065","VIV-MU-4.2.2-1","ED-1-C","M02 · 16 viv",1.5,60,102],["T-0066","VIV-EL-4.3.1-1","ED-1-D","M02 · 16 viv",2,60,134],["T-0067","VIV-MU-4.2.1-1","ED-1-E","M03 · 16 viv",2,61,127],["T-0068","INF-RD-002-1","ED-1-G","M04 · 16 viv",0.5,61,89],["T-0069","VIV-CIM-4.1.1-1","ED-1-H","M04 · 16 viv",0.5,61,82],["T-0070","P-001-1","M06","ED-1-K / ED-1-L",1,61,63],["T-0071","UV-001-1","Tramo C1","Manzanas M01, M02, M03",3,61,92],["T-0072","VIV-CR-4.5.1-1","ED-1-C","M02 · 16 viv",1.5,62,107],["T-0073","VIV-CR-4.5.2-1","ED-1-C","M02 · 16 viv",1.5,62,104],["T-0074","P-001-2","M06","ED-1-K / ED-1-L",1,62,65],["T-0075","VIV-HI-4.3.3-1","ED-1-B","M01 · 16 viv",16,63,128],["T-0076","VIV-EL-4.3.1-1","ED-1-E","M03 · 16 viv",2,64,138],["T-0077","P-001-3","M06","ED-1-K / ED-1-L",1,64,70],["T-0078","VIV-CIM-4.1.1-1","ED-1-I","M05 · 16 viv",0.5,65,86],["T-0079","VIV-GA-4.3.2-1","ED-1-A","M01 · 16 viv",16,66,126],["T-0080","VIV-SAN-4.3.4-1","ED-1-H","M04 · 16 viv",16,66,151],["T-0081","VIV-HI-4.3.3-1","ED-1-C","M02 · 16 viv",16,67,132],["T-0082","VIV-MU-4.2.2-1","ED-1-D","M02 · 16 viv",1.5,67,109],["T-0083","P-001-5","M06","ED-1-K / ED-1-L",1,67,75],["T-0084","VIV-MU-4.2.1-1","ED-1-F","M03 · 16 viv",2,68,134],["T-0085","INF-RD-002-1","ED-1-H","M04 · 16 viv",0.5,68,96],["T-0086","VIV-CR-4.5.1-1","ED-1-D","M02 · 16 viv",1.5,69,114],["T-0087","VIV-CR-4.5.2-1","ED-1-D","M02 · 16 viv",1.5,69,111],["T-0088","P-001-4","M06","ED-1-K / ED-1-L",1,69,73],["T-0089","VIV-AC-4.4.1-2","ED-1-A","M01 · 16 viv",16,70,126],["T-0090","VIV-SAN-4.3.4-1","ED-1-I","M05 · 16 viv",16,70,155],["T-0091","VIV-MU-4.2.2-1","ED-1-E","M03 · 16 viv",1.5,71,113],["T-0092","VIV-EL-4.3.1-1","ED-1-F","M03 · 16 viv",2,71,145],["T-0093","VIV-MU-4.2.1-1","ED-1-G","M04 · 16 viv",2,72,138],["T-0094","INF-RD-002-1","ED-1-I","M05 · 16 viv",0.5,72,100],["T-0095","VIV-CIM-4.1.1-1","ED-1-J","M05 · 16 viv",0.5,72,93],["T-0096","P-001-1","M07","ED-1-M / ED-1-N",1,72,74],["T-0097","VIV-AC-4.4.1-1","ED-1-A","M01 · 16 viv",16,73,131],["T-0098","VIV-GA-4.3.2-1","ED-1-B","M01 · 16 viv",16,73,133],["T-0099","VIV-CR-4.5.1-1","ED-1-E","M03 · 16 viv",1.5,73,118],["T-0100","VIV-CR-4.5.2-1","ED-1-E","M03 · 16 viv",1.5,73,115],["T-0101","P-001-2","M07","ED-1-M / ED-1-N",1,73,76],["T-0102","UV-002-1","Tramo C1","Manzanas M01, M02, M03",3,74,111],["T-0103","INF-RE-001-5","Tramo C1","Manzanas M01, M02, M03",3,74,123],["T-0104","VIV-HI-4.3.3-1","ED-1-D","M02 · 16 viv",16,74,139],["T-0105","VIV-EL-4.3.1-1","ED-1-G","M04 · 16 viv",2,75,149],["T-0106","P-001-3","M07","ED-1-M / ED-1-N",1,75,81],["T-0107","VIV-CIM-4.1.1-1","ED-1-K","M06 · 16 viv",0.5,76,97],["T-0108","VIV-MU-4.2.1-2","ED-1-A","M01 · 16 viv",2,77,119],["T-0109","VIV-AC-4.4.1-2","ED-1-B","M01 · 16 viv",16,77,133],["T-0110","VIV-GA-4.3.2-1","ED-1-C","M02 · 16 viv",16,77,137],["T-0111","VIV-SAN-4.3.4-1","ED-1-J","M05 · 16 viv",16,77,162],["T-0112","VIV-HI-4.3.3-1","ED-1-E","M03 · 16 viv",16,78,143],["T-0113","VIV-MU-4.2.2-1","ED-1-F","M03 · 16 viv",1.5,78,120],["T-0114","P-001-5","M07","ED-1-M / ED-1-N",1,78,86],["T-0115","VIV-MU-4.2.1-1","ED-1-H","M04 · 16 viv",2,79,145],["T-0116","INF-RD-002-1","ED-1-J","M05 · 16 viv",0.5,79,107],["T-0117","UV-002-2","Tramo C1","Manzanas M01, M02, M03",3,80,111],["T-0118","INF-RE-001-4","Tramo C1","Manzanas M01, M02, M03",3,80,123],["T-0119","VIV-AC-4.4.1-1","ED-1-B","M01 · 16 viv",16,80,138],["T-0120","VIV-CR-4.5.1-1","ED-1-F","M03 · 16 viv",1.5,80,125],["T-0121","VIV-CR-4.5.2-1","ED-1-F","M03 · 16 viv",1.5,80,122],["T-0122","P-001-4","M07","ED-1-M / ED-1-N",1,80,84],["T-0123","VIV-AC-4.4.2-1","ED-1-A","M01 · 16 viv",16,81,133],["T-0124","VIV-AC-4.4.1-2","ED-1-C","M02 · 16 viv",16,81,137],["T-0125","VIV-SAN-4.3.4-1","ED-1-K","M06 · 16 viv",16,81,166],["T-0126","VIV-MU-4.2.2-1","ED-1-G","M04 · 16 viv",1.5,82,124],["T-0127","VIV-EL-4.3.1-1","ED-1-H","M04 · 16 viv",2,82,156],["T-0128","VIV-MU-4.2.1-1","ED-1-I","M05 · 16 viv",2,83,149],["T-0129","INF-RD-002-1","ED-1-K","M06 · 16 viv",0.5,83,111],["T-0130","VIV-CIM-4.1.1-1","ED-1-L","M06 · 16 viv",0.5,83,104],["T-0131","P-001-1","M08","ED-1-Ñ / ED-1-O",1,83,85],["T-0132","INF-D-001-1","ED-1-A","M01 · 16 viv",0.5,84,126],["T-0133","VIV-MU-4.2.1-3","ED-1-A","M01 · 16 viv",2,84,121],["T-0134","VIV-MU-4.2.1-2","ED-1-B","M01 · 16 viv",2,84,126],["T-0135","VIV-AC-4.4.1-1","ED-1-C","M02 · 16 viv",16,84,142],["T-0136","VIV-GA-4.3.2-1","ED-1-D","M02 · 16 viv",16,84,144],["T-0137","VIV-CR-4.5.1-1","ED-1-G","M04 · 16 viv",1.5,84,129],["T-0138","VIV-CR-4.5.2-1","ED-1-G","M04 · 16 viv",1.5,84,126],["T-0139","P-001-2","M08","ED-1-Ñ / ED-1-O",1,84,87],["T-0140","VIV-HI-4.3.3-1","ED-1-F","M03 · 16 viv",16,85,150],["T-0141","UV-003-3","Tramo C1","Manzanas M01, M02, M03",3,149,180],["T-0142","VIV-AC-4.4.5-2","ED-1-A","M01 · 16 viv",16,86,133],["T-0143","VIV-EL-4.3.1-1","ED-1-I","M05 · 16 viv",2,86,160],["T-0144","P-001-3","M08","ED-1-Ñ / ED-1-O",1,86,92],["T-0145","VIV-CIM-4.1.1-1","ED-1-M","M07 · 16 viv",0.5,87,108],["T-0146","VIV-AC-4.4.2-1","ED-1-B","M01 · 16 viv",16,88,140],["T-0147","VIV-MU-4.2.1-2","ED-1-C","M02 · 16 viv",2,88,130],["T-0148","VIV-AC-4.4.1-2","ED-1-D","M02 · 16 viv",16,88,144],["T-0149","VIV-GA-4.3.2-1","ED-1-E","M03 · 16 viv",16,88,148],["T-0150","VIV-SAN-4.3.4-1","ED-1-L","M06 · 16 viv",16,88,173],["T-0151","VIV-HI-4.3.3-1","ED-1-G","M04 · 16 viv",16,89,154],["T-0152","VIV-MU-4.2.2-1","ED-1-H","M04 · 16 viv",1.5,89,131],["T-0153","P-001-5","M08","ED-1-Ñ / ED-1-O",1,89,97],["T-0154","VIV-MU-4.2.1-1","ED-1-J","M05 · 16 viv",2,90,156],["T-0155","INF-RD-002-1","ED-1-L","M06 · 16 viv",0.5,90,118],["T-0156","VIV-AC-4.4.2-2","ED-1-A","M01 · 16 viv",16,91,136],["T-0157","INF-D-001-1","ED-1-B","M01 · 16 viv",0.5,91,133],["T-0158","VIV-MU-4.2.1-3","ED-1-B","M01 · 16 viv",2,91,128],["T-0159","VIV-AC-4.4.1-1","ED-1-D","M02 · 16 viv",16,91,149],["T-0160","VIV-CR-4.5.1-1","ED-1-H","M04 · 16 viv",1.5,91,136],["T-0161","VIV-CR-4.5.2-1","ED-1-H","M04 · 16 viv",1.5,91,133],["T-0162","P-001-4","M08","ED-1-Ñ / ED-1-O",1,91,95],["T-0163","VIV-AC-4.4.2-1","ED-1-C","M02 · 16 viv",16,92,144],["T-0164","VIV-AC-4.4.1-2","ED-1-E","M03 · 16 viv",16,92,148],["T-0165","VIV-SAN-4.3.4-1","ED-1-M","M07 · 16 viv",16,92,177],["T-0166","UV-003-4","Tramo C1","Manzanas M01, M02, M03",3,149,176],["T-0167","VIV-AC-4.4.5-2","ED-1-B","M01 · 16 viv",16,93,140],["T-0168","VIV-MU-4.2.2-1","ED-1-I","M05 · 16 viv",1.5,93,135],["T-0169","VIV-EL-4.3.1-1","ED-1-J","M05 · 16 viv",2,93,167],["T-0170","VIV-MU-4.2.1-1","ED-1-K","M06 · 16 viv",2,94,160],["T-0171","INF-RD-002-1","ED-1-M","M07 · 16 viv",0.5,94,122],["T-0172","VIV-CIM-4.1.1-1","ED-1-N","M07 · 16 viv",0.5,94,115],["T-0173","P-001-1","M09","ED-1-P / ED-1-Q",1,94,96],["T-0174","INF-D-001-1","ED-1-C","M02 · 16 viv",0.5,95,137],["T-0175","VIV-MU-4.2.1-3","ED-1-C","M02 · 16 viv",2,95,132],["T-0176","VIV-MU-4.2.1-2","ED-1-D","M02 · 16 viv",2,95,137],["T-0177","VIV-AC-4.4.1-1","ED-1-E","M03 · 16 viv",16,95,153],["T-0178","VIV-GA-4.3.2-1","ED-1-F","M03 · 16 viv",16,95,155],["T-0179","VIV-CR-4.5.1-1","ED-1-I","M05 · 16 viv",1.5,95,140],["T-0180","VIV-CR-4.5.2-1","ED-1-I","M05 · 16 viv",1.5,95,137],["T-0181","P-001-2","M09","ED-1-P / ED-1-Q",1,95,98],["T-0182","VIV-HI-4.3.3-1","ED-1-H","M04 · 16 viv",16,96,161],["T-0183","VIV-AC-4.4.5-2","ED-1-C","M02 · 16 viv",16,97,144],["T-0184","VIV-EL-4.3.1-1","ED-1-K","M06 · 16 viv",2,97,171],["T-0185","P-001-3","M09","ED-1-P / ED-1-Q",1,97,103],["T-0186","VIV-AC-4.4.2-2","ED-1-B","M01 · 16 viv",16,98,143],["T-0187","VIV-CIM-4.1.1-1","ED-1-Ñ","M08 · 16 viv",0.5,98,119],["T-0188","VIV-AC-4.4.2-1","ED-1-D","M02 · 16 viv",16,99,151],["T-0189","VIV-MU-4.2.1-2","ED-1-E","M03 · 16 viv",2,99,141],["T-0190","VIV-AC-4.4.1-2","ED-1-F","M03 · 16 viv",16,99,155],["T-0191","VIV-GA-4.3.2-1","ED-1-G","M04 · 16 viv",16,99,159],["T-0192","VIV-SAN-4.3.4-1","ED-1-N","M07 · 16 viv",16,99,184],["T-0193","VIV-HI-4.3.3-1","ED-1-I","M05 · 16 viv",16,100,165],["T-0194","VIV-MU-4.2.2-1","ED-1-J","M05 · 16 viv",1.5,100,142],["T-0195","P-001-5","M09","ED-1-P / ED-1-Q",1,100,108],["T-0196","VIV-MU-4.2.2-2","ED-1-A","M01 · 16 viv",0.5,101,113],["T-0197","VIV-MU-4.2.1-1","ED-1-L","M06 · 16 viv",2,101,167],["T-0198","INF-RD-002-1","ED-1-N","M07 · 16 viv",0.5,101,129],["T-0199","VIV-AC-4.4.2-2","ED-1-C","M02 · 16 viv",16,102,147],["T-0200","INF-D-001-1","ED-1-D","M02 · 16 viv",0.5,102,144],["T-0201","VIV-MU-4.2.1-3","ED-1-D","M02 · 16 viv",2,102,139],["T-0202","VIV-AC-4.4.1-1","ED-1-F","M03 · 16 viv",16,102,160],["T-0203","VIV-CR-4.5.1-1","ED-1-J","M05 · 16 viv",1.5,102,147],["T-0204","VIV-CR-4.5.2-1","ED-1-J","M05 · 16 viv",1.5,102,144],["T-0205","P-001-4","M09","ED-1-P / ED-1-Q",1,102,106],["T-0206","VIV-AC-4.4.2-1","ED-1-E","M03 · 16 viv",16,103,155],["T-0207","VIV-AC-4.4.1-2","ED-1-G","M04 · 16 viv",16,103,159],["T-0208","VIV-SAN-4.3.4-1","ED-1-Ñ","M08 · 16 viv",16,103,188],["T-0209","VIV-AC-4.4.5-2","ED-1-D","M02 · 16 viv",16,104,151],["T-0210","VIV-MU-4.2.2-1","ED-1-K","M06 · 16 viv",1.5,104,146],["T-0211","VIV-EL-4.3.1-1","ED-1-L","M06 · 16 viv",2,104,178],["T-0212","VIV-MU-4.2.1-1","ED-1-M","M07 · 16 viv",2,105,171],["T-0213","VIV-CIM-4.1.1-1","ED-1-O","M08 · 16 viv",0.5,105,126],["T-0214","INF-RD-002-1","ED-1-Ñ","M08 · 16 viv",0.5,105,133],["T-0215","P-001-1","M10","ED-1-R / ED-1-S",1,105,107],["T-0216","INF-RE-002-1","ED-1-A","M01 · 16 viv",0.5,106,133],["T-0217","INF-D-001-1","ED-1-E","M03 · 16 viv",0.5,106,148],["T-0218","VIV-MU-4.2.1-3","ED-1-E","M03 · 16 viv",2,106,143],["T-0219","VIV-MU-4.2.1-2","ED-1-F","M03 · 16 viv",2,106,148],["T-0220","VIV-AC-4.4.1-1","ED-1-G","M04 · 16 viv",16,106,164],["T-0221","VIV-GA-4.3.2-1","ED-1-H","M04 · 16 viv",16,106,166],["T-0222","VIV-CR-4.5.1-1","ED-1-K","M06 · 16 viv",1.5,106,151],["T-0223","VIV-CR-4.5.2-1","ED-1-K","M06 · 16 viv",1.5,106,148],["T-0224","P-001-2","M10","ED-1-R / ED-1-S",1,106,109],["T-0225","VIV-HI-4.3.3-1","ED-1-J","M05 · 16 viv",16,107,172],["T-0226","VIV-MU-4.2.2-2","ED-1-B","M01 · 16 viv",0.5,108,120],["T-0227","VIV-AC-4.4.5-2","ED-1-E","M03 · 16 viv",16,108,155],["T-0228","VIV-EL-4.3.1-1","ED-1-M","M07 · 16 viv",2,108,182],["T-0229","P-001-3","M10","ED-1-R / ED-1-S",1,108,114],["T-0230","VIV-PLU-4.3.5-1","ED-1-A","M01 · 16 viv",16,109,126],["T-0231","VIV-AC-4.4.2-2","ED-1-D","M02 · 16 viv",16,109,154],["T-0232","VIV-CIM-4.1.1-1","ED-1-P","M09 · 16 viv",0.5,109,130],["T-0233","VIV-AC-4.4.2-1","ED-1-F","M03 · 16 viv",16,110,162],["T-0234","VIV-MU-4.2.1-2","ED-1-G","M04 · 16 viv",2,110,152],["T-0235","VIV-AC-4.4.1-2","ED-1-H","M04 · 16 viv",16,110,166],["T-0236","VIV-GA-4.3.2-1","ED-1-I","M05 · 16 viv",16,110,170],["T-0237","VIV-SAN-4.3.4-1","ED-1-O","M08 · 16 viv",16,110,195],["T-0238","U-AC-003-1","Tramo C1","Manzanas M01, M02, M03",3,111,129],["T-0239","VIV-AC-4.4.4-1","ED-1-A","M01 · 16 viv",16,111,139],["T-0240","VIV-AC-4.4.4-2","ED-1-A","M01 · 16 viv",16,111,139],["T-0241","VIV-HI-4.3.3-1","ED-1-K","M06 · 16 viv",16,111,176],["T-0242","VIV-MU-4.2.2-1","ED-1-L","M06 · 16 viv",1.5,111,153],["T-0243","P-001-5","M10","ED-1-R / ED-1-S",1,111,119],["T-0244","VIV-MU-4.2.2-2","ED-1-C","M02 · 16 viv",0.5,112,124],["T-0245","VIV-MU-4.2.1-1","ED-1-N","M07 · 16 viv",2,112,178],["T-0246","INF-RD-002-1","ED-1-O","M08 · 16 viv",0.5,112,140],["T-0247","INF-RE-002-1","ED-1-B","M01 · 16 viv",0.5,113,140],["T-0248","VIV-AC-4.4.2-2","ED-1-E","M03 · 16 viv",16,113,158],["T-0249","INF-D-001-1","ED-1-F","M03 · 16 viv",0.5,113,155],["T-0250","VIV-MU-4.2.1-3","ED-1-F","M03 · 16 viv",2,113,150],["T-0251","VIV-AC-4.4.1-1","ED-1-H","M04 · 16 viv",16,113,171],["T-0252","VIV-CR-4.5.1-1","ED-1-L","M06 · 16 viv",1.5,113,158],["T-0253","VIV-CR-4.5.2-1","ED-1-L","M06 · 16 viv",1.5,113,155],["T-0254","P-001-4","M10","ED-1-R / ED-1-S",1,113,117],["T-0255","VIV-AC-4.4.2-1","ED-1-G","M04 · 16 viv",16,114,166],["T-0256","VIV-AC-4.4.1-2","ED-1-I","M05 · 16 viv",16,114,170],["T-0257","VIV-SAN-4.3.4-1","ED-1-P","M09 · 16 viv",16,114,199],["T-0258","U-AC-002-1","Tramo C1","Manzanas M01, M02, M03",3,149,164],["T-0259","U-AC-002-2","Tramo C1","Manzanas M01, M02, M03",3,149,164],["T-0260","VIV-AC-4.4.5-3","ED-1-A","M01 · 16 viv",0.5,115,129],["T-0261","VIV-AC-4.4.5-2","ED-1-F","M03 · 16 viv",16,115,162],["T-0262","VIV-MU-4.2.2-1","ED-1-M","M07 · 16 viv",1.5,115,157],["T-0263","VIV-EL-4.3.1-1","ED-1-N","M07 · 16 viv",2,115,189],["T-0264","INF-RE-002-2","ED-1-A","M01 · 16 viv",0.5,116,136],["T-0265","VIV-AC-4.4.3-1","ED-1-A","M01 · 16 viv",16,116,141],["T-0266","VIV-AC-4.4.3-2","ED-1-A","M01 · 16 viv",16,116,141],["T-0267","VIV-AC-4.4.3-3","ED-1-A","M01 · 16 viv",16,116,141],["T-0268","VIV-PLU-4.3.5-1","ED-1-B","M01 · 16 viv",16,116,133],["T-0269","INF-RD-002-1","ED-1-P","M09 · 16 viv",0.5,116,144],["T-0270","VIV-CIM-4.1.1-1","ED-1-Q","M09 · 16 viv",0.5,116,137],["T-0271","VIV-MU-4.2.1-1","ED-1-Ñ","M08 · 16 viv",2,116,182],["T-0272","P-001-1","M11","ED-1-T / ED-1-U",1,116,118],["T-0273","U-AC-003-2","Tramo C1","Manzanas M01, M02, M03",3,149,161],["T-0274","INF-RE-002-1","ED-1-C","M02 · 16 viv",0.5,117,144],["T-0275","INF-D-001-1","ED-1-G","M04 · 16 viv",0.5,117,159],["T-0276","VIV-MU-4.2.1-3","ED-1-G","M04 · 16 viv",2,117,154],["T-0277","VIV-MU-4.2.1-2","ED-1-H","M04 · 16 viv",2,117,159],["T-0278","VIV-AC-4.4.1-1","ED-1-I","M05 · 16 viv",16,117,175],["T-0279","VIV-GA-4.3.2-1","ED-1-J","M05 · 16 viv",16,117,177],["T-0280","VIV-CR-4.5.1-1","ED-1-M","M07 · 16 viv",1.5,117,162],["T-0281","VIV-CR-4.5.2-1","ED-1-M","M07 · 16 viv",1.5,117,159],["T-0282","P-001-2","M11","ED-1-T / ED-1-U",1,117,120],["T-0283","VIV-AC-4.4.4-1","ED-1-B","M01 · 16 viv",16,118,146],["T-0284","VIV-AC-4.4.4-2","ED-1-B","M01 · 16 viv",16,118,146],["T-0285","VIV-HI-4.3.3-1","ED-1-L","M06 · 16 viv",16,118,183],["T-0286","VIV-EL-4.3.1-2","ED-1-A","M01 · 16 viv",0.5,119,136],["T-0287","VIV-AC-4.4.6-2","ED-1-A","M01 · 16 viv",0.5,119,143],["T-0288","VIV-MU-4.2.2-2","ED-1-D","M02 · 16 viv",0.5,119,131],["T-0289","VIV-AC-4.4.5-2","ED-1-G","M04 · 16 viv",16,119,166],["T-0290","VIV-EL-4.3.1-1","ED-1-Ñ","M08 · 16 viv",2,119,193],["T-0291","P-001-3","M11","ED-1-T / ED-1-U",1,119,125],["T-0292","VIV-PLU-4.3.5-1","ED-1-C","M02 · 16 viv",16,120,137],["T-0293","VIV-AC-4.4.2-2","ED-1-F","M03 · 16 viv",16,120,165],["T-0294","VIV-CIM-4.1.1-1","ED-1-R","M10 · 16 viv",0.5,120,141],["T-0295","VIV-AC-4.4.5-1","ED-1-A","M01 · 16 viv",16,121,141],["T-0296","VIV-AC-4.4.6-1","ED-1-A","M01 · 16 viv",16,121,145],["T-0297","VIV-AC-4.4.2-1","ED-1-H","M04 · 16 viv",16,121,173],["T-0298","VIV-MU-4.2.1-2","ED-1-I","M05 · 16 viv",2,121,163],["T-0299","VIV-AC-4.4.1-2","ED-1-J","M05 · 16 viv",16,121,177],["T-0300","VIV-GA-4.3.2-1","ED-1-K","M06 · 16 viv",16,121,181],["T-0301","VIV-SAN-4.3.4-1","ED-1-Q","M09 · 16 viv",16,121,206],["T-0302","VIV-AC-4.4.5-3","ED-1-B","M01 · 16 viv",0.5,122,136],["T-0303","VIV-AC-4.4.4-1","ED-1-C","M02 · 16 viv",16,122,150],["T-0304","VIV-AC-4.4.4-2","ED-1-C","M02 · 16 viv",16,122,150],["T-0305","VIV-HI-4.3.3-1","ED-1-M","M07 · 16 viv",16,122,187],["T-0306","VIV-MU-4.2.2-1","ED-1-N","M07 · 16 viv",1.5,122,164],["T-0307","P-001-5","M11","ED-1-T / ED-1-U",1,122,130],["T-0308","INF-RE-002-2","ED-1-B","M01 · 16 viv",0.5,123,143],["T-0309","VIV-AC-4.4.3-1","ED-1-B","M01 · 16 viv",16,123,148],["T-0310","VIV-AC-4.4.3-2","ED-1-B","M01 · 16 viv",16,123,148],["T-0311","VIV-AC-4.4.3-3","ED-1-B","M01 · 16 viv",16,123,148],["T-0312","VIV-MU-4.2.2-2","ED-1-E","M03 · 16 viv",0.5,123,135],["T-0313","VIV-MU-4.2.1-1","ED-1-O","M08 · 16 viv",2,123,189],["T-0314","INF-RD-002-1","ED-1-Q","M09 · 16 viv",0.5,123,151],["T-0315","INF-RE-002-1","ED-1-D","M02 · 16 viv",0.5,124,151],["T-0316","VIV-AC-4.4.2-2","ED-1-G","M04 · 16 viv",16,124,169],["T-0317","INF-D-001-1","ED-1-H","M04 · 16 viv",0.5,124,166],["T-0318","VIV-MU-4.2.1-3","ED-1-H","M04 · 16 viv",2,124,161],["T-0319","VIV-AC-4.4.1-1","ED-1-J","M05 · 16 viv",16,124,182],["T-0320","VIV-CR-4.5.1-1","ED-1-N","M07 · 16 viv",1.5,124,169],["T-0321","VIV-CR-4.5.2-1","ED-1-N","M07 · 16 viv",1.5,124,166],["T-0322","P-001-4","M11","ED-1-T / ED-1-U",1,124,128],["T-0323","VIV-AC-4.4.2-1","ED-1-I","M05 · 16 viv",16,125,177],["T-0324","VIV-AC-4.4.1-2","ED-1-K","M06 · 16 viv",16,125,181],["T-0325","VIV-SAN-4.3.4-1","ED-1-R","M10 · 16 viv",16,125,210],["T-0326","VIV-EL-4.3.1-2","ED-1-B","M01 · 16 viv",0.5,126,143],["T-0327","VIV-AC-4.4.6-2","ED-1-B","M01 · 16 viv",0.5,126,150],["T-0328","VIV-AC-4.4.5-3","ED-1-C","M02 · 16 viv",0.5,126,140],["T-0329","VIV-AC-4.4.5-2","ED-1-H","M04 · 16 viv",16,126,173],["T-0330","VIV-EL-4.3.1-1","ED-1-O","M08 · 16 viv",2,126,200],["T-0331","VIV-MU-4.2.2-1","ED-1-Ñ","M08 · 16 viv",1.5,126,168],["T-0332","INF-RE-002-2","ED-1-C","M02 · 16 viv",0.5,127,147],["T-0333","VIV-AC-4.4.3-1","ED-1-C","M02 · 16 viv",16,127,152],["T-0334","VIV-AC-4.4.3-2","ED-1-C","M02 · 16 viv",16,127,152],["T-0335","VIV-AC-4.4.3-3","ED-1-C","M02 · 16 viv",16,127,152],["T-0336","VIV-PLU-4.3.5-1","ED-1-D","M02 · 16 viv",16,127,144],["T-0337","VIV-MU-4.2.1-1","ED-1-P","M09 · 16 viv",2,127,193],["T-0338","INF-RD-002-1","ED-1-R","M10 · 16 viv",0.5,127,155],["T-0339","VIV-CIM-4.1.1-1","ED-1-S","M10 · 16 viv",0.5,127,148],["T-0340","P-001-1","M12","ED-1-V / ED-1-W",1,127,129],["T-0341","VIV-AC-4.4.5-1","ED-1-B","M01 · 16 viv",16,128,148],["T-0342","VIV-AC-4.4.6-1","ED-1-B","M01 · 16 viv",16,128,152],["T-0343","INF-RE-002-1","ED-1-E","M03 · 16 viv",0.5,128,155],["T-0344","INF-D-001-1","ED-1-I","M05 · 16 viv",0.5,128,170],["T-0345","VIV-MU-4.2.1-3","ED-1-I","M05 · 16 viv",2,128,165],["T-0346","VIV-MU-4.2.1-2","ED-1-J","M05 · 16 viv",2,128,170],["T-0347","VIV-AC-4.4.1-1","ED-1-K","M06 · 16 viv",16,128,186],["T-0348","VIV-GA-4.3.2-1","ED-1-L","M06 · 16 viv",16,128,188],["T-0349","VIV-CR-4.5.1-1","ED-1-Ñ","M08 · 16 viv",1.5,128,173],["T-0350","VIV-CR-4.5.2-1","ED-1-Ñ","M08 · 16 viv",1.5,128,170],["T-0351","P-001-2","M12","ED-1-V / ED-1-W",1,128,131],["T-0352","VIV-MO-4.3.7-1","ED-1-A","M01 · 16 viv",16,129,147],["T-0353","VIV-AC-4.4.4-1","ED-1-D","M02 · 16 viv",16,129,157],["T-0354","VIV-AC-4.4.4-2","ED-1-D","M02 · 16 viv",16,129,157],["T-0355","VIV-HI-4.3.3-1","ED-1-N","M07 · 16 viv",16,129,194],["T-0356","UV-003-1","Tramo C2","Manzanas M04, M05, M06",3,129,147],["T-0357","VIV-EL-4.3.1-2","ED-1-C","M02 · 16 viv",0.5,130,147],["T-0358","VIV-AC-4.4.6-2","ED-1-C","M02 · 16 viv",0.5,130,154],["T-0359","VIV-MU-4.2.2-2","ED-1-F","M03 · 16 viv",0.5,130,142],["T-0360","VIV-AC-4.4.5-2","ED-1-I","M05 · 16 viv",16,130,177],["T-0361","VIV-EL-4.3.1-1","ED-1-P","M09 · 16 viv",2,130,204],["T-0362","P-001-3","M12","ED-1-V / ED-1-W",1,130,136],["T-0363","VIV-PLU-4.3.5-1","ED-1-E","M03 · 16 viv",16,131,148],["T-0364","VIV-AC-4.4.2-2","ED-1-H","M04 · 16 viv",16,131,176],["T-0365","VIV-CIM-4.1.1-1","ED-1-T","M11 · 16 viv",0.5,131,152],["T-0366","VIV-AC-4.4.5-1","ED-1-C","M02 · 16 viv",16,132,152],["T-0367","VIV-AC-4.4.6-1","ED-1-C","M02 · 16 viv",16,132,156],["T-0368","VIV-AC-4.4.2-1","ED-1-J","M05 · 16 viv",16,132,184],["T-0369","VIV-MU-4.2.1-2","ED-1-K","M06 · 16 viv",2,132,174],["T-0370","VIV-AC-4.4.1-2","ED-1-L","M06 · 16 viv",16,132,188],["T-0371","VIV-GA-4.3.2-1","ED-1-M","M07 · 16 viv",16,132,192],["T-0372","VIV-SAN-4.3.4-1","ED-1-S","M10 · 16 viv",16,132,217],["T-0373","INF-D-002-1","Tramo C2","Manzanas M04, M05, M06",3,132,156],["T-0374","VIV-AC-4.4.5-3","ED-1-D","M02 · 16 viv",0.5,133,147],["T-0375","VIV-AC-4.4.4-1","ED-1-E","M03 · 16 viv",16,133,161],["T-0376","VIV-AC-4.4.4-2","ED-1-E","M03 · 16 viv",16,133,161],["T-0377","VIV-MU-4.2.2-1","ED-1-O","M08 · 16 viv",1.5,133,175],["T-0378","VIV-HI-4.3.3-1","ED-1-Ñ","M08 · 16 viv",16,133,198],["T-0379","P-001-5","M12","ED-1-V / ED-1-W",1,133,141],["T-0380","INF-RE-002-2","ED-1-D","M02 · 16 viv",0.5,134,154],["T-0381","VIV-AC-4.4.3-1","ED-1-D","M02 · 16 viv",16,134,159],["T-0382","VIV-AC-4.4.3-2","ED-1-D","M02 · 16 viv",16,134,159],["T-0383","VIV-AC-4.4.3-3","ED-1-D","M02 · 16 viv",16,134,159],["T-0384","VIV-MU-4.2.2-2","ED-1-G","M04 · 16 viv",0.5,134,146],["T-0385","VIV-MU-4.2.1-1","ED-1-Q","M09 · 16 viv",2,134,200],["T-0386","INF-RD-002-1","ED-1-S","M10 · 16 viv",0.5,134,162],["T-0387","INF-RE-002-1","ED-1-F","M03 · 16 viv",0.5,135,162],["T-0388","VIV-AC-4.4.2-2","ED-1-I","M05 · 16 viv",16,135,180],["T-0389","INF-D-001-1","ED-1-J","M05 · 16 viv",0.5,135,177],["T-0390","VIV-MU-4.2.1-3","ED-1-J","M05 · 16 viv",2,135,172],["T-0391","VIV-AC-4.4.1-1","ED-1-L","M06 · 16 viv",16,135,193],["T-0392","VIV-CR-4.5.1-1","ED-1-O","M08 · 16 viv",1.5,135,180],["T-0393","VIV-CR-4.5.2-1","ED-1-O","M08 · 16 viv",1.5,135,177],["T-0394","P-001-4","M12","ED-1-V / ED-1-W",1,135,139],["T-0395","VIV-MO-4.3.7-1","ED-1-B","M01 · 16 viv",16,136,154],["T-0396","VIV-AC-4.4.2-1","ED-1-K","M06 · 16 viv",16,136,188],["T-0397","VIV-AC-4.4.1-2","ED-1-M","M07 · 16 viv",16,136,192],["T-0398","VIV-SAN-4.3.4-1","ED-1-T","M11 · 16 viv",16,136,221],["T-0399","VIV-EL-4.3.1-2","ED-1-D","M02 · 16 viv",0.5,137,154],["T-0400","VIV-AC-4.4.6-2","ED-1-D","M02 · 16 viv",0.5,137,161],["T-0401","VIV-AC-4.4.5-3","ED-1-E","M03 · 16 viv",0.5,137,151],["T-0402","VIV-AC-4.4.5-2","ED-1-J","M05 · 16 viv",16,137,184],["T-0403","VIV-MU-4.2.2-1","ED-1-P","M09 · 16 viv",1.5,137,179],["T-0404","VIV-EL-4.3.1-1","ED-1-Q","M09 · 16 viv",2,137,211],["T-0405","INF-RE-002-2","ED-1-E","M03 · 16 viv",0.5,138,158],["T-0406","VIV-AC-4.4.3-1","ED-1-E","M03 · 16 viv",16,138,163],["T-0407","VIV-AC-4.4.3-2","ED-1-E","M03 · 16 viv",16,138,163],["T-0408","VIV-AC-4.4.3-3","ED-1-E","M03 · 16 viv",16,138,163],["T-0409","VIV-PLU-4.3.5-1","ED-1-F","M03 · 16 viv",16,138,155],["T-0410","VIV-MU-4.2.1-1","ED-1-R","M10 · 16 viv",2,138,204],["T-0411","INF-RD-002-1","ED-1-T","M11 · 16 viv",0.5,138,166],["T-0412","VIV-CIM-4.1.1-1","ED-1-U","M11 · 16 viv",0.5,138,159],["T-0413","P-001-1","M13","ED-1-X / ED-1-Y",1,138,140],["T-0414","INF-RD-001-1","Tramo C2","Manzanas M04, M05, M06",3,138,160],["T-0415","VIV-AC-4.4.5-1","ED-1-D","M02 · 16 viv",16,139,159],["T-0416","VIV-AC-4.4.6-1","ED-1-D","M02 · 16 viv",16,139,163],["T-0417","INF-RE-002-1","ED-1-G","M04 · 16 viv",0.5,139,166],["T-0418","INF-D-001-1","ED-1-K","M06 · 16 viv",0.5,139,181],["T-0419","VIV-MU-4.2.1-3","ED-1-K","M06 · 16 viv",2,139,176],["T-0420","VIV-MU-4.2.1-2","ED-1-L","M06 · 16 viv",2,139,181],["T-0421","VIV-AC-4.4.1-1","ED-1-M","M07 · 16 viv",16,139,197],["T-0422","VIV-GA-4.3.2-1","ED-1-N","M07 · 16 viv",16,139,199],["T-0423","VIV-CR-4.5.1-1","ED-1-P","M09 · 16 viv",1.5,139,184],["T-0424","VIV-CR-4.5.2-1","ED-1-P","M09 · 16 viv",1.5,139,181],["T-0425","P-001-2","M13","ED-1-X / ED-1-Y",1,139,142],["T-0426","VIV-MO-4.3.7-1","ED-1-C","M02 · 16 viv",16,140,158],["T-0427","VIV-AC-4.4.4-1","ED-1-F","M03 · 16 viv",16,140,168],["T-0428","VIV-AC-4.4.4-2","ED-1-F","M03 · 16 viv",16,140,168],["T-0429","VIV-HI-4.3.3-1","ED-1-O","M08 · 16 viv",16,140,205],["T-0430","U-AC-001-1","Jardín J5","Manzanas M13, M14, M15, M16",4,140,344],["T-0431","U-AC-001-1","Jardín J7","Manzanas M09, M10, M11, M12",4,140,344],["T-0432","VIV-EL-4.3.1-2","ED-1-E","M03 · 16 viv",0.5,141,158],["T-0433","VIV-AC-4.4.6-2","ED-1-E","M03 · 16 viv",0.5,141,165],["T-0434","VIV-MU-4.2.2-2","ED-1-H","M04 · 16 viv",0.5,141,153],["T-0435","VIV-AC-4.4.5-2","ED-1-K","M06 · 16 viv",16,141,188],["T-0436","VIV-EL-4.3.1-1","ED-1-R","M10 · 16 viv",2,141,215],["T-0437","P-001-3","M13","ED-1-X / ED-1-Y",1,141,147],["T-0438","INF-RE-001-1","Tramo C2","Manzanas M04, M05, M06",3,141,166],["T-0439","VIV-PLU-4.3.5-1","ED-1-G","M04 · 16 viv",16,142,159],["T-0440","VIV-AC-4.4.2-2","ED-1-J","M05 · 16 viv",16,142,187],["T-0441","VIV-CIM-4.1.1-1","ED-1-V","M12 · 16 viv",0.5,142,163],["T-0442","VIV-AC-4.4.5-1","ED-1-E","M03 · 16 viv",16,143,163],["T-0443","VIV-AC-4.4.6-1","ED-1-E","M03 · 16 viv",16,143,167],["T-0444","VIV-AC-4.4.2-1","ED-1-L","M06 · 16 viv",16,143,195],["T-0445","VIV-MU-4.2.1-2","ED-1-M","M07 · 16 viv",2,143,185],["T-0446","VIV-AC-4.4.1-2","ED-1-N","M07 · 16 viv",16,143,199],["T-0447","VIV-SAN-4.3.4-1","ED-1-U","M11 · 16 viv",16,143,228],["T-0448","VIV-GA-4.3.2-1","ED-1-Ñ","M08 · 16 viv",16,143,203],["T-0449","VIV-AC-4.4.5-3","ED-1-F","M03 · 16 viv",0.5,144,158],["T-0450","VIV-AC-4.4.4-1","ED-1-G","M04 · 16 viv",16,144,172],["T-0451","VIV-AC-4.4.4-2","ED-1-G","M04 · 16 viv",16,144,172],["T-0452","VIV-HI-4.3.3-1","ED-1-P","M09 · 16 viv",16,144,209],["T-0453","VIV-MU-4.2.2-1","ED-1-Q","M09 · 16 viv",1.5,144,186],["T-0454","P-001-5","M13","ED-1-X / ED-1-Y",1,144,152],["T-0455","INF-RE-002-2","ED-1-F","M03 · 16 viv",0.5,145,165],["T-0456","VIV-AC-4.4.3-1","ED-1-F","M03 · 16 viv",16,145,170],["T-0457","VIV-AC-4.4.3-2","ED-1-F","M03 · 16 viv",16,145,170],["T-0458","VIV-AC-4.4.3-3","ED-1-F","M03 · 16 viv",16,145,170],["T-0459","VIV-MU-4.2.2-2","ED-1-I","M05 · 16 viv",0.5,145,157],["T-0460","VIV-MU-4.2.1-1","ED-1-S","M10 · 16 viv",2,145,211],["T-0461","INF-RD-002-1","ED-1-U","M11 · 16 viv",0.5,145,173],["T-0462","INF-RE-002-1","ED-1-H","M04 · 16 viv",0.5,146,173],["T-0463","VIV-AC-4.4.2-2","ED-1-K","M06 · 16 viv",16,146,191],["T-0464","INF-D-001-1","ED-1-L","M06 · 16 viv",0.5,146,188],["T-0465","VIV-MU-4.2.1-3","ED-1-L","M06 · 16 viv",2,146,183],["T-0466","VIV-AC-4.4.1-1","ED-1-N","M07 · 16 viv",16,146,204],["T-0467","VIV-CR-4.5.1-1","ED-1-Q","M09 · 16 viv",1.5,146,191],["T-0468","VIV-CR-4.5.2-1","ED-1-Q","M09 · 16 viv",1.5,146,188],["T-0469","P-001-4","M13","ED-1-X / ED-1-Y",1,146,150],["T-0470","VIV-MO-4.3.7-1","ED-1-D","M02 · 16 viv",16,147,165],["T-0471","VIV-AC-4.4.2-1","ED-1-M","M07 · 16 viv",16,147,199],["T-0472","VIV-SAN-4.3.4-1","ED-1-V","M12 · 16 viv",16,147,232],["T-0473","VIV-AC-4.4.1-2","ED-1-Ñ","M08 · 16 viv",16,147,203],["T-0474","VIV-EL-4.3.1-2","ED-1-F","M03 · 16 viv",0.5,148,165],["T-0475","VIV-AC-4.4.6-2","ED-1-F","M03 · 16 viv",0.5,148,172],["T-0476","VIV-AC-4.4.5-3","ED-1-G","M04 · 16 viv",0.5,148,162],["T-0477","VIV-AC-4.4.5-2","ED-1-L","M06 · 16 viv",16,148,195],["T-0478","VIV-MU-4.2.2-1","ED-1-R","M10 · 16 viv",1.5,148,190],["T-0479","VIV-EL-4.3.1-1","ED-1-S","M10 · 16 viv",2,148,222],["T-0480","INF-RE-002-2","ED-1-G","M04 · 16 viv",0.5,149,169],["T-0481","VIV-AC-4.4.3-1","ED-1-G","M04 · 16 viv",16,149,174],["T-0482","VIV-AC-4.4.3-2","ED-1-G","M04 · 16 viv",16,149,174],["T-0483","VIV-AC-4.4.3-3","ED-1-G","M04 · 16 viv",16,149,174],["T-0484","VIV-PLU-4.3.5-1","ED-1-H","M04 · 16 viv",16,149,166],["T-0485","VIV-MU-4.2.1-1","ED-1-T","M11 · 16 viv",2,149,215],["T-0486","INF-RD-002-1","ED-1-V","M12 · 16 viv",0.5,149,177],["T-0487","VIV-CIM-4.1.1-1","ED-1-W","M12 · 16 viv",0.5,149,170],["T-0488","P-001-1","M14","ED-1-Z / ED-2-A",1,149,151],["T-0489","VIV-AC-4.4.5-1","ED-1-F","M03 · 16 viv",16,150,170],["T-0490","VIV-AC-4.4.6-1","ED-1-F","M03 · 16 viv",16,150,174],["T-0491","INF-RE-002-1","ED-1-I","M05 · 16 viv",0.5,150,177],["T-0492","INF-D-001-1","ED-1-M","M07 · 16 viv",0.5,150,192],["T-0493","VIV-MU-4.2.1-3","ED-1-M","M07 · 16 viv",2,150,187],["T-0494","VIV-MU-4.2.1-2","ED-1-N","M07 · 16 viv",2,150,192],["T-0495","VIV-GA-4.3.2-1","ED-1-O","M08 · 16 viv",16,150,210],["T-0496","VIV-CR-4.5.1-1","ED-1-R","M10 · 16 viv",1.5,150,195],["T-0497","VIV-CR-4.5.2-1","ED-1-R","M10 · 16 viv",1.5,150,192],["T-0498","VIV-AC-4.4.1-1","ED-1-Ñ","M08 · 16 viv",16,150,208],["T-0499","P-001-2","M14","ED-1-Z / ED-2-A",1,150,153],["T-0500","UV-003-2","Tramo C2","Manzanas M04, M05, M06",3,150,166],["T-0501","VIV-MO-4.3.7-1","ED-1-E","M03 · 16 viv",16,151,169],["T-0502","VIV-AC-4.4.4-1","ED-1-H","M04 · 16 viv",16,151,179],["T-0503","VIV-AC-4.4.4-2","ED-1-H","M04 · 16 viv",16,151,179],["T-0504","VIV-HI-4.3.3-1","ED-1-Q","M09 · 16 viv",16,151,216],["T-0505","VIV-EL-4.3.1-2","ED-1-G","M04 · 16 viv",0.5,152,169],["T-0506","VIV-AC-4.4.6-2","ED-1-G","M04 · 16 viv",0.5,152,176],["T-0507","VIV-MU-4.2.2-2","ED-1-J","M05 · 16 viv",0.5,152,164],["T-0508","VIV-AC-4.4.5-2","ED-1-M","M07 · 16 viv",16,152,199],["T-0509","VIV-EL-4.3.1-1","ED-1-T","M11 · 16 viv",2,152,226],["T-0510","P-001-3","M14","ED-1-Z / ED-2-A",1,152,158],["T-0511","VIV-PLU-4.3.5-1","ED-1-I","M05 · 16 viv",16,153,170],["T-0512","VIV-AC-4.4.2-2","ED-1-L","M06 · 16 viv",16,153,198],["T-0513","VIV-CIM-4.1.1-1","ED-1-X","M13 · 16 viv",0.5,153,174],["T-0514","VIV-AC-4.4.5-1","ED-1-G","M04 · 16 viv",16,154,174],["T-0515","VIV-AC-4.4.6-1","ED-1-G","M04 · 16 viv",16,154,178],["T-0516","VIV-AC-4.4.2-1","ED-1-N","M07 · 16 viv",16,154,206],["T-0517","VIV-AC-4.4.1-2","ED-1-O","M08 · 16 viv",16,154,210],["T-0518","VIV-GA-4.3.2-1","ED-1-P","M09 · 16 viv",16,154,214],["T-0519","VIV-SAN-4.3.4-1","ED-1-W","M12 · 16 viv",16,154,239],["T-0520","VIV-MU-4.2.1-2","ED-1-Ñ","M08 · 16 viv",2,154,196],["T-0521","VIV-AC-4.4.5-3","ED-1-H","M04 · 16 viv",0.5,155,169],["T-0522","VIV-AC-4.4.4-1","ED-1-I","M05 · 16 viv",16,155,183],["T-0523","VIV-AC-4.4.4-2","ED-1-I","M05 · 16 viv",16,155,183],["T-0524","VIV-HI-4.3.3-1","ED-1-R","M10 · 16 viv",16,155,220],["T-0525","VIV-MU-4.2.2-1","ED-1-S","M10 · 16 viv",1.5,155,197],["T-0526","P-001-5","M14","ED-1-Z / ED-2-A",1,155,163],["T-0527","INF-RE-002-2","ED-1-H","M04 · 16 viv",0.5,156,176],["T-0528","VIV-AC-4.4.3-1","ED-1-H","M04 · 16 viv",16,156,181],["T-0529","VIV-AC-4.4.3-2","ED-1-H","M04 · 16 viv",16,156,181],["T-0530","VIV-AC-4.4.3-3","ED-1-H","M04 · 16 viv",16,156,181],["T-0531","VIV-MU-4.2.2-2","ED-1-K","M06 · 16 viv",0.5,156,168],["T-0532","VIV-MU-4.2.1-1","ED-1-U","M11 · 16 viv",2,156,222],["T-0533","INF-RD-002-1","ED-1-W","M12 · 16 viv",0.5,156,184],["T-0534","UV-001-1","Tramo C2","Manzanas M04, M05, M06",3,156,172],["T-0535","INF-RE-002-1","ED-1-J","M05 · 16 viv",0.5,157,184],["T-0536","VIV-AC-4.4.2-2","ED-1-M","M07 · 16 viv",16,157,202],["T-0537","INF-D-001-1","ED-1-N","M07 · 16 viv",0.5,157,199],["T-0538","VIV-MU-4.2.1-3","ED-1-N","M07 · 16 viv",2,157,194],["T-0539","VIV-AC-4.4.1-1","ED-1-O","M08 · 16 viv",16,157,215],["T-0540","VIV-CR-4.5.1-1","ED-1-S","M10 · 16 viv",1.5,157,202],["T-0541","VIV-CR-4.5.2-1","ED-1-S","M10 · 16 viv",1.5,157,199],["T-0542","P-001-4","M14","ED-1-Z / ED-2-A",1,157,161],["T-0543","VIV-MO-4.3.7-1","ED-1-F","M03 · 16 viv",16,158,176],["T-0544","VIV-AC-4.4.1-2","ED-1-P","M09 · 16 viv",16,158,214],["T-0545","VIV-SAN-4.3.4-1","ED-1-X","M13 · 16 viv",16,158,243],["T-0546","VIV-AC-4.4.2-1","ED-1-Ñ","M08 · 16 viv",16,158,210],["T-0547","VIV-EL-4.3.1-2","ED-1-H","M04 · 16 viv",0.5,159,176],["T-0548","VIV-AC-4.4.6-2","ED-1-H","M04 · 16 viv",0.5,159,183],["T-0549","VIV-AC-4.4.5-3","ED-1-I","M05 · 16 viv",0.5,159,173],["T-0550","VIV-AC-4.4.5-2","ED-1-N","M07 · 16 viv",16,159,206],["T-0551","VIV-MU-4.2.2-1","ED-1-T","M11 · 16 viv",1.5,159,201],["T-0552","VIV-EL-4.3.1-1","ED-1-U","M11 · 16 viv",2,159,233],["T-0553","U-AC-001-1","Jardín J3","Manzanas M03, M04, M05",3,159,190],["T-0554","INF-RE-002-2","ED-1-I","M05 · 16 viv",0.5,160,180],["T-0555","VIV-AC-4.4.3-1","ED-1-I","M05 · 16 viv",16,160,185],["T-0556","VIV-AC-4.4.3-2","ED-1-I","M05 · 16 viv",16,160,185],["T-0557","VIV-AC-4.4.3-3","ED-1-I","M05 · 16 viv",16,160,185],["T-0558","VIV-PLU-4.3.5-1","ED-1-J","M05 · 16 viv",16,160,177],["T-0559","VIV-MU-4.2.1-1","ED-1-V","M12 · 16 viv",2,160,226],["T-0560","INF-RD-002-1","ED-1-X","M13 · 16 viv",0.5,160,188],["T-0561","VIV-CIM-4.1.1-1","ED-1-Y","M13 · 16 viv",0.5,160,181],["T-0562","P-001-1","M15","ED-2-B / ED-2-C",1,160,162],["T-0563","VIV-AC-4.4.5-1","ED-1-H","M04 · 16 viv",16,161,181],["T-0564","VIV-AC-4.4.6-1","ED-1-H","M04 · 16 viv",16,161,185],["T-0565","INF-RE-002-1","ED-1-K","M06 · 16 viv",0.5,161,188],["T-0566","VIV-MU-4.2.1-2","ED-1-O","M08 · 16 viv",2,161,203],["T-0567","VIV-AC-4.4.1-1","ED-1-P","M09 · 16 viv",16,161,219],["T-0568","VIV-GA-4.3.2-1","ED-1-Q","M09 · 16 viv",16,161,221],["T-0569","VIV-CR-4.5.1-1","ED-1-T","M11 · 16 viv",1.5,161,206],["T-0570","VIV-CR-4.5.2-1","ED-1-T","M11 · 16 viv",1.5,161,203],["T-0571","INF-D-001-1","ED-1-Ñ","M08 · 16 viv",0.5,161,203],["T-0572","VIV-MU-4.2.1-3","ED-1-Ñ","M08 · 16 viv",2,161,198],["T-0573","P-001-2","M15","ED-2-B / ED-2-C",1,161,164],["T-0574","VIV-MO-4.3.7-1","ED-1-G","M04 · 16 viv",16,162,180],["T-0575","VIV-AC-4.4.4-1","ED-1-J","M05 · 16 viv",16,162,190],["T-0576","VIV-AC-4.4.4-2","ED-1-J","M05 · 16 viv",16,162,190],["T-0577","VIV-HI-4.3.3-1","ED-1-S","M10 · 16 viv",16,162,227],["T-0578","UV-002-1","Tramo C2","Manzanas M04, M05, M06",3,163,181],["T-0579","INF-RE-001-5","Tramo C2","Manzanas M04, M05, M06",3,163,187],["T-0580","VIV-EL-4.3.1-2","ED-1-I","M05 · 16 viv",0.5,163,180],["T-0581","VIV-AC-4.4.6-2","ED-1-I","M05 · 16 viv",0.5,163,187],["T-0582","VIV-MU-4.2.2-2","ED-1-L","M06 · 16 viv",0.5,163,175],["T-0583","VIV-EL-4.3.1-1","ED-1-V","M12 · 16 viv",2,163,237],["T-0584","VIV-AC-4.4.5-2","ED-1-Ñ","M08 · 16 viv",16,163,210],["T-0585","P-001-3","M15","ED-2-B / ED-2-C",1,163,169],["T-0586","VIV-PLU-4.3.5-1","ED-1-K","M06 · 16 viv",16,164,181],["T-0587","VIV-AC-4.4.2-2","ED-1-N","M07 · 16 viv",16,164,209],["T-0588","VIV-CIM-4.1.1-1","ED-1-Z","M14 · 16 viv",0.5,164,185],["T-0589","VIV-AC-4.4.5-1","ED-1-I","M05 · 16 viv",16,165,185],["T-0590","VIV-AC-4.4.6-1","ED-1-I","M05 · 16 viv",16,165,189],["T-0591","VIV-AC-4.4.2-1","ED-1-O","M08 · 16 viv",16,165,217],["T-0592","VIV-MU-4.2.1-2","ED-1-P","M09 · 16 viv",2,165,207],["T-0593","VIV-AC-4.4.1-2","ED-1-Q","M09 · 16 viv",16,165,221],["T-0594","VIV-GA-4.3.2-1","ED-1-R","M10 · 16 viv",16,165,225],["T-0595","VIV-SAN-4.3.4-1","ED-1-Y","M13 · 16 viv",16,165,250],["T-0596","UV-002-2","Tramo C2","Manzanas M04, M05, M06",3,166,181],["T-0597","INF-RE-001-4","Tramo C2","Manzanas M04, M05, M06",3,166,187],["T-0598","VIV-AC-4.4.5-3","ED-1-J","M05 · 16 viv",0.5,166,180],["T-0599","VIV-AC-4.4.4-1","ED-1-K","M06 · 16 viv",16,166,194],["T-0600","VIV-AC-4.4.4-2","ED-1-K","M06 · 16 viv",16,166,194],["T-0601","VIV-HI-4.3.3-1","ED-1-T","M11 · 16 viv",16,166,231],["T-0602","VIV-MU-4.2.2-1","ED-1-U","M11 · 16 viv",1.5,166,208],["T-0603","P-001-5","M15","ED-2-B / ED-2-C",1,166,174],["T-0604","INF-RE-002-2","ED-1-J","M05 · 16 viv",0.5,167,187],["T-0605","VIV-AC-4.4.3-1","ED-1-J","M05 · 16 viv",16,167,192],["T-0606","VIV-AC-4.4.3-2","ED-1-J","M05 · 16 viv",16,167,192],["T-0607","VIV-AC-4.4.3-3","ED-1-J","M05 · 16 viv",16,167,192],["T-0608","VIV-MU-4.2.2-2","ED-1-M","M07 · 16 viv",0.5,167,179],["T-0609","VIV-MU-4.2.1-1","ED-1-W","M12 · 16 viv",2,167,233],["T-0610","INF-RD-002-1","ED-1-Y","M13 · 16 viv",0.5,167,195],["T-0611","INF-RE-002-1","ED-1-L","M06 · 16 viv",0.5,168,195],["T-0612","INF-D-001-1","ED-1-O","M08 · 16 viv",0.5,168,210],["T-0613","VIV-MU-4.2.1-3","ED-1-O","M08 · 16 viv",2,168,205],["T-0614","VIV-AC-4.4.1-1","ED-1-Q","M09 · 16 viv",16,168,226],["T-0615","VIV-CR-4.5.1-1","ED-1-U","M11 · 16 viv",1.5,168,213],["T-0616","VIV-CR-4.5.2-1","ED-1-U","M11 · 16 viv",1.5,168,210],["T-0617","VIV-AC-4.4.2-2","ED-1-Ñ","M08 · 16 viv",16,168,213],["T-0618","P-001-4","M15","ED-2-B / ED-2-C",1,168,172],["T-0619","UV-003-3","Tramo C2","Manzanas M04, M05, M06",3,182,197],["T-0620","VIV-MO-4.3.7-1","ED-1-H","M04 · 16 viv",16,169,187],["T-0621","VIV-AC-4.4.2-1","ED-1-P","M09 · 16 viv",16,169,221],["T-0622","VIV-AC-4.4.1-2","ED-1-R","M10 · 16 viv",16,169,225],["T-0623","VIV-SAN-4.3.4-1","ED-1-Z","M14 · 16 viv",16,169,254],["T-0624","VIV-EL-4.3.1-2","ED-1-J","M05 · 16 viv",0.5,170,187],["T-0625","VIV-AC-4.4.6-2","ED-1-J","M05 · 16 viv",0.5,170,194],["T-0626","VIV-AC-4.4.5-3","ED-1-K","M06 · 16 viv",0.5,170,184],["T-0627","VIV-AC-4.4.5-2","ED-1-O","M08 · 16 viv",16,170,217],["T-0628","VIV-MU-4.2.2-1","ED-1-V","M12 · 16 viv",1.5,170,212],["T-0629","VIV-EL-4.3.1-1","ED-1-W","M12 · 16 viv",2,170,244],["T-0630","INF-RE-002-2","ED-1-K","M06 · 16 viv",0.5,171,191],["T-0631","VIV-AC-4.4.3-1","ED-1-K","M06 · 16 viv",16,171,196],["T-0632","VIV-AC-4.4.3-2","ED-1-K","M06 · 16 viv",16,171,196],["T-0633","VIV-AC-4.4.3-3","ED-1-K","M06 · 16 viv",16,171,196],["T-0634","VIV-PLU-4.3.5-1","ED-1-L","M06 · 16 viv",16,171,188],["T-0635","VIV-MU-4.2.1-1","ED-1-X","M13 · 16 viv",2,171,237],["T-0636","INF-RD-002-1","ED-1-Z","M14 · 16 viv",0.5,171,199],["T-0637","VIV-CIM-4.1.1-1","ED-2-A","M14 · 16 viv",0.5,171,192],["T-0638","P-001-1","M16","ED-2-D / ED-2-E",1,171,173],["T-0639","UV-003-4","Tramo C2","Manzanas M04, M05, M06",3,182,195],["T-0640","VIV-AC-4.4.5-1","ED-1-J","M05 · 16 viv",16,172,192],["T-0641","VIV-AC-4.4.6-1","ED-1-J","M05 · 16 viv",16,172,196],["T-0642","INF-RE-002-1","ED-1-M","M07 · 16 viv",0.5,172,199],["T-0643","INF-D-001-1","ED-1-P","M09 · 16 viv",0.5,172,214],["T-0644","VIV-MU-4.2.1-3","ED-1-P","M09 · 16 viv",2,172,209],["T-0645","VIV-MU-4.2.1-2","ED-1-Q","M09 · 16 viv",2,172,214],["T-0646","VIV-AC-4.4.1-1","ED-1-R","M10 · 16 viv",16,172,230],["T-0647","VIV-GA-4.3.2-1","ED-1-S","M10 · 16 viv",16,172,232],["T-0648","VIV-CR-4.5.1-1","ED-1-V","M12 · 16 viv",1.5,172,217],["T-0649","VIV-CR-4.5.2-1","ED-1-V","M12 · 16 viv",1.5,172,214],["T-0650","P-001-2","M16","ED-2-D / ED-2-E",1,172,175],["T-0651","VIV-MO-4.3.7-1","ED-1-I","M05 · 16 viv",16,173,191],["T-0652","VIV-AC-4.4.4-1","ED-1-L","M06 · 16 viv",16,173,201],["T-0653","VIV-AC-4.4.4-2","ED-1-L","M06 · 16 viv",16,173,201],["T-0654","VIV-HI-4.3.3-1","ED-1-U","M11 · 16 viv",16,173,238],["T-0655","VIV-EL-4.3.1-2","ED-1-K","M06 · 16 viv",0.5,174,191],["T-0656","VIV-AC-4.4.6-2","ED-1-K","M06 · 16 viv",0.5,174,198],["T-0657","VIV-MU-4.2.2-2","ED-1-N","M07 · 16 viv",0.5,174,186],["T-0658","VIV-AC-4.4.5-2","ED-1-P","M09 · 16 viv",16,174,221],["T-0659","VIV-EL-4.3.1-1","ED-1-X","M13 · 16 viv",2,174,248],["T-0660","P-001-3","M16","ED-2-D / ED-2-E",1,174,180],["T-0661","VIV-PLU-4.3.5-1","ED-1-M","M07 · 16 viv",16,175,192],["T-0662","VIV-AC-4.4.2-2","ED-1-O","M08 · 16 viv",16,175,220],["T-0663","VIV-CIM-4.1.1-1","ED-2-B","M15 · 16 viv",0.5,175,196],["T-0664","VIV-AC-4.4.5-1","ED-1-K","M06 · 16 viv",16,176,196],["T-0665","VIV-AC-4.4.6-1","ED-1-K","M06 · 16 viv",16,176,200],["T-0666","VIV-AC-4.4.2-1","ED-1-Q","M09 · 16 viv",16,176,228],["T-0667","VIV-MU-4.2.1-2","ED-1-R","M10 · 16 viv",2,176,218],["T-0668","VIV-AC-4.4.1-2","ED-1-S","M10 · 16 viv",16,176,232],["T-0669","VIV-GA-4.3.2-1","ED-1-T","M11 · 16 viv",16,176,236],["T-0670","VIV-SAN-4.3.4-1","ED-2-A","M14 · 16 viv",16,176,261],["T-0671","VIV-AC-4.4.5-3","ED-1-L","M06 · 16 viv",0.5,177,191],["T-0672","VIV-AC-4.4.4-1","ED-1-M","M07 · 16 viv",16,177,205],["T-0673","VIV-AC-4.4.4-2","ED-1-M","M07 · 16 viv",16,177,205],["T-0674","VIV-HI-4.3.3-1","ED-1-V","M12 · 16 viv",16,177,242],["T-0675","VIV-MU-4.2.2-1","ED-1-W","M12 · 16 viv",1.5,177,219],["T-0676","P-001-5","M16","ED-2-D / ED-2-E",1,177,185],["T-0677","INF-RE-002-2","ED-1-L","M06 · 16 viv",0.5,178,198],["T-0678","VIV-AC-4.4.3-1","ED-1-L","M06 · 16 viv",16,178,203],["T-0679","VIV-AC-4.4.3-2","ED-1-L","M06 · 16 viv",16,178,203],["T-0680","VIV-AC-4.4.3-3","ED-1-L","M06 · 16 viv",16,178,203],["T-0681","VIV-MU-4.2.1-1","ED-1-Y","M13 · 16 viv",2,178,244],["T-0682","VIV-MU-4.2.2-2","ED-1-Ñ","M08 · 16 viv",0.5,178,190],["T-0683","INF-RD-002-1","ED-2-A","M14 · 16 viv",0.5,178,206],["T-0684","INF-RE-002-1","ED-1-N","M07 · 16 viv",0.5,179,206],["T-0685","VIV-AC-4.4.2-2","ED-1-P","M09 · 16 viv",16,179,224],["T-0686","INF-D-001-1","ED-1-Q","M09 · 16 viv",0.5,179,221],["T-0687","VIV-MU-4.2.1-3","ED-1-Q","M09 · 16 viv",2,179,216],["T-0688","VIV-AC-4.4.1-1","ED-1-S","M10 · 16 viv",16,179,237],["T-0689","VIV-CR-4.5.1-1","ED-1-W","M12 · 16 viv",1.5,179,224],["T-0690","VIV-CR-4.5.2-1","ED-1-W","M12 · 16 viv",1.5,179,221],["T-0691","P-001-4","M16","ED-2-D / ED-2-E",1,179,183],["T-0692","VIV-MO-4.3.7-1","ED-1-J","M05 · 16 viv",16,180,198],["T-0693","VIV-AC-4.4.2-1","ED-1-R","M10 · 16 viv",16,180,232],["T-0694","VIV-AC-4.4.1-2","ED-1-T","M11 · 16 viv",16,180,236],["T-0695","VIV-SAN-4.3.4-1","ED-2-B","M15 · 16 viv",16,180,265],["T-0696","U-AC-003-1","Tramo C2","Manzanas M04, M05, M06",3,181,190],["T-0697","VIV-EL-4.3.1-2","ED-1-L","M06 · 16 viv",0.5,181,198],["T-0698","VIV-AC-4.4.6-2","ED-1-L","M06 · 16 viv",0.5,181,205],["T-0699","VIV-AC-4.4.5-3","ED-1-M","M07 · 16 viv",0.5,181,195],["T-0700","VIV-AC-4.4.5-2","ED-1-Q","M09 · 16 viv",16,181,228],["T-0701","VIV-MU-4.2.2-1","ED-1-X","M13 · 16 viv",1.5,181,223],["T-0702","VIV-EL-4.3.1-1","ED-1-Y","M13 · 16 viv",2,181,255],["T-0703","INF-RE-002-2","ED-1-M","M07 · 16 viv",0.5,182,202],["T-0704","VIV-AC-4.4.3-1","ED-1-M","M07 · 16 viv",16,182,207],["T-0705","VIV-AC-4.4.3-2","ED-1-M","M07 · 16 viv",16,182,207],["T-0706","VIV-AC-4.4.3-3","ED-1-M","M07 · 16 viv",16,182,207],["T-0707","VIV-PLU-4.3.5-1","ED-1-N","M07 · 16 viv",16,182,199],["T-0708","VIV-MU-4.2.1-1","ED-1-Z","M14 · 16 viv",2,182,248],["T-0709","INF-RD-002-1","ED-2-B","M15 · 16 viv",0.5,182,210],["T-0710","VIV-CIM-4.1.1-1","ED-2-C","M15 · 16 viv",0.5,182,203],["T-0711","P-001-1","M17","ED-2-F / ED-2-G",1,182,184],["T-0712","U-AC-002-1","Tramo C2","Manzanas M04, M05, M06",3,183,190],["T-0713","U-AC-002-2","Tramo C2","Manzanas M04, M05, M06",3,183,190],["T-0714","VIV-AC-4.4.5-1","ED-1-L","M06 · 16 viv",16,183,203],["T-0715","VIV-AC-4.4.6-1","ED-1-L","M06 · 16 viv",16,183,207],["T-0716","INF-D-001-1","ED-1-R","M10 · 16 viv",0.5,183,225],["T-0717","VIV-MU-4.2.1-3","ED-1-R","M10 · 16 viv",2,183,220],["T-0718","VIV-MU-4.2.1-2","ED-1-S","M10 · 16 viv",2,183,225],["T-0719","VIV-AC-4.4.1-1","ED-1-T","M11 · 16 viv",16,183,241],["T-0720","VIV-GA-4.3.2-1","ED-1-U","M11 · 16 viv",16,183,243],["T-0721","VIV-CR-4.5.1-1","ED-1-X","M13 · 16 viv",1.5,183,228],["T-0722","VIV-CR-4.5.2-1","ED-1-X","M13 · 16 viv",1.5,183,225],["T-0723","INF-RE-002-1","ED-1-Ñ","M08 · 16 viv",0.5,183,210],["T-0724","U-AC-004-6","Jardín J3","Manzanas M03, M04, M05",3,184,190],["T-0725","P-001-2","M17","ED-2-F / ED-2-G",1,183,186],["T-0726","U-AC-003-2","Tramo C2","Manzanas M04, M05, M06",3,184,190],["T-0727","VIV-MO-4.3.7-1","ED-1-K","M06 · 16 viv",16,184,202],["T-0728","VIV-AC-4.4.4-1","ED-1-N","M07 · 16 viv",16,184,212],["T-0729","VIV-AC-4.4.4-2","ED-1-N","M07 · 16 viv",16,184,212],["T-0730","VIV-HI-4.3.3-1","ED-1-W","M12 · 16 viv",16,184,249],["T-0731","VIV-EL-4.3.1-2","ED-1-M","M07 · 16 viv",0.5,185,202],["T-0732","VIV-AC-4.4.6-2","ED-1-M","M07 · 16 viv",0.5,185,209],["T-0733","VIV-MU-4.2.2-2","ED-1-O","M08 · 16 viv",0.5,185,197],["T-0734","VIV-AC-4.4.5-2","ED-1-R","M10 · 16 viv",16,185,232],["T-0735","VIV-EL-4.3.1-1","ED-1-Z","M14 · 16 viv",2,185,259],["T-0736","P-001-3","M17","ED-2-F / ED-2-G",1,185,191],["T-0737","VIV-AC-4.4.2-2","ED-1-Q","M09 · 16 viv",16,186,231],["T-0738","VIV-PLU-4.3.5-1","ED-1-Ñ","M08 · 16 viv",16,186,203],["T-0739","VIV-CIM-4.1.1-1","ED-2-D","M16 · 16 viv",0.5,186,207],["T-0740","VIV-AC-4.4.5-1","ED-1-M","M07 · 16 viv",16,187,207],["T-0741","VIV-AC-4.4.6-1","ED-1-M","M07 · 16 viv",16,187,211],["T-0742","VIV-AC-4.4.2-1","ED-1-S","M10 · 16 viv",16,187,239],["T-0743","VIV-MU-4.2.1-2","ED-1-T","M11 · 16 viv",2,187,229],["T-0744","VIV-AC-4.4.1-2","ED-1-U","M11 · 16 viv",16,187,243],["T-0745","VIV-GA-4.3.2-1","ED-1-V","M12 · 16 viv",16,187,247],["T-0746","VIV-SAN-4.3.4-1","ED-2-C","M15 · 16 viv",16,187,272],["T-0747","VIV-AC-4.4.5-3","ED-1-N","M07 · 16 viv",0.5,188,202],["T-0748","VIV-HI-4.3.3-1","ED-1-X","M13 · 16 viv",16,188,253],["T-0749","VIV-MU-4.2.2-1","ED-1-Y","M13 · 16 viv",1.5,188,230],["T-0750","VIV-AC-4.4.4-1","ED-1-Ñ","M08 · 16 viv",16,188,216],["T-0751","VIV-AC-4.4.4-2","ED-1-Ñ","M08 · 16 viv",16,188,216],["T-0752","P-001-5","M17","ED-2-F / ED-2-G",1,188,196],["T-0753","INF-RE-002-2","ED-1-N","M07 · 16 viv",0.5,189,209],["T-0754","VIV-AC-4.4.3-1","ED-1-N","M07 · 16 viv",16,189,214],["T-0755","VIV-AC-4.4.3-2","ED-1-N","M07 · 16 viv",16,189,214],["T-0756","VIV-AC-4.4.3-3","ED-1-N","M07 · 16 viv",16,189,214],["T-0757","VIV-MU-4.2.2-2","ED-1-P","M09 · 16 viv",0.5,189,201],["T-0758","VIV-MU-4.2.1-1","ED-2-A","M14 · 16 viv",2,189,255],["T-0759","INF-RD-002-1","ED-2-C","M15 · 16 viv",0.5,189,217],["T-0760","INF-RE-002-1","ED-1-O","M08 · 16 viv",0.5,190,217],["T-0761","VIV-AC-4.4.2-2","ED-1-R","M10 · 16 viv",16,190,235],["T-0762","INF-D-001-1","ED-1-S","M10 · 16 viv",0.5,190,232],["T-0763","VIV-MU-4.2.1-3","ED-1-S","M10 · 16 viv",2,190,227],["T-0764","VIV-AC-4.4.1-1","ED-1-U","M11 · 16 viv",16,190,248],["T-0765","VIV-CR-4.5.1-1","ED-1-Y","M13 · 16 viv",1.5,190,235],["T-0766","VIV-CR-4.5.2-1","ED-1-Y","M13 · 16 viv",1.5,190,232],["T-0767","P-001-4","M17","ED-2-F / ED-2-G",1,190,194],["T-0768","UV-003-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,190,208],["T-0769","VIV-MO-4.3.7-1","ED-1-L","M06 · 16 viv",16,191,209],["T-0770","VIV-AC-4.4.2-1","ED-1-T","M11 · 16 viv",16,191,243],["T-0771","VIV-AC-4.4.1-2","ED-1-V","M12 · 16 viv",16,191,247],["T-0772","VIV-SAN-4.3.4-1","ED-2-D","M16 · 16 viv",16,191,276],["T-0773","VIV-EL-4.3.1-2","ED-1-N","M07 · 16 viv",0.5,192,209],["T-0774","VIV-AC-4.4.6-2","ED-1-N","M07 · 16 viv",0.5,192,216],["T-0775","VIV-AC-4.4.5-2","ED-1-S","M10 · 16 viv",16,192,239],["T-0776","VIV-MU-4.2.2-1","ED-1-Z","M14 · 16 viv",1.5,192,234],["T-0777","VIV-AC-4.4.5-3","ED-1-Ñ","M08 · 16 viv",0.5,192,206],["T-0778","VIV-EL-4.3.1-1","ED-2-A","M14 · 16 viv",2,192,266],["T-0779","INF-D-002-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,193,217],["T-0780","VIV-PLU-4.3.5-1","ED-1-O","M08 · 16 viv",16,193,210],["T-0781","INF-RE-002-2","ED-1-Ñ","M08 · 16 viv",0.5,193,213],["T-0782","VIV-AC-4.4.3-1","ED-1-Ñ","M08 · 16 viv",16,193,218],["T-0783","VIV-AC-4.4.3-2","ED-1-Ñ","M08 · 16 viv",16,193,218],["T-0784","VIV-AC-4.4.3-3","ED-1-Ñ","M08 · 16 viv",16,193,218],["T-0785","VIV-MU-4.2.1-1","ED-2-B","M15 · 16 viv",2,193,259],["T-0786","INF-RD-002-1","ED-2-D","M16 · 16 viv",0.5,193,221],["T-0787","VIV-CIM-4.1.1-1","ED-2-E","M16 · 16 viv",0.5,193,214],["T-0788","VIV-AC-4.4.5-1","ED-1-N","M07 · 16 viv",16,194,214],["T-0789","VIV-AC-4.4.6-1","ED-1-N","M07 · 16 viv",16,194,218],["T-0790","INF-RE-002-1","ED-1-P","M09 · 16 viv",0.5,194,221],["T-0791","INF-D-001-1","ED-1-T","M11 · 16 viv",0.5,194,236],["T-0792","VIV-MU-4.2.1-3","ED-1-T","M11 · 16 viv",2,194,231],["T-0793","VIV-MU-4.2.1-2","ED-1-U","M11 · 16 viv",2,194,236],["T-0794","VIV-AC-4.4.1-1","ED-1-V","M12 · 16 viv",16,194,252],["T-0795","VIV-GA-4.3.2-1","ED-1-W","M12 · 16 viv",16,194,254],["T-0796","VIV-CR-4.5.1-1","ED-1-Z","M14 · 16 viv",1.5,194,239],["T-0797","VIV-CR-4.5.2-1","ED-1-Z","M14 · 16 viv",1.5,194,236],["T-0798","VIV-MO-4.3.7-1","ED-1-M","M07 · 16 viv",16,195,213],["T-0799","VIV-AC-4.4.4-1","ED-1-O","M08 · 16 viv",16,195,223],["T-0800","VIV-AC-4.4.4-2","ED-1-O","M08 · 16 viv",16,195,223],["T-0801","VIV-HI-4.3.3-1","ED-1-Y","M13 · 16 viv",16,195,260],["T-0802","VIV-MU-4.2.2-2","ED-1-Q","M09 · 16 viv",0.5,196,208],["T-0803","VIV-AC-4.4.5-2","ED-1-T","M11 · 16 viv",16,196,243],["T-0804","VIV-EL-4.3.1-2","ED-1-Ñ","M08 · 16 viv",0.5,196,213],["T-0805","VIV-AC-4.4.6-2","ED-1-Ñ","M08 · 16 viv",0.5,196,220],["T-0806","VIV-EL-4.3.1-1","ED-2-B","M15 · 16 viv",2,196,270],["T-0807","VIV-PLU-4.3.5-1","ED-1-P","M09 · 16 viv",16,197,214],["T-0808","VIV-AC-4.4.2-2","ED-1-S","M10 · 16 viv",16,197,242],["T-0809","VIV-CIM-4.1.1-1","ED-2-F","M17 · 16 viv",0.5,197,218],["T-0810","VIV-AC-4.4.2-1","ED-1-U","M11 · 16 viv",16,198,250],["T-0811","VIV-MU-4.2.1-2","ED-1-V","M12 · 16 viv",2,198,240],["T-0812","VIV-AC-4.4.1-2","ED-1-W","M12 · 16 viv",16,198,254],["T-0813","VIV-GA-4.3.2-1","ED-1-X","M13 · 16 viv",16,198,258],["T-0814","VIV-AC-4.4.5-1","ED-1-Ñ","M08 · 16 viv",16,198,218],["T-0815","VIV-AC-4.4.6-1","ED-1-Ñ","M08 · 16 viv",16,198,222],["T-0816","VIV-SAN-4.3.4-1","ED-2-E","M16 · 16 viv",16,198,283],["T-0817","INF-RD-001-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,199,220],["T-0818","VIV-AC-4.4.5-3","ED-1-O","M08 · 16 viv",0.5,199,213],["T-0819","VIV-AC-4.4.4-1","ED-1-P","M09 · 16 viv",16,199,227],["T-0820","VIV-AC-4.4.4-2","ED-1-P","M09 · 16 viv",16,199,227],["T-0821","VIV-HI-4.3.3-1","ED-1-Z","M14 · 16 viv",16,199,264],["T-0822","VIV-MU-4.2.2-1","ED-2-A","M14 · 16 viv",1.5,199,241],["T-0823","INF-RE-002-2","ED-1-O","M08 · 16 viv",0.5,200,220],["T-0824","VIV-AC-4.4.3-1","ED-1-O","M08 · 16 viv",16,200,225],["T-0825","VIV-AC-4.4.3-2","ED-1-O","M08 · 16 viv",16,200,225],["T-0826","VIV-AC-4.4.3-3","ED-1-O","M08 · 16 viv",16,200,225],["T-0827","VIV-MU-4.2.2-2","ED-1-R","M10 · 16 viv",0.5,200,212],["T-0828","VIV-MU-4.2.1-1","ED-2-C","M15 · 16 viv",2,200,266],["T-0829","INF-RD-002-1","ED-2-E","M16 · 16 viv",0.5,200,228],["T-0830","INF-RE-002-1","ED-1-Q","M09 · 16 viv",0.5,201,228],["T-0831","VIV-AC-4.4.2-2","ED-1-T","M11 · 16 viv",16,201,246],["T-0832","INF-D-001-1","ED-1-U","M11 · 16 viv",0.5,201,243],["T-0833","VIV-MU-4.2.1-3","ED-1-U","M11 · 16 viv",2,201,238],["T-0834","VIV-AC-4.4.1-1","ED-1-W","M12 · 16 viv",16,201,259],["T-0835","VIV-CR-4.5.1-1","ED-2-A","M14 · 16 viv",1.5,201,246],["T-0836","VIV-CR-4.5.2-1","ED-2-A","M14 · 16 viv",1.5,201,243],["T-0837","INF-RE-001-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,202,225],["T-0838","VIV-MO-4.3.7-1","ED-1-N","M07 · 16 viv",16,202,220],["T-0839","VIV-AC-4.4.2-1","ED-1-V","M12 · 16 viv",16,202,254],["T-0840","VIV-AC-4.4.1-2","ED-1-X","M13 · 16 viv",16,202,258],["T-0841","VIV-SAN-4.3.4-1","ED-2-F","M17 · 16 viv",16,202,287],["T-0842","VIV-EL-4.3.1-2","ED-1-O","M08 · 16 viv",0.5,203,220],["T-0843","VIV-AC-4.4.6-2","ED-1-O","M08 · 16 viv",0.5,203,227],["T-0844","VIV-AC-4.4.5-3","ED-1-P","M09 · 16 viv",0.5,203,217],["T-0845","VIV-AC-4.4.5-2","ED-1-U","M11 · 16 viv",16,203,250],["T-0846","VIV-MU-4.2.2-1","ED-2-B","M15 · 16 viv",1.5,203,245],["T-0847","VIV-EL-4.3.1-1","ED-2-C","M15 · 16 viv",2,203,277],["T-0848","INF-RE-002-2","ED-1-P","M09 · 16 viv",0.5,204,224],["T-0849","VIV-AC-4.4.3-1","ED-1-P","M09 · 16 viv",16,204,229],["T-0850","VIV-AC-4.4.3-2","ED-1-P","M09 · 16 viv",16,204,229],["T-0851","VIV-AC-4.4.3-3","ED-1-P","M09 · 16 viv",16,204,229],["T-0852","VIV-PLU-4.3.5-1","ED-1-Q","M09 · 16 viv",16,204,221],["T-0853","VIV-MU-4.2.1-1","ED-2-D","M16 · 16 viv",2,204,270],["T-0854","INF-RD-002-1","ED-2-F","M17 · 16 viv",0.5,204,232],["T-0855","VIV-CIM-4.1.1-1","ED-2-G","M17 · 16 viv",0.5,204,225],["T-0856","VIV-AC-4.4.5-1","ED-1-O","M08 · 16 viv",16,205,225],["T-0857","VIV-AC-4.4.6-1","ED-1-O","M08 · 16 viv",16,205,229],["T-0858","INF-RE-002-1","ED-1-R","M10 · 16 viv",0.5,205,232],["T-0859","INF-D-001-1","ED-1-V","M12 · 16 viv",0.5,205,247],["T-0860","VIV-MU-4.2.1-3","ED-1-V","M12 · 16 viv",2,205,242],["T-0861","VIV-MU-4.2.1-2","ED-1-W","M12 · 16 viv",2,205,247],["T-0862","VIV-AC-4.4.1-1","ED-1-X","M13 · 16 viv",16,205,263],["T-0863","VIV-GA-4.3.2-1","ED-1-Y","M13 · 16 viv",16,205,265],["T-0864","VIV-CR-4.5.1-1","ED-2-B","M15 · 16 viv",1.5,205,250],["T-0865","VIV-CR-4.5.2-1","ED-2-B","M15 · 16 viv",1.5,205,247],["T-0866","VIV-AC-4.4.4-1","ED-1-Q","M09 · 16 viv",16,206,234],["T-0867","VIV-AC-4.4.4-2","ED-1-Q","M09 · 16 viv",16,206,234],["T-0868","VIV-MO-4.3.7-1","ED-1-Ñ","M08 · 16 viv",16,206,224],["T-0869","VIV-HI-4.3.3-1","ED-2-A","M14 · 16 viv",16,206,271],["T-0870","VIV-EL-4.3.1-2","ED-1-P","M09 · 16 viv",0.5,207,224],["T-0871","VIV-AC-4.4.6-2","ED-1-P","M09 · 16 viv",0.5,207,231],["T-0872","VIV-MU-4.2.2-2","ED-1-S","M10 · 16 viv",0.5,207,219],["T-0873","VIV-AC-4.4.5-2","ED-1-V","M12 · 16 viv",16,207,254],["T-0874","VIV-EL-4.3.1-1","ED-2-D","M16 · 16 viv",2,207,281],["T-0875","VIV-PLU-4.3.5-1","ED-1-R","M10 · 16 viv",16,208,225],["T-0876","VIV-AC-4.4.2-2","ED-1-U","M11 · 16 viv",16,208,253],["T-0877","VIV-AC-4.4.5-1","ED-1-P","M09 · 16 viv",16,209,229],["T-0878","VIV-AC-4.4.6-1","ED-1-P","M09 · 16 viv",16,209,233],["T-0879","VIV-AC-4.4.2-1","ED-1-W","M12 · 16 viv",16,209,261],["T-0880","VIV-MU-4.2.1-2","ED-1-X","M13 · 16 viv",2,209,251],["T-0881","VIV-AC-4.4.1-2","ED-1-Y","M13 · 16 viv",16,209,265],["T-0882","VIV-GA-4.3.2-1","ED-1-Z","M14 · 16 viv",16,209,269],["T-0883","VIV-SAN-4.3.4-1","ED-2-G","M17 · 16 viv",16,209,294],["T-0884","VIV-AC-4.4.5-3","ED-1-Q","M09 · 16 viv",0.5,210,224],["T-0885","VIV-AC-4.4.4-1","ED-1-R","M10 · 16 viv",16,210,238],["T-0886","VIV-AC-4.4.4-2","ED-1-R","M10 · 16 viv",16,210,238],["T-0887","VIV-HI-4.3.3-1","ED-2-B","M15 · 16 viv",16,210,275],["T-0888","VIV-MU-4.2.2-1","ED-2-C","M15 · 16 viv",1.5,210,252],["T-0889","UV-003-2","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,211,225],["T-0890","INF-RE-002-2","ED-1-Q","M09 · 16 viv",0.5,211,231],["T-0891","VIV-AC-4.4.3-1","ED-1-Q","M09 · 16 viv",16,211,236],["T-0892","VIV-AC-4.4.3-2","ED-1-Q","M09 · 16 viv",16,211,236],["T-0893","VIV-AC-4.4.3-3","ED-1-Q","M09 · 16 viv",16,211,236],["T-0894","VIV-MU-4.2.2-2","ED-1-T","M11 · 16 viv",0.5,211,223],["T-0895","VIV-MU-4.2.1-1","ED-2-E","M16 · 16 viv",2,211,277],["T-0896","INF-RD-002-1","ED-2-G","M17 · 16 viv",0.5,211,239],["T-0897","INF-RE-002-1","ED-1-S","M10 · 16 viv",0.5,212,239],["T-0898","VIV-AC-4.4.2-2","ED-1-V","M12 · 16 viv",16,212,257],["T-0899","INF-D-001-1","ED-1-W","M12 · 16 viv",0.5,212,254],["T-0900","VIV-MU-4.2.1-3","ED-1-W","M12 · 16 viv",2,212,249],["T-0901","VIV-AC-4.4.1-1","ED-1-Y","M13 · 16 viv",16,212,270],["T-0902","VIV-CR-4.5.1-1","ED-2-C","M15 · 16 viv",1.5,212,257],["T-0903","VIV-CR-4.5.2-1","ED-2-C","M15 · 16 viv",1.5,212,254],["T-0904","VIV-MO-4.3.7-1","ED-1-O","M08 · 16 viv",16,213,231],["T-0905","VIV-AC-4.4.2-1","ED-1-X","M13 · 16 viv",16,213,265],["T-0906","VIV-AC-4.4.1-2","ED-1-Z","M14 · 16 viv",16,213,269],["T-0907","VIV-EL-4.3.1-2","ED-1-Q","M09 · 16 viv",0.5,214,231],["T-0908","VIV-AC-4.4.6-2","ED-1-Q","M09 · 16 viv",0.5,214,238],["T-0909","VIV-AC-4.4.5-3","ED-1-R","M10 · 16 viv",0.5,214,228],["T-0910","VIV-AC-4.4.5-2","ED-1-W","M12 · 16 viv",16,214,261],["T-0911","VIV-MU-4.2.2-1","ED-2-D","M16 · 16 viv",1.5,214,256],["T-0912","VIV-EL-4.3.1-1","ED-2-E","M16 · 16 viv",2,214,288],["T-0913","INF-RE-002-2","ED-1-R","M10 · 16 viv",0.5,215,235],["T-0914","VIV-AC-4.4.3-1","ED-1-R","M10 · 16 viv",16,215,240],["T-0915","VIV-AC-4.4.3-2","ED-1-R","M10 · 16 viv",16,215,240],["T-0916","VIV-AC-4.4.3-3","ED-1-R","M10 · 16 viv",16,215,240],["T-0917","VIV-PLU-4.3.5-1","ED-1-S","M10 · 16 viv",16,215,232],["T-0918","VIV-MU-4.2.1-1","ED-2-F","M17 · 16 viv",2,215,281],["T-0919","VIV-AC-4.4.5-1","ED-1-Q","M09 · 16 viv",16,216,236],["T-0920","VIV-AC-4.4.6-1","ED-1-Q","M09 · 16 viv",16,216,240],["T-0921","INF-RE-002-1","ED-1-T","M11 · 16 viv",0.5,216,243],["T-0922","INF-D-001-1","ED-1-X","M13 · 16 viv",0.5,216,258],["T-0923","VIV-MU-4.2.1-3","ED-1-X","M13 · 16 viv",2,216,253],["T-0924","VIV-MU-4.2.1-2","ED-1-Y","M13 · 16 viv",2,216,258],["T-0925","VIV-AC-4.4.1-1","ED-1-Z","M14 · 16 viv",16,216,274],["T-0926","VIV-GA-4.3.2-1","ED-2-A","M14 · 16 viv",16,216,276],["T-0927","VIV-CR-4.5.1-1","ED-2-D","M16 · 16 viv",1.5,216,261],["T-0928","VIV-CR-4.5.2-1","ED-2-D","M16 · 16 viv",1.5,216,258],["T-0929","UV-001-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,217,231],["T-0930","VIV-MO-4.3.7-1","ED-1-P","M09 · 16 viv",16,217,235],["T-0931","VIV-AC-4.4.4-1","ED-1-S","M10 · 16 viv",16,217,245],["T-0932","VIV-AC-4.4.4-2","ED-1-S","M10 · 16 viv",16,217,245],["T-0933","VIV-HI-4.3.3-1","ED-2-C","M15 · 16 viv",16,217,282],["T-0934","VIV-EL-4.3.1-2","ED-1-R","M10 · 16 viv",0.5,218,235],["T-0935","VIV-AC-4.4.6-2","ED-1-R","M10 · 16 viv",0.5,218,242],["T-0936","VIV-MU-4.2.2-2","ED-1-U","M11 · 16 viv",0.5,218,230],["T-0937","VIV-AC-4.4.5-2","ED-1-X","M13 · 16 viv",16,218,265],["T-0938","VIV-EL-4.3.1-1","ED-2-F","M17 · 16 viv",2,218,292],["T-0939","VIV-PLU-4.3.5-1","ED-1-T","M11 · 16 viv",16,219,236],["T-0940","VIV-AC-4.4.2-2","ED-1-W","M12 · 16 viv",16,219,264],["T-0941","VIV-AC-4.4.5-1","ED-1-R","M10 · 16 viv",16,220,240],["T-0942","VIV-AC-4.4.6-1","ED-1-R","M10 · 16 viv",16,220,244],["T-0943","VIV-AC-4.4.2-1","ED-1-Y","M13 · 16 viv",16,220,272],["T-0944","VIV-MU-4.2.1-2","ED-1-Z","M14 · 16 viv",2,220,262],["T-0945","VIV-AC-4.4.1-2","ED-2-A","M14 · 16 viv",16,220,276],["T-0946","VIV-GA-4.3.2-1","ED-2-B","M15 · 16 viv",16,220,280],["T-0947","VIV-AC-4.4.5-3","ED-1-S","M10 · 16 viv",0.5,221,235],["T-0948","VIV-AC-4.4.4-1","ED-1-T","M11 · 16 viv",16,221,249],["T-0949","VIV-AC-4.4.4-2","ED-1-T","M11 · 16 viv",16,221,249],["T-0950","VIV-HI-4.3.3-1","ED-2-D","M16 · 16 viv",16,221,286],["T-0951","VIV-MU-4.2.2-1","ED-2-E","M16 · 16 viv",1.5,221,263],["T-0952","INF-RE-002-2","ED-1-S","M10 · 16 viv",0.5,222,242],["T-0953","VIV-AC-4.4.3-1","ED-1-S","M10 · 16 viv",16,222,247],["T-0954","VIV-AC-4.4.3-2","ED-1-S","M10 · 16 viv",16,222,247],["T-0955","VIV-AC-4.4.3-3","ED-1-S","M10 · 16 viv",16,222,247],["T-0956","VIV-MU-4.2.2-2","ED-1-V","M12 · 16 viv",0.5,222,234],["T-0957","VIV-MU-4.2.1-1","ED-2-G","M17 · 16 viv",2,222,288],["T-0958","UV-002-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,222,240],["T-0959","INF-RE-001-5","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,222,246],["T-0960","INF-RE-002-1","ED-1-U","M11 · 16 viv",0.5,223,250],["T-0961","VIV-AC-4.4.2-2","ED-1-X","M13 · 16 viv",16,223,268],["T-0962","INF-D-001-1","ED-1-Y","M13 · 16 viv",0.5,223,265],["T-0963","VIV-MU-4.2.1-3","ED-1-Y","M13 · 16 viv",2,223,260],["T-0964","VIV-AC-4.4.1-1","ED-2-A","M14 · 16 viv",16,223,281],["T-0965","VIV-CR-4.5.1-1","ED-2-E","M16 · 16 viv",1.5,223,268],["T-0966","VIV-CR-4.5.2-1","ED-2-E","M16 · 16 viv",1.5,223,265],["T-0967","VIV-MO-4.3.7-1","ED-1-Q","M09 · 16 viv",16,224,242],["T-0968","VIV-AC-4.4.2-1","ED-1-Z","M14 · 16 viv",16,224,276],["T-0969","VIV-AC-4.4.1-2","ED-2-B","M15 · 16 viv",16,224,280],["T-0970","VIV-EL-4.3.1-2","ED-1-S","M10 · 16 viv",0.5,225,242],["T-0971","VIV-AC-4.4.6-2","ED-1-S","M10 · 16 viv",0.5,225,249],["T-0972","VIV-AC-4.4.5-3","ED-1-T","M11 · 16 viv",0.5,225,239],["T-0973","VIV-AC-4.4.5-2","ED-1-Y","M13 · 16 viv",16,225,272],["T-0974","VIV-MU-4.2.2-1","ED-2-F","M17 · 16 viv",1.5,225,267],["T-0975","VIV-EL-4.3.1-1","ED-2-G","M17 · 16 viv",2,225,299],["T-0976","UV-002-2","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,225,240],["T-0977","INF-RE-001-4","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,225,246],["T-0978","INF-RE-002-2","ED-1-T","M11 · 16 viv",0.5,226,246],["T-0979","VIV-AC-4.4.3-1","ED-1-T","M11 · 16 viv",16,226,251],["T-0980","VIV-AC-4.4.3-2","ED-1-T","M11 · 16 viv",16,226,251],["T-0981","VIV-AC-4.4.3-3","ED-1-T","M11 · 16 viv",16,226,251],["T-0982","VIV-PLU-4.3.5-1","ED-1-U","M11 · 16 viv",16,226,243],["T-0983","VIV-AC-4.4.5-1","ED-1-S","M10 · 16 viv",16,227,247],["T-0984","VIV-AC-4.4.6-1","ED-1-S","M10 · 16 viv",16,227,251],["T-0985","INF-RE-002-1","ED-1-V","M12 · 16 viv",0.5,227,254],["T-0986","INF-D-001-1","ED-1-Z","M14 · 16 viv",0.5,227,269],["T-0987","VIV-MU-4.2.1-3","ED-1-Z","M14 · 16 viv",2,227,264],["T-0988","VIV-MU-4.2.1-2","ED-2-A","M14 · 16 viv",2,227,269],["T-0989","VIV-AC-4.4.1-1","ED-2-B","M15 · 16 viv",16,227,285],["T-0990","VIV-GA-4.3.2-1","ED-2-C","M15 · 16 viv",16,227,287],["T-0991","VIV-CR-4.5.1-1","ED-2-F","M17 · 16 viv",1.5,227,272],["T-0992","VIV-CR-4.5.2-1","ED-2-F","M17 · 16 viv",1.5,227,269],["T-0993","VIV-MO-4.3.7-1","ED-1-R","M10 · 16 viv",16,228,246],["T-0994","VIV-AC-4.4.4-1","ED-1-U","M11 · 16 viv",16,228,256],["T-0995","VIV-AC-4.4.4-2","ED-1-U","M11 · 16 viv",16,228,256],["T-0996","VIV-HI-4.3.3-1","ED-2-E","M16 · 16 viv",16,228,293],["T-0997","UV-003-3","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,281,296],["T-0998","VIV-EL-4.3.1-2","ED-1-T","M11 · 16 viv",0.5,229,246],["T-0999","VIV-AC-4.4.6-2","ED-1-T","M11 · 16 viv",0.5,229,253],["T-1000","VIV-MU-4.2.2-2","ED-1-W","M12 · 16 viv",0.5,229,241],["T-1001","VIV-AC-4.4.5-2","ED-1-Z","M14 · 16 viv",16,229,276],["T-1002","VIV-PLU-4.3.5-1","ED-1-V","M12 · 16 viv",16,230,247],["T-1003","VIV-AC-4.4.2-2","ED-1-Y","M13 · 16 viv",16,230,275],["T-1004","VIV-AC-4.4.5-1","ED-1-T","M11 · 16 viv",16,231,251],["T-1005","VIV-AC-4.4.6-1","ED-1-T","M11 · 16 viv",16,231,255],["T-1006","VIV-AC-4.4.2-1","ED-2-A","M14 · 16 viv",16,231,283],["T-1007","VIV-MU-4.2.1-2","ED-2-B","M15 · 16 viv",2,231,273],["T-1008","VIV-AC-4.4.1-2","ED-2-C","M15 · 16 viv",16,231,287],["T-1009","VIV-GA-4.3.2-1","ED-2-D","M16 · 16 viv",16,231,291],["T-1010","UV-003-4","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,281,294],["T-1011","VIV-AC-4.4.5-3","ED-1-U","M11 · 16 viv",0.5,232,246],["T-1012","VIV-AC-4.4.4-1","ED-1-V","M12 · 16 viv",16,232,260],["T-1013","VIV-AC-4.4.4-2","ED-1-V","M12 · 16 viv",16,232,260],["T-1014","VIV-HI-4.3.3-1","ED-2-F","M17 · 16 viv",16,232,297],["T-1015","VIV-MU-4.2.2-1","ED-2-G","M17 · 16 viv",1.5,232,274],["T-1016","INF-RE-002-2","ED-1-U","M11 · 16 viv",0.5,233,253],["T-1017","VIV-AC-4.4.3-1","ED-1-U","M11 · 16 viv",16,233,258],["T-1018","VIV-AC-4.4.3-2","ED-1-U","M11 · 16 viv",16,233,258],["T-1019","VIV-AC-4.4.3-3","ED-1-U","M11 · 16 viv",16,233,258],["T-1020","VIV-MU-4.2.2-2","ED-1-X","M13 · 16 viv",0.5,233,245],["T-1021","INF-RE-002-1","ED-1-W","M12 · 16 viv",0.5,234,261],["T-1022","VIV-AC-4.4.2-2","ED-1-Z","M14 · 16 viv",16,234,279],["T-1023","INF-D-001-1","ED-2-A","M14 · 16 viv",0.5,234,276],["T-1024","VIV-MU-4.2.1-3","ED-2-A","M14 · 16 viv",2,234,271],["T-1025","VIV-AC-4.4.1-1","ED-2-C","M15 · 16 viv",16,234,292],["T-1026","VIV-CR-4.5.1-1","ED-2-G","M17 · 16 viv",1.5,234,279],["T-1027","VIV-CR-4.5.2-1","ED-2-G","M17 · 16 viv",1.5,234,276],["T-1028","VIV-MO-4.3.7-1","ED-1-S","M10 · 16 viv",16,235,253],["T-1029","VIV-AC-4.4.2-1","ED-2-B","M15 · 16 viv",16,235,287],["T-1030","VIV-AC-4.4.1-2","ED-2-D","M16 · 16 viv",16,235,291],["T-1031","VIV-EL-4.3.1-2","ED-1-U","M11 · 16 viv",0.5,236,253],["T-1032","VIV-AC-4.4.6-2","ED-1-U","M11 · 16 viv",0.5,236,260],["T-1033","VIV-AC-4.4.5-3","ED-1-V","M12 · 16 viv",0.5,236,250],["T-1034","VIV-AC-4.4.5-2","ED-2-A","M14 · 16 viv",16,236,283],["T-1035","INF-RE-002-2","ED-1-V","M12 · 16 viv",0.5,237,257],["T-1036","VIV-AC-4.4.3-1","ED-1-V","M12 · 16 viv",16,237,262],["T-1037","VIV-AC-4.4.3-2","ED-1-V","M12 · 16 viv",16,237,262],["T-1038","VIV-AC-4.4.3-3","ED-1-V","M12 · 16 viv",16,237,262],["T-1039","VIV-PLU-4.3.5-1","ED-1-W","M12 · 16 viv",16,237,254],["T-1040","VIV-AC-4.4.5-1","ED-1-U","M11 · 16 viv",16,238,258],["T-1041","VIV-AC-4.4.6-1","ED-1-U","M11 · 16 viv",16,238,262],["T-1042","INF-RE-002-1","ED-1-X","M13 · 16 viv",0.5,238,265],["T-1043","INF-D-001-1","ED-2-B","M15 · 16 viv",0.5,238,280],["T-1044","VIV-MU-4.2.1-3","ED-2-B","M15 · 16 viv",2,238,275],["T-1045","VIV-MU-4.2.1-2","ED-2-C","M15 · 16 viv",2,238,280],["T-1046","VIV-AC-4.4.1-1","ED-2-D","M16 · 16 viv",16,238,296],["T-1047","VIV-GA-4.3.2-1","ED-2-E","M16 · 16 viv",16,238,298],["T-1048","VIV-MO-4.3.7-1","ED-1-T","M11 · 16 viv",16,239,257],["T-1049","VIV-AC-4.4.4-1","ED-1-W","M12 · 16 viv",16,239,267],["T-1050","VIV-AC-4.4.4-2","ED-1-W","M12 · 16 viv",16,239,267],["T-1051","VIV-HI-4.3.3-1","ED-2-G","M17 · 16 viv",16,239,304],["T-1052","VIV-EL-4.3.1-2","ED-1-V","M12 · 16 viv",0.5,240,257],["T-1053","VIV-AC-4.4.6-2","ED-1-V","M12 · 16 viv",0.5,240,264],["T-1054","VIV-MU-4.2.2-2","ED-1-Y","M13 · 16 viv",0.5,240,252],["T-1055","VIV-AC-4.4.5-2","ED-2-B","M15 · 16 viv",16,240,287],["T-1056","U-AC-003-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,240,249],["T-1057","VIV-PLU-4.3.5-1","ED-1-X","M13 · 16 viv",16,241,258],["T-1058","VIV-AC-4.4.2-2","ED-2-A","M14 · 16 viv",16,241,286],["T-1059","U-AC-002-1","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,281,288],["T-1060","U-AC-002-2","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,281,288],["T-1061","VIV-AC-4.4.5-1","ED-1-V","M12 · 16 viv",16,242,262],["T-1062","VIV-AC-4.4.6-1","ED-1-V","M12 · 16 viv",16,242,266],["T-1063","VIV-AC-4.4.2-1","ED-2-C","M15 · 16 viv",16,242,294],["T-1064","VIV-MU-4.2.1-2","ED-2-D","M16 · 16 viv",2,242,284],["T-1065","VIV-AC-4.4.1-2","ED-2-E","M16 · 16 viv",16,242,298],["T-1066","VIV-GA-4.3.2-1","ED-2-F","M17 · 16 viv",16,242,302],["T-1067","VIV-AC-4.4.5-3","ED-1-W","M12 · 16 viv",0.5,243,257],["T-1068","VIV-AC-4.4.4-1","ED-1-X","M13 · 16 viv",16,243,271],["T-1069","VIV-AC-4.4.4-2","ED-1-X","M13 · 16 viv",16,243,271],["T-1070","U-AC-003-2","Tramo C3","Manzanas M07, M08, M09, M13, M14, M15",6,281,287],["T-1071","INF-RE-002-2","ED-1-W","M12 · 16 viv",0.5,244,264],["T-1072","VIV-AC-4.4.3-1","ED-1-W","M12 · 16 viv",16,244,269],["T-1073","VIV-AC-4.4.3-2","ED-1-W","M12 · 16 viv",16,244,269],["T-1074","VIV-AC-4.4.3-3","ED-1-W","M12 · 16 viv",16,244,269],["T-1075","VIV-MU-4.2.2-2","ED-1-Z","M14 · 16 viv",0.5,244,256],["T-1076","INF-RE-002-1","ED-1-Y","M13 · 16 viv",0.5,245,272],["T-1077","VIV-AC-4.4.2-2","ED-2-B","M15 · 16 viv",16,245,290],["T-1078","INF-D-001-1","ED-2-C","M15 · 16 viv",0.5,245,287],["T-1079","VIV-MU-4.2.1-3","ED-2-C","M15 · 16 viv",2,245,282],["T-1080","VIV-AC-4.4.1-1","ED-2-E","M16 · 16 viv",16,245,303],["T-1081","VIV-MO-4.3.7-1","ED-1-U","M11 · 16 viv",16,246,264],["T-1082","VIV-AC-4.4.2-1","ED-2-D","M16 · 16 viv",16,246,298],["T-1083","VIV-AC-4.4.1-2","ED-2-F","M17 · 16 viv",16,246,302],["T-1084","VIV-EL-4.3.1-2","ED-1-W","M12 · 16 viv",0.5,247,264],["T-1085","VIV-AC-4.4.6-2","ED-1-W","M12 · 16 viv",0.5,247,271],["T-1086","VIV-AC-4.4.5-3","ED-1-X","M13 · 16 viv",0.5,247,261],["T-1087","VIV-AC-4.4.5-2","ED-2-C","M15 · 16 viv",16,247,294],["T-1088","INF-RE-002-2","ED-1-X","M13 · 16 viv",0.5,248,268],["T-1089","VIV-AC-4.4.3-1","ED-1-X","M13 · 16 viv",16,248,273],["T-1090","VIV-AC-4.4.3-2","ED-1-X","M13 · 16 viv",16,248,273],["T-1091","VIV-AC-4.4.3-3","ED-1-X","M13 · 16 viv",16,248,273],["T-1092","VIV-PLU-4.3.5-1","ED-1-Y","M13 · 16 viv",16,248,265],["T-1093","VIV-AC-4.4.5-1","ED-1-W","M12 · 16 viv",16,249,269],["T-1094","VIV-AC-4.4.6-1","ED-1-W","M12 · 16 viv",16,249,273],["T-1095","INF-RE-002-1","ED-1-Z","M14 · 16 viv",0.5,249,276],["T-1096","INF-D-001-1","ED-2-D","M16 · 16 viv",0.5,249,291],["T-1097","VIV-MU-4.2.1-3","ED-2-D","M16 · 16 viv",2,249,286],["T-1098","VIV-MU-4.2.1-2","ED-2-E","M16 · 16 viv",2,249,291],["T-1099","VIV-AC-4.4.1-1","ED-2-F","M17 · 16 viv",16,249,307],["T-1100","VIV-GA-4.3.2-1","ED-2-G","M17 · 16 viv",16,249,309],["T-1101","UV-003-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,249,267],["T-1102","VIV-MO-4.3.7-1","ED-1-V","M12 · 16 viv",16,250,268],["T-1103","VIV-AC-4.4.4-1","ED-1-Y","M13 · 16 viv",16,250,278],["T-1104","VIV-AC-4.4.4-2","ED-1-Y","M13 · 16 viv",16,250,278],["T-1105","VIV-EL-4.3.1-2","ED-1-X","M13 · 16 viv",0.5,251,268],["T-1106","VIV-AC-4.4.6-2","ED-1-X","M13 · 16 viv",0.5,251,275],["T-1107","VIV-MU-4.2.2-2","ED-2-A","M14 · 16 viv",0.5,251,263],["T-1108","VIV-AC-4.4.5-2","ED-2-D","M16 · 16 viv",16,251,298],["T-1109","VIV-PLU-4.3.5-1","ED-1-Z","M14 · 16 viv",16,252,269],["T-1110","VIV-AC-4.4.2-2","ED-2-C","M15 · 16 viv",16,252,297],["T-1111","INF-D-002-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,252,276],["T-1112","VIV-AC-4.4.5-1","ED-1-X","M13 · 16 viv",16,253,273],["T-1113","VIV-AC-4.4.6-1","ED-1-X","M13 · 16 viv",16,253,277],["T-1114","VIV-AC-4.4.2-1","ED-2-E","M16 · 16 viv",16,253,305],["T-1115","VIV-MU-4.2.1-2","ED-2-F","M17 · 16 viv",2,253,295],["T-1116","VIV-AC-4.4.1-2","ED-2-G","M17 · 16 viv",16,253,309],["T-1117","VIV-AC-4.4.5-3","ED-1-Y","M13 · 16 viv",0.5,254,268],["T-1118","VIV-AC-4.4.4-1","ED-1-Z","M14 · 16 viv",16,254,282],["T-1119","VIV-AC-4.4.4-2","ED-1-Z","M14 · 16 viv",16,254,282],["T-1120","INF-RE-002-2","ED-1-Y","M13 · 16 viv",0.5,255,275],["T-1121","VIV-AC-4.4.3-1","ED-1-Y","M13 · 16 viv",16,255,280],["T-1122","VIV-AC-4.4.3-2","ED-1-Y","M13 · 16 viv",16,255,280],["T-1123","VIV-AC-4.4.3-3","ED-1-Y","M13 · 16 viv",16,255,280],["T-1124","VIV-MU-4.2.2-2","ED-2-B","M15 · 16 viv",0.5,255,267],["T-1125","INF-RE-002-1","ED-2-A","M14 · 16 viv",0.5,256,283],["T-1126","VIV-AC-4.4.2-2","ED-2-D","M16 · 16 viv",16,256,301],["T-1127","INF-D-001-1","ED-2-E","M16 · 16 viv",0.5,256,298],["T-1128","VIV-MU-4.2.1-3","ED-2-E","M16 · 16 viv",2,256,293],["T-1129","VIV-AC-4.4.1-1","ED-2-G","M17 · 16 viv",16,256,314],["T-1130","VIV-MO-4.3.7-1","ED-1-W","M12 · 16 viv",16,257,275],["T-1131","VIV-AC-4.4.2-1","ED-2-F","M17 · 16 viv",16,257,309],["T-1132","VIV-EL-4.3.1-2","ED-1-Y","M13 · 16 viv",0.5,258,275],["T-1133","VIV-AC-4.4.6-2","ED-1-Y","M13 · 16 viv",0.5,258,282],["T-1134","VIV-AC-4.4.5-3","ED-1-Z","M14 · 16 viv",0.5,258,272],["T-1135","VIV-AC-4.4.5-2","ED-2-E","M16 · 16 viv",16,258,305],["T-1136","INF-RD-001-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,258,280],["T-1137","INF-RE-002-2","ED-1-Z","M14 · 16 viv",0.5,259,279],["T-1138","VIV-AC-4.4.3-1","ED-1-Z","M14 · 16 viv",16,259,284],["T-1139","VIV-AC-4.4.3-2","ED-1-Z","M14 · 16 viv",16,259,284],["T-1140","VIV-AC-4.4.3-3","ED-1-Z","M14 · 16 viv",16,259,284],["T-1141","VIV-PLU-4.3.5-1","ED-2-A","M14 · 16 viv",16,259,276],["T-1142","VIV-AC-4.4.5-1","ED-1-Y","M13 · 16 viv",16,260,280],["T-1143","VIV-AC-4.4.6-1","ED-1-Y","M13 · 16 viv",16,260,284],["T-1144","INF-RE-002-1","ED-2-B","M15 · 16 viv",0.5,260,287],["T-1145","INF-D-001-1","ED-2-F","M17 · 16 viv",0.5,260,302],["T-1146","VIV-MU-4.2.1-3","ED-2-F","M17 · 16 viv",2,260,297],["T-1147","VIV-MU-4.2.1-2","ED-2-G","M17 · 16 viv",2,260,302],["T-1148","VIV-MO-4.3.7-1","ED-1-X","M13 · 16 viv",16,261,279],["T-1149","VIV-AC-4.4.4-1","ED-2-A","M14 · 16 viv",16,261,289],["T-1150","VIV-AC-4.4.4-2","ED-2-A","M14 · 16 viv",16,261,289],["T-1151","U-AC-001-1","Jardín J4","Manzanas M06, M07, M08",3,261,344],["T-1152","INF-RE-001-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,261,286],["T-1153","U-AC-004-3","Zona recreativa central B","Zona recreativa central B + áreas verdes M6–M8",1,261,344],["T-1154","VIV-EL-4.3.1-2","ED-1-Z","M14 · 16 viv",0.5,262,279],["T-1155","VIV-AC-4.4.6-2","ED-1-Z","M14 · 16 viv",0.5,262,286],["T-1156","VIV-MU-4.2.2-2","ED-2-C","M15 · 16 viv",0.5,262,274],["T-1157","VIV-AC-4.4.5-2","ED-2-F","M17 · 16 viv",16,262,309],["T-1158","VIV-PLU-4.3.5-1","ED-2-B","M15 · 16 viv",16,263,280],["T-1159","VIV-AC-4.4.2-2","ED-2-E","M16 · 16 viv",16,263,308],["T-1160","VIV-AC-4.4.5-1","ED-1-Z","M14 · 16 viv",16,264,284],["T-1161","VIV-AC-4.4.6-1","ED-1-Z","M14 · 16 viv",16,264,288],["T-1162","VIV-AC-4.4.2-1","ED-2-G","M17 · 16 viv",16,264,316],["T-1163","VIV-AC-4.4.5-3","ED-2-A","M14 · 16 viv",0.5,265,279],["T-1164","VIV-AC-4.4.4-1","ED-2-B","M15 · 16 viv",16,265,293],["T-1165","VIV-AC-4.4.4-2","ED-2-B","M15 · 16 viv",16,265,293],["T-1166","INF-RE-002-2","ED-2-A","M14 · 16 viv",0.5,266,286],["T-1167","VIV-AC-4.4.3-1","ED-2-A","M14 · 16 viv",16,266,291],["T-1168","VIV-AC-4.4.3-2","ED-2-A","M14 · 16 viv",16,266,291],["T-1169","VIV-AC-4.4.3-3","ED-2-A","M14 · 16 viv",16,266,291],["T-1170","VIV-MU-4.2.2-2","ED-2-D","M16 · 16 viv",0.5,266,278],["T-1171","INF-RE-002-1","ED-2-C","M15 · 16 viv",0.5,267,294],["T-1172","VIV-AC-4.4.2-2","ED-2-F","M17 · 16 viv",16,267,312],["T-1173","INF-D-001-1","ED-2-G","M17 · 16 viv",0.5,267,309],["T-1174","VIV-MU-4.2.1-3","ED-2-G","M17 · 16 viv",2,267,304],["T-1175","VIV-MO-4.3.7-1","ED-1-Y","M13 · 16 viv",16,268,286],["T-1176","VIV-EL-4.3.1-2","ED-2-A","M14 · 16 viv",0.5,269,286],["T-1177","VIV-AC-4.4.6-2","ED-2-A","M14 · 16 viv",0.5,269,293],["T-1178","VIV-AC-4.4.5-3","ED-2-B","M15 · 16 viv",0.5,269,283],["T-1179","VIV-AC-4.4.5-2","ED-2-G","M17 · 16 viv",16,269,316],["T-1180","INF-RE-002-2","ED-2-B","M15 · 16 viv",0.5,270,290],["T-1181","VIV-AC-4.4.3-1","ED-2-B","M15 · 16 viv",16,270,295],["T-1182","VIV-AC-4.4.3-2","ED-2-B","M15 · 16 viv",16,270,295],["T-1183","VIV-AC-4.4.3-3","ED-2-B","M15 · 16 viv",16,270,295],["T-1184","VIV-PLU-4.3.5-1","ED-2-C","M15 · 16 viv",16,270,287],["T-1185","UV-003-2","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,270,286],["T-1186","VIV-AC-4.4.5-1","ED-2-A","M14 · 16 viv",16,271,291],["T-1187","VIV-AC-4.4.6-1","ED-2-A","M14 · 16 viv",16,271,295],["T-1188","INF-RE-002-1","ED-2-D","M16 · 16 viv",0.5,271,298],["T-1189","VIV-MO-4.3.7-1","ED-1-Z","M14 · 16 viv",16,272,290],["T-1190","VIV-AC-4.4.4-1","ED-2-C","M15 · 16 viv",16,272,300],["T-1191","VIV-AC-4.4.4-2","ED-2-C","M15 · 16 viv",16,272,300],["T-1192","VIV-EL-4.3.1-2","ED-2-B","M15 · 16 viv",0.5,273,290],["T-1193","VIV-AC-4.4.6-2","ED-2-B","M15 · 16 viv",0.5,273,297],["T-1194","VIV-MU-4.2.2-2","ED-2-E","M16 · 16 viv",0.5,273,285],["T-1195","VIV-PLU-4.3.5-1","ED-2-D","M16 · 16 viv",16,274,291],["T-1196","VIV-AC-4.4.2-2","ED-2-G","M17 · 16 viv",16,274,319],["T-1197","VIV-AC-4.4.5-1","ED-2-B","M15 · 16 viv",16,275,295],["T-1198","VIV-AC-4.4.6-1","ED-2-B","M15 · 16 viv",16,275,299],["T-1199","U-AC-001-1","Jardín J6","Manzanas M17",1,275,344],["T-1200","U-AC-004-2","Zona recreativa oriente C","Zona recreativa oriente C (M17)",1,275,344],["T-1201","U-AC-004-4","Zona recreativa oriente C","Zona recreativa oriente C (M17)",2,275,344],["T-1202","VIV-AC-4.4.5-3","ED-2-C","M15 · 16 viv",0.5,276,290],["T-1203","VIV-AC-4.4.4-1","ED-2-D","M16 · 16 viv",16,276,304],["T-1204","VIV-AC-4.4.4-2","ED-2-D","M16 · 16 viv",16,276,304],["T-1205","UV-001-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,276,292],["T-1206","INF-RE-002-2","ED-2-C","M15 · 16 viv",0.5,277,297],["T-1207","VIV-AC-4.4.3-1","ED-2-C","M15 · 16 viv",16,277,302],["T-1208","VIV-AC-4.4.3-2","ED-2-C","M15 · 16 viv",16,277,302],["T-1209","VIV-AC-4.4.3-3","ED-2-C","M15 · 16 viv",16,277,302],["T-1210","VIV-MU-4.2.2-2","ED-2-F","M17 · 16 viv",0.5,277,289],["T-1211","INF-RE-002-1","ED-2-E","M16 · 16 viv",0.5,278,305],["T-1212","VIV-MO-4.3.7-1","ED-2-A","M14 · 16 viv",16,279,297],["T-1213","VIV-EL-4.3.1-2","ED-2-C","M15 · 16 viv",0.5,280,297],["T-1214","VIV-AC-4.4.6-2","ED-2-C","M15 · 16 viv",0.5,280,304],["T-1215","VIV-AC-4.4.5-3","ED-2-D","M16 · 16 viv",0.5,280,294],["T-1216","INF-RE-002-2","ED-2-D","M16 · 16 viv",0.5,281,301],["T-1217","VIV-AC-4.4.3-1","ED-2-D","M16 · 16 viv",16,281,306],["T-1218","VIV-AC-4.4.3-2","ED-2-D","M16 · 16 viv",16,281,306],["T-1219","VIV-AC-4.4.3-3","ED-2-D","M16 · 16 viv",16,281,306],["T-1220","VIV-PLU-4.3.5-1","ED-2-E","M16 · 16 viv",16,281,298],["T-1221","VIV-AC-4.4.5-1","ED-2-C","M15 · 16 viv",16,282,302],["T-1222","VIV-AC-4.4.6-1","ED-2-C","M15 · 16 viv",16,282,306],["T-1223","INF-RE-002-1","ED-2-F","M17 · 16 viv",0.5,282,309],["T-1224","UV-002-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,283,301],["T-1225","INF-RE-001-5","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,283,307],["T-1226","VIV-MO-4.3.7-1","ED-2-B","M15 · 16 viv",16,283,301],["T-1227","VIV-AC-4.4.4-1","ED-2-E","M16 · 16 viv",16,283,311],["T-1228","VIV-AC-4.4.4-2","ED-2-E","M16 · 16 viv",16,283,311],["T-1229","VIV-EL-4.3.1-2","ED-2-D","M16 · 16 viv",0.5,284,301],["T-1230","VIV-AC-4.4.6-2","ED-2-D","M16 · 16 viv",0.5,284,308],["T-1231","VIV-MU-4.2.2-2","ED-2-G","M17 · 16 viv",0.5,284,296],["T-1232","U-AC-004-1","Zona recreativa A","Zona recreativa A (entre M2 y M3)",1,284,344],["T-1233","U-AC-004-4","Zona recreativa A","Zona recreativa A (entre M2 y M3)",2,284,344],["T-1234","U-AC-004-5","Zona recreativa A","Zona recreativa A (entre M2 y M3)",1,284,344],["T-1235","VIV-PLU-4.3.5-1","ED-2-F","M17 · 16 viv",16,285,302],["T-1236","UV-002-2","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,286,301],["T-1237","INF-RE-001-4","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,286,307],["T-1238","VIV-AC-4.4.5-1","ED-2-D","M16 · 16 viv",16,286,306],["T-1239","VIV-AC-4.4.6-1","ED-2-D","M16 · 16 viv",16,286,310],["T-1240","VIV-AC-4.4.5-3","ED-2-E","M16 · 16 viv",0.5,287,301],["T-1241","VIV-AC-4.4.4-1","ED-2-F","M17 · 16 viv",16,287,315],["T-1242","VIV-AC-4.4.4-2","ED-2-F","M17 · 16 viv",16,287,315],["T-1243","INF-RE-002-2","ED-2-E","M16 · 16 viv",0.5,288,308],["T-1244","VIV-AC-4.4.3-1","ED-2-E","M16 · 16 viv",16,288,313],["T-1245","VIV-AC-4.4.3-2","ED-2-E","M16 · 16 viv",16,288,313],["T-1246","VIV-AC-4.4.3-3","ED-2-E","M16 · 16 viv",16,288,313],["T-1247","UV-003-3","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,303,318],["T-1248","INF-RE-002-1","ED-2-G","M17 · 16 viv",0.5,289,316],["T-1249","VIV-MO-4.3.7-1","ED-2-C","M15 · 16 viv",16,290,308],["T-1250","VIV-EL-4.3.1-2","ED-2-E","M16 · 16 viv",0.5,291,308],["T-1251","VIV-AC-4.4.6-2","ED-2-E","M16 · 16 viv",0.5,291,315],["T-1252","VIV-AC-4.4.5-3","ED-2-F","M17 · 16 viv",0.5,291,305],["T-1253","U-AC-001-1","Jardín J1","Manzanas M01, M02",2,291,344],["T-1254","UV-003-4","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,303,316],["T-1255","INF-RE-002-2","ED-2-F","M17 · 16 viv",0.5,292,312],["T-1256","VIV-AC-4.4.3-1","ED-2-F","M17 · 16 viv",16,292,317],["T-1257","VIV-AC-4.4.3-2","ED-2-F","M17 · 16 viv",16,292,317],["T-1258","VIV-AC-4.4.3-3","ED-2-F","M17 · 16 viv",16,292,317],["T-1259","VIV-PLU-4.3.5-1","ED-2-G","M17 · 16 viv",16,292,309],["T-1260","VIV-AC-4.4.5-1","ED-2-E","M16 · 16 viv",16,293,313],["T-1261","VIV-AC-4.4.6-1","ED-2-E","M16 · 16 viv",16,293,317],["T-1262","VIV-MO-4.3.7-1","ED-2-D","M16 · 16 viv",16,294,312],["T-1263","VIV-AC-4.4.4-1","ED-2-G","M17 · 16 viv",16,294,322],["T-1264","VIV-AC-4.4.4-2","ED-2-G","M17 · 16 viv",16,294,322],["T-1265","VIV-EL-4.3.1-2","ED-2-F","M17 · 16 viv",0.5,295,312],["T-1266","VIV-AC-4.4.6-2","ED-2-F","M17 · 16 viv",0.5,295,319],["T-1267","VIV-AC-4.4.5-1","ED-2-F","M17 · 16 viv",16,297,317],["T-1268","VIV-AC-4.4.6-1","ED-2-F","M17 · 16 viv",16,297,321],["T-1269","VIV-AC-4.4.5-3","ED-2-G","M17 · 16 viv",0.5,298,312],["T-1270","INF-RE-002-2","ED-2-G","M17 · 16 viv",0.5,299,319],["T-1271","VIV-AC-4.4.3-1","ED-2-G","M17 · 16 viv",16,299,324],["T-1272","VIV-AC-4.4.3-2","ED-2-G","M17 · 16 viv",16,299,324],["T-1273","VIV-AC-4.4.3-3","ED-2-G","M17 · 16 viv",16,299,324],["T-1274","U-AC-003-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,301,310],["T-1275","VIV-MO-4.3.7-1","ED-2-E","M16 · 16 viv",16,301,319],["T-1276","VIV-EL-4.3.1-2","ED-2-G","M17 · 16 viv",0.5,302,319],["T-1277","VIV-AC-4.4.6-2","ED-2-G","M17 · 16 viv",0.5,302,326],["T-1278","U-AC-002-1","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,303,310],["T-1279","U-AC-002-2","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,303,310],["T-1280","U-AC-004-6","Jardín J5","Manzanas M13, M14, M15, M16",4,303,344],["T-1281","U-AC-004-6","Jardín J7","Manzanas M09, M10, M11, M12",4,303,344],["T-1282","U-AC-003-2","Tramo C4","Manzanas M10, M11, M12, M16, M17",5,304,310],["T-1283","VIV-AC-4.4.5-1","ED-2-G","M17 · 16 viv",16,304,324],["T-1284","VIV-AC-4.4.6-1","ED-2-G","M17 · 16 viv",16,304,328],["T-1285","VIV-MO-4.3.7-1","ED-2-F","M17 · 16 viv",16,305,323],["T-1286","VIV-MO-4.3.7-1","ED-2-G","M17 · 16 viv",16,312,330],["T-1287","U-AC-004-6","Jardín J4","Manzanas M06, M07, M08",3,327,344],["T-1288","U-AC-004-6","Jardín J6","Manzanas M17",1,330,344],["T-1289","U-AC-004-6","Jardín J1","Manzanas M01, M02",2,333,344]],"tren":[["M01","ED-1-A","C1","P1",21,113,147,132],["M01","ED-1-B","C1","P1",28,120,154,132],["M02","ED-1-C","C1","P2",32,124,158,163],["M02","ED-1-D","C1","P2",39,131,165,163],["M03","ED-1-E","C1","P2",43,135,169,163],["M03","ED-1-F","C1","P2",50,142,176,163],["M04","ED-1-G","C2","P3",54,146,180,194],["M04","ED-1-H","C2","P3",61,153,187,194],["M05","ED-1-I","C2","P3",65,157,191,194],["M05","ED-1-J","C2","P3",72,164,198,194],["M06","ED-1-K","C2","P3",76,168,202,194],["M06","ED-1-L","C2","P3",83,175,209,194],["M07","ED-1-M","C3","P4",87,179,213,222],["M07","ED-1-N","C3","P4",94,186,220,222],["M08","ED-1-Ñ","C3","P4",98,190,224,222],["M08","ED-1-O","C3","P4",105,197,231,222],["M09","ED-1-P","C3","P4",109,201,235,222],["M09","ED-1-Q","C3","P4",116,208,242,222],["M10","ED-1-R","C4","P5",120,212,246,283],["M10","ED-1-S","C4","P5",127,219,253,283],["M11","ED-1-T","C4","P5",131,223,257,283],["M11","ED-1-U","C4","P5",138,230,264,283],["M12","ED-1-V","C4","P5",142,234,268,283],["M12","ED-1-W","C4","P5",149,241,275,283],["M13","ED-1-X","C3","P5",153,245,279,283],["M13","ED-1-Y","C3","P5",160,252,286,283],["M14","ED-1-Z","C3","P6",164,256,290,314],["M14","ED-2-A","C3","P6",171,263,297,314],["M15","ED-2-B","C3","P6",175,267,301,314],["M15","ED-2-C","C3","P6",182,274,308,314],["M16","ED-2-D","C4","P6",186,278,312,314],["M16","ED-2-E","C4","P6",193,285,319,314],["M17","ED-2-F","C4","P7",197,289,323,344],["M17","ED-2-G","C4","P7",204,296,330,344]],"site":{"lindero":[[[1506.78,1225.17],[1829.8,1224.74],[1827.25,1194.85],[2170.25,1195.82],[2181.83,1254.9],[1502.75,1254.9],[1506.78,1225.17]],[[1506.65,1226.1],[1506.72,1225.61]]],"ejes":[1513.87,1559.21,1564.71,1610.04,1615.54,1659.24,1664.74,1710.08,1715.58,1760.91,1766.41,1811.75,1817.25,1862.59,1868.09,1913.42,1918.92,1964.26,1969.76,2015.09,2020.59,2065.93,2071.43,2116.77,2122.27,2167.6,2173.1],"verde":[[[1618.0,1231.34],[1656.8,1231.34],[1656.8,1231.19],[1618.0,1231.19]],[[2123.92,1224.39],[2173.4,1224.39],[2173.4,1224.24],[2123.92,1224.24]],[[2073.78,1224.39],[2073.78,1224.24],[2114.42,1224.24],[2114.42,1224.39]],[[1617.2,1232.84],[1657.59,1232.84],[1657.59,1254.9],[1617.2,1254.9]],[[2123.92,1222.74],[2175.53,1222.74],[2170.25,1195.82],[2123.92,1195.69]],[[2174.9,1222.74],[2175.53,1222.74],[2181.83,1254.9],[2174.9,1254.9]],[[2071.43,1222.74],[2116.77,1222.74],[2116.77,1218.72],[2071.43,1218.72]],[[2022.94,1224.39],[2022.94,1224.24],[2063.58,1224.24],[2063.58,1224.39]],[[2020.59,1222.74],[2065.93,1222.74],[2065.93,1218.72],[2020.59,1218.72]],[[1972.11,1224.39],[1972.11,1224.24],[2012.74,1224.24],[2012.74,1224.39]],[[1921.27,1224.39],[1921.27,1224.24],[1961.91,1224.24],[1961.91,1224.39]],[[1870.44,1224.39],[1870.44,1224.24],[1911.07,1224.24],[1911.07,1224.39]],[[1513.87,1253.4],[1520.53,1253.4],[1520.53,1254.9],[1513.87,1254.9]],[[1559.21,1253.4],[1552.54,1253.4],[1552.54,1254.9],[1559.21,1254.9]],[[1564.71,1253.4],[1571.37,1253.4],[1571.37,1254.9],[1564.71,1254.9]],[[1610.04,1253.4],[1603.38,1253.4],[1603.38,1254.9],[1610.04,1254.9]],[[1664.74,1253.4],[1671.41,1253.4],[1671.41,1254.9],[1664.74,1254.9]],[[1710.08,1253.4],[1703.41,1253.4],[1703.41,1254.9],[1710.08,1254.9]],[[1715.58,1253.4],[1722.24,1253.4],[1722.24,1254.9],[1715.58,1254.9]],[[1760.91,1253.4],[1754.25,1253.4],[1754.25,1254.9],[1760.91,1254.9]],[[1766.41,1253.4],[1773.08,1253.4],[1773.08,1254.9],[1766.41,1254.9]],[[1811.75,1253.4],[1805.09,1253.4],[1805.09,1254.9],[1811.75,1254.9]],[[1817.25,1253.4],[1823.91,1253.4],[1823.91,1254.9],[1817.25,1254.9]],[[1862.59,1253.4],[1855.92,1253.4],[1855.92,1254.9],[1862.59,1254.9]],[[1913.42,1252.4],[1906.83,1252.4],[1906.83,1254.9],[1913.42,1254.9]],[[1868.09,1252.4],[1874.67,1252.4],[1874.67,1254.9],[1868.09,1254.9]],[[1964.26,1252.4],[1957.67,1252.4],[1957.67,1254.9],[1964.26,1254.9]],[[1918.92,1252.4],[1925.51,1252.4],[1925.51,1254.9],[1918.92,1254.9]],[[2015.09,1252.4],[2008.5,1252.4],[2008.5,1254.9],[2015.09,1254.9]],[[1969.76,1252.4],[1976.35,1252.4],[1976.35,1254.9],[1969.76,1254.9]],[[2065.93,1252.4],[2059.34,1252.4],[2059.34,1254.9],[2065.93,1254.9]],[[2020.59,1252.4],[2027.18,1252.4],[2027.18,1254.9],[2020.59,1254.9]],[[2116.77,1252.4],[2110.18,1252.4],[2110.18,1254.9],[2116.77,1254.9]],[[2071.43,1252.4],[2078.02,1252.4],[2078.02,1254.9],[2071.43,1254.9]],[[2167.6,1252.4],[2161.01,1252.4],[2161.01,1254.9],[2167.6,1254.9]],[[2122.27,1252.4],[2128.85,1252.4],[2128.85,1254.9],[2122.27,1254.9]],[[2116.77,1198.17],[2110.18,1198.17],[2110.18,1195.65],[2116.77,1195.65]],[[2071.43,1198.17],[2078.02,1198.17],[2078.02,1195.56],[2071.43,1195.56]],[[2065.93,1198.17],[2059.34,1198.17],[2059.34,1195.51],[2065.93,1195.51]],[[2020.59,1198.17],[2027.18,1198.17],[2027.18,1195.42],[2020.59,1195.42]],[[2015.09,1198.17],[2008.5,1198.17],[2008.5,1195.36],[2015.09,1195.36]],[[1969.76,1198.17],[1976.35,1198.17],[1976.35,1195.27],[1969.76,1195.27]],[[1964.26,1198.17],[1957.67,1198.17],[1957.67,1195.22],[1964.26,1195.22]],[[1918.92,1198.17],[1925.51,1198.17],[1925.51,1195.13],[1918.92,1195.13]],[[1913.42,1198.17],[1906.83,1198.17],[1906.83,1195.07],[1913.42,1195.07]],[[1868.09,1198.17],[1874.67,1198.17],[1874.67,1194.98],[1868.09,1194.98]]],"lab":{"MANZANA 1":[1528.2,1243.0],"MANZANA 2":[1579.0,1243.0],"MANZANA 3":[1679.2,1243.0],"MANZANA 4":[1730.0,1243.0],"MANZANA 5":[1780.9,1242.9],"MANZANA 6":[1831.6,1242.9],"MANZANA 7":[1882.5,1241.9],"MANZANA 8":[1933.3,1241.9],"MANZANA 9":[1984.2,1242.0],"MANZANA 10":[2035.0,1241.9],"MANZANA 11":[2085.9,1241.9],"MANZANA 12":[2135.4,1241.9],"MANZANA 13":[1881.3,1208.0],"MANZANA 14":[1932.2,1208.1],"MANZANA 15":[1983.0,1208.3],"MANZANA 16":[2033.7,1208.0],"MANZANA 17":[2084.7,1208.6],"ED-1-A":[1534.3,1247.7],"ED-1-C":[1584.9,1247.4],"ED-1-E":[1685.3,1247.5],"ED-1-G":[1736.0,1247.9],"ED-1-L":[1838.0,1237.8],"ED-1-M":[1888.9,1246.5],"ED-1-Ñ":[1939.5,1246.7],"ED-1-P":[1990.8,1246.4],"ED-1-S":[2041.4,1236.8],"ED-1-V":[2143.2,1246.8],"ED-1-X":[1888.8,1213.3],"ED-1-Z":[1939.8,1213.2],"ED-2-B":[1990.4,1213.2],"ED-1-B":[1534.3,1237.9],"ED-1-D":[1584.9,1237.8],"ED-1-F":[1685.3,1237.9],"ED-1-H":[1736.0,1237.8],"ED-1-I":[1787.0,1247.6],"ED-1-J":[1787.0,1237.9],"ED-1-K":[1837.9,1247.7],"ED-1-N":[1888.9,1236.9],"ED-1-O":[1939.2,1236.8],"ED-1-Q":[1990.8,1236.7],"ED-1-R":[2041.2,1246.7],"ED-1-T":[2092.4,1246.6],"ED-1-U":[2092.4,1236.9],"ED-1-W":[2143.2,1236.9],"ED-1-Y":[1888.8,1203.2],"ED-2-A":[1939.8,1203.0],"ED-2-C":[1990.4,1203.0],"ED-2-D":[2041.5,1213.2],"ED-2-E":[2041.5,1203.0],"ED-2-F":[2092.4,1213.2],"ED-2-G":[2092.4,1203.0]}}}</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+"use strict";
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const D0 = new Date(2026,9,1);            // día 0 = 1-oct-2026
+const DAY = 86400000;
+const TOL = 0.05;                          // tolerancia de atraso: 5 puntos
+const MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const $ = id => document.getElementById(id);
+const el = (tag, cls, txt) => { const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+const dayIdx = d => Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate()) - D0)/DAY);
+const dateOf = i => new Date(D0.getTime()+i*DAY);
+const fmtD = i => { const d=dateOf(i); return d.getDate()+'-'+MESES[d.getMonth()]+'-'+String(d.getFullYear()).slice(2); };
+const isoD = i => { const d=dateOf(i); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const fromIso = s => { if(!s) return null; const [y,m,dd]=s.split('-').map(Number); return dayIdx(new Date(y,m-1,dd)); };
+const money = v => '$'+(v/1e6).toLocaleString('es-MX',{minimumFractionDigits:1,maximumFractionDigits:1})+' M';
+const moneyFull = v => '$'+v.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = v => (v*100).toLocaleString('es-MX',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+const num = v => v.toLocaleString('es-MX',{maximumFractionDigits:2});
+const ST = {ok:['A tiempo','s-ok'],late:['Atrasado','s-late'],done:['Entregado','s-done'],idle:['Por iniciar','s-idle']};
+const chip = s => el('span','chip '+ST[s][1],ST[s][0]);
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- modelo de tareas ---------- */
+const CONC = DATA.conc;
+const GRUPOS = {OC:'Obra civil',IN:'Instalaciones',AC:'Acabados',PL:'Plataforma (terracerías)',UR:'Calles y redes',JA:'Jardines y áreas recreativas'};
+const IN_CLAVES = new Set(['INF-RE-002-1','INF-RE-002-2','INF-D-001-1']);
+const TASKS = DATA.tasks.map(t => {
+  const c = CONC[t[1]];
+  const fr = t[2];
+  let g;
+  if (fr.startsWith('ED-')) g = (c[1].startsWith('4.3') || IN_CLAVES.has(t[1])) ? 'IN' : (c[1].startsWith('4.4') ? 'AC' : 'OC');
+  else if (/^M\d\d$/.test(fr)) g='PL'; else if (fr.startsWith('Tramo')) g='UR'; else g='JA';
+  return {id:t[0], clave:t[1], frente:fr, det:t[3], cant:t[4], ini:t[5], fin:t[6], partida:c[0], sub:c[1], nombre:c[2], unidad:c[3], pu:c[4], imp:t[4]*c[4], g, key: fr+'|'+g};
+});
+const TOTAL = TASKS.reduce((s,t)=>s+t.imp,0);
+const BY_ID = new Map(TASKS.map(t=>[t.id,t]));
+const TREN = DATA.tren.map(r=>({mz:r[0],ed:r[1],tramo:r[2],per:r[3],ini:r[4],on:r[5],fin:r[6],dwg:r[7]}));
+const ED_TASKS = new Map(); TASKS.forEach(t=>{ if(t.frente.startsWith('ED-')){ if(!ED_TASKS.has(t.frente)) ED_TASKS.set(t.frente,[]); ED_TASKS.get(t.frente).push(t);} });
+const FR_TASKS = new Map(); TASKS.forEach(t=>{ if(!FR_TASKS.has(t.frente)) FR_TASKS.set(t.frente,[]); FR_TASKS.get(t.frente).push(t); });
+const KEYS = []; const seenK=new Set();
+TREN.forEach(r=>['OC','IN','AC'].forEach(g=>{const k=r.ed+'|'+g; if(!seenK.has(k)){seenK.add(k);KEYS.push({key:k,frente:r.ed,g});}}));
+TASKS.forEach(t=>{ if(!seenK.has(t.key)){ seenK.add(t.key); KEYS.push({key:t.key,frente:t.frente,g:t.g}); } });
+const KEY_COUNT = new Map(); TASKS.forEach(t=>KEY_COUNT.set(t.key,(KEY_COUNT.get(t.key)||0)+1));
+const MIN_DAY = Math.min(...TASKS.map(t=>t.ini)), MAX_DAY = Math.max(...TASKS.map(t=>t.fin));
+const W0 = MIN_DAY - ((dateOf(MIN_DAY).getDay()+6)%7);   // lunes de la primera semana
+const NW = Math.ceil((MAX_DAY - W0 + 1)/7) + 1;
+
+/* ---------- estado ---------- */
+const S = { today: dayIdx(new Date()), t: dayIdx(new Date()), mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], me:null, canEdit:false, canWrite:null, db:null, user:null, selEd:null, page:0, profiles:{}, usuarios:[] };
+S.t = Math.min(Math.max(S.t, W0), MAX_DAY+14);
+
+function progAt(t, d){ if(d < t.ini) return 0; if(d >= t.fin) return 1; return (d - t.ini + 1)/(t.fin - t.ini + 1); }
+function qtyAt(t, d){
+  if (d >= S.today) { const a=S.avance.get(t.id); return a ? +a.q||0 : 0; }
+  let best=null, bw=-1;
+  for (const [w,map] of S.hist) if (w<=d && w>bw && map[t.id]!=null){ bw=w; best=map[t.id]; }
+  return best==null?0:+best;
+}
+function realAt(t,d){ return t.cant>0 ? Math.min(1, qtyAt(t,d)/t.cant) : 0; }
+function statusOf(list, d){
+  let imp=0, p=0, r=0, overdue=false;
+  for (const t of list){ const pr=progAt(t,d), re=realAt(t,d); imp+=t.imp; p+=pr*t.imp; r+=re*t.imp; if (d>t.fin && re<0.999) overdue=true; }
+  const pp = imp? p/imp:0, rr = imp? r/imp:0;
+  let s;
+  if (rr>=0.999) s='done'; else if (pp===0 && rr===0) s='idle'; else if (overdue || pp-rr>TOL) s='late'; else s='ok';
+  return {s, prog:pp, real:rr, imp, ejec:r, progImp:p};
+}
+function progStatus(list,d){ const st=statusOf(list,d); const s = st.prog>=0.999?'done':(st.prog>0?'ok':'idle'); return {...st, s, real:st.prog}; }
+const stOf = (list,d) => S.mode==='real' ? statusOf(list,d) : progStatus(list,d);
+
+/* ---------- utilidades UI ---------- */
+let toastT;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,3200); }
+function respOf(key){ return S.resp[key]||{}; }
+async function resolveProfiles(ids){ if(!S.user) return {}; ids=[...new Set(ids.filter(Boolean))]; if(!ids.length) return {}; try{ const p=await S.user.profiles(ids); Object.assign(S.profiles,p); return p; }catch(e){ return {}; } }
+function personNode(id){
+  const w=el('span','person');
+  if(!id){ w.append(el('span','muted','Sin asignar')); return w; }
+  const p=S.profiles[id];
+  if(p && p.avatarUrl){ const img=el('img'); img.src=p.avatarUrl; img.alt=''; w.append(img); }
+  w.append(el('span',null,(p&&p.name)||'Líder asignado'));
+  return w;
+}
+function barNode(prog, real, s){
+  const b=el('div','bar'); const p=el('div','p'); p.style.width=(prog*100)+'%'; const r=el('div','r'); r.style.width=(real*100)+'%'; r.style.background='var(--'+({ok:'ok',late:'late',done:'done',idle:'idle'}[s])+')';
+  b.append(p,r); b.title='Real '+pct(real)+' · Programado '+pct(prog); return b;
+}
+function canCapture(t){
+  if (S.canEdit) return true;
+  if (S.canWrite===false) return false;
+  const l = respOf(t.key).l;
+  if (l) return l===S.me;
+  return true;
+}
+
+/* ---------- cabecera / fecha ---------- */
+const slider=$('slider'); slider.min=W0; slider.max=MAX_DAY+14; slider.value=S.t;
+function setT(v){ S.t=+v; slider.value=S.t; $('fechaTxt').textContent=fmtD(S.t); renderAll(); }
+slider.addEventListener('input',e=>setT(e.target.value));
+$('hoyBtn').addEventListener('click',()=>setT(Math.min(Math.max(S.today,W0),MAX_DAY+14)));
+function setMode(m){ S.mode=m; $('mReal').setAttribute('aria-pressed',m==='real'); $('mProg').setAttribute('aria-pressed',m==='prog'); renderAll(); }
+$('mReal').addEventListener('click',()=>setMode('real')); $('mProg').addEventListener('click',()=>setMode('prog'));
+$('fechaTxt').textContent=fmtD(S.t);
+
+/* ---------- pestañas ---------- */
+const VIEWS=['resumen','hitos','tareas','responsables','estimaciones','usuarios'];
+function route(){ const h=(location.hash||'#resumen').slice(1); const v=VIEWS.includes(h)?h:'resumen';
+  VIEWS.forEach(n=>{ $('v-'+n).hidden = n!==v; });
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.setAttribute('aria-current', a.getAttribute('href')==='#'+v?'page':'false'));
+  S.view=v; renderView(); if(v==='resumen' && G.ready) G.resize(); }
+window.addEventListener('hashchange',route);
+
+/* ---------- KPIs ---------- */
+function kpi(lab,val,foot,cls){ const k=el('div','kpi'+(cls?' '+cls:'')); k.append(el('div','lab',lab),el('div','val',val),el('div','foot',foot)); return k; }
+function renderKpis(){
+  const st = statusOf(TASKS,S.t);
+  const box=$('kpis'); box.replaceChildren();
+  const gap = st.real-st.prog;
+  let edReal=0, edProg=0, late=0;
+  TREN.forEach(r=>{ const s=statusOf(ED_TASKS.get(r.ed),S.t); if(s.real>=0.999) edReal++; if(s.prog>=0.999) edProg++; if(s.s==='late') late++; });
+  const est = S.estim.filter(e=>fromIso(e.fin)!=null && fromIso(e.fin)<=S.t).reduce((s,e)=>s+(+e.monto||0),0);
+  const cob = S.estim.filter(e=>fromIso(e.fcobro)!=null && fromIso(e.fcobro)<=S.t).reduce((s,e)=>s+(+e.cobrado||0),0);
+  box.append(
+    kpi('Avance programado',pct(st.prog),money(st.progImp)+' de '+money(TOTAL)),
+    kpi('Avance real',pct(st.real),(gap>=0?'+':'')+(gap*100).toFixed(1)+' pts vs programa',gap< -TOL?'late':(st.real>0?'ok':'')),
+    kpi('Viviendas entregadas',String(edReal*16),'Programadas al corte: '+(edProg*16)+' de 544',edReal*16>=edProg*16 && edReal>0?'done':(edProg>edReal?'late':'')),
+    kpi('Edificios atrasados',String(late),'de 34 edificios',late?'late':''),
+    kpi('Estimado acumulado',money(est),pct(est/TOTAL)+' del contrato'),
+    kpi('Cobrado acumulado',money(cob),'Por cobrar: '+money(Math.max(0,est-cob)),cob>0?'done':'')
+  );
+}
+
+/* ---------- atención ---------- */
+function hitoList(){
+  const out=[];
+  TREN.forEach((r,i)=>{ const s=stOf(ED_TASKS.get(r.ed),S.t); out.push({kind:'viv',id:r.ed,label:r.ed,sub:r.mz+' · 16 viviendas',fin:r.fin,st:s,tren:r}); });
+  const urb=[['Tramo C1','Calles tramo C1'],['Tramo C2','Calles tramo C2'],['Tramo C3','Calles tramo C3'],['Tramo C4','Calles tramo C4'],['Jardín J3','Jardín J3'],['Jardín J5','Jardín J5'],['Jardín J7','Jardín J7'],['Jardín J4','Jardín J4'],['Jardín J6','Jardín J6'],['Jardín J1','Jardín J1'],['Zona recreativa A','Zona recreativa A'],['Zona recreativa central B','Zona recreativa central B'],['Zona recreativa oriente C','Zona recreativa oriente C']];
+  urb.forEach(([f,l])=>{ const ts=FR_TASKS.get(f)||[]; if(!ts.length) return; out.push({kind:'urb',id:f,label:l,sub:ts[0].det,fin:Math.max(...ts.map(t=>t.fin)),st:stOf(ts,S.t)}); });
+  return out;
+}
+function renderAttn(){
+  const hs=hitoList().filter(h=>h.st.s!=='done');
+  const late=hs.filter(h=>h.st.s==='late').sort((a,b)=>a.fin-b.fin);
+  const soon=hs.filter(h=>h.st.s!=='late' && h.fin>=S.t && h.fin<=S.t+45).sort((a,b)=>a.fin-b.fin);
+  const box=$('attn'); box.replaceChildren();
+  $('attnCount').textContent = late.length+' atrasados · '+soon.length+' próximos 45 días';
+  const rows=[...late,...soon].slice(0,14);
+  if(!rows.length){ box.append(el('div','notice','Ningún hito atrasado ni por vencer en los próximos 45 días.')); return; }
+  rows.forEach(h=>{ const li=el('div','li'); li.tabIndex=0; li.setAttribute('role','button');
+    const c=chip(h.st.s); const mid=el('div'); mid.append(el('div','t',h.label),el('div','d',h.sub+' · real '+pct(h.st.real)+' / prog '+pct(h.st.prog)));
+    li.append(c,mid,el('div','mono',fmtD(h.fin)));
+    const go=()=>{ if(h.kind==='viv'){ selectEd(h.id); } else { location.hash='#tareas'; $('fFrente').value=h.id; $('fVentana').value='todas'; S.page=0; renderTareas(); } };
+    li.addEventListener('click',go); li.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+    box.append(li); });
+}
+
+/* ---------- panel de edificio ---------- */
+function selectEd(ed){ S.selEd=ed; if(S.view!=='resumen'){ location.hash='#resumen'; } renderEdPanel(); G.render(); document.getElementById('edpanel').scrollIntoView({block:'nearest',behavior:'smooth'}); }
+async function renderEdPanel(){
+  const box=$('edpanel'); box.replaceChildren();
+  const r=TREN.find(x=>x.ed===S.selEd);
+  if(!r){ box.append(el('div','muted','Selecciona un edificio en el modelo o en la lista de hitos.')); return; }
+  const ts=ED_TASKS.get(r.ed); const st=stOf(ts,S.t); const real=statusOf(ts,S.t);
+  const h=el('div','row'); const tt=el('h3',null,r.ed+' · '+r.mz); tt.style.fontSize='18px'; h.append(tt,chip(st.s));
+  const b=el('div','row'); b.append(el('span','muted','Real '+pct(real.real)+' · Programado '+pct(real.prog)), (()=>{const x=barNode(real.prog,real.real,real.s); x.style.flex='1'; return x;})());
+  const f=el('div','row mono'); f.style.fontSize='12px';
+  f.append(el('span',null,'Cimentación: '+fmtD(r.ini)), el('span',null,'Obra negra: '+fmtD(r.on)), el('span',null,'Entrega: '+fmtD(r.fin)), el('span','muted','Periodo DWG '+r.per+': '+fmtD(r.dwg)));
+  const rr=el('div','row'); const ids=['OC','IN','AC'].map(g=>respOf(r.ed+'|'+g).l); await resolveProfiles(ids);
+  ['OC','IN','AC'].forEach(g=>{ const s=el('span'); s.append(el('span','muted',GRUPOS[g]+': '), personNode(respOf(r.ed+'|'+g).l)); rr.append(s); });
+  const act = ts.filter(t=>progAt(t,S.t)>0 && realAt(t,S.t)<0.999).sort((a,b)=>a.fin-b.fin).slice(0,6);
+  const lst=el('div','list');
+  act.forEach(t=>{ const s=statusOf([t],S.t); const li=el('div','li'); li.style.cursor='default'; const m=el('div'); m.append(el('div','t',t.nombre),el('div','d',fmtD(t.ini)+' → '+fmtD(t.fin)+' · real '+pct(s.real)+' / prog '+pct(s.prog))); li.append(chip(s.s),m,el('span','mono',money(t.imp))); lst.append(li); });
+  const goT=el('button','linkbtn','Ver todas sus tareas'); goT.type='button'; goT.addEventListener('click',()=>{ location.hash='#tareas'; $('fFrente').value=r.ed; $('fVentana').value='todas'; S.page=0; renderTareas(); });
+  box.append(h,b,f,rr);
+  if(act.length){ box.append(el('div','muted','Tareas en ejecución al corte'),lst); }
+  box.append(goT);
+}
+
+/* ---------- curva S ---------- */
+function renderCurva(){
+  const box=$('curva'); box.replaceChildren();
+  const W=Math.max(320,box.clientWidth||800), H=Math.round(Math.min(340,Math.max(220,W*0.36)));
+  const m={l:46,r:14,t:12,b:28};
+  const xs=[]; for(let i=0;i<NW;i++) xs.push(W0+i*7+6);
+  const prog=xs.map(d=>TASKS.reduce((s,t)=>s+progAt(t,d)*t.imp,0)/TOTAL);
+  const real=xs.map(d=> d<=S.today+6 ? TASKS.reduce((s,t)=>s+realAt(t,Math.min(d,S.today))*t.imp,0)/TOTAL : null);
+  const estA=xs.map(d=>S.estim.filter(e=>{const f=fromIso(e.fin);return f!=null&&f<=d;}).reduce((s,e)=>s+(+e.monto||0),0)/TOTAL);
+  const cobA=xs.map(d=>S.estim.filter(e=>{const f=fromIso(e.fcobro);return f!=null&&f<=d;}).reduce((s,e)=>s+(+e.cobrado||0),0)/TOTAL);
+  const hasEst=S.estim.length>0;
+  const X=d=>m.l+(d-W0)/((W0+NW*7)-W0)*(W-m.l-m.r), Y=v=>m.t+(1-v)*(H-m.t-m.b);
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('width','100%'); svg.setAttribute('role','img'); svg.setAttribute('aria-label','Curva S programado, real, estimado y cobrado');
+  const mk=(n,a)=>{const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); return e;};
+  [0,.25,.5,.75,1].forEach(v=>{ svg.append(mk('line',{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:cssv('--line'),'stroke-width':1}));
+    const tx=mk('text',{x:m.l-6,y:Y(v)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted'),'font-family':'IBM Plex Mono, monospace'}); tx.textContent=(v*100)+'%'; svg.append(tx); });
+  for(let mth=0;mth<14;mth++){ const d=new Date(2026,9+mth,1); const i=dayIdx(d); if(i<W0||i>W0+NW*7) continue;
+    svg.append(mk('line',{x1:X(i),x2:X(i),y1:H-m.b,y2:H-m.b+4,stroke:cssv('--muted')}));
+    const tx=mk('text',{x:X(i)+2,y:H-m.b+16,'font-size':11,fill:cssv('--muted')}); tx.textContent=MESES[d.getMonth()]+(d.getMonth()===0?' '+String(d.getFullYear()).slice(2):''); svg.append(tx); }
+  const line=(arr,color,w,dash)=>{ let dstr='',on=false; arr.forEach((v,i)=>{ if(v==null){on=false;return;} dstr+=(on?'L':'M')+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1); on=true; }); if(dstr) svg.append(mk('path',{d:dstr,fill:'none',stroke:color,'stroke-width':w,'stroke-dasharray':dash||'','stroke-linejoin':'round'})); };
+  // área programada
+  let area='M'+X(xs[0])+','+Y(0); prog.forEach((v,i)=>area+='L'+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1)); area+='L'+X(xs[xs.length-1])+','+Y(0)+'Z';
+  svg.append(mk('path',{d:area,fill:cssv('--gold'),opacity:.12}));
+  line(prog,cssv('--gold'),2.5);
+  if(hasEst){ line(estA,cssv('--muted'),2,'6 4'); line(cobA,cssv('--done'),2.5); }
+  line(real,cssv('--ok'),2.5);
+  // corte
+  svg.append(mk('line',{x1:X(S.t),x2:X(S.t),y1:m.t,y2:H-m.b,stroke:cssv('--fg'),'stroke-width':1,'stroke-dasharray':'3 3'}));
+  const ct=mk('text',{x:X(S.t)+4,y:m.t+10,'font-size':11,fill:cssv('--fg')}); ct.textContent='Corte '+fmtD(S.t); svg.append(ct);
+  const iC=xs.findIndex(d=>d>=S.t); if(iC>=0){ svg.append(mk('circle',{cx:X(xs[iC]),cy:Y(prog[iC]),r:4,fill:cssv('--gold')})); }
+  box.append(svg);
+  const lg=$('curvaLegend'); lg.replaceChildren();
+  const sw=(c,t,dash)=>{ const s=el('span','person'); const i=el('span'); i.style.cssText=`display:inline-block;width:18px;height:0;border-top:3px ${dash?'dashed':'solid'} ${c}`; s.append(i,el('span',null,t)); return s; };
+  lg.append(sw(cssv('--gold'),'Programado'),sw(cssv('--ok'),'Ejecutado (capturado)'),sw(cssv('--muted'),'Estimado',1),sw(cssv('--done'),'Cobrado'));
+  if(!hasEst) lg.append(el('span','muted','Estimado y cobrado aparecen al registrar la primera estimación.'));
+  // tooltip
+  const tip=el('div','tip'); tip.hidden=true; box.append(tip);
+  svg.addEventListener('pointermove',e=>{ const rc=svg.getBoundingClientRect(); const x=(e.clientX-rc.left)/rc.width*W; let best=0; xs.forEach((d,i)=>{ if(Math.abs(X(d)-x)<Math.abs(X(xs[best])-x)) best=i; });
+    tip.replaceChildren(el('b',null,'Semana al '+fmtD(xs[best])));
+    const row=(a,b)=>{const r=el('div','r'); r.append(el('span','muted',a),el('span','mono',b)); return r;};
+    tip.append(row('Programado',pct(prog[best])+' · '+money(prog[best]*TOTAL)));
+    if(real[best]!=null) tip.append(row('Ejecutado',pct(real[best])+' · '+money(real[best]*TOTAL)));
+    if(hasEst){ tip.append(row('Estimado',money(estA[best]*TOTAL)), row('Cobrado',money(cobA[best]*TOTAL))); }
+    tip.hidden=false; const px=(X(xs[best])/W)*rc.width; tip.style.left=Math.min(Math.max(0,px+12),rc.width-200)+'px'; tip.style.top='8px'; });
+  svg.addEventListener('pointerleave',()=>tip.hidden=true);
+}
+
+/* ---------- hitos ---------- */
+function hcard(h){
+  const c=el('div','hcard '+h.st.s); c.tabIndex=0; c.setAttribute('role','button');
+  const hh=el('div','h'); hh.append(el('b',null,h.label),chip(h.st.s));
+  const meta=el('div','meta'); meta.append(el('span',null,h.sub),el('span','mono','Entrega '+fmtD(h.fin)));
+  const m2=el('div','meta'); const sr=statusOf(h.kind==='viv'?ED_TASKS.get(h.id):FR_TASKS.get(h.id),S.t); m2.append(el('span',null,'Real '+pct(sr.real)),el('span',null,'Prog. '+pct(sr.prog)));
+  c.append(hh,meta,barNode(sr.prog,sr.real,sr.s),m2);
+  if(h.kind==='viv' && h.tren){ const d=h.tren.fin-h.tren.dwg; const x=el('div','meta'); x.append(el('span',null,'vs DWG '+h.tren.per+': '+(d>0?'+':'')+d+' d')); c.append(x); }
+  const go=()=>{ if(h.kind==='viv') selectEd(h.id); else { location.hash='#tareas'; $('fFrente').value=h.id; $('fVentana').value='todas'; S.page=0; renderTareas(); } };
+  c.addEventListener('click',go); c.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+  return c;
+}
+function renderHitos(){
+  const hs=hitoList();
+  const viv=hs.filter(h=>h.kind==='viv'), urb=hs.filter(h=>h.kind==='urb');
+  $('hViv').replaceChildren(...viv.map(hcard)); $('hUrb').replaceChildren(...urb.map(hcard));
+  const cnt={ok:0,late:0,done:0,idle:0}; viv.forEach(h=>cnt[h.st.s]++);
+  $('hCounts').replaceChildren(...['late','ok','done','idle'].map(s=>{const c=chip(s); c.textContent=ST[s][0]+': '+cnt[s]; return c;}));
+}
+
+/* ---------- tareas ---------- */
+const PAGE=80;
+function fillFilterOptions(){
+  const fr=$('fFrente'); const frentes=[...new Set(TASKS.map(t=>t.frente))];
+  frentes.sort((a,b)=>{const o=x=>x.startsWith('ED-')?0:(/^M\d/.test(x)?1:2); return o(a)-o(b)||a.localeCompare(b,'es');});
+  frentes.forEach(f=>{const o=el('option',null,f); o.value=f; fr.append(o);});
+  const pa=$('fPartida'); [...new Set(TASKS.map(t=>t.partida))].forEach(p=>{const o=el('option',null,p); o.value=p; pa.append(o);});
+}
+async function fillRespOptions(){
+  const sel=$('fResp'); const cur=sel.value; sel.replaceChildren(el('option',null,'Todos los responsables')); sel.options[0].value='';
+  if(S.me){ const o=el('option',null,'Mis tareas'); o.value='__me'; sel.append(o); }
+  const o2=el('option',null,'Sin líder asignado'); o2.value='__none'; sel.append(o2);
+  const ids=[...new Set(Object.values(S.resp).map(r=>r.l).filter(Boolean))]; await resolveProfiles(ids);
+  ids.forEach(id=>{ const o=el('option',null,(S.profiles[id]&&S.profiles[id].name)||'Líder'); o.value=id; sel.append(o); });
+  const eqs=[...new Set(Object.values(S.resp).map(r=>r.e).filter(Boolean))].sort();
+  eqs.forEach(e=>{ const o=el('option',null,'Equipo: '+e); o.value='eq:'+e; sel.append(o); });
+  sel.value=[...sel.options].some(o=>o.value===cur)?cur:'';
+}
+function filteredTasks(){
+  const v=$('fVentana').value, rs=$('fResp').value, fr=$('fFrente').value, pa=$('fPartida').value, es=$('fEstatus').value, q=$('fTexto').value.trim().toLowerCase();
+  const d=S.t;
+  return TASKS.filter(t=>{
+    const pr=progAt(t,d), re=realAt(t,d);
+    if(v==='activas' && !((pr>0||re>0) && re<0.999)) return false;
+    if(v==='prox' && !(t.ini>d && t.ini<=d+14)) return false;
+    if(fr && t.frente!==fr) return false;
+    if(pa && t.partida!==pa) return false;
+    const r=respOf(t.key);
+    if(rs==='__me' && r.l!==S.me) return false;
+    if(rs==='__none' && r.l) return false;
+    if(rs && rs.startsWith('eq:') && r.e!==rs.slice(3)) return false;
+    if(rs && !rs.startsWith('__') && !rs.startsWith('eq:') && r.l!==rs) return false;
+    const s=statusOf([t],d).s;
+    if(v==='atr' && s!=='late') return false;
+    if(es && s!==es) return false;
+    if(q && !(t.nombre.toLowerCase().includes(q)||t.clave.toLowerCase().includes(q)||t.frente.toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a,b)=>a.ini-b.ini||a.frente.localeCompare(b.frente));
+}
+async function saveQty(t, input){
+  let v=input.value.trim()===''?0:Number(input.value);
+  if(!isFinite(v)||v<0){ input.classList.add('err'); toast('Captura una cantidad válida (0 o mayor).'); return; }
+  if(v>t.cant*1.0001){ input.classList.add('err'); toast('La cantidad no puede pasar de '+num(t.cant)+' '+t.unidad+' (cantidad del catálogo).'); return; }
+  if(!S.db){ toast('No hay conexión con la base de datos del tablero.'); return; }
+  const at=new Date().toISOString();
+  try{
+    await S.db.doc('avance/'+t.id).set({q:v, at, by:S.me||''});
+    const wk=S.today-((dateOf(S.today).getDay()+6)%7); const ref=S.db.doc('historial/w'+wk);
+    await ref.set({q:{[t.id]:v}, w:wk},{merge:true});
+    input.classList.remove('err'); input.classList.add('saved'); toast('Guardado: '+t.frente+' · '+t.nombre+' = '+num(v)+' '+t.unidad);
+  }catch(e){ input.classList.add('err'); if(e&&e.code==='permission-denied'){ toast('No tienes permiso para capturar esta tarea: no eres el líder de ese frente.'); } else toast('No se pudo guardar. Intenta de nuevo.'); }
+}
+async function renderTareas(){
+  const list=filteredTasks(); const pages=Math.max(1,Math.ceil(list.length/PAGE)); S.page=Math.min(S.page,pages-1);
+  const imp=list.reduce((s,t)=>s+t.imp,0);
+  $('tCountTxt').textContent=list.length+' tareas · '+money(imp);
+  const rows=list.slice(S.page*PAGE,(S.page+1)*PAGE);
+  await resolveProfiles(rows.map(t=>respOf(t.key).l));
+  const tb=$('tBody'); tb.replaceChildren();
+  const editable = S.t>=S.today && !!S.db;
+  rows.forEach(t=>{
+    const s=statusOf([t],S.t); const tr=el('tr');
+    const c0=el('td'); c0.append(chip(s.s));
+    const c1=el('td'); c1.append(el('div',null,t.frente),el('div','muted',GRUPOS[t.g])); c1.style.whiteSpace='nowrap';
+    const c2=el('td'); c2.append(el('div',null,t.nombre),el('div','muted mono',t.clave+' · '+t.id)); c2.style.minWidth='220px';
+    const r=respOf(t.key); const c3=el('td'); c3.append(personNode(r.l)); if(r.e) c3.append(el('div','muted',r.e));
+    const c4=el('td','mono'); c4.textContent=fmtD(t.ini)+' → '+fmtD(t.fin); c4.style.whiteSpace='nowrap';
+    const c5=el('td','num',num(t.cant)+' '+t.unidad.toLowerCase());
+    const c6=el('td','num');
+    const q=qtyAt(t,S.t);
+    if(editable && canCapture(t)){ const inp=el('input','qty'); inp.type='number'; inp.min='0'; inp.step='any'; inp.max=String(t.cant); inp.value=q?String(q):''; inp.placeholder='0'; inp.id='q-'+t.id; inp.setAttribute('aria-label','Cantidad ejecutada '+t.nombre+' '+t.frente);
+      inp.addEventListener('change',()=>saveQty(t,inp)); c6.append(inp); }
+    else c6.textContent=num(q);
+    const c7=el('td'); const bw=el('div'); bw.style.minWidth='120px'; bw.append(barNode(s.prog,s.real,s.s), el('div','muted mono',pct(s.real)+' / '+pct(s.prog))); bw.lastChild.style.fontSize='11px'; c7.append(bw);
+    const c8=el('td','num',moneyFull(q*t.pu));
+    tr.append(c0,c1,c2,c3,c4,c5,c6,c7,c8); tb.append(tr);
+  });
+  if(!rows.length){ const tr=el('tr'); const td=el('td','muted','No hay tareas con estos filtros al corte '+fmtD(S.t)+'.'); td.colSpan=9; tr.append(td); tb.append(tr); }
+  $('pgTxt').textContent='Página '+(S.page+1)+' de '+pages; $('pgPrev').disabled=S.page===0; $('pgNext').disabled=S.page>=pages-1;
+  const n=$('capNotice');
+  if(!S.db) n.textContent='Inicia sesión para capturar.';
+  else if(!editable) n.textContent='Estás viendo una fecha pasada: se muestra lo capturado hasta esa semana. Regresa a "Hoy" para capturar.';
+  else if(S.canWrite===false && !S.canEdit) n.textContent='Tu rol es de Consulta: puedes ver todo, pero no capturar. Si eres líder de frente, pide al administrador el rol de Líder.';
+  else n.textContent='Captura la CANTIDAD EJECUTADA ACUMULADA de cada tarea (misma unidad del catálogo). El monto, el % y el color se calculan solos. Solo puedes capturar las tareas de los frentes donde eres líder; si el frente no tiene líder, cualquier colaborador puede capturar.';
+}
+['fVentana','fResp','fFrente','fPartida','fEstatus'].forEach(id=>$(id).addEventListener('change',()=>{S.page=0;renderTareas();}));
+$('fTexto').addEventListener('input',()=>{S.page=0;renderTareas();});
+$('pgPrev').addEventListener('click',()=>{S.page--;renderTareas();}); $('pgNext').addEventListener('click',()=>{S.page++;renderTareas();});
+
+/* ---------- responsables ---------- */
+const SEL=new Set(); let bulkLeader=null;
+function makePicker(container, onPick){
+  container.replaceChildren();
+  const inp=el('input'); inp.type='text'; inp.placeholder='Buscar persona'; inp.setAttribute('aria-label','Buscar líder');
+  const menu=el('div','menu'); menu.hidden=true; container.append(inp,menu);
+  const show=async q=>{ q=(q||'').toLowerCase(); const hits=S.usuarios.filter(u=>(u.rol==='lider'||u.rol==='admin') && ((u.nombre||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q))).slice(0,12).map(u=>({id:u.id,name:u.nombre||u.email,avatarUrl:''})); menu.replaceChildren();
+    const none=el('button',null,'Quitar líder'); none.type='button'; none.addEventListener('mousedown',e=>{e.preventDefault(); menu.hidden=true; inp.value=''; onPick(null);}); menu.append(none);
+    hits.forEach(h=>{ const b=el('button'); b.type='button'; b.append(el('span',null,h.name)); b.addEventListener('mousedown',e=>{e.preventDefault(); S.profiles[h.id]=h; inp.value=h.name; menu.hidden=true; onPick(h.id);}); menu.append(b); });
+    if(!hits.length) menu.append(el('div','muted','  Sin líderes con ese nombre. Primero dale rol de Líder en Usuarios.'));
+    menu.hidden=false; };
+  inp.addEventListener('focus',()=>show(inp.value)); inp.addEventListener('input',()=>show(inp.value)); inp.addEventListener('blur',()=>setTimeout(()=>menu.hidden=true,150));
+  return inp;
+}
+async function writeResp(keys, patch){
+  if(!S.db) return;
+  if(patch.l!==undefined){ const u=S.usuarios.find(x=>x.id===patch.l); patch.n=u?(u.nombre||u.email):''; }
+  const m={}; keys.forEach(k=>{ m[k]=Object.assign({}, S.resp[k]||{}, patch); });
+  try{ await S.db.doc('config/resp').set({m},{merge:true});
+    Object.assign(S.resp,m); toast('Asignación guardada ('+keys.length+' frentes).'); renderResp(); fillRespOptions(); }
+  catch(e){ toast('Solo el administrador del tablero puede asignar líderes.'); }
+}
+async function renderResp(){
+  const filt=$('aFiltro').value;
+  const ids=Object.values(S.resp).map(r=>r.l).filter(Boolean); await resolveProfiles(ids);
+  // tarjetas por líder
+  const groups=new Map();
+  TASKS.forEach(t=>{ const r=respOf(t.key); const k=r.l?('l:'+r.l):(r.e?('e:'+r.e):'none'); if(!groups.has(k)) groups.set(k,{l:r.l||null,e:r.e||'',tasks:[],eqs:new Set()}); const g=groups.get(k); g.tasks.push(t); if(r.e) g.eqs.add(r.e); });
+  const cards=[...groups.values()].sort((a,b)=>(a.l?0:1)-(b.l?0:1));
+  const box=$('rCards'); box.replaceChildren();
+  cards.forEach(g=>{ const c=el('div','rcard'); const st=statusOf(g.tasks,S.t);
+    const act=g.tasks.filter(t=>{const p=progAt(t,S.t),r=realAt(t,S.t);return (p>0||r>0)&&r<0.999;}); const late=g.tasks.filter(t=>statusOf([t],S.t).s==='late').length;
+    const who=el('div','who');
+    if(g.l){ const p=S.profiles[g.l]; const nm=el('div'); nm.append(el('b',null,(p&&p.name)||'Líder asignado'),el('div','muted',[...g.eqs].join(', ')||'Sin equipo')); who.append(nm); }
+    else { const nm=el('div'); nm.append(el('b',null,g.e?('Equipo '+g.e):'Sin líder asignado'),el('div','muted',g.e?'Falta asignar líder':'Asigna líderes abajo')); who.append(nm); }
+    c.append(who,(()=>{const r=el('div','row'); r.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center'; r.append(chip(st.s),el('span','muted',act.length+' en ejecución · '+late+' atrasadas')); return r;})(), barNode(st.prog,st.real,st.s), el('div','muted mono','Real '+pct(st.real)+' / prog '+pct(st.prog)+' · '+money(st.imp)));
+    const b=el('button','linkbtn','Ver sus tareas'); b.type='button'; b.addEventListener('click',()=>{ location.hash='#tareas'; fillRespOptions().then(()=>{ $('fResp').value = g.l? g.l : (g.e?'eq:'+g.e:'__none'); $('fVentana').value='activas'; S.page=0; renderTareas(); }); }); c.append(b);
+    box.append(c); });
+  // tabla de asignación
+  const tb=$('aBody'); tb.replaceChildren();
+  const admin=S.canEdit && !!S.db;
+  $('asigHint').textContent = admin ? 'Marca frentes y asígnales equipo y líder (el líder debe tener rol de Líder en Usuarios)' : 'Solo el administrador asigna líderes';
+  $('aAll').disabled=!admin;
+  KEYS.filter(k=> !filt || (filt==='sin'? !respOf(k.key).l : k.g===filt)).forEach(k=>{
+    const r=respOf(k.key); const tr=el('tr'); if(SEL.has(k.key)) tr.className='sel';
+    const c0=el('td'); const cb=el('input'); cb.type='checkbox'; cb.checked=SEL.has(k.key); cb.disabled=!admin; cb.setAttribute('aria-label','Seleccionar '+k.frente+' '+GRUPOS[k.g]); cb.addEventListener('change',()=>{ cb.checked?SEL.add(k.key):SEL.delete(k.key); tr.className=cb.checked?'sel':''; updBulk(); }); c0.append(cb);
+    const c3=el('td');
+    if(admin){ const ti=el('input','tin'); ti.value=r.e||''; ti.placeholder='Equipo'; ti.setAttribute('aria-label','Equipo '+k.frente); ti.addEventListener('change',()=>writeResp([k.key],{e:ti.value.trim()})); c3.append(ti); } else c3.textContent=r.e||'—';
+    const c4=el('td');
+    if(admin){ const pk=el('span','picker'); const inp=makePicker(pk,id=>writeResp([k.key],{l:id||''})); inp.value=r.l?((S.profiles[r.l]&&S.profiles[r.l].name)||''):''; c4.append(pk); } else c4.append(personNode(r.l));
+    tr.append(c0,el('td',null,k.frente),el('td',null,GRUPOS[k.g]),c3,c4,el('td','num',String(KEY_COUNT.get(k.key)||0)));
+    tb.append(tr); });
+  updBulk();
+}
+function updBulk(){ const box=$('bulkBox'); box.hidden = !(S.canEdit && SEL.size>0); box.style.display=box.hidden?'none':'inline-flex'; $('bulkTxt').textContent=SEL.size+' frentes seleccionados'; }
+$('aFiltro').addEventListener('change',renderResp);
+$('aAll').addEventListener('change',e=>{ const filt=$('aFiltro').value; KEYS.filter(k=>!filt||(filt==='sin'?!respOf(k.key).l:k.g===filt)).forEach(k=>e.target.checked?SEL.add(k.key):SEL.delete(k.key)); renderResp(); });
+makePicker($('bulkPicker'),id=>{bulkLeader=id;});
+$('bulkApply').addEventListener('click',()=>{ const patch={}; const eq=$('bulkEquipo').value.trim(); if(eq) patch.e=eq; if(bulkLeader!==null) patch.l=bulkLeader||''; if(!Object.keys(patch).length){ toast('Escribe un equipo o elige un líder.'); return; } writeResp([...SEL],patch).then(()=>{SEL.clear(); $('aAll').checked=false; renderResp();}); });
+
+/* ---------- estimaciones ---------- */
+let editingE=null;
+function renderEstim(){
+  const tb=$('eBody'); tb.replaceChildren();
+  const rows=[...S.estim].sort((a,b)=>(a.ini||'').localeCompare(b.ini||''));
+  let tE=0,tC=0;
+  rows.forEach(e=>{ tE+=+e.monto||0; tC+=+e.cobrado||0;
+    const tr=el('tr'); const porc=(+e.monto||0)-(+e.cobrado||0);
+    const st = (+e.cobrado||0)>=(+e.monto||0)-0.5 ? 'done' : ((+e.cobrado||0)>0?'ok':'idle');
+    const c7=el('td');
+    if(S.canEdit){ const b1=el('button','linkbtn','Editar'); b1.type='button'; b1.addEventListener('click',()=>loadE(e)); const b2=el('button','linkbtn','Borrar'); b2.type='button';
+      b2.addEventListener('click',()=>{ if(b2.dataset.c){ S.db.doc('estimaciones/'+e._id).delete().then(()=>toast('Estimación '+e.no+' borrada.')).catch(()=>toast('No se pudo borrar.')); } else { b2.dataset.c='1'; b2.textContent='Confirmar borrado'; setTimeout(()=>{b2.dataset.c='';b2.textContent='Borrar';},4000);} });
+      c7.append(b1,' ',b2); }
+    const c0=el('td'); c0.append(el('b',null,e.no||'—'),' ',chip(st));
+    tr.append(c0, el('td','mono',(e.ini?fmtD(fromIso(e.ini)):'')+' → '+(e.fin?fmtD(fromIso(e.fin)):'')), el('td','num',moneyFull(+e.monto||0)), el('td','num',moneyFull(+e.cobrado||0)), el('td','mono',e.fcobro?fmtD(fromIso(e.fcobro)):'Pendiente'), el('td','num',moneyFull(porc)), el('td',null,e.nota||''), c7);
+    tb.append(tr); });
+  if(!rows.length){ const tr=el('tr'); const td=el('td','muted','Aún no hay estimaciones registradas. Registra la primera arriba: número, periodo y monto estimado; cuando se pague, agrega el monto cobrado y la fecha.'); td.colSpan=8; tr.append(td); tb.append(tr); }
+  const st=statusOf(TASKS,S.today);
+  $('eKpis').replaceChildren(kpi('Estimado total',money(tE),pct(tE/TOTAL)+' del contrato'), kpi('Cobrado',money(tC),pct(tE?tC/tE:0)+' de lo estimado',tC>0?'done':''), kpi('Por cobrar',money(tE-tC),rows.filter(e=>!e.fcobro).length+' estimaciones pendientes',tE-tC>0?'late':''), kpi('Ejecutado sin estimar',money(Math.max(0,st.ejec-tE)),'Ejecutado capturado: '+money(st.ejec)));
+  $('eFormPanel').hidden=!S.canEdit;
+}
+function loadE(e){ editingE=e._id; $('eNo').value=e.no||''; $('eIni').value=e.ini||''; $('eFin').value=e.fin||''; $('eMonto').value=e.monto||''; $('eCobrado').value=e.cobrado||''; $('eFCobro').value=e.fcobro||''; $('eNota').value=e.nota||''; $('eCancel').hidden=false; $('eSave').textContent='Guardar cambios'; $('eNo').focus(); }
+function resetE(){ editingE=null; $('eForm').reset(); $('eCancel').hidden=true; $('eSave').textContent='Guardar'; }
+$('eCancel').addEventListener('click',resetE);
+$('eForm').addEventListener('submit',async ev=>{ ev.preventDefault(); if(!S.db) return;
+  const body={no:$('eNo').value.trim(), ini:$('eIni').value, fin:$('eFin').value, monto:+$('eMonto').value||0, cobrado:+$('eCobrado').value||0, fcobro:$('eFCobro').value||'', nota:$('eNota').value.trim(), at:new Date().toISOString(), by:S.me||''};
+  if(body.fin<body.ini){ toast('La fecha final del periodo es anterior a la inicial.'); return; }
+  try{ if(editingE) await S.db.doc('estimaciones/'+editingE).set(body); else await S.db.collection('estimaciones').add(body); toast('Estimación '+body.no+' guardada.'); resetE(); }
+  catch(e){ toast('Solo un administrador registra estimaciones.'); } });
+
+/* ---------- 3D ---------- */
+const G={ready:false};
+(function init3D(){
+  const host=$('scene');
+  if(!window.THREE){ host.append(el('div','nogl','El modelo 3D no pudo cargarse en este navegador. El resto del tablero funciona normal.')); return; }
+  let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:false}); }catch(e){ host.append(el('div','nogl','Este dispositivo no tiene WebGL; el modelo 3D no está disponible.')); return; }
+  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1)); host.prepend(renderer.domElement);
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(30,2,1,5000);
+  const CX=1842, CY=1225;
+  const P=(x,y,z)=>new THREE.Vector3(x-CX, z||0, -(y-CY));
+  const HOME=[0,250,560]; cam.position.set(...HOME);
+  const ctl=new THREE.OrbitControls(cam,renderer.domElement); ctl.target.set(0,0,0); ctl.maxPolarAngle=Math.PI*0.48; ctl.minDistance=40; ctl.maxDistance=1200; ctl.enableDamping=false; ctl.screenSpacePanning=true;
+  scene.add(new THREE.HemisphereLight(0xffffff,0x888877,0.85)); const sun=new THREE.DirectionalLight(0xffffff,0.55); sun.position.set(-200,400,250); scene.add(sun);
+  const groundG=new THREE.Group(), dyn=new THREE.Group(); scene.add(groundG,dyn);
+  const mat=(c,o)=>new THREE.MeshLambertMaterial(Object.assign({color:new THREE.Color(c)},o||{}));
+  const shapeOf=pts=>{ const s=new THREE.Shape(); pts.forEach((p,i)=>{ const x=p[0]-CX, y=(p[1]-CY); i?s.lineTo(x,y):s.moveTo(x,y); }); return s; };
+  const flat=(pts,color,h)=>{ const g=new THREE.ShapeGeometry(shapeOf(pts)); const m=new THREE.Mesh(g,mat(color,{side:THREE.DoubleSide})); m.rotation.x=-Math.PI/2; m.position.y=h; return m; };
+  // manzanas
+  const E=DATA.site.ejes; const cols=[]; for(let i=0;i<E.length-1;i+=2) cols.push([E[i],E[i+1]]);
+  const colOf={M01:0,M02:1,M03:3,M04:4,M05:5,M06:6,M07:7,M08:8,M09:9,M10:10,M11:11,M12:12,M13:7,M14:8,M15:9,M16:10,M17:11};
+  const rowY=m=>{ const n=+m.slice(1); return n<=12 ? {pad:[1234.6,1254.6],A:[1244.6,1253.2],B:[1235.6,1243.8]} : {pad:[1196.2,1221.2],A:[1209.6,1218.4],B:[1199.4,1208.2]}; };
+  const tramoX={C1:[1503,1664.7],C2:[1664.7,1868.1],C3:[1868.1,2015.1],C4:[2015.1,2182]};
+  const labelSprite=(txt,color)=>{ const c=document.createElement('canvas'); c.width=256; c.height=96; const x=c.getContext('2d'); x.font='700 54px Archivo, Arial'; x.fillStyle=color; x.textAlign='center'; x.textBaseline='middle'; x.fillText(txt,128,48); const t=new THREE.CanvasTexture(c); const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false})); s.scale.set(16,6,1); return s; };
+  const pick=[];
+  function buildStatic(){
+    groundG.clear();
+    scene.background=new THREE.Color(cssv('--panel2'));
+    DATA.site.lindero.filter(p=>p.length>3).forEach(p=>groundG.add(flat(p,cssv('--ground'),0)));
+    DATA.site.verde.forEach(p=>{ if(p.length>=3) groundG.add(flat(p,cssv('--green3d'),0.08)); });
+    Object.keys(colOf).forEach(m=>{ const s=labelSprite(String(+m.slice(1)),cssv('--muted')); const c=cols[colOf[m]]; const ry=rowY(m).pad; const y=+m.slice(1)<=12?ry[1]+5:ry[0]-5; s.position.copy(P((c[0]+c[1])/2,y,1.5)); groundG.add(s); });
+  }
+  function boxAt(x0,x1,y0,y1,z0,z1,material){ const g=new THREE.BoxGeometry(x1-x0,z1-z0,y1-y0); const m=new THREE.Mesh(g,material); m.position.copy(P((x0+x1)/2,(y0+y1)/2,(z0+z1)/2)); return m; }
+  const COL=()=>({ok:cssv('--ok'),late:cssv('--late'),done:cssv('--done'),idle:cssv('--idle'),ghost:cssv('--ghost'),road:cssv('--road'),gold:cssv('--gold'),fg:cssv('--fg')});
+  function buildDyn(){
+    dyn.clear(); pick.length=0; const C=COL(); const d=S.t;
+    // calles por tramo
+    Object.entries(tramoX).forEach(([k,xr])=>{ const ts=FR_TASKS.get('Tramo '+k)||[]; const st=stOf(ts,d); const c= st.s==='idle'? C.road : C[st.s];
+      const yr = xr[0]<1862? [1225.4,1234.4] : [1222.2,1233.4];
+      dyn.add(boxAt(Math.max(xr[0],1506.8),Math.min(xr[1],2174),yr[0],yr[1],0.02,0.18,mat(c,{transparent:true,opacity:st.s==='idle'?0.9:0.55}))); });
+    TREN.forEach(r=>{
+      const c=cols[colOf[r.mz]]; const ry=rowY(r.mz); const ab=r.ed===TREN.find(x=>x.mz===r.mz).ed?'A':'B';
+      const y=ry[ab]; const x0=c[0]+6.4, x1=c[1]-6.4;
+      // plataforma
+      if(ab==='A'){ const pl=statusOf(FR_TASKS.get(r.mz)||[],d); const plDone = S.mode==='real'? pl.real>=0.999 : pl.prog>=0.999; const plOn = S.mode==='real'? pl.real>0 : pl.prog>0;
+        dyn.add(boxAt(c[0]+1,c[1]-1,ry.pad[0],ry.pad[1],0,0.35,mat(plDone?'#cfc8bb':(plOn?'#b59a72':cssv('--ground'))))); }
+      const ts=ED_TASKS.get(r.ed); const st=stOf(ts,d);
+      const mu=ts.find(t=>t.clave==='VIV-MU-4.2.1-1'); const fr = S.mode==='real'? realAt(mu,d) : progAt(mu,d);
+      const floors = st.s==='done'?4:Math.floor(fr*4+1e-6), partial = st.s==='done'?0:(fr*4-floors);
+      const color = S.mode==='real' ? C[st.s] : (st.s==='done'?C.done:(st.s==='ok'?C.gold:C.idle));
+      const H=2.8, base=0.35; const sel=S.selEd===r.ed;
+      for(let f=0;f<4;f++){
+        const z0=base+f*H, z1=z0+H-0.25;
+        let m;
+        if(f<floors){ m=boxAt(x0,x1,y[0],y[1],z0,z1,mat(color)); }
+        else if(f===floors && partial>0.02){ m=boxAt(x0,x1,y[0],y[1],z0,z0+(H-0.25)*partial,mat(color,{transparent:true,opacity:0.8})); dyn.add(m); m.userData.ed=r.ed; pick.push(m);
+          m=boxAt(x0,x1,y[0],y[1],z0,z1,mat(C.ghost,{transparent:true,opacity:0.22})); }
+        else { m=boxAt(x0,x1,y[0],y[1],z0,z1,mat(st.s==='idle'?C.ghost:color,{transparent:true,opacity: st.s==='idle'?0.18:0.22})); }
+        m.userData.ed=r.ed; dyn.add(m); pick.push(m);
+      }
+      // contorno y marcador
+      const eg=new THREE.EdgesGeometry(new THREE.BoxGeometry(x1-x0,4*H,y[1]-y[0])); const ln=new THREE.LineSegments(eg,new THREE.LineBasicMaterial({color:new THREE.Color(sel?C.fg:color),transparent:true,opacity:sel?1:0.55}));
+      ln.position.copy(P((x0+x1)/2,(y[0]+y[1])/2,base+2*H)); dyn.add(ln);
+      if(sel){ const s=labelSprite(r.ed,C.fg); s.position.copy(P((x0+x1)/2,(y[0]+y[1])/2,base+4*H+5)); s.scale.set(22,8,1); dyn.add(s); }
+    });
+    draw();
+  }
+  function draw(){ renderer.render(scene,cam); }
+  function resize(){ const w=host.clientWidth, h=host.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); draw(); }
+  ctl.addEventListener('change',draw);
+  new ResizeObserver(resize).observe(host);
+  // selección
+  const ray=new THREE.Raycaster(); let down=null;
+  renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
+  renderer.domElement.addEventListener('pointerup',e=>{ if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5) return;
+    const rc=renderer.domElement.getBoundingClientRect(); const v=new THREE.Vector2(((e.clientX-rc.left)/rc.width)*2-1, -((e.clientY-rc.top)/rc.height)*2+1);
+    ray.setFromCamera(v,cam); const hit=ray.intersectObjects(pick,false)[0]; if(hit){ S.selEd=hit.object.userData.ed; renderEdPanel(); buildDyn(); } });
+  $('homeBtn').addEventListener('click',()=>{cam.position.set(...HOME); ctl.target.set(0,0,0); ctl.update(); draw();});
+  G.ready=true; G.render=buildDyn; G.restyle=()=>{buildStatic();buildDyn();}; G.resize=resize;
+  buildStatic(); resize(); buildDyn();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{G.restyle(); renderCurva();});
+  new MutationObserver(()=>{G.restyle(); renderCurva();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+if(!G.ready){ G.render=()=>{}; G.resize=()=>{}; }
+
+/* ---------- render ---------- */
+function renderView(){
+  if(S.view==='resumen'){ renderKpis(); renderAttn(); renderCurva(); renderEdPanel(); G.render(); }
+  else if(S.view==='hitos') renderHitos();
+  else if(S.view==='tareas') renderTareas();
+  else if(S.view==='responsables') renderResp();
+  else if(S.view==='estimaciones') renderEstim();
+  else if(S.view==='usuarios' && window.renderUsuarios) window.renderUsuarios();
+}
+let rq=false;
+function renderAll(){ if(rq) return; rq=true; requestAnimationFrame(()=>{ rq=false; renderView(); }); }
+let cw=0; new ResizeObserver(()=>{ const w=$('curva').clientWidth; if(Math.abs(w-cw)>8){ cw=w; if(S.view==='resumen') renderCurva(); } }).observe($('curva'));
+
+fillFilterOptions();
+route();
+
+/* ---------- datos compartidos ---------- */
+(function connectFirebase(){
+  const ROLES={pendiente:'Pendiente',consulta:'Consulta',lider:'Líder',admin:'Administrador'};
+  if(!window.firebase){ $('gMsg').textContent='No se pudo cargar el servicio de acceso. Revisa tu conexión y recarga.'; return; }
+  firebase.initializeApp({"apiKey": "AIzaSyBDGTPF0zIokqDH7VKj6oYASmVRCL3Gt7M", "authDomain": "grupo-alaris-obra.firebaseapp.com", "projectId": "grupo-alaris-obra", "storageBucket": "grupo-alaris-obra.firebasestorage.app", "messagingSenderId": "439876810110", "appId": "1:439876810110:web:481b62561a4ef861fdef2f"});
+  const auth=firebase.auth(), db=firebase.firestore();
+  let unsubs=[]; let registrando=false;
+  const gate=$('gate'), gLogin=$('gLogin'), gPend=$('gPend');
+  function showGate(mode,msg){ gate.hidden=false; gLogin.hidden=mode!=='login'; gPend.hidden=mode!=='pend'; gPend.style.display=mode==='pend'?'flex':'none'; gLogin.style.display=mode==='login'?'flex':'none'; if(msg) $('gMsg').textContent=msg; }
+  const errTxt=e=>({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'No existe una cuenta con ese correo. Usa "Crear cuenta".','auth/email-already-in-use':'Ese correo ya tiene cuenta: usa "Entrar".','auth/weak-password':'La contraseña debe tener al menos 6 caracteres.','auth/invalid-email':'El correo no es válido.','auth/popup-closed-by-user':'Se cerró la ventana de Google antes de terminar.','auth/unauthorized-domain':'Este dominio no está autorizado en Firebase (Authentication › Settings › Authorized domains).'}[e&&e.code]||('No se pudo completar: '+((e&&e.message)||'error')));
+  $('gGoogle').addEventListener('click',()=>auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>$('gMsg').textContent=errTxt(e)));
+  $('gToggle').addEventListener('click',()=>{ registrando=!registrando; $('gNombre').hidden=!registrando; $('gNombre').required=registrando; $('gSubmit').textContent=registrando?'Crear cuenta':'Entrar'; $('gToggle').textContent=registrando?'Ya tengo cuenta':'Crear cuenta'; $('gPass').autocomplete=registrando?'new-password':'current-password'; });
+  $('gForm').addEventListener('submit',async ev=>{ ev.preventDefault(); const em=$('gEmail').value.trim(), pw=$('gPass').value;
+    try{ if(registrando){ const c=await auth.createUserWithEmailAndPassword(em,pw); await c.user.updateProfile({displayName:$('gNombre').value.trim()}); await ensureUser(c.user); } else await auth.signInWithEmailAndPassword(em,pw); }
+    catch(e){ $('gMsg').textContent=errTxt(e); } });
+  $('gReset').addEventListener('click',async()=>{ const em=$('gEmail').value.trim(); if(!em){ $('gMsg').textContent='Escribe tu correo arriba y vuelve a dar clic en "Olvidé mi contraseña".'; return; } try{ await auth.sendPasswordResetEmail(em); $('gMsg').textContent='Te enviamos un correo para cambiar tu contraseña a '+em+'.'; }catch(e){ $('gMsg').textContent=errTxt(e); } });
+  $('gOut').addEventListener('click',()=>auth.signOut());
+  async function ensureUser(u){
+    const ref=db.doc('usuarios/'+u.uid); const snap=await ref.get();
+    if(snap.exists) return snap.data();
+    const base={nombre:u.displayName||$('gNombre').value.trim()||'', email:u.email||'', creado:new Date().toISOString()};
+    try{ await ref.set(Object.assign({rol:'admin'},base)); return Object.assign({rol:'admin'},base); }
+    catch(e){ await ref.set(Object.assign({rol:'pendiente'},base)); return Object.assign({rol:'pendiente'},base); }
+  }
+  async function seed(){
+    try{ const t=await db.doc('config/tareas').get(); if(!t.exists){ const k={}; TASKS.forEach(x=>k[x.id]=x.key); await db.doc('config/tareas').set({k}); }
+      const r=await db.doc('config/resp').get(); if(!r.exists) await db.doc('config/resp').set({m:{}}); }catch(e){}
+  }
+  function stop(){ unsubs.forEach(f=>f()); unsubs=[]; S.db=null; S.me=null; S.canEdit=false; S.canWrite=false; }
+  auth.onAuthStateChanged(async u=>{
+    stop();
+    if(!u){ $('userBox').replaceChildren(); showGate('login','Inicia sesión para ver el tablero y capturar avance.'); return; }
+    let perfil; try{ perfil=await ensureUser(u); }catch(e){ showGate('pend','No se pudo leer tu cuenta. Recarga la página.'); return; }
+    const box=$('userBox'); const out=el('button','linkbtn','Salir'); out.type='button'; out.addEventListener('click',()=>auth.signOut());
+    box.replaceChildren(el('span',null,(perfil.nombre||u.email)+' · '+ROLES[perfil.rol]),out);
+    if(perfil.rol==='pendiente'){ showGate('pend'); return; }
+    gate.hidden=true;
+    S.db=db; S.me=u.uid; S.canEdit=perfil.rol==='admin'; S.canWrite=perfil.rol==='lider'||perfil.rol==='admin';
+    $('navUsuarios').hidden=!S.canEdit;
+    if(S.canEdit) await seed();
+    unsubs.push(db.collection('avance').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>m.set(d.id,d.data())); S.avance=m; renderAll(); }, ()=>{}));
+    unsubs.push(db.collection('historial').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>{ const b=d.data(); const w=b.w!=null?+b.w:+d.id.slice(1); m.set(w,b.q||{}); }); S.hist=m; renderAll(); }, ()=>{}));
+    unsubs.push(db.doc('config/resp').onSnapshot(snap=>{ S.resp=(snap.exists && snap.data().m)||{}; Object.entries(S.resp).forEach(([k,r])=>{ if(r.l) S.profiles[r.l]={id:r.l,name:r.n||'Líder',avatarUrl:''}; }); fillRespOptions(); renderAll(); }, ()=>{}));
+    unsubs.push(db.collection('estimaciones').onSnapshot(snap=>{ S.estim=snap.docs.map(d=>Object.assign({_id:d.id},d.data())); renderAll(); }, ()=>{}));
+    if(S.canEdit) unsubs.push(db.collection('usuarios').onSnapshot(snap=>{ S.usuarios=snap.docs.map(d=>Object.assign({id:d.id},d.data())); S.usuarios.forEach(x=>{ S.profiles[x.id]={id:x.id,name:x.nombre||x.email,avatarUrl:''}; }); renderAll(); }, ()=>{}));
+    route();
+  });
+  window.renderUsuarios=function(){
+    const tb=$('uBody'); tb.replaceChildren();
+    const order={pendiente:0,admin:1,lider:2,consulta:3};
+    [...S.usuarios].sort((a,b)=>(order[a.rol]-order[b.rol])||(a.nombre||'').localeCompare(b.nombre||'')).forEach(u=>{
+      const tr=el('tr'); const sel=el('select'); sel.className='tin'; sel.style.width='auto'; sel.setAttribute('aria-label','Rol de '+(u.nombre||u.email));
+      Object.entries(ROLES).forEach(([k,v])=>{ const o=el('option',null,v); o.value=k; sel.append(o); }); sel.value=u.rol;
+      sel.disabled = u.id===S.me;
+      sel.addEventListener('change',()=>db.doc('usuarios/'+u.id).update({rol:sel.value}).then(()=>toast((u.nombre||u.email)+': '+ROLES[sel.value])).catch(()=>toast('No se pudo cambiar el rol.')));
+      const del=el('button','linkbtn','Quitar acceso'); del.type='button'; del.hidden=u.id===S.me;
+      del.addEventListener('click',()=>{ if(del.dataset.c){ db.doc('usuarios/'+u.id).delete().then(()=>toast('Acceso quitado a '+(u.nombre||u.email)+'.')); } else { del.dataset.c='1'; del.textContent='Confirmar'; setTimeout(()=>{del.dataset.c='';del.textContent='Quitar acceso';},4000);} });
+      const c0=el('td'); c0.append(el('b',null,u.nombre||'—')); if(u.rol==='pendiente') c0.append(' ',chip('late')), c0.lastChild.textContent='Por aprobar';
+      tr.append(c0,el('td','mono',u.email||''),(()=>{const td=el('td'); td.append(sel); return td;})(),el('td','mono',u.creado?u.creado.slice(0,10):''),(()=>{const td=el('td'); td.append(del); return td;})());
+      tb.append(tr); });
+    if(!S.usuarios.length){ const tr=el('tr'); const td=el('td','muted','Aún no hay usuarios registrados.'); td.colSpan=5; tr.append(td); tb.append(tr); }
+  };
+})();
+})();
+</script>
+
+</body>
+</html>
