@@ -178,7 +178,7 @@ tr.sel td{background:var(--gold-soft)}
       </div>
     </div>
     <nav class="tabs" aria-label="Secciones">
-      <a href="#resumen">Resumen</a><a href="#hitos">Hitos</a><a href="#tareas">Tareas</a><a href="#responsables">Responsables</a><a href="#estimaciones">Estimaciones</a><a href="#usuarios" id="navUsuarios" hidden>Usuarios</a><span style="flex:1"></span><span id="userBox" class="person" style="font-size:12px;padding:0 4px;white-space:nowrap"></span>
+      <a href="#resumen">Resumen</a><a href="#hitos">Hitos</a><a href="#tareas">Tareas</a><a href="#responsables">Responsables</a><a href="#estimaciones">Estimaciones</a><a href="#infonavit">Reporte INFONAVIT</a><a href="#usuarios" id="navUsuarios" hidden>Usuarios</a><span style="flex:1"></span><span id="userBox" class="person" style="font-size:12px;padding:0 4px;white-space:nowrap"></span>
     </nav>
   </div>
 </header>
@@ -306,6 +306,46 @@ tr.sel td{background:var(--gold-soft)}
       </form>
     </div>
     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Estimado</th><th style="text-align:right">Cobrado</th><th>Fecha de cobro</th><th style="text-align:right">Por cobrar</th><th>Nota</th><th></th></tr></thead><tbody id="eBody"></tbody></table></div>
+  </section>
+  <!-- REPORTE INFONAVIT -->
+  <section class="view" id="v-infonavit" hidden>
+    <div class="notice" style="margin-bottom:10px">Mismos datos que el formato de servicios y la amortización de anticipo de INFONAVIT. El programado es el <b>programa base del contrato</b> (v3); la desviación incluye el atraso por anticipo, que se separa abajo.</div>
+    <div class="panel">
+      <h2>Avance físico-financiero <small id="iCorte"></small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Programado %</th><th>Real %</th><th>Desviación %</th><th style="text-align:right">Programado $</th><th style="text-align:right">Real $</th><th style="text-align:right">Desviación $</th></tr></thead><tbody id="iAff"></tbody></table></div>
+      <div class="muted" id="iAffNote" style="margin-top:6px;font-size:12px"></div>
+    </div>
+    <div class="panel">
+      <h2>Avance global de servicios <small>Ponderación INFONAVIT: ventanilla 10 · autorización 25 · inicio 15 · fin 20 · autorización final 30</small></h2>
+      <div class="kpis" id="iSrvK" style="margin-top:10px"></div>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Dependencia</th><th>Hito</th><th style="text-align:right">Peso</th><th style="text-align:right">Acumulado</th><th>Fecha programada</th><th>Fecha real</th><th>Estatus</th></tr></thead><tbody id="iSrv"></tbody></table></div>
+      <div class="muted" style="margin-top:6px;font-size:12px">Fechas programadas: propuesta amarrada al programa v3 (inicio y fin de obra = tareas de redes del programa). Un administrador captura la fecha real de cada hito; el % de la dependencia suma el peso de los hitos cumplidos al corte.</div>
+      <div class="legend" id="iSrvLeg" style="margin-top:10px"></div>
+      <div class="chart" id="iSrvCurva"></div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Programación de terminación de viviendas <small>Verde = entregada</small></h2>
+        <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th style="text-align:right">N° viviendas</th><th>Fecha de construcción</th><th>Fecha de habitabilidad</th><th>Edificios</th></tr></thead><tbody id="iHab"></tbody></table></div>
+        <div class="muted" style="margin-top:6px;font-size:12px">Habitabilidad = el mayor entre edificio terminado y terminación de redes de su tramo de calle + 30 días (recepción y conexión de servicios por etapa).</div>
+      </div>
+      <div class="panel">
+        <h2>Fuerza laboral del proyecto <small>Debe coincidir con SUA-IMSS / SIROC</small></h2>
+        <div class="kpis" id="iFzaK" style="margin-top:10px"></div>
+        <form id="iFza" class="formgrid" style="margin-top:12px" hidden>
+          <label>Personal propio<input id="fzP" type="number" min="0" step="1"></label>
+          <label>Subcontratado<input id="fzS" type="number" min="0" step="1"></label>
+          <label>Vinculados en SIROC<input id="fzR" type="number" min="0" step="1"></label>
+          <label>En proceso de afiliación<input id="fzA" type="number" min="0" step="1"></label>
+          <label>Fecha del dato<input id="fzF" type="date"></label>
+          <div><button class="btn" type="submit">Guardar</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Amortización de anticipo <small id="iAmHint"></small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Monto de la estimación</th><th style="text-align:right">Amortización del periodo</th><th style="text-align:right">Amortización acumulada</th><th style="text-align:right">Saldo del anticipo</th><th>Origen</th></tr></thead><tbody id="iAm"></tbody></table></div>
+    </div>
   </section>
   <section class="view" id="v-usuarios" hidden>
     <div class="panel">
@@ -461,7 +501,7 @@ $('mReal').addEventListener('click',()=>setMode('real')); $('mProg').addEventLis
 $('fechaTxt').textContent=fmtD(S.t);
 
 /* ---------- pestañas ---------- */
-const VIEWS=['resumen','hitos','tareas','responsables','estimaciones','usuarios'];
+const VIEWS=['resumen','hitos','tareas','responsables','estimaciones','infonavit','usuarios'];
 function route(){ const h=(location.hash||'#resumen').slice(1); const v=VIEWS.includes(h)?h:'resumen';
   VIEWS.forEach(n=>{ $('v-'+n).hidden = n!==v; });
   document.querySelectorAll('nav.tabs a').forEach(a=>a.setAttribute('aria-current', a.getAttribute('href')==='#'+v?'page':'false'));
@@ -764,7 +804,9 @@ makePicker($('bulkPicker'),id=>{bulkLeader=id;});
 $('bulkApply').addEventListener('click',()=>{ const patch={}; const eq=$('bulkEquipo').value.trim(); if(eq) patch.e=eq; if(bulkLeader!==null) patch.l=bulkLeader||''; if(!Object.keys(patch).length){ toast('Escribe un equipo o elige un líder.'); return; } writeResp([...SEL],patch).then(()=>{SEL.clear(); $('aAll').checked=false; renderResp();}); });
 
 /* ---------- estimaciones ---------- */
-function antMonto(){ const a=S.contrato.anticipo||{}; if(+a.monto>0) return +a.monto; if(+a.pct>0) return Math.round(TOTAL*a.pct)/100; return 0; }
+const ANT_PCT_DEF=30;
+function antPct(){ const a=S.contrato.anticipo||{}; return +a.pct>0 ? +a.pct : ANT_PCT_DEF; }
+function antMonto(){ const a=S.contrato.anticipo||{}; if(+a.monto>0) return +a.monto; return Math.round(TOTAL*antPct())/100; }
 function renderAnt(){
   const a=S.contrato.anticipo||{}; const dI=antDias(); const mA=antMonto(); const rec=+a.recibido||0;
   $('aKpis').replaceChildren(
@@ -937,7 +979,94 @@ function renderView(){
   else if(S.view==='tareas') renderTareas();
   else if(S.view==='responsables'){ renderContrato(); renderPlantilla(); renderResp(); }
   else if(S.view==='estimaciones'){ renderEstim(); renderAnt(); }
+  else if(S.view==='infonavit') renderInfonavit();
   else if(S.view==='usuarios' && window.renderUsuarios) window.renderUsuarios();
+}
+
+/* ---------- reporte INFONAVIT ---------- */
+const SRV_HITOS=[['Entrega en ventanilla',10],['Autorización de proyecto',25],['Inicio de obras',15],['Finalización de obras',20],['Autorización final / liberación',30]];
+const SRV_DEPS=[['CFE','CFE'],['AGUA','Agua potable'],['DREN','Drenaje']];
+const SRV_PROG0={CFE:['2026-12-15','2027-02-26','2026-11-01','2027-08-16','2027-09-10'],AGUA:['2026-11-30','2027-01-29','2026-10-25','2027-07-08','2027-08-06'],DREN:['2026-11-30','2027-01-29','2026-10-13','2027-07-04','2027-08-06']};
+function srvOf(dep){ const v=(S.contrato.servicios||{})[dep]||{}; const p=SRV_PROG0[dep].map((x,i)=>(v.prog&&v.prog[i])||x); const r=SRV_HITOS.map((x,i)=>(v.real&&v.real[i])||''); return {p,r}; }
+function srvPct(dep,d,which){ const o=srvOf(dep); return SRV_HITOS.reduce((s,h,i)=>{ const f=fromIso(which==='p'?o.p[i]:o.r[i]); return s+((f!=null&&f<=d)?h[1]:0); },0)/100; }
+const TRAMO_MZ={'Tramo C1':['M01','M02','M03'],'Tramo C2':['M04','M05','M06'],'Tramo C3':['M07','M08','M09','M13','M14','M15'],'Tramo C4':['M10','M11','M12','M16','M17']};
+function tramoFin(mz){ for(const [t,ms] of Object.entries(TRAMO_MZ)) if(ms.includes(mz)){ const ts=FR_TASKS.get(t)||[]; return Math.max(...ts.map(x=>x.fin)); } return MAX_DAY; }
+const mesTxt=i=>{ const d=dateOf(i); return MESES[d.getMonth()].replace(/^./,c=>c.toUpperCase())+'-'+String(d.getFullYear()).slice(2); };
+function renderInfonavit(){
+  const d=S.t; $('iCorte').textContent='Corte '+fmtD(d);
+  // avance físico-financiero (programa base)
+  const pB=TASKS.reduce((s,t)=>s+progAt(t,d,0)*t.imp,0), rE=TASKS.reduce((s,t)=>s+realAt(t,Math.min(d,S.today))*t.imp,0);
+  const pD=TASKS.reduce((s,t)=>s+progAt(t,d,antDias())*t.imp,0);
+  const tr=el('tr'); const dv=(rE-pB);
+  [pct(pB/TOTAL),pct(rE/TOTAL),pct(dv/TOTAL)].forEach((v,i)=>{ const td=el('td','mono',v); if(i===2){ td.style.fontWeight='700'; if(dv<0) td.style.color='var(--late)'; } tr.append(td); });
+  [moneyFull(pB),moneyFull(rE),moneyFull(dv)].forEach((v,i)=>{ const td=el('td','num',v); if(i===2){ td.style.fontWeight='700'; if(dv<0) td.style.color='var(--late)'; } tr.append(td); });
+  $('iAff').replaceChildren(tr);
+  const dI=antDias(); const infP=Math.max(0,pB-pD);
+  $('iAffNote').textContent = dI>0 ? ('De la desviación, '+moneyFull(infP)+' ('+pct(infP/TOTAL)+') corresponde a '+dI+' días de atraso del anticipo (imputable a INFONAVIT); el resto, '+moneyFull(Math.max(0,pD-rE))+', es atraso de obra.') : 'Sin atraso por anticipo.';
+  // servicios
+  const tb=$('iSrv'); tb.replaceChildren(); const kp=[];
+  SRV_DEPS.forEach(([dep,lab])=>{ const o=srvOf(dep); let acc=0;
+    SRV_HITOS.forEach((h,i)=>{ acc+=h[1]; const row=el('tr');
+      const fp=fromIso(o.p[i]), fr=fromIso(o.r[i]);
+      const st = fr!=null&&fr<=d ? 'done' : (fp!=null&&fp<d ? 'late' : (fp!=null&&fp-d<=30?'ok':'idle'));
+      const c1=el('td'); if(i===0) c1.append(el('b',null,lab));
+      const cP=el('td','mono'), cR=el('td','mono');
+      if(S.canEdit){ const ip=el('input'); ip.type='date'; ip.className='tin'; ip.value=o.p[i]; ip.style.width='auto'; ip.addEventListener('change',()=>saveSrv(dep,'prog',i,ip.value)); cP.append(ip);
+        const ir=el('input'); ir.type='date'; ir.className='tin'; ir.value=o.r[i]; ir.style.width='auto'; ir.addEventListener('change',()=>saveSrv(dep,'real',i,ir.value)); cR.append(ir); }
+      else { cP.textContent=fp!=null?fmtD(fp):'—'; cR.textContent=fr!=null?fmtD(fr):'Pendiente'; }
+      const cS=el('td'); cS.append(chip(st));
+      row.append(c1,el('td',null,h[0]),el('td','num',h[1]+'%'),el('td','num',acc+'%'),cP,cR,cS); tb.append(row); });
+    const pr=srvPct(dep,d,'p'), re=srvPct(dep,d,'r');
+    kp.push(kpi(lab, pct(re), 'Programado '+pct(pr), re+1e-9<pr?'late':(re>0?'done':''))); });
+  $('iSrvK').replaceChildren(...kp);
+  renderSrvCurva();
+  // habitabilidad
+  const hb=$('iHab'); hb.replaceChildren(); const k=SH(); const g=new Map();
+  TREN.forEach(r=>{ const fin=r.fin+k, hab=Math.max(fin, tramoFin(r.mz)+k+30); const key=mesTxt(fin)+'|'+mesTxt(hab);
+    if(!g.has(key)) g.set(key,{n:0,fin,hab,eds:[],done:0}); const x=g.get(key); x.n+=16; x.eds.push(r.ed); if(statusOf(ED_TASKS.get(r.ed),S.today).s==='done') x.done+=16; });
+  [...g.values()].sort((a,b)=>a.fin-b.fin||a.hab-b.hab).forEach(x=>{ const row=el('tr'); if(x.done>=x.n) row.style.background='var(--ok-bg)';
+    row.append(el('td','num',String(x.n)+(x.done&&x.done<x.n?' ('+x.done+' entregadas)':'')),el('td','mono',mesTxt(x.fin)),el('td','mono',mesTxt(x.hab)),el('td','muted',x.eds.join(', '))); hb.append(row); });
+  // fuerza laboral
+  const f=Object.assign({propio:9,sub:0,siroc:9,afil:0,fecha:'2026-11-06'},S.contrato.fuerza||{});
+  $('iFzaK').replaceChildren(kpi('Empleos directos',String((+f.propio||0)+(+f.sub||0)),'Al '+(f.fecha?fmtD(fromIso(f.fecha)):'—')),kpi('Personal propio',String(f.propio)),kpi('Subcontratado',String(f.sub)),kpi('Vinculados en SIROC',String(f.siroc)),kpi('En proceso de afiliación',String(f.afil)));
+  $('iFza').hidden=!S.canEdit;
+  if(S.canEdit && !$('iFza').contains(document.activeElement)){ $('fzP').value=f.propio; $('fzS').value=f.sub; $('fzR').value=f.siroc; $('fzA').value=f.afil; $('fzF').value=f.fecha||''; }
+  // amortización
+  const mA=antMonto(), rate=mA/TOTAL; $('iAmHint').textContent='Anticipo '+moneyFull(mA)+' ('+num(antPct())+'%) · se amortiza el '+num(rate*100)+'% de cada estimación';
+  const ab=$('iAm'); ab.replaceChildren(); let acc=0; let n=0;
+  const reales=[...S.estim].sort((a,b)=>(a.ini||'').localeCompare(b.ini||''));
+  const add=(no,per,monto,orig)=>{ let am=Math.min(mA-acc,Math.round(monto*rate*100)/100); if(mA-acc-am<1) am=mA-acc; acc+=am; const row=el('tr'); row.append(el('td',null,no),el('td','mono',per),el('td','num',moneyFull(monto)),el('td','num',moneyFull(am)),el('td','num',moneyFull(acc)),el('td','num',moneyFull(mA-acc)),el('td','muted',orig)); ab.append(row); };
+  reales.forEach(e=>{ n++; add(e.no||('Est. '+n),(e.ini?fmtD(fromIso(e.ini)):'')+' → '+(e.fin?fmtD(fromIso(e.fin)):''),+e.monto||0,'Registrada'); });
+  // proyección mensual del programa (diferido por anticipo) desde el mes siguiente a la última registrada
+  const lastFin = reales.length ? Math.max(...reales.map(e=>fromIso(e.fin)||0)) : -1e9;
+  const shf=antDias(); const P=x=>TASKS.reduce((s,t)=>s+progAt(t,x,shf)*t.imp,0);
+  let y=dateOf(W0+shf).getFullYear(), m=dateOf(W0+shf).getMonth();
+  for(let it=0; it<30 && acc<mA-0.5; it++){ const a=dayIdx(new Date(y,m,1)), b=dayIdx(new Date(y,m+1,0));
+    if(b>lastFin){ const ini=Math.max(a,lastFin+1); const monto=P(b)-P(ini-1); if(monto>0.5){ n++; add('Est. '+n+' (prog.)',mesTxt(a),monto,'Programada'+(shf?' (diferida +'+shf+' d)':'')); } }
+    m++; if(m>11){m=0;y++;} }
+}
+async function saveSrv(dep,kind,i,val){ if(!S.db) return; const o=srvOf(dep); const arr=(kind==='prog'?o.p:o.r).slice(); arr[i]=val||'';
+  const body={servicios:{}}; body.servicios[dep]={}; body.servicios[dep][kind]=arr;
+  try{ await S.db.doc('config/contrato').set(body,{merge:true}); toast('Servicio '+dep+' actualizado.'); }catch(e){ toast('Solo un administrador captura servicios.'); } }
+$('iFza').addEventListener('submit',async ev=>{ ev.preventDefault(); if(!S.db) return;
+  const fz={propio:+$('fzP').value||0, sub:+$('fzS').value||0, siroc:+$('fzR').value||0, afil:+$('fzA').value||0, fecha:$('fzF').value};
+  try{ await S.db.doc('config/contrato').set({fuerza:fz},{merge:true}); toast('Fuerza laboral guardada.'); }catch(e){ toast('Solo un administrador captura la fuerza laboral.'); } });
+function renderSrvCurva(){
+  const box=$('iSrvCurva'); box.replaceChildren();
+  const W=Math.max(320,box.clientWidth||800), H=220, m={l:46,r:14,t:12,b:28};
+  const a0=fromIso('2026-10-01'), a1=fromIso('2027-10-01'); const xs=[]; for(let x=a0;x<=a1;x+=3) xs.push(x);
+  const X=d=>m.l+(d-a0)/(a1-a0)*(W-m.l-m.r), Y=v=>m.t+(1-v)*(H-m.t-m.b);
+  const NS='http://www.w3.org/2000/svg'; const mk=(n,a)=>{const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); return e;};
+  const svg=mk('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',role:'img','aria-label':'Curva S de servicios'});
+  [0,.25,.5,.75,1].forEach(v=>{ svg.append(mk('line',{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:cssv('--line')})); const t=mk('text',{x:m.l-6,y:Y(v)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted')}); t.textContent=(v*100)+'%'; svg.append(t); });
+  for(let k=0;k<=12;k++){ const d=new Date(2026,9+k,1), i=dayIdx(d); const t=mk('text',{x:X(i)+2,y:H-m.b+16,'font-size':11,fill:cssv('--muted')}); t.textContent=MESES[d.getMonth()]; svg.append(t); }
+  const cols={CFE:cssv('--gold'),AGUA:cssv('--done'),DREN:cssv('--ok')};
+  const line=(arr,c,w,dash)=>{ let ds=''; arr.forEach((v,i)=>{ if(v==null) return; ds+=(ds?'L':'M')+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1); }); if(ds) svg.append(mk('path',{d:ds,fill:'none',stroke:c,'stroke-width':w,'stroke-dasharray':dash||''})); };
+  SRV_DEPS.forEach(([dep])=>{ line(xs.map(d=>srvPct(dep,d,'p')),cols[dep],1.5,'5 4'); line(xs.map(d=>d<=S.today?srvPct(dep,d,'r'):null),cols[dep],2.5); });
+  svg.append(mk('line',{x1:X(S.t),x2:X(S.t),y1:m.t,y2:H-m.b,stroke:cssv('--fg'),'stroke-dasharray':'3 3'}));
+  box.append(svg);
+  const lg=$('iSrvLeg'); lg.replaceChildren(); SRV_DEPS.forEach(([dep,lab])=>{ const s=el('span','person'); const i=el('span'); i.style.cssText=`display:inline-block;width:18px;border-top:3px solid ${cols[dep]}`; s.append(i,el('span',null,lab)); lg.append(s); });
+  lg.append(el('span','muted','Punteado = programado · sólido = real'));
 }
 let rq=false;
 function renderAll(){ if(rq) return; rq=true; requestAnimationFrame(()=>{ rq=false; renderView(); }); }
