@@ -134,6 +134,10 @@ tr.sel td{background:var(--gold-soft)}
 .btn{border:1px solid var(--fg);background:var(--fg);color:var(--bg);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:600}
 .btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.cgrid .cbox{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:3px}
+.cgrid .cbox b{font-size:14px}
+.notice.warn{border-color:var(--late);color:var(--fg)}
 .notice{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:13px}
 .formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
 .formgrid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
@@ -156,6 +160,7 @@ tr.sel td{background:var(--gold-soft)}
         <div class="eyebrow">Grupo Alaris · Construcción virtual</div>
         <h1>Primera Línea · Control de obra</h1>
         <div class="sub">INFONAVIT Nopalucan de la Granja · 17 manzanas · 34 edificios · 544 viviendas · Contrato CO-PVB-244-2026</div>
+        <div class="sub" id="empresaTxt">Contratista: Corporación Nacional de Construcciones, S.A. de C.V. · Representante legal: C. Yamel Verónica Nava García</div>
       </div>
       <div class="corte" role="group" aria-label="Fecha de corte">
         <label for="slider">Corte</label>
@@ -165,6 +170,10 @@ tr.sel td{background:var(--gold-soft)}
         <div class="seg" role="group" aria-label="Qué mostrar">
           <button type="button" id="mReal" aria-pressed="true">Real</button>
           <button type="button" id="mProg" aria-pressed="false">Programado</button>
+        </div>
+        <div class="seg" role="group" aria-label="Programa de referencia" title="Base: programa v3 tal cual. Diferido: el programa se recorre los días que INFONAVIT lleva sin pagar el anticipo.">
+          <button type="button" id="pBase" aria-pressed="false">Prog. base</button>
+          <button type="button" id="pDif" aria-pressed="true">Prog. diferido</button>
         </div>
       </div>
     </div>
@@ -178,6 +187,7 @@ tr.sel td{background:var(--gold-soft)}
   <!-- RESUMEN -->
   <section class="view" id="v-resumen">
     <div class="kpis" id="kpis"></div>
+    <div class="notice" id="antNotice" style="margin-top:10px" hidden></div>
     <div class="grid2">
       <div class="panel">
         <h2>Conjunto en 3D <small>Clic en un edificio para ver su detalle</small></h2>
@@ -239,6 +249,15 @@ tr.sel td{background:var(--gold-soft)}
   <!-- RESPONSABLES -->
   <section class="view" id="v-responsables" hidden>
     <div class="panel">
+      <h2>Datos del contrato <small>Partes y representante legal</small></h2>
+      <div class="cgrid" id="cDatos" style="margin-top:10px"></div>
+    </div>
+    <div class="panel">
+      <h2>Plantilla de obra <small id="plHint">Personal designado y empleados del proyecto</small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Puesto / rol</th><th>Nombre</th><th>Empresa</th><th>Teléfono</th><th>Correo</th><th>Cuenta en tablero</th><th>Designación</th><th></th></tr></thead><tbody id="plBody"></tbody></table></div>
+      <div style="margin-top:8px"><button class="btn ghost" id="plAdd" type="button" hidden>Agregar persona</button></div>
+    </div>
+    <div class="panel">
       <h2>Equipos y líderes <small>Avance de lo que tiene asignado cada líder al corte</small></h2>
       <div class="rgrid" id="rCards" style="margin-top:10px"></div>
     </div>
@@ -260,6 +279,19 @@ tr.sel td{background:var(--gold-soft)}
   <!-- ESTIMACIONES -->
   <section class="view" id="v-estimaciones" hidden>
     <div class="kpis" id="eKpis"></div>
+    <div class="panel">
+      <h2>Anticipo INFONAVIT <small>Sin anticipo pagado, el programa se recorre: ese atraso es de INFONAVIT, no de la obra</small></h2>
+      <div class="kpis" id="aKpis" style="margin-top:10px"></div>
+      <form id="aForm" class="formgrid" style="margin-top:12px" hidden>
+        <label>% de anticipo<input id="aPct" type="number" min="0" max="100" step="0.01" placeholder="p. ej. 30"></label>
+        <label>Monto del anticipo ($)<input id="aMonto" type="number" min="0" step="0.01" placeholder="Se calcula con el %"></label>
+        <label>Fecha compromiso de pago<input id="aFComp" type="date" required></label>
+        <label>Fecha real de pago<input id="aFPago" type="date"></label>
+        <label>Monto recibido ($)<input id="aRecibido" type="number" min="0" step="0.01"></label>
+        <label style="grid-column:1/-1">Nota / referencia<input id="aNota" type="text" placeholder="Cláusula del contrato, oficio, factura del anticipo…"></label>
+        <div style="display:flex;gap:8px"><button class="btn" type="submit">Guardar anticipo</button></div>
+      </form>
+    </div>
     <div class="panel" id="eFormPanel">
       <h2>Registrar estimación</h2>
       <form id="eForm" class="formgrid" style="margin-top:10px">
@@ -365,10 +397,15 @@ const W0 = MIN_DAY - ((dateOf(MIN_DAY).getDay()+6)%7);   // lunes de la primera 
 const NW = Math.ceil((MAX_DAY - W0 + 1)/7) + 1;
 
 /* ---------- estado ---------- */
-const S = { today: dayIdx(new Date()), t: dayIdx(new Date()), mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], me:null, canEdit:false, canWrite:null, db:null, user:null, selEd:null, page:0, profiles:{}, usuarios:[] };
+const CONTRATO_DEF0 = {anticipo:{pct:null, monto:null, fComp:'2026-10-07', fPago:'', recibido:null, nota:''}};
+const S = { today: dayIdx(new Date()), t: dayIdx(new Date()), mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], me:null, canEdit:false, canWrite:null, db:null, user:null, selEd:null, page:0, profiles:{}, usuarios:[], pRef:'dif', contrato:JSON.parse(JSON.stringify(CONTRATO_DEF0)), plantilla:null };
 S.t = Math.min(Math.max(S.t, W0), MAX_DAY+14);
 
-function progAt(t, d){ if(d < t.ini) return 0; if(d >= t.fin) return 1; return (d - t.ini + 1)/(t.fin - t.ini + 1); }
+/* ---------- anticipo / programa diferido ---------- */
+function antDias(){ const a=(S.contrato&&S.contrato.anticipo)||{}; const c=fromIso(a.fComp); if(c==null) return 0; const fin=a.fPago?fromIso(a.fPago):S.today; return Math.max(0,fin-c); }
+function SH(){ return S.pRef==='dif' ? antDias() : 0; }
+function progBase(t, d){ if(d < t.ini) return 0; if(d >= t.fin) return 1; return (d - t.ini + 1)/(t.fin - t.ini + 1); }
+function progAt(t, d, sh){ return progBase(t, d - (sh==null?SH():sh)); }
 function qtyAt(t, d){
   if (d >= S.today) { const a=S.avance.get(t.id); return a ? +a.q||0 : 0; }
   let best=null, bw=-1;
@@ -378,7 +415,7 @@ function qtyAt(t, d){
 function realAt(t,d){ return t.cant>0 ? Math.min(1, qtyAt(t,d)/t.cant) : 0; }
 function statusOf(list, d){
   let imp=0, p=0, r=0, overdue=false;
-  for (const t of list){ const pr=progAt(t,d), re=realAt(t,d); imp+=t.imp; p+=pr*t.imp; r+=re*t.imp; if (d>t.fin && re<0.999) overdue=true; }
+  for (const t of list){ const pr=progAt(t,d), re=realAt(t,d); imp+=t.imp; p+=pr*t.imp; r+=re*t.imp; if (d-SH()>t.fin && re<0.999) overdue=true; }
   const pp = imp? p/imp:0, rr = imp? r/imp:0;
   let s;
   if (rr>=0.999) s='done'; else if (pp===0 && rr===0) s='idle'; else if (overdue || pp-rr>TOL) s='late'; else s='ok';
@@ -417,6 +454,8 @@ const slider=$('slider'); slider.min=W0; slider.max=MAX_DAY+14; slider.value=S.t
 function setT(v){ S.t=+v; slider.value=S.t; $('fechaTxt').textContent=fmtD(S.t); renderAll(); }
 slider.addEventListener('input',e=>setT(e.target.value));
 $('hoyBtn').addEventListener('click',()=>setT(Math.min(Math.max(S.today,W0),MAX_DAY+14)));
+function setRef(m){ S.pRef=m; $('pBase').setAttribute('aria-pressed',m==='base'); $('pDif').setAttribute('aria-pressed',m==='dif'); renderAll(); }
+$('pBase').addEventListener('click',()=>setRef('base')); $('pDif').addEventListener('click',()=>setRef('dif'));
 function setMode(m){ S.mode=m; $('mReal').setAttribute('aria-pressed',m==='real'); $('mProg').setAttribute('aria-pressed',m==='prog'); renderAll(); }
 $('mReal').addEventListener('click',()=>setMode('real')); $('mProg').addEventListener('click',()=>setMode('prog'));
 $('fechaTxt').textContent=fmtD(S.t);
@@ -447,14 +486,24 @@ function renderKpis(){
     kpi('Estimado acumulado',money(est),pct(est/TOTAL)+' del contrato'),
     kpi('Cobrado acumulado',money(cob),'Por cobrar: '+money(Math.max(0,est-cob)),cob>0?'done':'')
   );
+  const a=S.contrato.anticipo||{}; const dI=antDias(); const mA=antMonto();
+  const base=TASKS.reduce((s,t)=>s+progAt(t,S.t,0)*t.imp,0)/TOTAL, dif=TASKS.reduce((s,t)=>s+progAt(t,S.t,dI)*t.imp,0)/TOTAL;
+  const atrINF=Math.max(0,base-dif), atrObra=Math.max(0,dif-st.real);
+  box.append(
+    kpi('Anticipo INFONAVIT', a.fPago?'Pagado':'Pendiente', (mA?money(mA)+' · ':'')+(a.fPago?'pagado el '+fmtD(fromIso(a.fPago))+(dI?' con '+dI+' d de atraso':' a tiempo'):(dI?dI+' días de atraso de INFONAVIT':'compromiso '+(a.fComp?fmtD(fromIso(a.fComp)):'sin fecha'))), a.fPago?'done':(dI?'late':'')),
+    kpi('Desfase vs programa base',((base-st.real)*100).toFixed(1)+' pts','INFONAVIT (anticipo): '+(atrINF*100).toFixed(1)+' pts · Obra: '+(atrObra*100).toFixed(1)+' pts', atrObra>TOL?'late':'')
+  );
+  const n=$('antNotice');
+  if(dI>0){ n.hidden=false; n.className='notice warn'; n.textContent=(a.fPago?'El anticipo se pagó con '+dI+' días de atraso':'INFONAVIT no ha pagado el anticipo: lleva '+dI+' días de atraso')+' (compromiso '+fmtD(fromIso(a.fComp))+'). '+(S.pRef==='dif'?'El programa está diferido '+dI+' días: los colores y el % programado miden solo el atraso real de la obra.':'Estás viendo el programa base, sin descontar el atraso del anticipo.'); }
+  else n.hidden=true;
 }
 
 /* ---------- atención ---------- */
 function hitoList(){
   const out=[];
-  TREN.forEach((r,i)=>{ const s=stOf(ED_TASKS.get(r.ed),S.t); out.push({kind:'viv',id:r.ed,label:r.ed,sub:r.mz+' · 16 viviendas',fin:r.fin,st:s,tren:r}); });
+  TREN.forEach((r,i)=>{ const s=stOf(ED_TASKS.get(r.ed),S.t); out.push({kind:'viv',id:r.ed,label:r.ed,sub:r.mz+' · 16 viviendas',fin:r.fin+SH(),st:s,tren:r}); });
   const urb=[['Tramo C1','Calles tramo C1'],['Tramo C2','Calles tramo C2'],['Tramo C3','Calles tramo C3'],['Tramo C4','Calles tramo C4'],['Jardín J3','Jardín J3'],['Jardín J5','Jardín J5'],['Jardín J7','Jardín J7'],['Jardín J4','Jardín J4'],['Jardín J6','Jardín J6'],['Jardín J1','Jardín J1'],['Zona recreativa A','Zona recreativa A'],['Zona recreativa central B','Zona recreativa central B'],['Zona recreativa oriente C','Zona recreativa oriente C']];
-  urb.forEach(([f,l])=>{ const ts=FR_TASKS.get(f)||[]; if(!ts.length) return; out.push({kind:'urb',id:f,label:l,sub:ts[0].det,fin:Math.max(...ts.map(t=>t.fin)),st:stOf(ts,S.t)}); });
+  urb.forEach(([f,l])=>{ const ts=FR_TASKS.get(f)||[]; if(!ts.length) return; out.push({kind:'urb',id:f,label:l,sub:ts[0].det,fin:Math.max(...ts.map(t=>t.fin))+SH(),st:stOf(ts,S.t)}); });
   return out;
 }
 function renderAttn(){
@@ -483,12 +532,12 @@ async function renderEdPanel(){
   const h=el('div','row'); const tt=el('h3',null,r.ed+' · '+r.mz); tt.style.fontSize='18px'; h.append(tt,chip(st.s));
   const b=el('div','row'); b.append(el('span','muted','Real '+pct(real.real)+' · Programado '+pct(real.prog)), (()=>{const x=barNode(real.prog,real.real,real.s); x.style.flex='1'; return x;})());
   const f=el('div','row mono'); f.style.fontSize='12px';
-  f.append(el('span',null,'Cimentación: '+fmtD(r.ini)), el('span',null,'Obra negra: '+fmtD(r.on)), el('span',null,'Entrega: '+fmtD(r.fin)), el('span','muted','Periodo DWG '+r.per+': '+fmtD(r.dwg)));
+  const k=SH(); f.append(el('span',null,'Cimentación: '+fmtD(r.ini+k)), el('span',null,'Obra negra: '+fmtD(r.on+k)), el('span',null,'Entrega: '+fmtD(r.fin+k)+(k?' (diferida +'+k+' d)':'')), el('span','muted','Periodo DWG '+r.per+': '+fmtD(r.dwg)));
   const rr=el('div','row'); const ids=['OC','IN','AC'].map(g=>respOf(r.ed+'|'+g).l); await resolveProfiles(ids);
   ['OC','IN','AC'].forEach(g=>{ const s=el('span'); s.append(el('span','muted',GRUPOS[g]+': '), personNode(respOf(r.ed+'|'+g).l)); rr.append(s); });
   const act = ts.filter(t=>progAt(t,S.t)>0 && realAt(t,S.t)<0.999).sort((a,b)=>a.fin-b.fin).slice(0,6);
   const lst=el('div','list');
-  act.forEach(t=>{ const s=statusOf([t],S.t); const li=el('div','li'); li.style.cursor='default'; const m=el('div'); m.append(el('div','t',t.nombre),el('div','d',fmtD(t.ini)+' → '+fmtD(t.fin)+' · real '+pct(s.real)+' / prog '+pct(s.prog))); li.append(chip(s.s),m,el('span','mono',money(t.imp))); lst.append(li); });
+  act.forEach(t=>{ const s=statusOf([t],S.t); const li=el('div','li'); li.style.cursor='default'; const m=el('div'); m.append(el('div','t',t.nombre),el('div','d',fmtD(t.ini+SH())+' → '+fmtD(t.fin+SH())+' · real '+pct(s.real)+' / prog '+pct(s.prog))); li.append(chip(s.s),m,el('span','mono',money(t.imp))); lst.append(li); });
   const goT=el('button','linkbtn','Ver todas sus tareas'); goT.type='button'; goT.addEventListener('click',()=>{ location.hash='#tareas'; $('fFrente').value=r.ed; $('fVentana').value='todas'; S.page=0; renderTareas(); });
   box.append(h,b,f,rr);
   if(act.length){ box.append(el('div','muted','Tareas en ejecución al corte'),lst); }
@@ -519,6 +568,7 @@ function renderCurva(){
   // área programada
   let area='M'+X(xs[0])+','+Y(0); prog.forEach((v,i)=>area+='L'+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1)); area+='L'+X(xs[xs.length-1])+','+Y(0)+'Z';
   svg.append(mk('path',{d:area,fill:cssv('--gold'),opacity:.12}));
+  if(SH()>0){ const pb=xs.map(d=>TASKS.reduce((s,t)=>s+progAt(t,d,0)*t.imp,0)/TOTAL); line(pb,cssv('--gold'),1.5,'2 4'); }
   line(prog,cssv('--gold'),2.5);
   if(hasEst){ line(estA,cssv('--muted'),2,'6 4'); line(cobA,cssv('--done'),2.5); }
   line(real,cssv('--ok'),2.5);
@@ -529,7 +579,8 @@ function renderCurva(){
   box.append(svg);
   const lg=$('curvaLegend'); lg.replaceChildren();
   const sw=(c,t,dash)=>{ const s=el('span','person'); const i=el('span'); i.style.cssText=`display:inline-block;width:18px;height:0;border-top:3px ${dash?'dashed':'solid'} ${c}`; s.append(i,el('span',null,t)); return s; };
-  lg.append(sw(cssv('--gold'),'Programado'),sw(cssv('--ok'),'Ejecutado (capturado)'),sw(cssv('--muted'),'Estimado',1),sw(cssv('--done'),'Cobrado'));
+  lg.append(sw(cssv('--gold'),SH()>0?'Programado diferido (+'+SH()+' d anticipo)':'Programado'),sw(cssv('--ok'),'Ejecutado (capturado)'),sw(cssv('--muted'),'Estimado',1),sw(cssv('--done'),'Cobrado'));
+  if(SH()>0) lg.append(sw(cssv('--gold'),'Programa base',1));
   if(!hasEst) lg.append(el('span','muted','Estimado y cobrado aparecen al registrar la primera estimación.'));
   // tooltip
   const tip=el('div','tip'); tip.hidden=true; box.append(tip);
@@ -550,7 +601,7 @@ function hcard(h){
   const meta=el('div','meta'); meta.append(el('span',null,h.sub),el('span','mono','Entrega '+fmtD(h.fin)));
   const m2=el('div','meta'); const sr=statusOf(h.kind==='viv'?ED_TASKS.get(h.id):FR_TASKS.get(h.id),S.t); m2.append(el('span',null,'Real '+pct(sr.real)),el('span',null,'Prog. '+pct(sr.prog)));
   c.append(hh,meta,barNode(sr.prog,sr.real,sr.s),m2);
-  if(h.kind==='viv' && h.tren){ const d=h.tren.fin-h.tren.dwg; const x=el('div','meta'); x.append(el('span',null,'vs DWG '+h.tren.per+': '+(d>0?'+':'')+d+' d')); c.append(x); }
+  if(h.kind==='viv' && h.tren){ const d=h.tren.fin+SH()-h.tren.dwg; const x=el('div','meta'); x.append(el('span',null,'vs DWG '+h.tren.per+': '+(d>0?'+':'')+d+' d')); c.append(x); }
   const go=()=>{ if(h.kind==='viv') selectEd(h.id); else { location.hash='#tareas'; $('fFrente').value=h.id; $('fVentana').value='todas'; S.page=0; renderTareas(); } };
   c.addEventListener('click',go); c.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
   return c;
@@ -587,7 +638,7 @@ function filteredTasks(){
   return TASKS.filter(t=>{
     const pr=progAt(t,d), re=realAt(t,d);
     if(v==='activas' && !((pr>0||re>0) && re<0.999)) return false;
-    if(v==='prox' && !(t.ini>d && t.ini<=d+14)) return false;
+    if(v==='prox' && !(t.ini+SH()>d && t.ini+SH()<=d+14)) return false;
     if(fr && t.frente!==fr) return false;
     if(pa && t.partida!==pa) return false;
     const r=respOf(t.key);
@@ -629,7 +680,7 @@ async function renderTareas(){
     const c1=el('td'); c1.append(el('div',null,t.frente),el('div','muted',GRUPOS[t.g])); c1.style.whiteSpace='nowrap';
     const c2=el('td'); c2.append(el('div',null,t.nombre),el('div','muted mono',t.clave+' · '+t.id)); c2.style.minWidth='220px';
     const r=respOf(t.key); const c3=el('td'); c3.append(personNode(r.l)); if(r.e) c3.append(el('div','muted',r.e));
-    const c4=el('td','mono'); c4.textContent=fmtD(t.ini)+' → '+fmtD(t.fin); c4.style.whiteSpace='nowrap';
+    const c4=el('td','mono'); c4.textContent=fmtD(t.ini+SH())+' → '+fmtD(t.fin+SH()); c4.style.whiteSpace='nowrap';
     const c5=el('td','num',num(t.cant)+' '+t.unidad.toLowerCase());
     const c6=el('td','num');
     const q=qtyAt(t,S.t);
@@ -713,6 +764,58 @@ makePicker($('bulkPicker'),id=>{bulkLeader=id;});
 $('bulkApply').addEventListener('click',()=>{ const patch={}; const eq=$('bulkEquipo').value.trim(); if(eq) patch.e=eq; if(bulkLeader!==null) patch.l=bulkLeader||''; if(!Object.keys(patch).length){ toast('Escribe un equipo o elige un líder.'); return; } writeResp([...SEL],patch).then(()=>{SEL.clear(); $('aAll').checked=false; renderResp();}); });
 
 /* ---------- estimaciones ---------- */
+function antMonto(){ const a=S.contrato.anticipo||{}; if(+a.monto>0) return +a.monto; if(+a.pct>0) return Math.round(TOTAL*a.pct)/100; return 0; }
+function renderAnt(){
+  const a=S.contrato.anticipo||{}; const dI=antDias(); const mA=antMonto(); const rec=+a.recibido||0;
+  $('aKpis').replaceChildren(
+    kpi('Monto del anticipo', mA?money(mA):'Por capturar', a.pct?num(+a.pct)+'% del contrato ('+money(TOTAL)+')':'Captura el % o el monto del contrato'),
+    kpi('Estatus', a.fPago?'Pagado':'Sin pagar', a.fPago?'Recibido '+money(rec||mA)+' el '+fmtD(fromIso(a.fPago)):'Compromiso: '+(a.fComp?fmtD(fromIso(a.fComp)):'—'), a.fPago?'done':(dI?'late':'')),
+    kpi('Atraso imputable a INFONAVIT', dI+' días', a.fPago?'Del compromiso a la fecha de pago':'Del compromiso a hoy; sigue corriendo', dI?'late':'ok'),
+    kpi('Entrega final', fmtD(MAX_DAY+dI), dI?'Base '+fmtD(MAX_DAY)+' → diferida +'+dI+' d':'Sin diferimiento')
+  );
+  $('aForm').hidden=!S.canEdit;
+  if(S.canEdit && document.activeElement && !$('aForm').contains(document.activeElement)){
+    $('aPct').value=a.pct??''; $('aMonto').value=a.monto??''; $('aFComp').value=a.fComp||''; $('aFPago').value=a.fPago||''; $('aRecibido').value=a.recibido??''; $('aNota').value=a.nota||''; }
+}
+$('aPct').addEventListener('input',()=>{ const p=+$('aPct').value; $('aMonto').placeholder = p>0 ? moneyFull(Math.round(TOTAL*p)/100) : 'Se calcula con el %'; });
+$('aForm').addEventListener('submit',async ev=>{ ev.preventDefault(); if(!S.db) return;
+  const v=id=>$(id).value; const nOrNull=x=>x===''?null:+x;
+  const body={anticipo:{pct:nOrNull(v('aPct')), monto:nOrNull(v('aMonto')), fComp:v('aFComp'), fPago:v('aFPago'), recibido:nOrNull(v('aRecibido')), nota:v('aNota').trim(), at:new Date().toISOString(), by:S.me||''}};
+  if(body.anticipo.fPago && body.anticipo.fPago<body.anticipo.fComp){ /* pago antes del compromiso: sin atraso */ }
+  try{ await S.db.doc('config/contrato').set(body,{merge:true}); toast('Anticipo guardado.'); }catch(e){ toast('Solo un administrador captura el anticipo.'); } });
+
+/* ---------- contrato y plantilla ---------- */
+const DATOS_CONTRATO = [
+  ['Contratante','INFONAVIT · INFONAVIT Constructora, S.A. de C.V.','Responsable técnico del proyecto ejecutivo: Asucena Gicela Paredes Garduño'],
+  ['Contratista','Corporación Nacional de Construcciones, S.A. de C.V.','RFC CNC920408GJ6 · Av. 24 Sur 4307 int. 2, Col. Los Pilares, Puebla, Pue., C.P. 72560 · Tel. (222) 296 90 25'],
+  ['Representante legal','C. Yamel Verónica Nava García','Corporación Nacional de Construcciones, S.A. de C.V. · Tel. 222 618 8718'],
+  ['Contrato','CO-PVB-244-2026 · 12-mar-2026','Obra a precio alzado y tiempo determinado: proyecto ejecutivo y construcción de 544 viviendas, Nopalucan-Tepeaca, Puebla']
+];
+const PLANTILLA0 = [
+  {rol:'Líder de proyecto', nombre:'Guillermo Muñoz Reyes Retana', empresa:'CNC', tel:'222 668 9091', email:'guillermomrr@duobus.mx', desig:'Oficio de designación de responsables (cambio de RT)'},
+  {rol:'Superintendente de obra', nombre:'Ricardo Camargo Vázquez', empresa:'CNC', tel:'222 446 1619', email:'arcv333@gmail.com', desig:'Oficio de designación de responsables (cambio de RT)'},
+  {rol:'Gestión documental (enlace RUV)', nombre:'Arq. Alfonso Leal Vargas', empresa:'CNC · Grupo Alaris', tel:'221 402 5175', email:'contacto@grupoalaris.mx', desig:'Oficio de designación de responsables (cambio de RT)'}
+];
+function renderContrato(){
+  const box=$('cDatos'); box.replaceChildren();
+  DATOS_CONTRATO.forEach(([l,v,f])=>{ const c=el('div','cbox'); c.append(el('span','muted',l),el('b',null,v),el('span','muted',f)); box.append(c); });
+}
+async function savePlantilla(list){ try{ await S.db.doc('config/plantilla').set({p:list}); toast('Plantilla guardada.'); }catch(e){ toast('Solo un administrador edita la plantilla.'); } }
+function renderPlantilla(){
+  const list=S.plantilla||PLANTILLA0; const admin=S.canEdit && !!S.db;
+  const tb=$('plBody'); tb.replaceChildren();
+  list.forEach((p,i)=>{ const tr=el('tr');
+    const cell=(k,w)=>{ const td=el('td'); if(admin){ const ti=el('input','tin'); ti.value=p[k]||''; if(w) ti.style.minWidth=w; ti.setAttribute('aria-label',k+' '+(p.nombre||'')); ti.addEventListener('change',()=>{ const nl=list.map(x=>Object.assign({},x)); nl[i][k]=ti.value.trim(); savePlantilla(nl); }); td.append(ti); } else td.textContent=p[k]||'—'; return td; };
+    const u=S.usuarios.find(x=>(x.email||'').toLowerCase()===(p.email||'').toLowerCase() && p.email);
+    const cu=el('td'); cu.append(u? el('span','chip '+(u.rol==='pendiente'?'s-late':'s-ok'), u.rol==='pendiente'?'Por aprobar':({consulta:'Consulta',lider:'Líder',admin:'Administrador'}[u.rol]||u.rol)) : el('span','muted', S.canEdit?'Sin registrarse':'—'));
+    const cd=el('td');
+    if(admin){ const b=el('button','linkbtn','Quitar'); b.type='button'; b.addEventListener('click',()=>{ if(b.dataset.c){ savePlantilla(list.filter((_,j)=>j!==i)); } else { b.dataset.c='1'; b.textContent='Confirmar'; setTimeout(()=>{b.dataset.c='';b.textContent='Quitar';},4000);} }); cd.append(b); }
+    tr.append(cell('rol','170px'),cell('nombre','200px'),cell('empresa','110px'),cell('tel','110px'),cell('email','190px'),cu,cell('desig','180px'),cd); tb.append(tr); });
+  $('plAdd').hidden=!admin;
+  $('plHint').textContent = admin ? 'Personal designado y empleados del proyecto · se guarda al salir de cada celda' : 'Personal designado y empleados del proyecto';
+}
+$('plAdd').addEventListener('click',()=>{ const list=(S.plantilla||PLANTILLA0).map(x=>Object.assign({},x)); list.push({rol:'',nombre:'',empresa:'',tel:'',email:'',desig:''}); savePlantilla(list); });
+
 let editingE=null;
 function renderEstim(){
   const tb=$('eBody'); tb.replaceChildren();
@@ -832,8 +935,8 @@ function renderView(){
   if(S.view==='resumen'){ renderKpis(); renderAttn(); renderCurva(); renderEdPanel(); G.render(); }
   else if(S.view==='hitos') renderHitos();
   else if(S.view==='tareas') renderTareas();
-  else if(S.view==='responsables') renderResp();
-  else if(S.view==='estimaciones') renderEstim();
+  else if(S.view==='responsables'){ renderContrato(); renderPlantilla(); renderResp(); }
+  else if(S.view==='estimaciones'){ renderEstim(); renderAnt(); }
   else if(S.view==='usuarios' && window.renderUsuarios) window.renderUsuarios();
 }
 let rq=false;
@@ -869,7 +972,9 @@ route();
   }
   async function seed(){
     try{ const t=await db.doc('config/tareas').get(); if(!t.exists){ const k={}; TASKS.forEach(x=>k[x.id]=x.key); await db.doc('config/tareas').set({k}); }
-      const r=await db.doc('config/resp').get(); if(!r.exists) await db.doc('config/resp').set({m:{}}); }catch(e){}
+      const r=await db.doc('config/resp').get(); if(!r.exists) await db.doc('config/resp').set({m:{}});
+      const c=await db.doc('config/contrato').get(); if(!c.exists) await db.doc('config/contrato').set(CONTRATO_DEF0);
+      const p=await db.doc('config/plantilla').get(); if(!p.exists) await db.doc('config/plantilla').set({p:PLANTILLA0}); }catch(e){}
   }
   function stop(){ unsubs.forEach(f=>f()); unsubs=[]; S.db=null; S.me=null; S.canEdit=false; S.canWrite=false; }
   auth.onAuthStateChanged(async u=>{
@@ -886,6 +991,8 @@ route();
     unsubs.push(db.collection('avance').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>m.set(d.id,d.data())); S.avance=m; renderAll(); }, ()=>{}));
     unsubs.push(db.collection('historial').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>{ const b=d.data(); const w=b.w!=null?+b.w:+d.id.slice(1); m.set(w,b.q||{}); }); S.hist=m; renderAll(); }, ()=>{}));
     unsubs.push(db.doc('config/resp').onSnapshot(snap=>{ S.resp=(snap.exists && snap.data().m)||{}; Object.entries(S.resp).forEach(([k,r])=>{ if(r.l) S.profiles[r.l]={id:r.l,name:r.n||'Líder',avatarUrl:''}; }); fillRespOptions(); renderAll(); }, ()=>{}));
+    unsubs.push(db.doc('config/contrato').onSnapshot(snap=>{ S.contrato=Object.assign(JSON.parse(JSON.stringify(CONTRATO_DEF0)), snap.exists?snap.data():{}); renderAll(); }, ()=>{}));
+    unsubs.push(db.doc('config/plantilla').onSnapshot(snap=>{ S.plantilla=snap.exists?(snap.data().p||[]):null; renderAll(); }, ()=>{}));
     unsubs.push(db.collection('estimaciones').onSnapshot(snap=>{ S.estim=snap.docs.map(d=>Object.assign({_id:d.id},d.data())); renderAll(); }, ()=>{}));
     if(S.canEdit) unsubs.push(db.collection('usuarios').onSnapshot(snap=>{ S.usuarios=snap.docs.map(d=>Object.assign({id:d.id},d.data())); S.usuarios.forEach(x=>{ S.profiles[x.id]={id:x.id,name:x.nombre||x.email,avatarUrl:''}; }); renderAll(); }, ()=>{}));
     route();
