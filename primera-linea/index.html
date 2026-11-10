@@ -306,6 +306,10 @@ tr.sel td{background:var(--gold-soft)}
       </form>
     </div>
     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Estimado</th><th style="text-align:right">Cobrado</th><th>Fecha de cobro</th><th style="text-align:right">Por cobrar</th><th>Nota</th><th></th></tr></thead><tbody id="eBody"></tbody></table></div>
+    <div class="panel" style="margin-top:14px">
+      <h2>Calendario de estimaciones <small>Quincenal, cortes los días 1 y 15 · primera estimación al 15-nov-2026 · monto programado según el Formato 9.2</small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>No.</th><th>Periodo</th><th>Corte</th><th style="text-align:right">Programado</th><th style="text-align:right">Acumulado</th><th style="text-align:right">Registrado</th><th>Estatus</th></tr></thead><tbody id="eCal"></tbody></table></div>
+    </div>
   </section>
   <!-- REPORTE INFONAVIT -->
   <section class="view" id="v-infonavit" hidden>
@@ -862,6 +866,35 @@ function renderPlantilla(){
 }
 $('plAdd').addEventListener('click',()=>{ const list=(S.plantilla||PLANTILLA0).map(x=>Object.assign({},x)); list.push({rol:'',nombre:'',empresa:'',tel:'',email:'',desig:''}); savePlantilla(list); });
 
+/* calendario de estimaciones: quincenal, cortes los días 1 y 15; E-01 del 26-oct al 15-nov-2026 */
+const EST_FIN1 = fromIso('2026-11-15');
+function estPeriodos(){
+  const out=[]; let ini=INI_OBRA, fin=EST_FIN1, k=1; const lim=Math.max(P92[P92.length-1][0],MAX_DAY)+antDias();
+  while(ini<=lim && k<60){
+    const f=dateOf(fin); const corte = f.getDate()===15 ? fin : fin+1;   // segunda quincena: corte el día 1 siguiente
+    out.push({no:'E-'+String(k).padStart(2,'0'), ini, fin, corte});
+    ini=fin+1; const d=dateOf(ini);
+    fin = d.getDate()===1 ? dayIdx(new Date(d.getFullYear(),d.getMonth(),15)) : dayIdx(new Date(d.getFullYear(),d.getMonth()+1,0));
+    k++; }
+  return out; }
+const estProg = (a,b) => { const sh=antDias(); return Math.max(0,(p92At(b-sh)-p92At(a-1-sh))*TOTAL); };   // Formato 9.2
+function nextPeriodo(){ const fins=S.estim.map(e=>fromIso(e.fin)).filter(x=>x!=null); const last=fins.length?Math.max(...fins):INI_OBRA-1;
+  return estPeriodos().find(q=>q.fin>last) || null; }
+function prefillE(){ if(editingE || !S.canEdit) return; const q=nextPeriodo(); if(!q) return;
+  if(!$('eNo').value) $('eNo').value=q.no; if(!$('eIni').value) $('eIni').value=isoD(q.ini); if(!$('eFin').value) $('eFin').value=isoD(q.fin);
+  if(!$('eMonto').value && !$('eForm').contains(document.activeElement)) $('eMonto').placeholder='Programado: '+moneyFull(estProg(q.ini,q.fin)); }
+function renderCalEst(){
+  const tb=$('eCal'); if(!tb) return; tb.replaceChildren();
+  const reg=[...S.estim]; let acc=0;
+  estPeriodos().forEach(q=>{ const m=estProg(q.ini,q.fin); acc+=m;
+    const r=reg.find(e=>fromIso(e.fin)===q.fin) || reg.find(e=>(e.no||'').toUpperCase()===q.no);
+    const est = r ? ((+r.cobrado||0)>=(+r.monto||0)-0.5 && r.fcobro ? 'done' : 'ok') : (q.corte<S.today ? 'late' : 'idle');
+    const lab = r ? ((est==='done')?'Cobrada':'Registrada') : (q.corte<S.today ? 'Sin registrar' : 'Programada');
+    const tr=el('tr'); if(q.ini<=S.today && S.today<=q.fin) tr.style.background='var(--ok-bg)';
+    tr.append(el('td',null,q.no), el('td','mono',fmtD(q.ini)+' → '+fmtD(q.fin)), el('td','mono',fmtD(q.corte)), el('td','num',moneyFull(m)), el('td','num',pct(acc/TOTAL)), el('td','num',r?moneyFull(+r.monto||0):'—'));
+    const cs=el('td'); cs.append(el('span','chip '+ST[est][1],lab)); tr.append(cs); tb.append(tr); });
+}
+
 let editingE=null;
 function renderEstim(){
   const tb=$('eBody'); tb.replaceChildren();
@@ -881,9 +914,10 @@ function renderEstim(){
   const st=statusOf(TASKS,S.today);
   $('eKpis').replaceChildren(kpi('Estimado total',money(tE),pct(tE/TOTAL)+' del contrato'), kpi('Cobrado',money(tC),pct(tE?tC/tE:0)+' de lo estimado',tC>0?'done':''), kpi('Por cobrar',money(tE-tC),rows.filter(e=>!e.fcobro).length+' estimaciones pendientes',tE-tC>0?'late':''), kpi('Ejecutado sin estimar',money(Math.max(0,st.ejec-tE)),'Ejecutado capturado: '+money(st.ejec)));
   $('eFormPanel').hidden=!S.canEdit;
+  renderCalEst(); prefillE();
 }
 function loadE(e){ editingE=e._id; $('eNo').value=e.no||''; $('eIni').value=e.ini||''; $('eFin').value=e.fin||''; $('eMonto').value=e.monto||''; $('eCobrado').value=e.cobrado||''; $('eFCobro').value=e.fcobro||''; $('eNota').value=e.nota||''; $('eCancel').hidden=false; $('eSave').textContent='Guardar cambios'; $('eNo').focus(); }
-function resetE(){ editingE=null; $('eForm').reset(); $('eCancel').hidden=true; $('eSave').textContent='Guardar'; }
+function resetE(){ editingE=null; $('eForm').reset(); $('eCancel').hidden=true; $('eSave').textContent='Guardar'; prefillE(); }
 $('eCancel').addEventListener('click',resetE);
 $('eForm').addEventListener('submit',async ev=>{ ev.preventDefault(); if(!S.db) return;
   const body={no:$('eNo').value.trim(), ini:$('eIni').value, fin:$('eFin').value, monto:+$('eMonto').value||0, cobrado:+$('eCobrado').value||0, fcobro:$('eFCobro').value||'', nota:$('eNota').value.trim(), at:new Date().toISOString(), by:S.me||''};
@@ -1041,13 +1075,11 @@ function renderInfonavit(){
   const reales=[...S.estim].sort((a,b)=>(a.ini||'').localeCompare(b.ini||''));
   const add=(no,per,monto,orig)=>{ let am=Math.min(mA-acc,Math.round(monto*rate*100)/100); if(mA-acc-am<1) am=mA-acc; acc+=am; const row=el('tr'); row.append(el('td',null,no),el('td','mono',per),el('td','num',moneyFull(monto)),el('td','num',moneyFull(am)),el('td','num',moneyFull(acc)),el('td','num',moneyFull(mA-acc)),el('td','muted',orig)); ab.append(row); };
   reales.forEach(e=>{ n++; add(e.no||('Est. '+n),(e.ini?fmtD(fromIso(e.ini)):'')+' → '+(e.fin?fmtD(fromIso(e.fin)):''),+e.monto||0,'Registrada'); });
-  // proyección mensual del programa (diferido por anticipo) desde el mes siguiente a la última registrada
+  // proyección quincenal (cortes 1 y 15, Formato 9.2) desde el periodo siguiente a la última registrada
   const lastFin = reales.length ? Math.max(...reales.map(e=>fromIso(e.fin)||0)) : -1e9;
-  const shf=antDias(); const P=x=>TASKS.reduce((s,t)=>s+progAt(t,x,shf)*t.imp,0);
-  let y=dateOf(W0+shf).getFullYear(), m=dateOf(W0+shf).getMonth();
-  for(let it=0; it<30 && acc<mA-0.5; it++){ const a=dayIdx(new Date(y,m,1)), b=dayIdx(new Date(y,m+1,0));
-    if(b>lastFin){ const ini=Math.max(a,lastFin+1); const monto=P(b)-P(ini-1); if(monto>0.5){ n++; add('Est. '+n+' (prog.)',mesTxt(a),monto,'Programada'+(shf?' (diferida +'+shf+' d)':'')); } }
-    m++; if(m>11){m=0;y++;} }
+  const shf=antDias();
+  estPeriodos().forEach(q=>{ if(acc>=mA-0.5 || q.fin<=lastFin) return; const ini=Math.max(q.ini,lastFin+1); const monto=estProg(ini,q.fin);
+    if(monto>0.5){ n++; add(q.no+' (prog.)',fmtD(ini)+' → '+fmtD(q.fin),monto,'Programada'+(shf?' (diferida +'+shf+' d)':'')); } });
 }
 async function saveSrv(dep,kind,i,val){ if(!S.db) return; const o=srvOf(dep); const arr=(kind==='prog'?o.p:o.r).slice(); arr[i]=val||'';
   const body={servicios:{}}; body.servicios[dep]={}; body.servicios[dep][kind]=arr;
