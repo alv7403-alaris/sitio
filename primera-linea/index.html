@@ -306,6 +306,11 @@ tr.sel td{background:var(--gold-soft)}
       </form>
     </div>
     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Estimado</th><th style="text-align:right">Cobrado</th><th>Fecha de cobro</th><th style="text-align:right">Por cobrar</th><th>Nota</th><th></th></tr></thead><tbody id="eBody"></tbody></table></div>
+    <div class="panel" style="margin-top:14px" id="dPanel">
+      <h2>Deducciones, retenciones y penalizaciones <small id="dHint">Las captura INFONAVIT por estimación; el líquido a pagar se calcula solo</small></h2>
+      <div class="notice" style="margin-top:10px">Líquido a pagar = importe de la estimación − amortización del anticipo − deducciones − retenciones − penalizaciones. Cada captura queda registrada con nombre y fecha de quien la hizo.</div>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>No.</th><th>Periodo</th><th style="text-align:right">Importe</th><th style="text-align:right">Amortización anticipo</th><th style="text-align:right">Deducciones</th><th style="text-align:right">Retenciones</th><th style="text-align:right">Penalizaciones</th><th style="text-align:right">Líquido a pagar</th><th>Fundamento / nota</th><th>Capturó</th><th></th></tr></thead><tbody id="dBody"></tbody></table></div>
+    </div>
     <div class="panel" style="margin-top:14px">
       <h2>Calendario de estimaciones <small>Quincenal, cortes los días 1 y 15 · primera estimación al 15-nov-2026 · monto programado según el Formato 9.2</small></h2>
       <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>No.</th><th>Periodo</th><th>Corte</th><th style="text-align:right">Programado</th><th style="text-align:right">Acumulado</th><th style="text-align:right">Registrado</th><th>Estatus</th></tr></thead><tbody id="eCal"></tbody></table></div>
@@ -354,7 +359,7 @@ tr.sel td{background:var(--gold-soft)}
   <section class="view" id="v-usuarios" hidden>
     <div class="panel">
       <h2>Usuarios del tablero <small>Aprueba solicitudes y asigna el rol de cada persona</small></h2>
-      <div class="notice" style="margin-top:10px">Roles: <b>Pendiente</b> (no ve nada) · <b>Consulta</b> (solo ve) · <b>Líder</b> (captura avance en los frentes donde es líder) · <b>Administrador</b> (asigna líderes, registra estimaciones y aprueba usuarios).</div>
+      <div class="notice" style="margin-top:10px">Roles: <b>Pendiente</b> (no ve nada) · <b>Consulta</b> (solo ve) · <b>Líder</b> (captura avance en los frentes donde es líder) · <b>INFONAVIT</b> (ve todo y captura deducciones, retenciones y penalizaciones de cada estimación) · <b>Administrador</b> (asigna líderes, registra estimaciones y aprueba usuarios).</div>
     </div>
     <div class="tablewrap"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Alta</th><th></th></tr></thead><tbody id="uBody"></tbody></table></div>
   </section>
@@ -445,7 +450,7 @@ const INI_OBRA = fromIso(DATA.ini);          // inicio reprogramado 12-oct-2026 
 const P92 = DATA.p92;                         // programa financiero Formato 9.2 (anexo)
 const p92At = d => { if(d<P92[0][0]) return 0; for(let i=1;i<P92.length;i++){ if(d<=P92[i][0]){ const a=P92[i-1],b=P92[i]; return (a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0]))/TOTAL; } } return P92[P92.length-1][1]/TOTAL; };
 const CONTRATO_DEF0 = {anticipo:{pct:null, monto:null, fComp:'2026-10-12', fPago:'2026-10-07', recibido:null, nota:''}};
-const S = { today: dayIdx(new Date()), t: dayIdx(new Date()), mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], me:null, canEdit:false, canWrite:null, db:null, user:null, selEd:null, page:0, profiles:{}, usuarios:[], pRef:'dif', contrato:JSON.parse(JSON.stringify(CONTRATO_DEF0)), plantilla:null };
+const S = { today: dayIdx(new Date()), t: dayIdx(new Date()), mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], me:null, canEdit:false, canWrite:null, db:null, user:null, selEd:null, page:0, profiles:{}, usuarios:[], deduc:{}, rol:'', canInfo:false, pRef:'dif', contrato:JSON.parse(JSON.stringify(CONTRATO_DEF0)), plantilla:null };
 S.t = Math.min(Math.max(S.t, W0), MAX_DAY+14);
 
 /* ---------- anticipo / programa diferido ---------- */
@@ -744,6 +749,7 @@ async function renderTareas(){
   const n=$('capNotice');
   if(!S.db) n.textContent='Inicia sesión para capturar.';
   else if(!editable) n.textContent='Estás viendo una fecha pasada: se muestra lo capturado hasta esa semana. Regresa a "Hoy" para capturar.';
+  else if(S.rol==='infonavit') n.textContent='Tu rol es INFONAVIT: puedes ver todo el avance; tu captura está en Estimaciones (deducciones, retenciones y penalizaciones).';
   else if(S.canWrite===false && !S.canEdit) n.textContent='Tu rol es de Consulta: puedes ver todo, pero no capturar. Si eres líder de frente, pide al administrador el rol de Líder.';
   else n.textContent='Captura la CANTIDAD EJECUTADA ACUMULADA de cada tarea (misma unidad del catálogo). El monto, el % y el color se calculan solos. Solo puedes capturar las tareas de los frentes donde eres líder; si el frente no tiene líder, cualquier colaborador puede capturar.';
 }
@@ -857,7 +863,7 @@ function renderPlantilla(){
   list.forEach((p,i)=>{ const tr=el('tr');
     const cell=(k,w)=>{ const td=el('td'); if(admin){ const ti=el('input','tin'); ti.value=p[k]||''; if(w) ti.style.minWidth=w; ti.setAttribute('aria-label',k+' '+(p.nombre||'')); ti.addEventListener('change',()=>{ const nl=list.map(x=>Object.assign({},x)); nl[i][k]=ti.value.trim(); savePlantilla(nl); }); td.append(ti); } else td.textContent=p[k]||'—'; return td; };
     const u=S.usuarios.find(x=>(x.email||'').toLowerCase()===(p.email||'').toLowerCase() && p.email);
-    const cu=el('td'); cu.append(u? el('span','chip '+(u.rol==='pendiente'?'s-late':'s-ok'), u.rol==='pendiente'?'Por aprobar':({consulta:'Consulta',lider:'Líder',admin:'Administrador'}[u.rol]||u.rol)) : el('span','muted', S.canEdit?'Sin registrarse':'—'));
+    const cu=el('td'); cu.append(u? el('span','chip '+(u.rol==='pendiente'?'s-late':'s-ok'), u.rol==='pendiente'?'Por aprobar':({consulta:'Consulta',lider:'Líder',infonavit:'INFONAVIT',admin:'Administrador'}[u.rol]||u.rol)) : el('span','muted', S.canEdit?'Sin registrarse':'—'));
     const cd=el('td');
     if(admin){ const b=el('button','linkbtn','Quitar'); b.type='button'; b.addEventListener('click',()=>{ if(b.dataset.c){ savePlantilla(list.filter((_,j)=>j!==i)); } else { b.dataset.c='1'; b.textContent='Confirmar'; setTimeout(()=>{b.dataset.c='';b.textContent='Quitar';},4000);} }); cd.append(b); }
     tr.append(cell('rol','170px'),cell('nombre','200px'),cell('empresa','110px'),cell('tel','110px'),cell('email','190px'),cu,cell('desig','180px'),cd); tb.append(tr); });
@@ -914,7 +920,45 @@ function renderEstim(){
   const st=statusOf(TASKS,S.today);
   $('eKpis').replaceChildren(kpi('Estimado total',money(tE),pct(tE/TOTAL)+' del contrato'), kpi('Cobrado',money(tC),pct(tE?tC/tE:0)+' de lo estimado',tC>0?'done':''), kpi('Por cobrar',money(tE-tC),rows.filter(e=>!e.fcobro).length+' estimaciones pendientes',tE-tC>0?'late':''), kpi('Ejecutado sin estimar',money(Math.max(0,st.ejec-tE)),'Ejecutado capturado: '+money(st.ejec)));
   $('eFormPanel').hidden=!S.canEdit;
-  renderCalEst(); prefillE();
+  renderCalEst(); prefillE(); renderDeduc();
+}
+/* ---------- deducciones, retenciones y penalizaciones (rol INFONAVIT) ---------- */
+function renderDeduc(){
+  const tb=$('dBody'); if(!tb) return;
+  if(tb.contains(document.activeElement)) return;   // no borrar lo que se está escribiendo
+  tb.replaceChildren();
+  const rows=[...S.estim].sort((a,b)=>(a.ini||'').localeCompare(b.ini||''));
+  const mA=antMonto(), rate=mA/TOTAL; let acc=0;
+  $('dHint').textContent = S.canInfo ? 'Captura por estimación y da Guardar; el líquido a pagar se calcula solo' : 'Las captura INFONAVIT por estimación; el líquido a pagar se calcula solo';
+  rows.forEach(e=>{
+    const monto=+e.monto||0; let am=Math.min(mA-acc,Math.round(monto*rate*100)/100); if(mA-acc-am<1) am=mA-acc; acc+=am;
+    const d=S.deduc[e._id]||{}; const tr=el('tr');
+    const liq=()=>monto-am-(+d.ded||0)-(+d.ret||0)-(+d.pen||0);
+    const cLiq=el('td','num',moneyFull(liq()));
+    const numCell=(k,lab)=>{ const td=el('td','num');
+      if(S.canInfo){ const ip=el('input','tin'); ip.type='number'; ip.min='0'; ip.step='0.01'; ip.inputMode='decimal'; ip.value=d[k]!=null?d[k]:''; ip.placeholder='0.00'; ip.style.width='120px'; ip.style.textAlign='right'; ip.dataset.k=k;
+        ip.setAttribute('aria-label',lab+' de la estimación '+(e.no||''));
+        ip.addEventListener('input',()=>{ const v={}; tr.querySelectorAll('input[data-k]').forEach(x=>v[x.dataset.k]=+x.value||0); cLiq.textContent=moneyFull(monto-am-(v.ded||0)-(v.ret||0)-(v.pen||0)); });
+        td.append(ip); }
+      else td.textContent = d[k]!=null ? moneyFull(+d[k]) : '—';
+      return td; };
+    const cNota=el('td');
+    if(S.canInfo){ const ip=el('input','tin'); ip.type='text'; ip.maxLength=300; ip.value=d.nota||''; ip.placeholder='Cláusula, oficio o motivo'; ip.style.minWidth='180px'; ip.dataset.n='1'; ip.setAttribute('aria-label','Fundamento o nota de la estimación '+(e.no||'')); cNota.append(ip); }
+    else cNota.textContent=d.nota||'';
+    const cWho=el('td','muted', d.at ? (d.byName||'—')+' · '+fmtD(fromIso(d.at.slice(0,10))) : 'Sin captura');
+    const cBtn=el('td');
+    if(S.canInfo){ const b=el('button','btn','Guardar'); b.type='button'; b.setAttribute('aria-label','Guardar deducciones de la estimación '+(e.no||''));
+      b.addEventListener('click',async()=>{ const body={}; let bad=false;
+        tr.querySelectorAll('input[data-k]').forEach(x=>{ const v=x.value===''?0:+x.value; if(!(v>=0)) bad=true; body[x.dataset.k]=Math.round(v*100)/100; });
+        if(bad){ toast('Los montos deben ser números mayores o iguales a cero.'); return; }
+        body.nota=(tr.querySelector('input[data-n]').value||'').trim().slice(0,300); body.by=S.me; body.byName=S.meName||''; body.at=new Date().toISOString(); body.no=e.no||'';
+        try{ await S.db.doc('deducciones/'+e._id).set(body); toast('Estimación '+(e.no||'')+': deducciones guardadas.'); b.blur(); renderAll(); }
+        catch(err){ toast('No tienes permiso para capturar deducciones. Pide al administrador el rol INFONAVIT.'); } });
+      cBtn.append(b); }
+    tr.append(el('td',null,e.no||'—'), el('td','mono',(e.ini?fmtD(fromIso(e.ini)):'')+' → '+(e.fin?fmtD(fromIso(e.fin)):'')), el('td','num',moneyFull(monto)), el('td','num',moneyFull(am)),
+      numCell('ded','Deducciones'), numCell('ret','Retenciones'), numCell('pen','Penalizaciones'), cLiq, cNota, cWho, cBtn);
+    tb.append(tr); });
+  if(!rows.length){ const tr=el('tr'); const td=el('td','muted','Aparecen aquí cuando el administrador registre la primera estimación.'); td.colSpan=11; tr.append(td); tb.append(tr); }
 }
 function loadE(e){ editingE=e._id; $('eNo').value=e.no||''; $('eIni').value=e.ini||''; $('eFin').value=e.fin||''; $('eMonto').value=e.monto||''; $('eCobrado').value=e.cobrado||''; $('eFCobro').value=e.fcobro||''; $('eNota').value=e.nota||''; $('eCancel').hidden=false; $('eSave').textContent='Guardar cambios'; $('eNo').focus(); }
 function resetE(){ editingE=null; $('eForm').reset(); $('eCancel').hidden=true; $('eSave').textContent='Guardar'; prefillE(); }
@@ -1113,7 +1157,7 @@ route();
 
 /* ---------- datos compartidos ---------- */
 (function connectFirebase(){
-  const ROLES={pendiente:'Pendiente',consulta:'Consulta',lider:'Líder',admin:'Administrador'};
+  const ROLES={pendiente:'Pendiente',consulta:'Consulta',lider:'Líder',infonavit:'INFONAVIT',admin:'Administrador'};
   if(!window.firebase){ $('gMsg').textContent='No se pudo cargar el servicio de acceso. Revisa tu conexión y recarga.'; return; }
   firebase.initializeApp({"apiKey": "AIzaSyBDGTPF0zIokqDH7VKj6oYASmVRCL3Gt7M", "authDomain": "grupo-alaris-obra.firebaseapp.com", "projectId": "grupo-alaris-obra", "storageBucket": "grupo-alaris-obra.firebasestorage.app", "messagingSenderId": "439876810110", "appId": "1:439876810110:web:481b62561a4ef861fdef2f"});
   const auth=firebase.auth(), db=firebase.firestore();
@@ -1141,7 +1185,7 @@ route();
       const c=await db.doc('config/contrato').get(); if(!c.exists) await db.doc('config/contrato').set(CONTRATO_DEF0);
       const p=await db.doc('config/plantilla').get(); if(!p.exists) await db.doc('config/plantilla').set({p:PLANTILLA0}); }catch(e){}
   }
-  function stop(){ unsubs.forEach(f=>f()); unsubs=[]; S.db=null; S.me=null; S.canEdit=false; S.canWrite=false; }
+  function stop(){ unsubs.forEach(f=>f()); unsubs=[]; S.db=null; S.me=null; S.canEdit=false; S.canWrite=false; S.canInfo=false; S.rol=''; S.deduc={}; }
   auth.onAuthStateChanged(async u=>{
     stop();
     if(!u){ $('userBox').replaceChildren(); showGate('login','Inicia sesión para ver el tablero y capturar avance.'); return; }
@@ -1150,7 +1194,7 @@ route();
     box.replaceChildren(el('span',null,(perfil.nombre||u.email)+' · '+ROLES[perfil.rol]),out);
     if(perfil.rol==='pendiente'){ showGate('pend'); return; }
     gate.hidden=true;
-    S.db=db; S.me=u.uid; S.canEdit=perfil.rol==='admin'; S.canWrite=perfil.rol==='lider'||perfil.rol==='admin';
+    S.db=db; S.me=u.uid; S.meName=perfil.nombre||u.email||''; S.rol=perfil.rol; S.canEdit=perfil.rol==='admin'; S.canWrite=perfil.rol==='lider'||perfil.rol==='admin'; S.canInfo=perfil.rol==='infonavit'||perfil.rol==='admin';
     $('navUsuarios').hidden=!S.canEdit;
     if(S.canEdit) await seed();
     unsubs.push(db.collection('avance').onSnapshot(snap=>{ const m=new Map(); snap.docs.forEach(d=>m.set(d.id,d.data())); S.avance=m; renderAll(); }, ()=>{}));
@@ -1158,13 +1202,14 @@ route();
     unsubs.push(db.doc('config/resp').onSnapshot(snap=>{ S.resp=(snap.exists && snap.data().m)||{}; Object.entries(S.resp).forEach(([k,r])=>{ if(r.l) S.profiles[r.l]={id:r.l,name:r.n||'Líder',avatarUrl:''}; }); fillRespOptions(); renderAll(); }, ()=>{}));
     unsubs.push(db.doc('config/contrato').onSnapshot(snap=>{ S.contrato=Object.assign(JSON.parse(JSON.stringify(CONTRATO_DEF0)), snap.exists?snap.data():{}); renderAll(); }, ()=>{}));
     unsubs.push(db.doc('config/plantilla').onSnapshot(snap=>{ S.plantilla=snap.exists?(snap.data().p||[]):null; renderAll(); }, ()=>{}));
+    unsubs.push(db.collection('deducciones').onSnapshot(snap=>{ const m={}; snap.docs.forEach(d=>m[d.id]=d.data()); S.deduc=m; renderAll(); }, ()=>{}));
     unsubs.push(db.collection('estimaciones').onSnapshot(snap=>{ S.estim=snap.docs.map(d=>Object.assign({_id:d.id},d.data())); renderAll(); }, ()=>{}));
     if(S.canEdit) unsubs.push(db.collection('usuarios').onSnapshot(snap=>{ S.usuarios=snap.docs.map(d=>Object.assign({id:d.id},d.data())); S.usuarios.forEach(x=>{ S.profiles[x.id]={id:x.id,name:x.nombre||x.email,avatarUrl:''}; }); renderAll(); }, ()=>{}));
     route();
   });
   window.renderUsuarios=function(){
     const tb=$('uBody'); tb.replaceChildren();
-    const order={pendiente:0,admin:1,lider:2,consulta:3};
+    const order={pendiente:0,admin:1,lider:2,infonavit:3,consulta:4};
     [...S.usuarios].sort((a,b)=>(order[a.rol]-order[b.rol])||(a.nombre||'').localeCompare(b.nombre||'')).forEach(u=>{
       const tr=el('tr'); const sel=el('select'); sel.className='tin'; sel.style.width='auto'; sel.setAttribute('aria-label','Rol de '+(u.nombre||u.email));
       Object.entries(ROLES).forEach(([k,v])=>{ const o=el('option',null,v); o.value=k; sel.append(o); }); sel.value=u.rol;
