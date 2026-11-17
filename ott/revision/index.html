@@ -1,1 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Revisión del proyecto ejecutivo · OTT San José Chiapa · Grupo Alaris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Archivo+Expanded:wght@600;700&display=swap" rel="stylesheet">
+<style>
 
+  :root{
+    --rojo:#EC3237; --oro:#D1AE6C; --negro:#201E1F;
+    --fondo:#262324; --panel:#2E2B2C; --panel2:#363233;
+    --texto:#EDE9E4; --texto2:#B8B2AC; --linea:#453F40;
+    --ok:#8FBF7F; --parcial:#D1AE6C; --falta:#EC3237; --na:#7A7472;
+    --azul:#7FA8D1;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Archivo',sans-serif; background:var(--fondo); color:var(--texto); font-size:15px; line-height:1.5;}
+  .marco{max-width:920px; margin:0 auto; padding:0 20px 130px;}
+
+  header{padding:36px 0 20px; border-bottom:3px solid var(--oro);}
+  .marca{font-family:'Archivo Expanded',sans-serif; font-weight:700; font-size:15px; letter-spacing:.04em;}
+  .marca b{color:var(--rojo);}
+  h1{font-family:'Archivo Expanded',sans-serif; font-weight:700; font-size:clamp(23px,4vw,32px); line-height:1.15; margin-top:14px;}
+  .sub{color:var(--texto2); margin-top:8px; max-width:62ch;}
+
+  .datos{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:22px 0;}
+  .datos label{display:block; font-size:12px; color:var(--texto2); margin-bottom:4px;}
+  .datos input{width:100%; background:var(--panel); border:1px solid var(--linea); color:var(--texto);
+    padding:9px 11px; border-radius:6px; font-family:inherit; font-size:14px;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--oro); outline-offset:1px;}
+
+  /* pestañas de etapa */
+  .etapas{display:flex; border-bottom:1px solid var(--linea); margin:6px 0 24px; gap:4px;}
+  .etapas button{background:none; border:0; border-bottom:3px solid transparent; color:var(--texto2);
+    padding:11px 16px; font-family:'Archivo Expanded',sans-serif; font-size:14px; font-weight:600; cursor:pointer;}
+  .etapas button.activo{color:var(--oro); border-bottom-color:var(--oro);}
+  .etapas button:focus-visible{outline:2px solid var(--oro); outline-offset:-3px;}
+
+  .modo{display:flex; margin:0 0 24px; border:1px solid var(--linea); border-radius:8px; overflow:hidden; width:fit-content;}
+  .modo button{background:var(--panel); color:var(--texto2); border:0; padding:9px 17px; font-family:inherit; font-size:13.5px; cursor:pointer;}
+  .modo button.activo{background:var(--oro); color:var(--negro); font-weight:700;}
+
+  .vista{display:none;} .vista.activa{display:block;}
+
+  /* ---- candados y checklist ---- */
+  .candados{border:2px solid var(--rojo); border-radius:10px; padding:20px; margin-bottom:28px; background:var(--panel);}
+  .candados h2{font-family:'Archivo Expanded',sans-serif; font-size:16px; color:var(--rojo);}
+  .candados p{color:var(--texto2); font-size:13px; margin:6px 0 14px; max-width:65ch;}
+  .aviso{margin-top:14px; padding:10px 14px; border-radius:6px; font-size:13.5px; font-weight:600; display:none;}
+  .aviso.rojo{display:block; background:rgba(236,50,55,.15); color:#F0888B; border:1px solid var(--rojo);}
+  .aviso.verde{display:block; background:rgba(143,191,127,.12); color:var(--ok); border:1px solid var(--ok);}
+
+  details.seccion{border:1px solid var(--linea); border-radius:10px; margin-bottom:13px; background:var(--panel); overflow:hidden;}
+  details.seccion summary{list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; gap:12px;
+    font-family:'Archivo Expanded',sans-serif; font-size:14px; font-weight:600; user-select:none;}
+  details.seccion summary::-webkit-details-marker{display:none;}
+  details.seccion summary:hover{background:var(--panel2);}
+  .conteo{margin-left:auto; font-family:'Archivo',sans-serif; font-weight:400; font-size:12.5px; color:var(--texto2);}
+  .alcance{border-top:1px solid var(--linea); background:var(--panel2); padding:11px 18px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .alcance .et{font-size:12px; color:var(--texto2); font-weight:600;}
+  .alcance select{background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 10px; border-radius:6px; font-family:inherit; font-size:13px; min-width:250px;}
+  .nota-alcance{font-size:12px; color:var(--oro); flex-basis:100%; margin-top:2px; display:none;}
+  .nota-alcance.ver{display:block;}
+  .flecha{transition:transform .15s; color:var(--oro); font-size:12px;}
+  details[open] .flecha{transform:rotate(90deg);}
+
+  .item{border-top:1px solid var(--linea); padding:14px 18px; display:grid; gap:10px;}
+  .item .nombre{font-weight:600; font-size:14.5px;}
+  .estados{display:flex; flex-wrap:wrap; gap:6px;}
+  .estados button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:6px 12px; border-radius:20px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+  .estados button[data-v="tengo"].sel{background:var(--ok); color:var(--negro); border-color:var(--ok); font-weight:700;}
+  .estados button[data-v="parcial"].sel{background:var(--parcial); color:var(--negro); border-color:var(--parcial); font-weight:700;}
+  .estados button[data-v="falta"].sel{background:var(--falta); color:#fff; border-color:var(--falta); font-weight:700;}
+  .estados button[data-v="na"].sel{background:var(--na); color:var(--negro); border-color:var(--na); font-weight:700;}
+  .extras{display:grid; grid-template-columns:auto 1fr; gap:8px;}
+  .extras .linea2{grid-column:1/-1;}
+  .extras input,.extras select{background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 10px; border-radius:6px; font-family:inherit; font-size:13px; width:100%;}
+  .extras select{min-width:190px;}
+  .valida{display:none; border-top:1px dashed var(--oro); padding-top:10px; gap:8px;}
+  body.modo-alaris .valida{display:grid;}
+  .vestados{display:flex; gap:6px; flex-wrap:wrap;}
+  .vestados button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:6px 12px; border-radius:6px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+  .vestados button[data-v="aceptado"].sel{background:var(--ok); color:var(--negro); font-weight:700; border-color:var(--ok);}
+  .vestados button[data-v="rechazado"].sel{background:var(--falta); color:#fff; font-weight:700; border-color:var(--falta);}
+  .vestados button[data-v="obs"].sel{background:var(--parcial); color:var(--negro); font-weight:700; border-color:var(--parcial);}
+  .valida input{background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 10px; border-radius:6px; font-family:inherit; font-size:13px; width:100%;}
+  .etiqueta-v{font-size:11.5px; color:var(--oro); font-weight:600;}
+
+  /* ---- observaciones ---- */
+  .avance{background:var(--panel); border:1px solid var(--linea); border-left:4px solid var(--oro);
+    border-radius:8px; padding:16px 18px; margin-bottom:20px;}
+  .avance .cifra{font-family:'Archivo Expanded',sans-serif; font-size:22px; font-weight:700;}
+  .avance .nota{color:var(--texto2); font-size:13px; margin-top:4px;}
+  .avance .pista{height:7px; background:var(--panel2); border-radius:4px; margin-top:10px; overflow:hidden;}
+  .avance .lleno{height:100%; background:var(--ok); width:0%; transition:width .25s;}
+
+  .captura{display:none; background:var(--panel); border:1px solid var(--oro); border-radius:10px; padding:18px; margin-bottom:22px;}
+  body.modo-alaris .captura{display:block;}
+  .captura h3{font-family:'Archivo Expanded',sans-serif; font-size:14px; color:var(--oro); margin-bottom:4px;}
+  .guia{font-size:12.5px; color:var(--texto2); margin-bottom:14px; max-width:70ch;}
+  .guia b{color:var(--texto);}
+  .campos{display:grid; grid-template-columns:repeat(4,1fr); gap:9px;}
+  .campos label{font-size:11.5px; color:var(--texto2); display:block; margin-bottom:3px;}
+  .campos select,.campos input,.campos textarea{width:100%; background:var(--fondo); border:1px solid var(--linea);
+    color:var(--texto); padding:8px 10px; border-radius:6px; font-family:inherit; font-size:13.5px;}
+  .campos .ancho{grid-column:1/-1;}
+  .campos textarea{resize:vertical; min-height:62px;}
+  .btn-add{margin-top:12px; background:var(--rojo); color:#fff; border:0; padding:10px 20px; border-radius:7px;
+    font-family:'Archivo Expanded',sans-serif; font-weight:600; font-size:13px; cursor:pointer;}
+
+  .obs{background:var(--panel); border:1px solid var(--linea); border-left:5px solid var(--linea);
+    border-radius:9px; padding:14px 16px; margin-bottom:11px;}
+  .obs.sev-alta{border-left-color:var(--rojo);}
+  .obs.sev-media{border-left-color:var(--oro);}
+  .obs.sev-info{border-left-color:var(--azul);}
+  .obs .fila1{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:7px;}
+  .folio{font-family:'Archivo Expanded',sans-serif; font-weight:700; font-size:13.5px; color:var(--oro);}
+  .chip{font-size:11.5px; padding:3px 9px; border-radius:12px; background:var(--panel2); color:var(--texto2);}
+  .chip.est-abierta{background:rgba(236,50,55,.18); color:#F0888B;}
+  .chip.est-respondida{background:rgba(209,174,108,.18); color:var(--oro);}
+  .chip.est-cerrada{background:rgba(143,191,127,.16); color:var(--ok);}
+  .chip.est-reincidente{background:rgba(236,50,55,.3); color:#FFB3B5;}
+  .obs .texto{font-size:14px; margin-bottom:8px;}
+  .obs .meta{font-size:12.5px; color:var(--texto2); margin-bottom:9px;}
+  .obs .acciones{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+  .obs .acciones button{background:var(--panel2); border:1px solid var(--linea); color:var(--texto2);
+    padding:6px 11px; border-radius:6px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+  .obs .acciones button.on{background:var(--oro); color:var(--negro); font-weight:700; border-color:var(--oro);}
+  .obs .respuesta{margin-top:9px; display:grid; gap:7px;}
+  .obs .respuesta input{background:var(--fondo); border:1px solid var(--linea); color:var(--texto);
+    padding:7px 10px; border-radius:6px; font-family:inherit; font-size:13px; width:100%;}
+  .vacio{color:var(--texto2); font-size:13.5px; padding:22px; text-align:center; border:1px dashed var(--linea); border-radius:9px;}
+
+  .barra{position:fixed; bottom:0; left:0; right:0; background:var(--negro); border-top:2px solid var(--oro);
+    padding:12px 20px; display:flex; align-items:center; gap:13px; flex-wrap:wrap; z-index:10;}
+  .barra .prog{flex:1; min-width:170px;}
+  .prog .num{font-family:'Archivo Expanded',sans-serif; font-weight:700; font-size:14.5px;}
+  .prog .pista{height:6px; background:var(--panel2); border-radius:3px; margin-top:6px; overflow:hidden;}
+  .prog .lleno{height:100%; background:var(--oro); width:0%; transition:width .2s;}
+  .barra button{font-family:'Archivo Expanded',sans-serif; font-weight:600; font-size:13px; cursor:pointer;
+    padding:11px 17px; border-radius:8px; border:1px solid var(--oro); background:transparent; color:var(--oro);}
+  .barra button.primario{background:var(--rojo); border-color:var(--rojo); color:#fff;}
+  .barra input[type=file]{display:none;}
+
+  .beta{display:inline-block; margin-left:10px; font-family:'Archivo',sans-serif; font-size:11px; font-weight:700; letter-spacing:.12em;
+    color:var(--negro); background:var(--oro); padding:3px 8px; border-radius:4px; vertical-align:middle;}
+  .cinta{margin-top:16px; background:var(--panel); border:1px solid var(--linea); border-left:4px solid var(--oro); border-radius:8px;
+    padding:12px 16px; font-size:13.5px; color:var(--texto2); display:flex; gap:14px; align-items:center; flex-wrap:wrap;}
+  .cinta b{color:var(--texto);}
+  .cinta a{color:var(--negro); background:var(--oro); text-decoration:none; font-weight:700; padding:7px 13px; border-radius:6px; white-space:nowrap; margin-left:auto;}
+  .pie{margin-top:40px; padding-top:14px; border-top:2px solid var(--oro); color:var(--texto2); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  .pie a{color:var(--oro);}
+  @media print{.beta,.cinta,.pie{display:none !important;}}
+  .solo-print{display:none;}
+  @media print{
+    body{background:#fff; color:#111; font-size:11px;}
+    .modo,.barra,.etapas,.captura,.flecha,.obs .acciones,.estados button:not(.sel),.vestados button:not(.sel){display:none !important;}
+    .vista{display:block !important;}
+    header{border-color:#111;} .marca b{color:#B5262A;} h1{font-size:20px;} .sub{color:#444;}
+    details.seccion{border:1px solid #999; background:#fff; break-inside:avoid;}
+    details.seccion summary{color:#111;}
+    .alcance{background:#fff; border-top:1px solid #999;} .alcance .et{color:#444;}
+    .nota-alcance{color:#444;} .nota-alcance.ver{display:block;}
+    details.seccion:not([open]) .item{display:grid !important;}
+    .candados{border-color:#B5262A; background:#fff;} .candados h2{color:#B5262A;} .aviso{display:none !important;}
+    .item{border-color:#ccc;} .item .nombre{color:#111;}
+    .estados button.sel,.vestados button.sel{border:1.5px solid #111; background:#fff !important; color:#111 !important;}
+    input,textarea,select{border:0; border-bottom:1px solid #999; background:#fff; color:#111; border-radius:0; appearance:none;}
+    .extras{grid-template-columns:auto 1fr;}
+    .valida{display:grid !important; border-color:#999;} .etiqueta-v{color:#555;} .conteo{color:#555;}
+    .avance{background:#fff; border:1px solid #999;} .avance .nota{color:#444;}
+    .obs{background:#fff; border:1px solid #999; break-inside:avoid;} .obs .meta{color:#444;}
+    .folio{color:#B5262A;} .chip{border:1px solid #999; color:#111;}
+    .solo-print{display:block; margin-top:36px; break-inside:avoid;}
+    .firmas{display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:56px;}
+    .firmas div{border-top:1px solid #111; padding-top:8px; text-align:center; font-size:11px;}
+  }
+  @media(max-width:700px){
+    .barra{padding:9px 14px; gap:8px;} .barra .btn-com{display:none;} .barra button{padding:8px 11px; font-size:12px;} .barra .prog{flex-basis:100%;}
+    .datos,.extras{grid-template-columns:1fr;}
+    .campos{grid-template-columns:1fr 1fr;}
+  }
+
+[hidden]{display:none !important;}
+/* ---- OTT ---- */
+.marco{max-width:1040px;}
+.datos input[readonly]{opacity:.85;}
+.ref{font-family:'Archivo',sans-serif; font-size:11.5px; font-weight:700; letter-spacing:.04em; color:var(--negro); background:var(--oro); padding:2px 7px; border-radius:4px; white-space:nowrap;}
+.act{font-size:11.5px; color:var(--texto2); border:1px solid var(--linea); padding:2px 7px; border-radius:4px; white-space:nowrap;}
+.item .nombre{display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;}
+.item .nombre .ref{font-size:10.5px; padding:1px 6px;}
+.vinculo{border-top:1px solid var(--linea); background:var(--panel2); padding:9px 18px; font-size:12.5px; color:var(--texto2); display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.estados button[disabled],.vestados button[disabled]{cursor:default; opacity:.55;}
+.estados button.sel[disabled],.vestados button.sel[disabled]{opacity:1;}
+.quien{font-size:11.5px; color:var(--texto2);}
+.etapas{overflow-x:auto;}
+.etapas button{white-space:nowrap;}
+/* acceso */
+.cuenta{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:14px; font-size:13px; color:var(--texto2);}
+.cuenta button{background:transparent; border:1px solid var(--oro); color:var(--oro); padding:6px 12px; border-radius:6px; font-family:inherit; font-size:12.5px; cursor:pointer;}
+.rol{font-size:11px; font-weight:700; letter-spacing:.08em; padding:2px 7px; border-radius:4px; background:var(--panel2); color:var(--oro);}
+.gate{position:fixed; inset:0; z-index:40; display:grid; place-items:center; padding:24px; background:rgba(32,30,31,.88); backdrop-filter:blur(6px);}
+.gate .card{background:var(--panel); border:1px solid var(--linea); border-top:3px solid var(--oro); border-radius:14px; padding:30px 26px; max-width:450px; width:100%; text-align:center; display:flex; flex-direction:column; gap:13px;}
+.gate .marca{font-size:13px;}
+.gate h2{font-family:'Archivo Expanded',sans-serif; font-size:21px; line-height:1.2;}
+.gate p{color:var(--texto2); font-size:14px;}
+.gate .gbtn{display:inline-flex; align-items:center; justify-content:center; gap:10px; border:0; background:var(--rojo); color:#fff; border-radius:8px; padding:12px 18px; font-family:'Archivo Expanded',sans-serif; font-size:14px; font-weight:600; cursor:pointer;}
+.gate .gbtn svg{width:20px; height:20px; background:#fff; border-radius:50%; padding:2px;}
+.gate small{color:var(--texto2); font-size:12px;}
+.toast{position:fixed; right:16px; bottom:86px; background:var(--texto); color:var(--negro); padding:10px 14px; border-radius:8px; font-size:13px; z-index:50; max-width:min(420px,calc(100vw - 32px));}
+/* tablero */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:18px;}
+.kpi{background:var(--panel); border:1px solid var(--linea); border-radius:10px; padding:13px 15px;}
+.kpi .lab{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--texto2);}
+.kpi .val{font-family:'Archivo Expanded',sans-serif; font-size:24px; font-weight:700; margin-top:3px;}
+.kpi .pie2{font-size:12px; color:var(--texto2);}
+.kpi.rojo .val{color:var(--rojo);} .kpi.verde .val{color:var(--ok);} .kpi.oro .val{color:var(--oro);}
+.panelT{background:var(--panel); border:1px solid var(--linea); border-radius:10px; padding:16px 18px; margin-bottom:16px;}
+.panelT h3{font-family:'Archivo Expanded',sans-serif; font-size:14px; margin-bottom:4px;}
+.panelT .nota{font-size:12.5px; color:var(--texto2); margin-bottom:12px;}
+.fila{display:grid; grid-template-columns:minmax(150px,280px) 1fr 92px; gap:10px; align-items:center; padding:6px 0; border-top:1px solid var(--linea); font-size:13px;}
+.fila:first-of-type{border-top:0;}
+.fila .r{font-family:'Archivo',sans-serif; text-align:right; color:var(--texto2); font-variant-numeric:tabular-nums;}
+.apil{display:flex; height:12px; border-radius:6px; overflow:hidden; background:var(--panel2);}
+.apil span{display:block; height:100%;}
+.leyenda{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--texto2); margin-bottom:8px;}
+.leyenda i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px;}
+.plazo{position:relative; height:44px; margin:10px 0 4px;}
+.plazo .base{position:absolute; left:0; right:0; top:18px; height:8px; background:var(--panel2); border-radius:4px;}
+.plazo .seg{position:absolute; top:18px; height:8px; border-radius:4px;}
+.plazo .hoy{position:absolute; top:6px; bottom:4px; width:2px; background:var(--texto);}
+.plazo .tag{position:absolute; top:0; font-size:11px; color:var(--texto2); white-space:nowrap; transform:translateX(-50%);}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media(max-width:800px){.grid2{grid-template-columns:1fr;} .fila{grid-template-columns:1fr 70px;} .fila .apil{grid-column:1/-1; grid-row:2;}}
+.tabla{width:100%; border-collapse:collapse; font-size:13px;}
+.tabla th{text-align:left; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--texto2); padding:6px 8px; border-bottom:1px solid var(--linea);}
+.tabla td{padding:7px 8px; border-bottom:1px solid var(--linea); vertical-align:top;}
+.tabla td.n{text-align:right; font-variant-numeric:tabular-nums;}
+@media print{.gate,.cuenta,.toast,#vista-3{display:none !important;} .ref{border:1px solid #111; background:#fff; color:#111;} .vinculo{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="marco">
+  <header>
+    <div class="marca">GRUPO <b>ALARIS</b> · CONSTRUCCIÓN VIRTUAL · ALR-2026-010</div>
+    <h1>Revisión del proyecto ejecutivo · Oficina de Transferencia de Tecnología</h1>
+    <p class="sub">Formato de revisión ajustado a los Términos de Referencia del contrato (licitación SPFA-OP-LPE-2026-115). Solo se piden los entregables que exigen los numerales 6 y 21 de los TdR: primero confirmamos qué documentación existe y después trabajamos las observaciones técnicas hasta el Proyecto Ejecutivo Autorizado.</p>
+    <div class="cinta"><span><b>Plazo del proyecto ejecutivo:</b> TdR, máximo 30 días naturales · Propuesta del contratista (DP-13), 20 días: 11-nov-26 al 30-nov-26. La validación es de constructibilidad dentro del Sistema ALARIS; no es dictamen de DRO.</span></div>
+    <div class="cuenta"><span id="cuentaTxt">Conectando…</span><button id="salirBtn" type="button" hidden>Salir</button></div>
+  </header>
+
+  <div class="datos">
+    <div><label for="d-proy">Proyecto</label><input id="d-proy" data-campo="proyecto" readonly value="Proyecto integral para la construcción de la Oficina de Transferencia de Tecnología y Vinculación Empresarial"></div>
+    <div><label for="d-cli">Contratante / Residente</label><input id="d-cli" data-campo="cliente" placeholder="Secretaría de Infraestructura del Estado de Puebla · Residente de obra"></div>
+    <div><label for="d-ubi">Ubicación</label><input id="d-ubi" data-campo="ubicacion" readonly value="Ciudad Modelo, San José Chiapa, Puebla"></div>
+    <div><label for="d-con">Contratista / responsable del proyecto ejecutivo</label><input id="d-con" data-campo="contratista" placeholder="Razón social y responsable"></div>
+    <div><label for="d-fecha">Fecha de revisión</label><input id="d-fecha" data-campo="fecha" type="date"></div>
+    <div><label for="d-entrega">Entrega revisada</label><input id="d-entrega" data-campo="entrega" placeholder="Ej. Entrega 1 · 25-nov-26"></div>
+  </div>
+
+  <div class="etapas">
+    <button id="tab-1" class="activo" onclick="setEtapa(1)">1 · Documentación TdR</button>
+    <button id="tab-2" onclick="setEtapa(2)">2 · Observaciones técnicas</button>
+    <button id="tab-3" onclick="setEtapa(3)">3 · Tablero de revisión</button>
+  </div>
+
+  <!-- ============ ETAPA 1 ============ -->
+  <div class="vista activa" id="vista-1">
+    <section class="candados">
+      <h2>Requisitos de entrada · Estudios previos base</h2>
+      <p>Sin estos estudios (TdR 6.1) no es posible validar la constructibilidad: cimentación, niveles, desalojo pluvial y conexiones dependen de ellos.</p>
+      <div id="lista-candados"></div>
+      <div class="aviso" id="aviso-candados"></div>
+    </section>
+    <div id="lista-secciones"></div>
+  </div>
+
+  <!-- ============ ETAPA 2 ============ -->
+  <div class="vista" id="vista-2">
+    <div class="avance">
+      <div class="cifra" id="av-cifra">Sin observaciones registradas</div>
+      <div class="nota" id="av-nota">Cada punto resuelto acerca el proyecto a su autorización.</div>
+      <div class="pista"><div class="lleno" id="av-lleno"></div></div>
+    </div>
+
+    <div class="captura">
+      <h3>Registrar observación</h3>
+      <p class="guia">Escribe la observación en función de <b>lo que la obra necesita</b>, no de lo que el proyecto omitió: "requerimos el nivel de desplante en el eje C-4 para cuantificar la excavación" en lugar de "falta el nivel". Cita el <b>numeral de los TdR</b> que la sustenta y cierra con la información concreta que se solicita.</p>
+      <div class="campos">
+        <div><label for="f-disc">Especialidad (TdR)</label><select id="f-disc"></select></div>
+        <div><label for="f-plano">Plano / documento</label><input id="f-plano" placeholder="A-04"></div>
+        <div><label for="f-ubi">Ubicación (nivel y ejes)</label><input id="f-ubi" placeholder="N+5.70, ejes C-4"></div>
+        <div>
+          <label for="f-sev">Severidad</label>
+          <select id="f-sev">
+            <option value="alta">Detiene obra o seguridad</option>
+            <option value="media">Impacta costo o tiempo</option>
+            <option value="info">Precisión de información</option>
+          </select>
+        </div>
+        <div class="ancho">
+          <label for="f-txt">Observación (texto que va dentro de la nube en el PDF)</label>
+          <textarea id="f-txt" placeholder="Para cuantificar la excavación requerimos el nivel de desplante de la zapata en el eje C-4 (TdR 6.2.3)."></textarea>
+        </div>
+      </div>
+      <button class="btn-add" onclick="agregarObs()">Agregar observación</button>
+    </div>
+
+    <div id="lista-obs"></div>
+  </div>
+
+  <!-- ============ ETAPA 3 ============ -->
+  <div class="vista" id="vista-3">
+    <div class="kpis" id="t-kpis"></div>
+    <div class="panelT">
+      <h3>Plazo del proyecto ejecutivo</h3>
+      <div class="nota" id="t-plazo-nota"></div>
+      <div class="plazo" id="t-plazo"></div>
+    </div>
+    <div class="panelT">
+      <h3>Completitud por numeral de los TdR</h3>
+      <div class="nota">Entregables recibidos según el contratista y validación de Grupo Alaris. Los marcados "No aplica" no cuentan.</div>
+      <div class="leyenda"><span><i style="background:var(--ok)"></i>Lo tiene</span><span><i style="background:var(--parcial)"></i>Parcial</span><span><i style="background:var(--falta)"></i>No lo tiene</span><span><i style="background:var(--panel2);border:1px solid var(--linea)"></i>Sin responder</span></div>
+      <div id="t-secciones"></div>
+    </div>
+    <div class="grid2">
+      <div class="panelT">
+        <h3>Observaciones por estado</h3>
+        <div class="leyenda"><span><i style="background:var(--falta)"></i>Abierta</span><span><i style="background:var(--oro)"></i>Respondida</span><span><i style="background:var(--ok)"></i>Cerrada</span><span><i style="background:#FFB3B5"></i>Reincidente</span></div>
+        <div id="t-obs-disc"></div>
+      </div>
+      <div class="panelT">
+        <h3>Observaciones abiertas por severidad</h3>
+        <div id="t-obs-sev"></div>
+        <h3 style="margin-top:16px">Entregables faltantes críticos</h3>
+        <div class="nota">Requisitos de entrada y entregables que el contratista marcó "No lo tengo".</div>
+        <div id="t-faltan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie"><span><b style="color:var(--texto);letter-spacing:.1em">GRUPO ALARIS</b> · Construcción virtual · Puebla, México</span><a href="https://www.grupoalaris.mx/ott/">Tablero de control de obra OTT</a></div>
+
+  <div class="solo-print">
+    <p><b>Dictamen de revisión:</b> ______ ACEPTADO &nbsp;&nbsp; ______ ACEPTADO CON OBSERVACIONES &nbsp;&nbsp; ______ NO ACEPTADO</p>
+    <p style="margin-top:6px;font-size:10px">Validación de constructibilidad dentro del Sistema ALARIS conforme a los Términos de Referencia del contrato. No sustituye la autorización del Residente ni el dictamen de DRO.</p>
+    <div class="firmas">
+      <div>Contratista · Responsable del proyecto ejecutivo<br>Nombre y firma</div>
+      <div>Grupo Alaris · Revisó<br>Arq. Alfonso Leal Vargas<br>Nombre y firma</div>
+    </div>
+  </div>
+</div>
+
+<div class="barra">
+  <div class="prog">
+    <span class="num" id="prog-num">0 de 0 respondidos</span>
+    <div class="pista"><div class="lleno" id="prog-lleno"></div></div>
+  </div>
+  <button onclick="exportarJSON()">Descargar respaldo</button>
+  <button class="primario" onclick="window.print()">Generar documento para firma</button>
+</div>
+
+<div class="gate" id="gate" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="gateT">
+    <div class="marca">GRUPO <b>ALARIS</b> · CONSTRUCCIÓN VIRTUAL</div>
+    <h2 id="gateT">Revisión del proyecto ejecutivo · OTT</h2>
+    <p>Entra con tu cuenta de Google. La primera vez quedas registrado: el contratista y sus proyectistas marcan los entregables y responden observaciones; Grupo Alaris valida.</p>
+    <button class="gbtn" id="gateBtn" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17z"/><path fill="#FBBC05" d="M10.6 28.6A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.1.8-4.6l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.2-8.5 2.2-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>Entrar con Google</button>
+    <small>Solo se guarda tu nombre y correo para identificar quién captura.</small>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+"use strict";
+/* ================= Catálogo según Términos de Referencia ================= */
+const CANDADOS = [
+  {id:"c1", ref:"6.1.1", n:"Levantamiento topográfico: poligonal y cuadro de construcción, curvas de nivel a 1.00 m, bancos de nivel, listado de puntos x,y,z, libretas y plano definitivo"},
+  {id:"c2", ref:"6.1.3", n:"Estudio de mecánica de suelos: estratigrafía, capacidad de carga, asentamientos, parámetros sísmicos y propuesta de cimentación, firmado en todas sus hojas"},
+  {id:"c3", ref:"6.1.2", n:"Estudio hidrológico: curvas IDF, lluvia de diseño, plano de cuencas y gastos, memoria e informe final"},
+  {id:"c4", ref:"6.1.6", n:"Factibilidades de servicios: energía eléctrica ante CFE (PROTER), agua potable, drenaje y descarga pluvial"},
+];
+const SECCIONES = [
+  {t:"Estudios previos complementarios", ref:"6.1", act:"ACT-01", items:[
+    ["6.1.3","Diseño de pavimentos: sondeos PCA, ensayes, CBR, perfiles estratigráficos y memoria de cálculo"],
+    ["6.1.4","Estudio de impacto de movilidad con propuesta de acciones, validado por la autoridad"],
+    ["6.1.5","Manifestación de Impacto Ambiental y resolutivo de la autoridad"],
+    ["6.1.6","Acuses de ingreso y resoluciones de licencias, permisos y factibilidades a nombre del Gobierno del Estado"],
+    ["6.1.6","Banco de tiro autorizado por el municipio"],
+    ["6.1.1","Reporte fotográfico del sitio y de la topografía"]]},
+  {t:"Proyecto de señalamiento para protección de obra", ref:"6.2.1", act:"ACT-02", items:[
+    ["6.2.1","Planos de dispositivos de seguridad con cuadro de especificaciones (NOM y manual SCT vigentes)"],
+    ["6.2.1","Resumen de señalamiento vertical (señal, dimensión, cantidad) y detalles constructivos"]]},
+  {t:"Proyecto arquitectónico", ref:"6.2.2", act:"Todas", items:[
+    ["6.2.2","Plantas arquitectónicas de planta baja y planta alta con NPT, cotas y superficies por destino"],
+    ["6.2.2","Planta de conjunto: edificio, explanada, área verde y estacionamiento"],
+    ["6.2.2","Cortes y fachadas"],
+    ["6.2.2","Proyecto de accesibilidad NMX-R-050-SCFI-2006: ruta accesible, sanitarios, pavimento táctil y señalización"],
+    ["6",    "Rutas de evacuación, salidas de emergencia y escalera de emergencia a azotea"],
+    ["6.2.2","Detalles constructivos arquitectónicos"],
+    ["5",    "Renders del proyecto"]]},
+  {t:"Proyecto estructural", ref:"6.2.3", act:"ACT-03", items:[
+    ["6.2.3","Memoria de cálculo estructural referenciada al estudio de mecánica de suelos"],
+    ["6.2.3","Planos de cimentación con niveles de desplante y especificaciones"],
+    ["6.2.3","Planos de superestructura (estructura metálica y losas) con especificaciones"],
+    ["6.2.3","Detalles de refuerzo y conexiones, con notas de procedimiento constructivo"],
+    ["6.2.3","Informe digital: archivos del programa de análisis y hojas de cálculo"]]},
+  {t:"Proyecto de albañilería", ref:"6.2.4", act:"ACT-04", items:[
+    ["6.2.4","Planos con cotas de firmes, juntas, muros, mochetas y pretiles"],
+    ["6.2.4","Materiales, detalles constructivos y vanos dimensionados para accesibilidad"]]},
+  {t:"Proyecto de acabados", ref:"6.2.5", act:"ACT-05", items:[
+    ["6.2.5","Planos de acabados en pisos, muros y plafones: plantas, alzados, secciones y detalles"],
+    ["6.2.5","Memoria descriptiva: materiales, colorimetría, mobiliario e iluminación"],
+    ["6",    "Tratamiento acústico del auditorio y espacios que lo requieran; piso antiestático del laboratorio"]]},
+  {t:"Proyecto de herrería, cancelería y cerrajería", ref:"6.2.8", act:"ACT-06", items:[
+    ["6.2.8","Planos de herrería: perfiles, dimensiones, materiales y procedimiento de fijación"],
+    ["6.2.8","Planos de cancelería y cerrajería"],
+    ["6.2.8","Detalles y memoria descriptiva"]]},
+  {t:"Proyecto de instalaciones hidrosanitarias", ref:"6.2.7", act:"ACT-07", items:[
+    ["6.2.7","Memoria de cálculo hidráulica"],
+    ["6.2.7","Memoria de cálculo sanitaria"],
+    ["6.2.7","Planos hidráulicos y sanitarios: plantas, isométricos y detalles"]]},
+  {t:"Proyecto de instalaciones pluviales", ref:"6.2.9", act:"ACT-08", items:[
+    ["6.2.9","Cálculo de aportaciones y diámetros basado en el estudio hidrológico"],
+    ["6.2.9","Planos de captación, conducción, descarga y coladeras pluviales"],
+    ["6.2.9","Informe final con resultados y recomendaciones"]]},
+  {t:"Proyecto de instalaciones eléctricas, alumbrado e iluminación", ref:"6.2.6", act:"ACT-09", items:[
+    ["6.2.6","Memoria de cálculo: alimentadores en media y baja tensión, caídas de tensión, corto circuito y sistema de tierras"],
+    ["6.2.6","Cuadros de cargas y diagramas unifilares (NOM-001-SEDE-2012)"],
+    ["6.2.6","Planos de baja tensión con detalles, simbología y cédula de cableado"],
+    ["6.2.6","Planos de media tensión"],
+    ["6.2.6","Cálculo de iluminación en software con resultado gráfico por área tipo"],
+    ["6.2.6","Aprobación de UVIE vigente; planos y memorias firmados con cédula del calculista"]]},
+  {t:"Proyecto de obras inducidas", ref:"6.2.10", act:"ACT-12", items:[
+    ["6.2.10","Proyecto eléctrico ante CFE (PROTER): transición aérea-subterránea, transformador tipo pedestal, tierras, ductos y registros de media tensión, medición"],
+    ["6.2.10","Toma de agua potable y descargas sanitaria y pluvial a las redes municipales"],
+    ["6.2.10","Reporte del recorrido conjunto con el Residente y las autoridades"]]},
+  {t:"Proyecto geométrico y de pavimentos", ref:"6.2.11", act:"ACT-12", items:[
+    ["6.2.11","Planta general con ejes, cadenamientos y perfiles"],
+    ["6.2.11","Rasantes, secciones y estructura de pavimento del estacionamiento (48 cajones mínimo)"]]},
+  {t:"Proyecto de señalética interior, vertical y horizontal", ref:"6.2.12", act:"ACT-11", items:[
+    ["6.2.12","Planos con resumen de señalamiento horizontal y vertical (señal, dimensión, cantidad y descripción)"],
+    ["6.2.12","Señalética interior, de orientación y de protección civil"]]},
+  {t:"Proyecto de instalaciones especiales", ref:"6.2.13", act:"ACT-10", items:[
+    ["6.2.13","Voz y datos: diseño de red, cableado vertical y horizontal, rack y SITE, planos y documento de propuesta"],
+    ["6.2.13","CCTV: ubicación de cámaras, cableado, ductería y centro de control"],
+    ["6.2.13","Gas: memoria de cálculo de perito, isométrico, listado de materiales y detalle de tanque (NOM-002-SECRE)"],
+    ["6.2.13","Protección contra incendios: detección, alarma con estrobos, estaciones manuales, extintores y memoria"],
+    ["6.2.13","Alerta sísmica temprana (NTCPC-007-2017)"],
+    ["6.2.13","Control de accesos: arquitectura del sistema, diagramas de interconexión, planos y memorias"],
+    ["6.2.13","HVAC: memorias de cálculo, planos con isométricos y fichas técnicas"],
+    ["6.2.13","Audio y video del auditorio: diagramas de interconexión, planos y especificaciones"]]},
+  {t:"Expediente del Proyecto Ejecutivo Autorizado", ref:"6.2.14 · 21", act:"ACT-01", items:[
+    ["6.2.14","Memoria descriptiva y procedimiento constructivo"],
+    ["6.2.14","Generadores de obra: concepto, ubicación (ejes, niveles), dimensiones, cálculo, unidad, cantidad y croquis"],
+    ["6.2.14","Especificaciones de construcción generales y particulares"],
+    ["6.2.14","Memorias de cálculo de todas las especialidades"],
+    ["6.2.14","Normas de calidad"],
+    ["6.2.14","Manuales de operación y mantenimiento"],
+    ["6.2.14","Fichas técnicas de equipos"],
+    ["6.2.14","Croquis de macro y micro localización y archivo KML"],
+    ["6.2.14","Reporte fotográfico"],
+    ["21",    "Dos juegos impresos firmados por los corresponsables en todos los planos y documentos, y digitalización completa"]]},
+  {t:"Cumplimiento del programa arquitectónico", ref:"6", act:"Validación", tipo:"cumple", items:[
+    ["6","Desplante mínimo de 821.44 m² en dos niveles (planta baja y planta alta)"],
+    ["6","Altura libre mínima: planta baja 5.70 m, planta alta 3.55 m"],
+    ["6","Auditorio ≥ 132.84 m², 90 butacas, mesa para 5 y espacio para sillas de ruedas"],
+    ["6","Sala de exposición ≥ 133.35 m² con acceso peatonal y vehicular independiente"],
+    ["6","Taller/laboratorio ≥ 135.49 m²: área de baterías con ventilación forzada, piso antiestático y tierra física dedicada"],
+    ["6","Acceso/recepción ≥ 60.44 m² · vestíbulo y circulación PB ≥ 145.25 m² · escalera ≥ 29.68 m²"],
+    ["6","Sanitarios PB ≥ 41.60 m² · cafetería ≥ 67.24 m² y terraza ≥ 67.24 m² · SITE ≥ 8.31 m² con control de temperatura"],
+    ["6","Planta alta: 6 cubículos Startups ≥ 132.01 m² · 2 salas de juntas ≥ 46.84 m² · sanitarios ≥ 34.43 m²"],
+    ["6","Planta alta: administración ≥ 23.36 m² · biblioteca ≥ 24.87 m² · vestíbulo ≥ 82.32 m² · oficina privada ≥ 90.94 m² con sanitario, archivo y sala de juntas"],
+    ["6","Exteriores: explanada ≥ 229.04 m² · área verde ≥ 41.13 m² · estacionamiento ≥ 2,645.88 m² con 48 cajones mínimo"]]},
+];
+const DISC = [
+  ["TOP","Topografía · 6.1.1"],["HID","Hidrológico · 6.1.2"],["MS","Mecánica de suelos y pavimentos · 6.1.3"],["MOV","Impacto de movilidad · 6.1.4"],
+  ["AMB","Impacto ambiental · 6.1.5"],["TRA","Trámites y factibilidades · 6.1.6"],["SPO","Señalamiento de protección de obra · 6.2.1"],
+  ["ARQ","Arquitectónico · 6.2.2"],["EST","Estructural · 6.2.3"],["ALB","Albañilería · 6.2.4"],["ACA","Acabados · 6.2.5"],
+  ["ELE","Eléctrica, alumbrado e iluminación · 6.2.6"],["HSA","Hidrosanitaria · 6.2.7"],["HCC","Herrería, cancelería y cerrajería · 6.2.8"],
+  ["PLU","Pluvial · 6.2.9"],["OIN","Obras inducidas · 6.2.10"],["GEO","Geométrico y pavimentos · 6.2.11"],["SEN","Señalética · 6.2.12"],
+  ["ESP","Instalaciones especiales · 6.2.13"],["EXP","Expediente · 6.2.14"]];
+const ESTADOS = {
+  doc:[{v:"tengo",t:"Lo tengo"},{v:"parcial",t:"Lo tengo parcial"},{v:"falta",t:"No lo tengo"},{v:"na",t:"No aplica"}],
+  cumple:[{v:"tengo",t:"Cumple"},{v:"parcial",t:"Cumple parcial"},{v:"falta",t:"No cumple"},{v:"na",t:"Sin información"}]};
+const GUIA_COMENT = {tengo:"¿Alguna aclaración sobre este documento? (opcional)", parcial:"¿Qué parte tienes y cuál falta?",
+  falta:"¿Está en proceso? ¿Para cuándo lo tendrías?", na:"¿Por qué no aplica? (los TdR lo piden: justifica)", "":"Selecciona primero el estado de arriba"};
+const VALIDACIONES = [{v:"aceptado",t:"Aceptado"},{v:"obs",t:"Con observaciones"},{v:"rechazado",t:"No aceptado"}];
+const SEV_TXT = {alta:"Detiene obra o seguridad", media:"Impacta costo o tiempo", info:"Precisión de información"};
+const EST_TXT = {abierta:"Abierta", respondida:"Respondida", cerrada:"Cerrada", reincidente:"Reincidente"};
+const PE_INI = "2026-11-11", PE_FIN_PROP = "2026-11-30", PE_FIN_TDR = "2026-12-10";
+
+/* ================= Estado ================= */
+const R = {};          // checklist por id
+const G = {};          // datos generales
+let OBS = [];          // observaciones
+const S = {db:null, me:null, admin:false, nombre:""};
+let etapa = 1;
+const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+let toastT; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,3400); }
+const TODOS = [...CANDADOS.map(c=>({id:c.id, ref:c.ref, n:c.n, sec:-1, tipo:"doc"})),
+  ...SECCIONES.flatMap((s,si)=>s.items.map((it,ii)=>({id:`s${si}i${ii}`, ref:it[0], n:it[1], sec:si, tipo:s.tipo||"doc"})))];
+
+/* ================= Checklist ================= */
+function itemHTML(it){
+  const est = ESTADOS[it.tipo];
+  return `<div class="item" data-id="${it.id}">
+    <div class="nombre"><span class="ref">TdR ${esc(it.ref)}</span><span>${esc(it.n)}</span></div>
+    <div class="estados" role="group" aria-label="Estado de ${esc(it.n)}">
+      ${est.map(e=>`<button type="button" data-v="${e.v}" onclick="setEstado('${it.id}','${e.v}')">${e.t}</button>`).join("")}
+    </div>
+    <div class="extras">
+      <select data-k="soporte" onchange="setCampo('${it.id}','soporte',this.value)" aria-label="Formato">
+        <option value="">¿En qué formato lo tienes?</option><option value="impreso">Impreso</option>
+        <option value="digital">Digital (PDF o DWG)</option><option value="ambos">Impreso y digital</option>
+      </select>
+      <input data-k="archivo" placeholder="Nombre del archivo o número de lámina" onchange="setCampo('${it.id}','archivo',this.value)" aria-label="Archivo">
+      <input data-k="coment" class="linea2" placeholder="Selecciona primero el estado de arriba" onchange="setCampo('${it.id}','coment',this.value)" aria-label="Comentario">
+    </div>
+    <div class="valida">
+      <span class="etiqueta-v">Validación Grupo Alaris</span>
+      <div class="vestados" role="group" aria-label="Validación">
+        ${VALIDACIONES.map(e=>`<button type="button" data-v="${e.v}" onclick="setVal('${it.id}','${e.v}')">${e.t}</button>`).join("")}
+      </div>
+      <input data-k="valObs" placeholder="Observación del revisor" onchange="setCampo('${it.id}','valObs',this.value)" aria-label="Observación del revisor">
+    </div>
+    <div class="quien" data-k="quien"></div>
+  </div>`;
+}
+function render(){
+  document.getElementById("lista-candados").innerHTML = TODOS.filter(t=>t.sec===-1).map(itemHTML).join("");
+  document.getElementById("lista-secciones").innerHTML = SECCIONES.map((s,si)=>`
+    <details class="seccion" ${si===0?"open":""}>
+      <summary><span class="flecha">▶</span>${esc(s.t)} <span class="ref">TdR ${esc(s.ref)}</span><span class="conteo" id="cont-${si}"></span></summary>
+      <div class="vinculo">Actividad del catálogo: <span class="act">${esc(s.act)}</span>${s.tipo==="cumple"?"Lo revisa Grupo Alaris contra los planos entregados.":""}</div>
+      ${TODOS.filter(t=>t.sec===si).map(itemHTML).join("")}
+    </details>`).join("");
+  const sel=document.getElementById("f-disc"); sel.innerHTML=DISC.map(d=>`<option value="${d[0]}">${d[0]} · ${esc(d[1])}</option>`).join("");
+  pintarTodo(); renderObs();
+}
+function pintarTodo(){ document.querySelectorAll(".item").forEach(el=>pintar(el.dataset.id)); refrescar(); if(etapa===3) renderTablero(); }
+function pintar(id){
+  const el=document.querySelector(`.item[data-id="${id}"]`); if(!el) return; const r=R[id]||{};
+  el.querySelectorAll(".estados button").forEach(b=>{ b.classList.toggle("sel", r.estado===b.dataset.v); b.disabled=!S.db; });
+  el.querySelectorAll(".vestados button").forEach(b=>{ b.classList.toggle("sel", r.val===b.dataset.v); b.disabled=!S.admin; });
+  el.querySelectorAll("[data-k]").forEach(f=>{ const k=f.dataset.k; if(k==="quien") return; if(document.activeElement!==f) f.value=r[k]||""; f.disabled = k==="valObs" ? !S.admin : !S.db; });
+  const c=el.querySelector('[data-k="coment"]'); c.placeholder=GUIA_COMENT[r.estado||""];
+  el.querySelector('[data-k="quien"]').textContent = r.byName ? `Actualizó ${r.byName} · ${String(r.at||"").slice(0,10)}` : "";
+}
+async function guardarItem(id,patch){
+  if(!S.db){ toast("Entra con tu cuenta de Google para capturar."); return; }
+  R[id]=Object.assign(R[id]||{},patch); pintar(id); refrescar();
+  try{ await S.db.doc("rev_ott_items/"+id).set(Object.assign({},patch,{at:new Date().toISOString(),by:S.me,byName:S.nombre}),{merge:true}); }
+  catch(e){ toast(e&&e.code==="permission-denied"?"Solo Grupo Alaris puede capturar la validación.":"No se pudo guardar. Intenta de nuevo."); }
+}
+function setEstado(id,v){ guardarItem(id,{estado:v}); }
+function setVal(id,v){ if(!S.admin) return; guardarItem(id,{val:v}); }
+function setCampo(id,c,v){ guardarItem(id,{[c]:v}); }
+function refrescar(){
+  const total=TODOS.length, resp=TODOS.filter(t=>R[t.id]&&R[t.id].estado).length;
+  document.getElementById("prog-num").textContent=`${resp} de ${total} respondidos`;
+  document.getElementById("prog-lleno").style.width=(resp/total*100)+"%";
+  SECCIONES.forEach((s,si)=>{ const its=TODOS.filter(t=>t.sec===si); const n=its.filter(t=>R[t.id]&&R[t.id].estado).length;
+    const ac=its.filter(t=>R[t.id]&&R[t.id].val==="aceptado").length;
+    const el=document.getElementById(`cont-${si}`); if(el) el.textContent=`${n}/${its.length} respondidos · ${ac} aceptados`; });
+  const ec=CANDADOS.map(c=>R[c.id]&&R[c.id].estado); const av=document.getElementById("aviso-candados");
+  if(ec.some(e=>e==="falta"||e==="na")){ av.className="aviso rojo"; av.textContent="Hay estudios previos pendientes. La validación de constructibilidad inicia en cuanto los tengamos."; }
+  else if(ec.every(e=>e==="tengo")){ av.className="aviso verde"; av.textContent="Estudios previos base completos. El proyecto puede pasar a revisión."; }
+  else { av.className="aviso"; av.textContent=""; }
+}
+
+/* ================= Observaciones ================= */
+function sigFolio(disc){ const n=OBS.filter(o=>o.disc===disc).map(o=>+o.folio.split("-").pop()||0); return `OTT-${disc}-${String((n.length?Math.max(...n):0)+1).padStart(3,"0")}`; }
+async function agregarObs(){
+  if(!S.admin){ toast("Solo Grupo Alaris registra observaciones."); return; }
+  const disc=document.getElementById("f-disc").value, txt=document.getElementById("f-txt").value.trim();
+  if(!txt){ toast("Escribe el texto de la observación antes de agregarla."); return; }
+  const folio=sigFolio(disc);
+  const o={folio, disc, plano:document.getElementById("f-plano").value.trim(), ubi:document.getElementById("f-ubi").value.trim(),
+    sev:document.getElementById("f-sev").value, txt, estado:"abierta", respArchivo:"", respuesta:"", respNota:"", at:new Date().toISOString(), by:S.me, byName:S.nombre};
+  try{ await S.db.doc("rev_ott_obs/"+folio).set(o); ["f-txt","f-plano","f-ubi"].forEach(i=>document.getElementById(i).value=""); toast(folio+" registrada."); }
+  catch(e){ toast("No se pudo registrar la observación."); }
+}
+async function setObs(folio,patch){
+  if(!S.db) return;
+  if(!S.admin && patch.estado && patch.estado!=="respondida"){ toast("Solo Grupo Alaris cierra observaciones."); return; }
+  try{ await S.db.doc("rev_ott_obs/"+folio).set(Object.assign({},patch,{respAt:new Date().toISOString(),respBy:S.nombre}),{merge:true}); }
+  catch(e){ toast(e&&e.code==="permission-denied"?"No tienes permiso para ese cambio.":"No se pudo guardar."); }
+}
+function renderObs(){
+  const cont=document.getElementById("lista-obs");
+  const lista=[...OBS].sort((a,b)=>a.folio.localeCompare(b.folio));
+  if(!lista.length){ cont.innerHTML=`<div class="vacio">Todavía no hay observaciones registradas.</div>`; }
+  else cont.innerHTML=lista.map(o=>`
+    <div class="obs sev-${o.sev}">
+      <div class="fila1"><span class="folio">${esc(o.folio)}</span><span class="chip est-${o.estado}">${EST_TXT[o.estado]}</span><span class="chip">${SEV_TXT[o.sev]}</span><span class="chip">${esc((DISC.find(d=>d[0]===o.disc)||["",""])[1])}</span></div>
+      <div class="texto">${esc(o.txt)}</div>
+      <div class="meta">${[o.plano?"Plano "+esc(o.plano):"", esc(o.ubi)].filter(Boolean).join(" · ")||"Sin ubicación indicada"}</div>
+      <div class="respuesta">
+        <input placeholder="Archivo de corrección que subió el proyectista" value="${esc(o.respArchivo)}" ${S.db?"":"disabled"} onchange="setObs('${o.folio}',{respArchivo:this.value})" aria-label="Archivo de corrección">
+        <input placeholder="Respuesta del contratista" value="${esc(o.respuesta)}" ${S.db?"":"disabled"} onchange="setObs('${o.folio}',{respuesta:this.value})" aria-label="Respuesta del contratista">
+        <input placeholder="Nota de validación de Grupo Alaris" value="${esc(o.respNota)}" ${S.admin?"":"disabled"} onchange="setObs('${o.folio}',{respNota:this.value})" aria-label="Nota de validación">
+      </div>
+      <div class="acciones">${(S.admin?["abierta","respondida","cerrada","reincidente"]:["respondida"]).map(e=>
+        `<button type="button" class="${o.estado===e?"on":""}" ${S.db?"":"disabled"} onclick="setObs('${o.folio}',{estado:'${e}'})">${S.admin?EST_TXT[e]:"Marcar como respondida"}</button>`).join("")}</div>
+    </div>`).join("");
+  const total=OBS.length, cerradas=OBS.filter(o=>o.estado==="cerrada").length;
+  document.getElementById("av-cifra").textContent = total?`${cerradas} de ${total} puntos resueltos`:"Sin observaciones registradas";
+  document.getElementById("av-nota").textContent = total&&cerradas===total ? "Todos los puntos quedaron resueltos. El proyecto puede pasar a autorización del Residente." : "Cada punto resuelto acerca el proyecto a su autorización.";
+  document.getElementById("av-lleno").style.width = total?(cerradas/total*100)+"%":"0%";
+  if(etapa===3) renderTablero();
+}
+
+/* ================= Tablero ================= */
+const dIdx = s => Math.round((new Date(s+"T00:00:00") - new Date(PE_INI+"T00:00:00"))/86400000);
+function kpi(l,v,p,c){ return `<div class="kpi ${c||""}"><div class="lab">${l}</div><div class="val">${v}</div><div class="pie2">${p}</div></div>`; }
+function apil(parts){ const t=parts.reduce((a,p)=>a+p[0],0)||1; return `<div class="apil">${parts.map(p=>p[0]?`<span style="width:${p[0]/t*100}%;background:${p[1]}"></span>`:"").join("")}</div>`; }
+function renderTablero(){
+  const docs=TODOS.filter(t=>t.tipo==="doc"); const est=t=>(R[t.id]||{}).estado;
+  const aplica=docs.filter(t=>est(t)!=="na");
+  const pond=aplica.reduce((a,t)=>a+(est(t)==="tengo"?1:est(t)==="parcial"?.5:0),0);
+  const comp=aplica.length?pond/aplica.length:0;
+  const acept=docs.filter(t=>(R[t.id]||{}).val==="aceptado").length;
+  const resp=TODOS.filter(t=>est(t)).length;
+  const abiertas=OBS.filter(o=>o.estado==="abierta"||o.estado==="reincidente").length, altas=OBS.filter(o=>o.sev==="alta"&&o.estado!=="cerrada").length;
+  const cand=CANDADOS.filter(c=>(R[c.id]||{}).estado==="tengo").length;
+  document.getElementById("t-kpis").innerHTML =
+    kpi("Completitud documental",(comp*100).toFixed(0)+" %",`${aplica.length} entregables que aplican`, comp>=.999?"verde":"oro")+
+    kpi("Respondidos por el contratista",`${resp}/${TODOS.length}`,"Entregables y requisitos marcados")+
+    kpi("Aceptados por Grupo Alaris",`${acept}/${docs.length}`,"Validación de constructibilidad", acept===docs.length?"verde":"")+
+    kpi("Estudios previos base",`${cand}/4`,"Topografía, suelos, hidrológico, factibilidades", cand<4?"rojo":"verde")+
+    kpi("Observaciones abiertas",String(abiertas),`${OBS.length} registradas en total`, abiertas?"rojo":"verde")+
+    kpi("Abiertas que detienen obra",String(altas),"Severidad alta sin cerrar", altas?"rojo":"verde");
+  // plazo
+  const hoy=dIdx(new Date().toISOString().slice(0,10)), fP=dIdx(PE_FIN_PROP), fT=dIdx(PE_FIN_TDR), max=fT+5;
+  const X=d=>Math.max(0,Math.min(100,d/max*100));
+  document.getElementById("t-plazo").innerHTML = `<div class="base"></div>
+    <div class="seg" style="left:0;width:${X(fP)}%;background:var(--oro)"></div>
+    <div class="seg" style="left:${X(fP)}%;width:${X(fT)-X(fP)}%;background:var(--linea)"></div>
+    <div class="tag" style="left:0;transform:none">Inicio 11-nov</div><div class="tag" style="left:${X(fP)}%">Propuesta 30-nov</div><div class="tag" style="left:${X(fT)}%">TdR 10-dic</div>
+    ${hoy>=0&&hoy<=max?`<div class="hoy" style="left:${X(hoy)}%" title="Hoy"></div>`:""}`;
+  const rest=fP-hoy;
+  document.getElementById("t-plazo-nota").textContent = rest>=0 ? `Faltan ${rest} días para la entrega del proyecto ejecutivo según la propuesta (${fT-hoy} según el máximo de los TdR).` : `La fecha de la propuesta ya pasó (${-rest} días). Máximo de los TdR: ${fT-hoy>=0?"faltan "+(fT-hoy)+" días":"vencido hace "+(hoy-fT)+" días"}.`;
+  // secciones
+  const grupos=[{t:"Requisitos de entrada · estudios previos base", ref:"6.1", ids:TODOS.filter(t=>t.sec===-1)},
+    ...SECCIONES.map((s,si)=>({t:s.t, ref:s.ref, ids:TODOS.filter(t=>t.sec===si)}))];
+  document.getElementById("t-secciones").innerHTML = grupos.map(g=>{
+    const c={tengo:0,parcial:0,falta:0,na:0,"":0}; g.ids.forEach(t=>c[est(t)||""]++);
+    const ac=g.ids.filter(t=>(R[t.id]||{}).val==="aceptado").length;
+    return `<div class="fila"><div>${esc(g.t)} <span class="ref" style="font-size:10px">${esc(g.ref)}</span></div>${apil([[c.tengo,"var(--ok)"],[c.parcial,"var(--parcial)"],[c.falta,"var(--falta)"],[c[""],"var(--panel2)"]])}<div class="r">${ac}/${g.ids.length} acept.</div></div>`; }).join("");
+  // observaciones por especialidad
+  const porD=DISC.map(d=>({d, o:OBS.filter(x=>x.disc===d[0])})).filter(x=>x.o.length);
+  document.getElementById("t-obs-disc").innerHTML = porD.length ? porD.map(x=>{ const c=k=>x.o.filter(o=>o.estado===k).length;
+    return `<div class="fila"><div>${x.d[0]} · ${esc(x.d[1].split(" · ")[0])}</div>${apil([[c("abierta"),"var(--falta)"],[c("reincidente"),"#FFB3B5"],[c("respondida"),"var(--oro)"],[c("cerrada"),"var(--ok)"]])}<div class="r">${c("cerrada")}/${x.o.length}</div></div>`; }).join("") : `<div class="vacio">Sin observaciones registradas.</div>`;
+  const ab=OBS.filter(o=>o.estado!=="cerrada");
+  document.getElementById("t-obs-sev").innerHTML = `<table class="tabla"><thead><tr><th>Severidad</th><th style="text-align:right">Sin cerrar</th></tr></thead><tbody>${
+    ["alta","media","info"].map(s=>`<tr><td>${SEV_TXT[s]}</td><td class="n">${ab.filter(o=>o.sev===s).length}</td></tr>`).join("")}</tbody></table>`;
+  const falt=docs.filter(t=>est(t)==="falta");
+  document.getElementById("t-faltan").innerHTML = falt.length ? `<table class="tabla"><tbody>${falt.map(t=>`<tr><td><span class="ref" style="font-size:10px">${esc(t.ref)}</span></td><td>${esc(t.n)}</td></tr>`).join("")}</tbody></table>` : `<div class="vacio">Ningún entregable marcado como faltante.</div>`;
+}
+
+/* ================= Etapas ================= */
+function setEtapa(n){
+  etapa=n; [1,2,3].forEach(i=>{ document.getElementById("vista-"+i).classList.toggle("activa",i===n); document.getElementById("tab-"+i).classList.toggle("activo",i===n); });
+  if(n===3) renderTablero();
+}
+
+/* ================= Datos generales ================= */
+document.querySelectorAll("[data-campo]").forEach(i=>{ if(i.readOnly) return; i.addEventListener("change",async()=>{
+  if(!S.admin){ toast("Solo Grupo Alaris edita los datos generales."); i.value=G[i.dataset.campo]||""; return; }
+  G[i.dataset.campo]=i.value; try{ await S.db.doc("rev_ott_meta/generales").set({[i.dataset.campo]:i.value},{merge:true}); }catch(e){ toast("No se pudo guardar."); } }); });
+function pintarGenerales(){ document.querySelectorAll("[data-campo]").forEach(i=>{ if(!i.readOnly && G[i.dataset.campo]!=null && document.activeElement!==i) i.value=G[i.dataset.campo]; i.disabled=!i.readOnly && !S.admin; }); }
+
+/* ================= Respaldo ================= */
+function exportarJSON(){
+  const p={formato:"ALARIS-REVISION-PROYECTO", version:"5-OTT", proyecto:"ALR-2026-010", generales:G, respuestas:R, observaciones:OBS, exportado:new Date().toISOString()};
+  const b=new Blob([JSON.stringify(p,null,2)],{type:"application/json"}); const a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download=`revision_OTT_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ================= Firebase ================= */
+const FIREBASE_CONFIG = {"apiKey": "AIzaSyCOUfL_ki92-OrbZ-M9PoGM3IcFXmTGZvM", "authDomain": "grupo-alaris-tableros.firebaseapp.com", "projectId": "grupo-alaris-tableros", "storageBucket": "grupo-alaris-tableros.firebasestorage.app", "messagingSenderId": "765715396603", "appId": "1:765715396603:web:a632bf53b1d21df41a7d5e"};
+const ADMINS = ['alv7403@gmail.com','contacto@grupoalaris.mx'];
+render();
+(function connect(){
+  const txt=document.getElementById("cuentaTxt"), salir=document.getElementById("salirBtn");
+  if(!window.firebase || !FIREBASE_CONFIG){ txt.textContent="Sin conexión a la base de datos: vista de consulta."; return; }
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const auth=firebase.auth(), fs=firebase.firestore(), prov=new firebase.auth.GoogleAuthProvider(); const uns=[];
+  const entrar=()=>auth.signInWithPopup(prov).catch(e=>toast("No se pudo entrar: "+(e.message||e.code)));
+  document.getElementById("gateBtn").addEventListener("click",entrar);
+  salir.addEventListener("click",()=>auth.signOut());
+  auth.onAuthStateChanged(async u=>{
+    uns.splice(0).forEach(f=>f()); document.getElementById("gate").hidden=!!u;
+    if(!u){ S.db=null; S.me=null; S.admin=false; Object.keys(R).forEach(k=>delete R[k]); OBS=[]; txt.textContent="Sin sesión"; salir.hidden=true; document.body.classList.remove("modo-alaris"); pintarTodo(); renderObs(); pintarGenerales(); return; }
+    S.db=fs; S.me=u.uid; S.nombre=u.displayName||u.email; S.admin=ADMINS.includes((u.email||"").toLowerCase());
+    document.body.classList.toggle("modo-alaris", S.admin);
+    txt.innerHTML=`${esc(S.nombre)} <span class="rol">${S.admin?"REVISIÓN ALARIS":"CONTRATISTA / PROYECTISTA"}</span>`; salir.hidden=false;
+    try{ await fs.doc("personas/"+u.uid).set({name:S.nombre,email:u.email||"",avatarUrl:u.photoURL||"",at:new Date().toISOString()},{merge:true}); }catch(e){}
+    const err=e=>{ if(e&&e.code==="permission-denied") toast("Sin permiso para leer la revisión. Revisa las reglas de Firestore."); };
+    uns.push(fs.collection("rev_ott_items").onSnapshot(s=>{ Object.keys(R).forEach(k=>delete R[k]); s.docs.forEach(d=>R[d.id]=d.data()); pintarTodo(); },err));
+    uns.push(fs.collection("rev_ott_obs").onSnapshot(s=>{ OBS=s.docs.map(d=>d.data()); renderObs(); },err));
+    uns.push(fs.doc("rev_ott_meta/generales").onSnapshot(s=>{ Object.assign(G,(s.exists&&s.data())||{}); pintarGenerales(); },err));
+    pintarTodo(); renderObs(); pintarGenerales();
+  });
+})();
+</script>
+</body>
+</html>
