@@ -1,984 +1,662 @@
 <!DOCTYPE html>
-<html lang="es-MX">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="theme-color" content="#201E1F">
-<title>Grupo Alaris · Construcción virtual y DRO en Puebla</title>
-<meta name="description" content="Construimos tu obra en virtual antes de construirla en campo: validamos que sea construible y sabes costo y tiempo. Revisión gratuita. Puebla.">
-<link rel="canonical" href="https://grupoalaris.mx/">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="es_MX">
-<meta property="og:site_name" content="Grupo Alaris">
-<meta property="og:title" content="Grupo Alaris · Construimos tu obra dos veces. La primera, en virtual.">
-<meta property="og:description" content="Construimos tu obra en virtual antes de construirla en campo. Sabes cuánto cuesta y cuánto tarda antes de invertir. Revisión gratuita de tu proyecto.">
-<meta property="og:url" content="https://grupoalaris.mx/">
-<meta property="og:image" content="https://grupoalaris.mx/og-alaris.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Edificio construido en virtual sobre fondo negro, con el lema de Grupo Alaris">
-<meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"LocalBusiness","name":"Grupo Alaris","url":"https://grupoalaris.mx/","image":"https://grupoalaris.mx/og-alaris.jpg","description":"Diseño, construcción virtual y dirección responsable de obra.","email":"contacto@grupoalaris.mx","telephone":"+52 222 618 4760","address":{"@type":"PostalAddress","streetAddress":"Privada 63 D Oriente 1409 Int. 1A, Villa Universitaria","postalCode":"72589","addressLocality":"Puebla","addressRegion":"Puebla","addressCountry":"MX"},"areaServed":"MX","founder":{"@type":"Person","name":"Alfonso Leal Vargas","jobTitle":"Director General y Director Responsable de Obra"}}
-</script>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22160%2054%20328%20272%22%20role%3D%22img%22%20aria-labelledby%3D%22t%22%3E%3Ctitle%20id%3D%22t%22%3EGrupo%20Alaris%3C/title%3E%3Cpath%20fill%3D%22%23EC3237%22%20fill-rule%3D%22evenodd%22%20d%3D%22M312.990%2082.067%20L283.626%20122.619%20L283.626%20140.250%20L218.768%20250.161%20L204.426%20258.724%20L168.224%20318.136%20L312.990%20220.163%20L312.990%2082.067%20L312.990%2082.067%20Z%20M285.755%20208.667%20L249.735%20236.877%20L288.493%20172.026%20L285.755%20208.667%20Z%22/%3E%3Cpath%20fill%3D%22%23EDEAE4%22%20fill-rule%3D%22evenodd%22%20d%3D%22M335.790%2082.043%20L365.154%20122.595%20L365.154%20140.226%20L430.012%20250.137%20L444.354%20258.699%20L480.035%20318.136%20L335.790%20220.139%20L335.790%2082.043%20L335.790%2082.043%20Z%20M363.025%20208.643%20L399.045%20236.852%20L360.287%20172.002%20L363.025%20208.643%20Z%22/%3E%3Cpath%20fill%3D%22%23D1AE6C%22%20d%3D%22M316.122%2082.067%20L324.130%2062.269%20L332.172%2082.067%20L332.172%20233.393%20L358.244%20248.749%20L332.172%20248.748%20L316.122%20248.748%20L290.015%20248.748%20L316.122%20233.391%20L316.122%2082.067%20Z%22/%3E%3Cpath%20fill%3D%22%23D1AE6C%22%20d%3D%22M275.790%20257.116%20L372.469%20257.116%20L480.035%20318.136%20L168.224%20318.136%20L275.790%20257.116%20Z%22/%3E%3C/svg%3E">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tablero OTT San José Chiapa · Grupo Alaris</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;padding:0}
 :root{
-  --black:#201E1F; --ink:#EDEAE4; --muted:#A8A29A; --gold:#D1AE6C; --red:#EC3237;
-  --panel:#2A2728; --line:#3D393A; --bg:var(--black);
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  color-scheme:dark;
+  --bg:#F3F1EC; --panel:#FFFFFF; --panel2:#ECE9E2; --line:#D9D4C9; --fg:#201E1F; --muted:#6B655C;
+  --gold:#A9843C; --gold-soft:#E9DDC3;
+  --ok:#1E9E5A; --late:#D93A3F; --done:#2F6FDB; --idle:#9A948A; --warn:#C27A12;
+  --ok-bg:#E2F3E9; --late-bg:#FBE3E3; --done-bg:#E2EBFB; --idle-bg:#ECEAE5; --warn-bg:#F8EAD3;
+  --ground:#DCD6CA; --green3d:#9CC59A; --ghost:#C9C3B8;
+  --f-disp:"Archivo","Arial Narrow",Arial,sans-serif; --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
 }
-:root[data-theme="light"]{--bg:#EDEAE4;--ink:#201E1F;--muted:#5b5652;--panel:#E2DED6;--line:#cfc9bf;--gold:#9C7A3C;color-scheme:light}
-:root[data-theme="dark"]{--bg:#201E1F;--ink:#EDEAE4;--muted:#A8A29A;--panel:#2A2728;--line:#3D393A;--gold:#D1AE6C}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#201E1F}}
-html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-img{max-width:100%}
-h1,h2,h3,.brand,.btn,.nav .cta,.step b,.mail,.menu-btn{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
-.skip{position:absolute;left:16px;top:-60px;z-index:50;background:var(--gold);color:var(--black);padding:10px 16px;font-weight:600;text-decoration:none;border-radius:4px}
-.skip:focus{top:12px}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
-.wrap{width:min(1200px,100% - 48px);margin-inline:auto}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161415; --panel:#201E1F; --panel2:#2A2728; --line:#3A3637; --fg:#F1ECE3; --muted:#A79F93;
+  --gold:#D1AE6C; --gold-soft:#3A3226;
+  --ok:#3CC47A; --late:#F2555A; --done:#5B93F0; --idle:#7D776E; --warn:#E3A33F;
+  --ok-bg:#16301F; --late-bg:#3A1A1B; --done-bg:#172540; --idle-bg:#2A2728; --warn-bg:#3A2C15;
+  --ground:#2E2B2A; --green3d:#3E6B47; --ghost:#55504B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161415; --panel:#201E1F; --panel2:#2A2728; --line:#3A3637; --fg:#F1ECE3; --muted:#A79F93;
+  --gold:#D1AE6C; --gold-soft:#3A3226;
+  --ok:#3CC47A; --late:#F2555A; --done:#5B93F0; --idle:#7D776E; --warn:#E3A33F;
+  --ok-bg:#16301F; --late-bg:#3A1A1B; --done-bg:#172540; --idle-bg:#2A2728; --warn-bg:#3A2C15;
+  --ground:#2E2B2A; --green3d:#3E6B47; --ghost:#55504B; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;max-width:1440px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-disp);text-wrap:balance;margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:12px 0;display:flex;flex-direction:column;gap:10px}
+.brandrow{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;justify-content:space-between}
+.brand .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.brand h1{font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.01em}
+.brand .sub{font-size:12px;color:var(--muted)}
+.corte{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.corte label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.corte input[type=range]{width:min(320px,52vw);accent-color:var(--gold)}
+.corte .fecha{font-family:var(--f-mono);font-weight:500;min-width:96px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:5px 10px;cursor:pointer;font-size:12px}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.linkbtn{border:1px solid var(--line);background:transparent;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{padding:10px 14px;text-decoration:none;color:var(--muted);font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--gold)}
+main{display:block;padding-top:18px}
+section.view{display:flex;flex-direction:column;gap:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px 2px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-bg)} .s-late{color:var(--late);background:var(--late-bg)} .s-done{color:var(--done);background:var(--done-bg)} .s-idle{color:var(--idle);background:var(--idle-bg)} .s-warn{color:var(--warn);background:var(--warn-bg)}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi .val{font-family:var(--f-disp);font-weight:800;font-size:clamp(22px,2.6vw,30px);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .foot{font-size:12px;color:var(--muted)}
+.kpi.late .val{color:var(--late)} .kpi.ok .val{color:var(--ok)} .kpi.done .val{color:var(--done)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+.panel h2{font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.panel h2 small{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.scene{position:relative;width:100%;aspect-ratio:16/8;border-radius:10px;overflow:hidden;background:var(--panel2);margin-top:10px;touch-action:none}
+@media (max-width:600px){.scene{aspect-ratio:4/3}}
+.scene canvas{display:block;width:100%;height:100%}
+.scene .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
+.scene .nogl{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);padding:20px;text-align:center}
+.edpanel{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.edpanel .row{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.bar{position:relative;height:8px;border-radius:4px;background:var(--panel2);overflow:hidden;min-width:80px}
+.bar .p{position:absolute;inset:0 auto 0 0;background:var(--ghost)}
+.bar .r{position:absolute;inset:0 auto 0 0;height:4px;top:2px;border-radius:2px}
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.li:last-child{border-bottom:0}
+.li .t{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .d{font-size:12px;color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--panel2);text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;white-space:nowrap}
+td{padding:7px 10px;border-top:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{font-weight:700;background:var(--panel2)}
+.qty{width:88px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);text-align:right;font-family:var(--f-mono)}
+.qty.saved{border-color:var(--ok)} .qty.err{border-color:var(--late)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters select,.filters input[type=search]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);max-width:100%}
+.counts{display:flex;flex-wrap:wrap;gap:8px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.hcard{border:1px solid var(--line);border-left:5px solid var(--idle);border-radius:10px;padding:10px 12px;background:var(--panel);display:flex;flex-direction:column;gap:6px;min-width:0}
+.hcard.ok{border-left-color:var(--ok)} .hcard.late{border-left-color:var(--late)} .hcard.done{border-left-color:var(--done)}
+.hcard .h{display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.hcard .h b{font-family:var(--f-disp);font-size:15px}
+.hcard .meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.crit{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;color:var(--late);border:1px solid var(--late);border-radius:4px;padding:0 4px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.rcard{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel);display:flex;flex-direction:column;gap:8px;min-width:0}
+.rcard .who{display:flex;align-items:center;gap:10px;min-width:0}
+.rcard img{width:32px;height:32px;border-radius:50%}
+.picker{position:relative}
+.picker input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);width:170px;max-width:100%}
+.picker .menu{position:absolute;z-index:20;left:0;top:100%;margin-top:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.18);max-height:260px;overflow:auto}
+.picker .menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border:0;padding:7px 10px;cursor:pointer}
+.picker .menu button:hover{background:var(--panel2)}
+.picker .menu img{width:22px;height:22px;border-radius:50%}
+.person{display:inline-flex;align-items:center;gap:6px}
+.person img{width:20px;height:20px;border-radius:50%}
+.tin{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);width:100%;min-width:120px}
+.btn{border:1px solid var(--fg);background:var(--fg);color:var(--bg);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.notice{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:13px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.formgrid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.formgrid input{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.ocard{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel);display:flex;flex-direction:column;gap:6px}
+.ocard .h{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ocard .h b{font-family:var(--f-mono)}
+.ocard select{padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.chart{position:relative;width:100%;margin-top:8px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.15);min-width:190px;z-index:3}
+.tip .r{display:flex;justify-content:space-between;gap:12px}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;z-index:30;max-width:min(420px,calc(100vw - 32px))}
+</style></head><body>
 
-/* nav */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:24px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-variation-settings:"wdth" 125;font-size:20px;letter-spacing:.5px}
-.brand{gap:12px}.brand .sym{height:32px;width:auto}.brand .wm{height:13px;width:auto;margin-top:3px}
-.nav ul{display:flex;list-style:none;gap:28px;font-size:15px}
-.nav ul a{text-decoration:none;color:var(--muted);transition:color .2s}
-.nav ul a:hover{color:var(--ink)}
-.nav-r{display:flex;align-items:center;gap:12px}
-.menu-btn{display:none;min-width:44px;min-height:44px;align-items:center;justify-content:center;gap:8px;background:none;border:1.5px solid var(--line);color:var(--ink);border-radius:2px;font-weight:700;font-size:15px;padding:0 14px;cursor:pointer}
-.menu-btn svg{width:18px;height:18px}
-.nav .cta{white-space:nowrap;min-height:44px;display:inline-flex;align-items:center;text-decoration:none;font-weight:700;font-size:15px;padding:10px 18px;border:1.5px solid var(--gold);color:var(--gold);border-radius:2px;transition:background .2s,color .2s}
-.nav .cta:hover{background:var(--gold);color:var(--black)}
-
-/* hero */
-.hero{position:relative;min-height:calc(100svh - 68px);display:grid;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
-#bim{position:absolute;inset:0 0 0 38%;width:62%;height:100%;touch-action:pan-y;cursor:grab}
-#bim:active{cursor:grabbing}
-.hero .wrap{position:relative;pointer-events:none;padding:64px 0}
-.hero .copy{max-width:640px;pointer-events:auto}
-.hero h1{font-weight:850;font-variation-settings:"wdth" 118;font-size:clamp(40px,5.6vw,84px);line-height:.95;letter-spacing:-1.5px;text-wrap:balance}
-.hero h1 .l2{display:block;font-weight:300;font-variation-settings:"wdth" 62;color:var(--gold);letter-spacing:-.5px;margin-top:.08em}
-.hero .copy p{margin-top:28px;font-size:clamp(17px,1.6vw,20px);max-width:520px;color:var(--muted)}
-.hero .copy p strong{color:var(--ink);font-weight:600}
-.btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
-.btn{display:inline-block;text-decoration:none;font-weight:700;padding:15px 26px;border-radius:2px;font-size:16px;transition:transform .15s,background .2s}
-.btn.primary{background:#C8252B;color:#fff}
-.btn.primary:hover{background:#B01E24}
-.btn.ghost{border:1.5px solid var(--line);color:var(--ink)}
-.btn.ghost:hover{border-color:var(--ink)}
-.btn:active{transform:scale(.98)}
-.readout{position:absolute;right:24px;bottom:22px;font-size:12px;color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,monospace;display:flex;align-items:center;gap:10px;pointer-events:none}
-.readout i{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block}
-.readout.done i{background:var(--gold)}
-.drag{position:absolute;right:24px;top:24px;font-size:13px;color:var(--muted);font-variation-settings:"wdth" 80;pointer-events:none;opacity:.8}
-
-/* sections */
-section{padding:120px 0;border-bottom:1px solid var(--line)}
-h2{font-weight:800;font-variation-settings:"wdth" 115;font-size:clamp(34px,4.6vw,60px);line-height:1;letter-spacing:-1px;max-width:16ch;text-wrap:balance}
-.lead{margin-top:22px;max-width:60ch;color:var(--muted);font-size:18px}
-
-/* propuesta de valor */
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 13px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.eyebrow::before{content:"";width:22px;height:2px;background:var(--red)}
-.hero .copy .trust{margin-top:18px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
-.trust span::before{content:"✓";color:var(--gold);margin-right:6px}
-.lema h2{max-width:20ch}
-.gains{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
-.gain{padding:28px 24px 8px 0}
-.gain+.gain{padding-left:24px;border-left:1px solid var(--line)}
-.gain h3{font-size:20px;font-weight:750;font-variation-settings:"wdth" 108;line-height:1.2}
-.gain h3::before{content:"";display:block;width:28px;height:3px;background:var(--gold);margin-bottom:16px}
-.gain p{margin-top:10px;font-size:15px;color:var(--muted);line-height:1.55}
-/* revisión gratuita */
-.rev{background:var(--panel)}
-.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-top:56px}
-.rsteps{list-style:none;counter-reset:r;display:grid;gap:0}
-.rsteps li{counter-increment:r;display:grid;grid-template-columns:56px 1fr;gap:4px 16px;padding:22px 0;border-top:1px solid var(--line)}
-.rsteps li:last-child{border-bottom:1px solid var(--line)}
-.rsteps li::before{content:counter(r);grid-row:1 / span 2;font:300 48px/1 Archivo,sans-serif;font-variation-settings:"wdth" 62;color:var(--gold)}
-.rsteps h3{font-size:19px;font-weight:750;font-variation-settings:"wdth" 108}
-.rsteps p{font-size:15px;color:var(--muted)}
-.check{border:1px solid var(--line);padding:28px;background:var(--bg)}
-.check h3{font-size:19px;font-weight:750;font-variation-settings:"wdth" 108}
-.check ul{list-style:none;margin-top:16px;display:grid;gap:12px}
-.check li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15px}
-.check li::before{content:"";width:14px;height:14px;margin-top:5px;border:2px solid var(--gold)}
-.check .conf{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
-.check .btns{margin-top:24px}
-.btn.wa{background:var(--gold);color:var(--black)}
-.btn.wa:hover{background:#E0C285}
-/* barra fija en celular */
-.mbar{display:none}
-
-/* panel de cuantificación en vivo */
-.qto{position:absolute;right:24px;bottom:22px;width:300px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.qto .qh{font:500 12px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.qto dl{display:grid;gap:4px;margin-top:10px}
-.qto dl>div{display:flex;justify-content:space-between;gap:12px;padding:3px 6px;margin:0 -6px;transition:background .3s}
-.qto dl>div.on{background:color-mix(in srgb,var(--gold) 20%,transparent)}
-.qto dt{color:var(--muted)}
-.qto dd{font-family:"IBM Plex Mono",ui-monospace,monospace;color:var(--ink)}
-.qto dd b{font-weight:500;font-variant-numeric:tabular-nums}
-.qto .qf{margin-top:10px;font-size:11px;color:var(--muted);letter-spacing:.04em}
-/* ejemplo de entrega */
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.kpis{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line)}
-.kpi{padding:22px 24px}
-.kpi+.kpi{border-left:1px solid var(--line)}
-.kpi>span{display:block;font-size:14px;color:var(--muted)}
-.kpi b{display:block;margin-top:6px;font:700 clamp(26px,3vw,38px)/1.1 Archivo,sans-serif;font-variation-settings:"wdth" 100;font-variant-numeric:tabular-nums}
-.kpi b small{font:500 15px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted);margin-left:4px}
-.tabs{margin-top:0;display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
-.tabs [role=tab]{min-height:48px;padding:12px 20px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--muted);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer}
-.tabs [role=tab][aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
-.tabs [role=tab]:hover{color:var(--ink)}
-.tpanel{padding-top:28px}
-.chart{overflow-x:auto}
-.chart svg{display:block;width:100%;min-width:600px;height:auto}
-#t-cant{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
-#t-cant th,#t-cant td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
-#t-cant thead th{font-size:13px;color:var(--muted);font-weight:500}
-#t-cant tbody th{font-weight:600}
-#t-cant td:nth-child(3),#t-cant td:nth-child(4){font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;text-align:right}
-#t-cant thead th:nth-child(3),#t-cant thead th:nth-child(4){text-align:right}
-#t-cant tfoot th,#t-cant tfoot td{border-bottom:none;font-weight:700;color:var(--gold)}
-.barc{width:34%}
-.bar{display:block;height:8px;background:var(--gold);border-radius:1px}
-.pct{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
-.pnote{margin-top:16px;font-size:14px;color:var(--muted);max-width:70ch}
-.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:12px;font-size:14px;color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:8px}
-.sw{width:16px;height:10px;display:inline-block;border-radius:1px}
-.ln{width:26px;height:0;display:inline-block;border-top:3px solid}
-.ln.plan{border-color:var(--gold);border-top-style:dashed}
-.ln.real{border-color:var(--ink)}
-.chart .grid{stroke:var(--line);stroke-width:1}
-.chart .tick{fill:var(--muted);font:12px "IBM Plex Mono",ui-monospace,monospace}
-.chart .lbl{fill:var(--ink);font:13px "IBM Plex Sans",sans-serif}
-.b-cim{fill:#8E8780;background:#8E8780}
-.b-est{fill:var(--gold);background:var(--gold)}
-.b-fac{fill:#7F9AAB;background:#7F9AAB}
-.b-azo{fill:#B3ACA4;background:#B3ACA4}
-.c-plan{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:8 6}
-.c-real{fill:none;stroke:var(--ink);stroke-width:3}
-.corte{stroke:#FF5A5F;stroke-width:1.5;stroke-dasharray:4 4}
-.avk{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:8px 28px;margin-bottom:20px}
-.avk dt{font-size:13px;color:var(--muted)}
-.avk dd{font:600 20px "IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
-.dash{margin-top:40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:start}
-.viewer{position:sticky;top:88px;height:560px;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line)}
-.viewer canvas{flex:1;min-height:0;width:100%;display:block;cursor:grab;touch-action:pan-y}
-.viewer canvas:active{cursor:grabbing}
-.vleg{display:flex;flex-wrap:wrap;gap:6px 16px;padding:10px 16px 0;font-size:13px;color:var(--muted)}
-.vleg[hidden],.vall[hidden],.viewer[hidden]{display:none}
-.vleg span{display:inline-flex;align-items:center;gap:6px}
-.st-n{background:#9A948D}.st-h{background:var(--gold)}.st-g{background:transparent;border:1px solid #8E8780}
-.vbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--line);min-height:64px}
-.vsel{font-size:14px;line-height:1.45}
-.vall{flex:none;min-height:44px;padding:0 14px;background:none;border:1.5px solid var(--gold);color:var(--gold);font:600 14px "IBM Plex Sans",sans-serif;border-radius:2px;cursor:pointer}
-.vall:hover{background:var(--gold);color:var(--black)}
-.vhint{padding:0 16px 12px;font-size:12px;color:var(--muted)}
-.rowbtn{display:block;width:100%;min-height:44px;margin:-12px -10px;padding:12px 10px;box-sizing:content-box;background:none;border:none;color:inherit;font:inherit;font-weight:600;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
-.rowbtn:hover{text-decoration-color:var(--gold)}
-#t-cant tr.sel>*{background:color-mix(in srgb,var(--gold) 14%,transparent)}
-#t-cant tr.sel .rowbtn{color:var(--gold)}
-.grow{cursor:pointer}
-.grow .hit{fill:transparent}
-.grow:hover .hit{fill:color-mix(in srgb,var(--ink) 6%,transparent)}
-.grow.sel .hit{fill:color-mix(in srgb,var(--gold) 16%,transparent)}
-.grow.sel .lbl{fill:var(--gold);font-weight:600}
-.grow:focus{outline:none}
-.grow:focus-visible .hit{stroke:var(--gold);stroke-width:2}
-.disc{margin-top:28px;font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
-
-/* proceso */
-.steps{margin-top:64px;display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line)}
-.step{padding:28px 22px 8px 0;position:relative}
-.step+.step{padding-left:22px;border-left:1px solid var(--line)}
-.step b{display:block;font-variation-settings:"wdth" 62;font-weight:300;font-size:56px;line-height:1;color:var(--gold)}
-.step h3{margin-top:18px;font-size:19px;font-weight:750;font-variation-settings:"wdth" 108;line-height:1.2}
-.step p{margin-top:10px;font-size:15px;color:var(--muted);line-height:1.55}
-.step.dro b{color:var(--red)}
-
-/* dro */
-.dro-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start}
-.regs{display:grid;gap:14px}
-.reg{background:var(--panel);padding:22px 24px;border-left:3px solid var(--gold);display:grid;grid-template-columns:1fr auto;gap:6px 24px;align-items:baseline}
-.reg h3{font-size:18px;font-weight:750;font-variation-settings:"wdth" 108}
-.reg .who{grid-column:1;font-size:14px;color:var(--muted)}
-.reg dl{grid-column:2;grid-row:1 / span 2;display:grid;grid-template-columns:auto auto;gap:4px 14px;text-align:right;font-size:15px}
-.reg dt{color:var(--gold);font-weight:600}
-.reg dd{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;font-feature-settings:"tnum"}
-.vig{margin-top:18px;font-size:14px;color:var(--muted)}
-.vig strong{color:var(--ink)}
-.firma{margin-top:32px;display:flex;align-items:center;gap:24px}
-.firma img{width:160px;height:200px;object-fit:cover;object-position:top;border-radius:4px;border:1px solid var(--line);flex:none}
-.firma .fn{font:700 20px/1.2 Archivo,sans-serif;font-variation-settings:"wdth" 108}
-.firma .fr{margin-top:6px;font-size:14px;color:var(--muted)}
-.firma .link{margin-top:14px}
-.link{display:inline-block;margin-top:28px;font-weight:700;color:var(--gold);text-underline-offset:5px}
-
-/* obra */
-.obra{margin-top:56px;border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:1.4fr 1fr .8fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--line);align-items:baseline;position:relative}
-.row::before{content:"";position:absolute;left:-24px;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transform-origin:top;transition:transform .25s ease-out}
-.row:hover::before{transform:scaleY(1)}
-.row h3{font-size:clamp(20px,2.4vw,30px);font-weight:750;font-variation-settings:"wdth" 110;line-height:1.1;transition:color .2s}
-.row:hover h3{color:var(--gold)}
-.row span{color:var(--muted);font-size:15px}
-.row span:last-child{text-align:right}
-.note{margin-top:18px;font-size:14px;color:var(--muted)}
-
-/* alianza */
-.team{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line)}
-.firm{padding:30px 26px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between}
-.firm+.firm{border-left:1px solid var(--line)}
-.firm h3{font-size:22px;font-weight:800;font-variation-settings:"wdth" 120;letter-spacing:.3px}
-.firm p{color:var(--muted);font-size:15px}
-.firm.lead-firm{background:var(--gold);color:var(--black)}
-.firm.lead-firm p{color:#3a2f1c}
-
-/* contacto */
-.contact{border-bottom:none;padding-bottom:80px}
-.mail{display:inline-block;margin-top:40px;font-weight:300;font-variation-settings:"wdth" 70;font-size:clamp(34px,6.4vw,92px);line-height:1;text-decoration:none;color:var(--gold);letter-spacing:-1px;word-break:break-word;background:linear-gradient(var(--red),var(--red)) 0 100%/0 3px no-repeat;transition:background-size .35s ease-out;padding-bottom:8px}
-.mail:hover{background-size:100% 3px}
-.cgrid{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:900px}
-.cgrid h3{font-size:14px;color:var(--muted);font-weight:500}
-.cgrid a,.cgrid p{display:block;margin-top:6px;font-size:19px;font-weight:600;text-decoration:none}
-.cgrid p small{display:block;margin-top:4px;font-size:15px;font-weight:400;color:var(--muted)}
-.cgrid a:hover{color:var(--gold)}
-.card{margin-top:48px;display:flex;align-items:center;gap:28px;max-width:640px;padding:22px;border:1px solid var(--line)}
-.card img{width:132px;height:132px;border-radius:2px;flex:none}
-.card h3{font-size:19px;font-weight:750;font-variation-settings:"wdth" 108}
-.card p{margin:6px 0 16px;color:var(--muted);font-size:15px}
-@media (max-width:680px){.card img{display:none}.card{padding:20px}}
-footer{border-top:1px solid var(--line);padding:28px 0 36px;font-size:14px;color:var(--muted)}
-footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}.fl{display:flex;align-items:flex-end;gap:18px}.fl .flogo{height:80px;width:auto}
-
-@media (max-width:1000px){
-  .gains{grid-template-columns:1fr 1fr}
-  .gain:nth-child(3){border-left:none;padding-left:0}
-  .gain:nth-child(n+3){border-top:1px solid var(--line)}
-  .rev-grid{grid-template-columns:1fr;gap:40px}
-  .steps{grid-template-columns:repeat(3,1fr)}
-  .step:nth-child(4){border-left:none;padding-left:0}
-  .step:nth-child(n+4){border-top:1px solid var(--line)}
-  .dro-grid{grid-template-columns:1fr;gap:40px}
-  .team{grid-template-columns:1fr 1fr}
-  .firm:nth-child(3){border-left:none}
-  .firm:nth-child(n+3){border-top:1px solid var(--line)}
-  .menu-btn{display:inline-flex}
-  .nav ul{display:none;position:absolute;left:0;right:0;top:68px;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 24px 16px}
-  .nav.open ul{display:flex}
-  .nav ul a{display:block;padding:12px 0;font-size:17px;color:var(--ink);border-bottom:1px solid var(--line)}
-  .nav ul li:last-child a{border-bottom:none}
-  /* portada apilada: el modelo arriba y el texto abajo, sin encimarse */
-  .hero{min-height:auto;display:block}
-  #bim{position:relative;inset:auto;width:100%;height:52svh;display:block}
-  .hero .wrap{padding:8px 0 64px}
-  .qto{position:relative;right:auto;bottom:auto;width:auto;margin:0 24px 8px}
-  .qto dl{grid-template-columns:repeat(4,1fr);gap:8px}
-  .qto dl>div{flex-direction:column;gap:2px}
-  .kpis{grid-template-columns:1fr 1fr}
-  .dash{grid-template-columns:minmax(0,1fr);gap:28px}
-  .viewer{position:relative;top:auto;height:440px}
-  .kpi:nth-child(3){border-left:none}
-  .kpi:nth-child(n+3){border-top:1px solid var(--line)}
-  .drag{display:none}
-}
-@media (max-width:680px){
-  body{font-size:16px}
-  .wrap{width:calc(100% - 36px)}
-  .hero .wrap{padding:8px 0 56px}
-  .qto{margin:0 18px 4px;padding:10px 12px}
-  .qto dl{grid-template-columns:1fr 1fr;margin-top:6px}
-  .qto [data-row="pzas"],.qto [data-row="av"],.qto .qf{display:none}
-  #bim{height:38svh}
-  .avk{grid-template-columns:1fr 1fr}
-  .kpi{padding:16px}
-  .viewer{height:380px}
-  .avk{grid-template-columns:1fr 1fr}
-  .drag{display:none}
-  section{padding:80px 0}
-  .steps{grid-template-columns:1fr}
-  .step,.step+.step{padding:24px 0 12px;border-left:none;border-top:1px solid var(--line)}
-  .step:first-child{border-top:none}
-  .row{grid-template-columns:1fr;gap:4px}
-  .row span:last-child{text-align:left}
-  .team{grid-template-columns:1fr}
-  .firm+.firm{border-left:none;border-top:1px solid var(--line)}
-  .firm{min-height:0;gap:18px}
-  .cgrid{grid-template-columns:1fr;gap:22px}
-  .gains{grid-template-columns:1fr}
-  .gain,.gain+.gain{padding:24px 0 8px;border-left:none;border-top:1px solid var(--line)}
-  .gain:first-child{border-top:none}
-  .check{padding:22px}
-  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
-  .mbar .btn{flex:1;text-align:center;padding:13px 12px;font-size:15px}
-  body{padding-bottom:76px}
-  .nav .cta{display:none}
-  .reg{grid-template-columns:1fr}
-  .firma img{width:120px;height:150px}
-  .firma{gap:16px}
-  .reg dl{grid-column:1;grid-row:auto;text-align:left;margin-top:8px}
-}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-</style>
-</head>
-<body>
-<a class="skip" href="#contenido">Saltar al contenido</a>
-
-<nav class="nav" aria-label="Principal">
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="#inicio" aria-label="Grupo Alaris, inicio"><svg class="sym" viewBox="160 54 328 272" width="39" height="32" aria-hidden="true" focusable="false"><path fill="#EC3237" fill-rule="evenodd" d="M312.990 82.067 L283.626 122.619 L283.626 140.250 L218.768 250.161 L204.426 258.724 L168.224 318.136 L312.990 220.163 L312.990 82.067 L312.990 82.067 Z M285.755 208.667 L249.735 236.877 L288.493 172.026 L285.755 208.667 Z"/><path fill="#EDEAE4" fill-rule="evenodd" d="M335.790 82.043 L365.154 122.595 L365.154 140.226 L430.012 250.137 L444.354 258.699 L480.035 318.136 L335.790 220.139 L335.790 82.043 L335.790 82.043 Z M363.025 208.643 L399.045 236.852 L360.287 172.002 L363.025 208.643 Z"/><path fill="#D1AE6C" d="M316.122 82.067 L324.130 62.269 L332.172 82.067 L332.172 233.393 L358.244 248.749 L332.172 248.748 L316.122 248.748 L290.015 248.748 L316.122 233.391 L316.122 82.067 Z"/><path fill="#D1AE6C" d="M275.790 257.116 L372.469 257.116 L480.035 318.136 L168.224 318.136 L275.790 257.116 Z"/></svg><svg class="wm" viewBox="166 320 328 50" width="86" height="13" aria-hidden="true" focusable="false"><path fill="#EDEAE4" fill-rule="evenodd" d="M226.405 366.611 L213.751 366.611 L208.740 358.197 L185.471 358.197 L180.649 366.611 L168.224 366.611 L190.751 329.653 L203.162 329.653 L226.405 366.611 L226.405 366.611 Z M204.932 351.952 L196.869 338.273 L189.036 351.952 L204.932 351.952 L204.932 351.952 Z M235.832 366.611 L235.832 329.962 L247.582 329.962 L247.582 360.365 L276.672 360.365 L276.672 366.611 L235.832 366.611 L235.832 366.611 Z M340.120 366.611 L327.465 366.611 L322.455 358.197 L299.185 358.197 L294.364 366.611 L281.939 366.611 L304.466 329.653 L316.877 329.653 L340.120 366.611 L340.120 366.611 Z M318.646 351.952 L310.584 338.273 L302.751 351.952 L318.646 351.952 L318.646 351.952 Z M349.222 366.611 L349.222 329.653 L373.897 329.653 C380.095 329.653 384.606 329.988 387.415 330.650 C390.238 331.313 392.480 332.491 394.168 334.186 C395.856 335.890 396.707 337.825 396.707 340.011 C396.707 342.789 395.438 345.078 392.885 346.884 C390.333 348.691 386.524 349.827 381.446 350.300 C383.971 351.238 386.051 352.270 387.685 353.397 C389.333 354.524 391.548 356.528 394.330 359.402 L401.407 366.611 L387.402 366.611 L379.002 358.542 C375.990 355.677 373.924 353.870 372.803 353.122 C371.695 352.382 370.521 351.866 369.277 351.590 C368.022 351.315 366.050 351.177 363.349 351.177 L360.972 351.177 L360.972 366.611 L349.222 366.611 L349.222 366.611 Z M360.972 345.293 L369.642 345.293 C375.261 345.293 378.759 345.138 380.163 344.837 C381.554 344.536 382.662 344.011 383.445 343.271 C384.242 342.531 384.633 341.602 384.633 340.492 C384.633 339.245 384.106 338.247 383.066 337.473 C382.027 336.707 380.555 336.225 378.664 336.027 C377.705 335.941 374.856 335.898 370.115 335.898 L360.972 335.898 L360.972 345.293 L360.972 345.293 Z M410.185 366.611 L410.185 329.653 L421.935 329.653 L421.935 366.611 L410.185 366.611 L410.185 366.611 Z M432.874 354.636 L444.300 353.913 C444.989 356.348 446.366 358.129 448.460 359.273 C450.553 360.417 453.375 360.985 456.927 360.985 C460.682 360.985 463.518 360.477 465.422 359.462 C467.326 358.447 468.285 357.260 468.285 355.901 C468.285 355.023 467.880 354.283 467.083 353.664 C466.287 353.053 464.882 352.519 462.883 352.072 C461.519 351.762 458.413 351.229 453.551 350.455 C447.298 349.457 442.909 348.235 440.384 346.781 C436.832 344.742 435.062 342.256 435.062 339.322 C435.062 337.438 435.900 335.666 437.561 334.023 C439.235 332.380 441.639 331.132 444.786 330.272 C447.933 329.412 451.714 328.982 456.171 328.982 C463.423 328.982 468.893 330.005 472.553 332.061 C476.227 334.117 478.145 336.853 478.333 340.286 L466.584 340.544 C466.084 338.634 465.017 337.266 463.383 336.432 C461.749 335.597 459.291 335.176 456.023 335.176 C452.646 335.176 449.999 335.623 448.095 336.518 C446.866 337.094 446.245 337.860 446.245 338.824 C446.245 339.701 446.825 340.449 447.987 341.069 C449.459 341.869 453.038 342.695 458.724 343.555 C464.409 344.407 468.610 345.301 471.324 346.213 C474.052 347.134 476.186 348.381 477.726 349.973 C479.265 351.564 480.035 353.526 480.035 355.857 C480.035 357.974 479.117 359.961 477.267 361.811 C475.416 363.660 472.810 365.037 469.433 365.932 C466.057 366.835 461.843 367.282 456.806 367.282 C449.473 367.282 443.841 366.207 439.911 364.048 C435.981 361.897 433.644 358.757 432.874 354.636 Z"/><path fill="#EDEAE4" fill-rule="evenodd" d="M481.326 332.182 L481.326 322.949 L485.252 322.949 C486.239 322.949 486.957 323.033 487.404 323.198 C487.853 323.364 488.210 323.658 488.479 324.082 C488.747 324.507 488.883 324.991 488.883 325.537 C488.883 326.231 488.680 326.803 488.274 327.254 C487.868 327.705 487.262 327.989 486.454 328.107 C486.856 328.341 487.187 328.599 487.447 328.881 C487.709 329.163 488.062 329.663 488.504 330.381 L489.631 332.182 L487.402 332.182 L486.065 330.166 C485.586 329.450 485.257 328.999 485.079 328.812 C484.902 328.627 484.715 328.498 484.517 328.430 C484.318 328.361 484.004 328.327 483.574 328.327 L483.196 328.327 L483.196 332.182 L481.326 332.182 L481.326 332.182 Z M483.196 326.856 L484.576 326.856 C485.470 326.856 486.026 326.818 486.250 326.743 C486.471 326.667 486.647 326.536 486.772 326.351 C486.899 326.166 486.961 325.934 486.961 325.657 C486.961 325.345 486.877 325.096 486.712 324.903 C486.546 324.712 486.312 324.591 486.011 324.542 C485.859 324.520 485.405 324.509 484.651 324.509 L483.196 324.509 L483.196 326.856 Z"/><path fill="none" stroke="#EDEAE4" stroke-width="0.5669" d="M485.240 321.326 C488.823 321.326 491.728 324.231 491.728 327.814 C491.728 331.397 488.823 334.302 485.240 334.302 C481.657 334.302 478.752 331.397 478.752 327.814 C478.752 324.231 481.657 321.326 485.240 321.326"/></svg></a>
-    <ul id="menu-principal">
-      <li><a href="#revision">Revisión gratuita</a></li>
-      <li><a href="#proceso">Cómo trabajamos</a></li>
-      <li><a href="#ejemplo">Ejemplo de entrega</a></li>
-      <li><a href="#obra">Obra</a></li>
-      <li><a href="#dro">Respaldo DRO</a></li>
-      <li><a href="#equipo">Equipo</a></li>
-      <li><a href="cv/">CV del director</a></li>
-    </ul>
-    <div class="nav-r">
-      <a class="cta" href="#revision">Revisión gratis</a>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-principal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menú</span></button>
-    </div>
-  </div>
-</nav>
-
-<header class="hero" id="inicio">
-  <canvas id="bim" role="img" aria-label="Construcción virtual de un edificio de ocho niveles, elemento por elemento y en orden de obra, mientras se cuantifican el concreto, el vidrio y las piezas"></canvas>
-  <div class="drag" aria-hidden="true">Arrastra para girar el modelo</div>
-  <div class="qto" id="qto" aria-hidden="true">
-    <p class="qh">Trazando ejes</p>
-    <dl>
-      <div data-row="con"><dt>Concreto</dt><dd><b data-q="con">0.0</b> m³</dd></div>
-      <div data-row="vid"><dt>Vidrio</dt><dd><b data-q="vid">0.0</b> m²</dd></div>
-      <div data-row="pzas"><dt>Elementos</dt><dd><b data-q="pzas">0</b> pzas</dd></div>
-      <div data-row="av"><dt>Modelado</dt><dd><b data-q="av">0</b> %</dd></div>
-    </dl>
-    <p class="qf">Cuantificación del modelo, en vivo</p>
-  </div>
-  <div class="wrap">
-    <div class="copy">
-      <h1>Construimos tu obra dos veces.<span class="l2">La primera, en virtual.</span></h1>
-      <p>Antes de construir tu obra, la construimos en virtual: elemento por elemento y en el mismo orden que en campo. Así validamos que sea construible y sabes <strong>cuánto cuesta y cuánto tarda</strong> antes de invertir.</p>
-      <div class="btns">
-        <a class="btn primary" href="#revision">Solicita la revisión gratuita</a>
-        <a class="btn ghost" href="#proceso">Ver cómo trabajamos</a>
+    <div class="brandrow">
+      <div class="brand">
+        <div class="eyebrow">Grupo Alaris · Construcción virtual · ALR-2026-010</div>
+        <h1>Oficina de Transferencia de Tecnología · Control de obra</h1>
+        <div class="sub">Ciudad Modelo, San José Chiapa · Licitación SPFA-OP-LPE-2026-115 · Precio alzado, 13 actividades · Programa de la propuesta: 11-nov-26 → 08-feb-27 (90 días)</div>
       </div>
-      <p class="trust"><span>Sin costo</span><span>Sin compromiso</span><span>Respuesta en 48 h hábiles</span></p>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+      <div id="authBox" class="corte" style="padding:6px 10px"><span class="muted" id="authTxt">Conectando…</span><button class="linkbtn" id="authBtn" type="button" hidden>Entrar con Google</button></div>
+      <div class="corte" role="group" aria-label="Fecha de corte">
+        <label for="slider">Corte</label>
+        <input type="range" id="slider" step="1">
+        <span class="fecha" id="fechaTxt">—</span>
+        <button class="linkbtn" id="hoyBtn" type="button">Hoy</button>
+        <div class="seg" role="group" aria-label="Qué mostrar">
+          <button type="button" id="mReal" aria-pressed="true">Real</button>
+          <button type="button" id="mProg" aria-pressed="false">Programado</button>
+        </div>
+      </div>
+      </div>
     </div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="#resumen">Resumen</a><a href="#actividades">Actividades</a><a href="#captura">Captura de avance</a><a href="#responsables">Responsables</a><a href="#estimaciones">Estimaciones</a><a href="#validacion">Validación</a>
+    </nav>
   </div>
 </header>
 
-<main id="contenido" tabindex="-1">
-<section class="lema" id="por-que">
-  <div class="wrap">
-    <p class="eyebrow">Para desarrolladores e inversionistas</p>
-    <h2>Solo se paga lo que está en el modelo.</h2>
-    <p class="lead">Cada concepto del presupuesto sale de un elemento modelado que se puede medir y contar. Decides con números verificables, no con estimaciones.</p>
-    <div class="gains">
-      <div class="gain"><h3>Costo con respaldo</h3><p>Volúmenes y números generadores salen del modelo, trazables elemento por elemento.</p></div>
-      <div class="gain"><h3>Tiempo previsto</h3><p>Programa 4D ligado al modelo: ves la secuencia de obra y dónde se atora antes de arrancar.</p></div>
-      <div class="gain"><h3>Proyecto construible</h3><p>Validamos que se pueda construir como está dibujado: lo que falta, lo que choca y lo que no cuadra se resuelve en el modelo, no en obra.</p></div>
-      <div class="gain"><h3>Control de obra</h3><p>Avance físico y financiero medido contra el modelo, en tableros que tú también consultas.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="rev" id="revision">
-  <div class="wrap">
-    <p class="eyebrow">Primer paso</p>
-    <h2>Revisión gratuita de tu proyecto</h2>
-    <p class="lead">Mándanos tus planos y te decimos qué riesgos vemos en costo, tiempo y constructibilidad. Así conoces nuestro método con tu propio proyecto.</p>
-    <div class="rev-grid">
-      <ol class="rsteps">
-        <li><h3>Envía tus planos</h3><p>PDF, DWG o Revit, por WhatsApp o correo. Con el proyecto arquitectónico basta para empezar.</p></li>
-        <li><h3>Los revisamos</h3><p>En 48 horas hábiles revisamos tu proyecto con el mismo criterio con que lo construiríamos.</p></li>
-        <li><h3>Te mostramos lo que encontramos</h3><p>En una llamada de 30 minutos. Si te conviene, te enviamos una propuesta técnica y económica.</p></li>
-      </ol>
-      <div class="check">
-        <h3>Qué revisamos</h3>
-        <ul>
-          <li>Si la información alcanza para cuantificar, presupuestar y programar</li>
-          <li>Congruencia entre arquitectónico, estructura e instalaciones</li>
-          <li>Detalles y especificaciones que faltan para construir sin improvisar</li>
-          <li>Riesgos de constructibilidad y de secuencia de obra</li>
-        </ul>
-        <p class="conf">Tus planos se usan solo para esta revisión y no se comparten con terceros.</p>
-        <div class="btns">
-          <a class="btn wa" href="https://wa.me/522226184760?text=Hola%2C%20quiero%20solicitar%20la%20revisi%C3%B3n%20gratuita%20de%20mi%20proyecto." target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a>
-          <a class="btn ghost" href="mailto:contacto@grupoalaris.mx?subject=Revisi%C3%B3n%20gratuita%20de%20proyecto">Enviar por correo</a>
+<main class="wrap">
+  <section class="view" id="v-resumen">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Edificio en 3D <small>Volumetría esquemática sobre el polígono del KML · se sustituye por el modelo del proyecto ejecutivo</small></h2>
+        <div class="legend" style="margin-top:8px">
+          <span class="chip s-ok">A tiempo</span><span class="chip s-late">Atrasado</span><span class="chip s-done">Terminado</span><span class="chip s-idle">Por iniciar</span>
+          <span class="muted" style="font-size:12px;align-self:center">Niveles sólidos = avance de Estructura (Act. 3)</span>
         </div>
+        <div class="scene" id="scene"><span class="hint">Arrastra para girar · rueda o pellizco para acercar · clic en el edificio para su detalle</span><button class="linkbtn" id="homeBtn" type="button" style="position:absolute;right:10px;top:10px;background:var(--panel)">Vista general</button></div>
+        <div class="edpanel" id="edpanel"></div>
+      </div>
+      <div class="panel">
+        <h2>Requieren atención <small id="attnCount"></small></h2>
+        <div class="list" id="attn" style="margin-top:6px"></div>
       </div>
     </div>
-  </div>
-</section>
+    <div class="panel">
+      <h2>Curva S <small>Programado según cédula de avances y pagos (DP-14) vs. ejecutado, estimado y cobrado</small></h2>
+      <div class="legend" id="curvaLegend" style="margin-top:6px"></div>
+      <div class="chart" id="curva"></div>
+    </div>
+  </section>
 
-<section id="proceso">
-  <div class="wrap">
-    <h2>Del levantamiento al control de obra, sin sorpresas</h2>
-    <p class="lead">Cada decisión se prueba primero en el modelo. Cuando llega la cuadrilla, las interferencias ya se resolvieron y las cantidades ya están contadas.</p>
-    <div class="steps">
-      <div class="step"><b>1</b><h3>Levantamiento</h3><p>Topografía y escaneo láser 3D del terreno o del edificio existente.</p></div>
-      <div class="step"><b>2</b><h3>Construcción virtual</h3><p>Construimos el proyecto en virtual siguiendo el proceso constructivo, con cada elemento medible y contable.</p></div>
-      <div class="step"><b>3</b><h3>Cuantificación</h3><p>Volúmenes y números generadores salen del modelo, no de un cálculo a mano.</p></div>
-      <div class="step"><b>4</b><h3>Programa 4D</h3><p>El modelo ligado al programa en Synchro: ves la obra avanzar semana por semana.</p></div>
-      <div class="step"><b>5</b><h3>Validación normativa</h3><p>Revisión del proyecto contra el reglamento, con Director Responsable de Obra propio.</p></div>
-      <div class="step"><b>6</b><h3>Obra y control</h3><p>Ejecución en campo con avance físico y financiero en tableros de Power BI.</p></div>
+  <section class="view" id="v-actividades" hidden>
+    <div class="panel">
+      <h2>Actividades del catálogo <small>Precio alzado · cada actividad se paga como ACTIVIDAD según la cédula de avance</small></h2>
+      <div class="counts" id="aCounts" style="margin:8px 0"></div>
+      <div class="hgrid" id="aCards"></div>
     </div>
-  </div>
-</section>
+    <div class="panel">
+      <h2>Cédula de avances y pagos programados <small>DP-14 · importes sin IVA</small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Actividad</th><th class="num">Nov-26</th><th class="num">Dic-26</th><th class="num">Ene-27</th><th class="num">Feb-27</th><th class="num">Total</th><th class="num">Peso</th></tr></thead><tbody id="cedBody"></tbody></table></div>
+    </div>
+  </section>
 
-<section id="ejemplo">
-  <div class="wrap">
-    <p class="eyebrow">Ejemplo de entrega</p>
-    <h2>Así recibes tu proyecto</h2>
-    <p class="lead">Proyecto de muestra: edificio de oficinas de ocho niveles. Las cantidades, el programa y la curva de avance salen del mismo modelo que ves en la portada. Nada se captura a mano.</p>
-    <div class="kpis">
-      <div class="kpi"><span>Concreto</span><b><span data-k="con">—</span><small>m³</small></b></div>
-      <div class="kpi"><span>Fachada de vidrio</span><b><span data-k="vid">—</span><small>m²</small></b></div>
-      <div class="kpi"><span>Elementos modelados</span><b><span data-k="pzas">—</span><small>pzas</small></b></div>
-      <div class="kpi"><span>Duración estimada</span><b><span data-k="dur">—</span><small>semanas</small></b></div>
-    </div>
-    <div class="dash">
-    <div class="viewer">
-      <canvas id="v3d" role="img" aria-label="Modelo 3D del proyecto de muestra. Al seleccionar una partida o un nivel se resaltan sus elementos."></canvas>
-      <div class="vleg" hidden><span><i class="sw st-n"></i>Terminado</span><span><i class="sw st-h"></i>En proceso</span><span><i class="sw st-g"></i>Pendiente</span></div>
-      <div class="vbar"><p class="vsel" aria-live="polite"></p><button type="button" class="vall" hidden>Ver todo</button></div>
-      <p class="vhint">Arrastra para girar · toca un elemento para ver su partida</p>
-    </div>
-    <div class="dpanel">
-    <div class="tabs" role="tablist" aria-label="Contenido del tablero de muestra">
-      <button type="button" role="tab" id="tab-cant" aria-controls="p-cant" aria-selected="true">Cantidades</button>
-      <button type="button" role="tab" id="tab-prog" aria-controls="p-prog" aria-selected="false" tabindex="-1">Programa de obra</button>
-      <button type="button" role="tab" id="tab-av" aria-controls="p-av" aria-selected="false" tabindex="-1">Control de avance</button>
-    </div>
-    <div class="tpanel" id="p-cant" role="tabpanel" aria-labelledby="tab-cant">
-      <div class="chart" tabindex="0" role="region" aria-label="Tabla de cantidades, se puede desplazar">
-        <table id="t-cant"><caption class="sr">Cantidades por partida del proyecto de muestra</caption>
-          <thead><tr><th scope="col">Partida</th><th scope="col">Unidad</th><th scope="col">Cantidad</th><th scope="col">Piezas</th><th scope="col">Participación</th></tr></thead>
-          <tbody></tbody>
-          <tfoot><tr><th scope="row">Concreto total</th><td>m³</td><td data-k="tcon"></td><td></td><td></td></tr></tfoot>
-        </table>
+  <section class="view" id="v-captura" hidden>
+    <div class="panel">
+      <h2>Captura de avance <small id="tCountTxt"></small></h2>
+      <div class="filters" style="margin-top:10px">
+        <select id="fGrupo" aria-label="Grupo"><option value="">Todos los grupos</option></select>
+        <select id="fEstatus" aria-label="Estatus"><option value="">Todos los estatus</option><option value="late">Atrasado</option><option value="ok">A tiempo</option><option value="done">Terminado</option><option value="idle">Por iniciar</option></select>
       </div>
-      <p class="pnote">Selecciona una partida para encender sus elementos en el modelo. Cada cantidad está ligada a elementos modelados: si no está en el modelo, no se cuantifica ni se cobra.</p>
+      <div class="notice" id="capNotice" style="margin-top:10px"></div>
     </div>
-    <div class="tpanel" id="p-prog" role="tabpanel" aria-labelledby="tab-prog" hidden>
-      <div class="legend"><span><i class="sw b-cim"></i>Cimentación</span><span><i class="sw b-est"></i>Estructura</span><span><i class="sw b-fac"></i>Fachada</span><span><i class="sw b-azo"></i>Azotea</span></div>
-      <div class="chart" id="g-prog" tabindex="0" role="region" aria-label="Programa de obra, se puede desplazar"></div>
-      <p class="pnote">Selecciona un nivel para verlo en el modelo. La fachada avanza dos niveles detrás de la estructura, la misma secuencia de la animación de la portada.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Estatus</th><th>Actividad</th><th>Responsable</th><th>Programa</th><th class="num">Importe</th><th class="num">Avance ejecutado (%)</th><th>Real vs prog.</th><th class="num">Monto ejecutado</th><th class="num">Por ejercer</th></tr></thead>
+        <tbody id="tBody"></tbody>
+      </table>
     </div>
-    <div class="tpanel" id="p-av" role="tabpanel" aria-labelledby="tab-av" hidden>
-      <dl class="avk"><div><dt>Corte</dt><dd>Semana <span data-k="corte"></span></dd></div><div><dt>Programado</dt><dd data-k="pp"></dd></div><div><dt>Real</dt><dd data-k="pr"></dd></div><div><dt>Desviación</dt><dd data-k="dv"></dd></div></dl>
-      <div class="legend"><span><i class="ln plan"></i>Programado</span><span><i class="ln real"></i>Real</span></div>
-      <div class="chart" id="g-av" tabindex="0" role="region" aria-label="Curva de avance, se puede desplazar"></div>
-      <p class="pnote">El avance real se registra en los elementos del modelo y de ahí sale la curva: ves de inmediato si la obra va adelantada o atrasada.</p>
-    </div>
-    </div>
-    </div>
-    <p class="disc">Ejemplo ilustrativo con datos de muestra. No corresponde a ningún cliente ni a una obra real.</p>
-    <div class="btns"><a class="btn primary" href="#revision">Quiero este control para mi proyecto</a></div>
-  </div>
-</section>
+  </section>
 
-<section id="obra">
-  <div class="wrap">
-    <h2>Obra que respalda el método</h2>
-    <div class="obra">
-      <div class="row"><h3>Residencial Allegra</h3><span>Conjunto de 8 residencias</span><span>San Andrés Cholula</span></div>
-      <div class="row"><h3>Anillo Periférico Arco Sur</h3><span>1.16 km de vialidad</span><span>San Martín Texmelucan</span></div>
-      <div class="row"><h3>Unidad de Docencia U-D1</h3><span>Estructura metálica, Universidad Politécnica Metropolitana</span><span>Puebla</span></div>
-      <div class="row"><h3>Complejo Cultural Universitario</h3><span>Institucional, BUAP</span><span>Puebla</span></div>
-      <div class="row"><h3>Paseo de la Barranca</h3><span>Espacio público con ciclopista</span><span>Zacatlán</span></div>
-      <div class="row"><h3>Residencia Toral</h3><span>Diseño y construcción</span><span>San Andrés Cholula</span></div>
-      <div class="row"><h3>Restaurante-bar La Catrina</h3><span>Concepto, diseño y construcción</span><span>Puebla</span></div>
+  <section class="view" id="v-responsables" hidden>
+    <div class="panel">
+      <h2>Líderes <small>Avance de lo que tiene asignado cada líder al corte</small></h2>
+      <div class="rgrid" id="rCards" style="margin-top:10px"></div>
     </div>
-    <p class="note">Participación en gerencia de proyecto, supervisión, diseño o construcción, según cada obra.</p>
-  </div>
-</section>
+    <div class="panel">
+      <h2>Asignación por actividad <small id="asigHint"></small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Actividad</th><th>Grupo</th><th>Equipo</th><th>Líder</th></tr></thead><tbody id="aBody"></tbody></table></div>
+    </div>
+    <div class="panel">
+      <h2>Personas registradas <small>Cualquiera que entre con su cuenta de Google queda registrado aquí; solo captura avance en las actividades donde es líder</small></h2>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Registro</th><th>Actividades como líder</th></tr></thead><tbody id="pBody"></tbody></table></div>
+    </div>
+  </section>
 
-<section id="dro">
-  <div class="wrap dro-grid">
-    <div>
-      <h2>Firmamos lo que modelamos</h2>
-      <p class="lead">Detrás de cada modelo hay un responsable con registro. El Arq. Alfonso Leal Vargas, director de Grupo Alaris, es Director Responsable de Obra y Corresponsable en Diseño Arquitectónico y Urbano: lo que validamos en virtual tiene respaldo técnico.</p>
-      <div class="firma">
-        <img src="data:image/webp;base64,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" width="160" height="200" loading="lazy" decoding="async" alt="Arq. Alfonso Leal Vargas, director general de Grupo Alaris">
-        <div>
-          <p class="fn">Arq. Alfonso Leal Vargas</p>
-          <p class="fr">Director general · Director Responsable de Obra y Corresponsable</p>
-          <a class="link" href="cv/">Ver trayectoria completa</a>
-        </div>
-      </div>
+  <section class="view" id="v-estimaciones" hidden>
+    <div class="kpis" id="eKpis"></div>
+    <div class="panel" id="eFormPanel">
+      <h2>Registrar estimación <small>Periodos no mayores a un mes (bases) · amortización de anticipo al 30 %</small></h2>
+      <form id="eForm" class="formgrid" style="margin-top:10px">
+        <label>No.<input id="eNo" type="text" required placeholder="E-01"></label>
+        <label>Periodo del<input id="eIni" type="date" required></label>
+        <label>al<input id="eFin" type="date" required></label>
+        <label>Monto estimado sin IVA ($)<input id="eMonto" type="number" min="0" step="0.01" required></label>
+        <label>Monto cobrado ($)<input id="eCobrado" type="number" min="0" step="0.01"></label>
+        <label>Fecha de cobro<input id="eFCobro" type="date"></label>
+        <label style="grid-column:1/-1">Nota<input id="eNota" type="text" placeholder="Opcional"></label>
+        <div style="display:flex;gap:8px"><button class="btn" type="submit" id="eSave">Guardar</button><button class="btn ghost" type="button" id="eCancel" hidden>Cancelar edición</button></div>
+      </form>
     </div>
-    <div>
-      <div class="regs">
-        <div class="reg"><h3>Municipio de Puebla</h3><div class="who">Gestión y Desarrollo Urbano, CAADROC</div><dl><dt>DRO A</dt><dd>3194/18</dd></dl></div>
-        <div class="reg"><h3>San Andrés Cholula</h3><div class="who">Administración de las Construcciones</div><dl><dt>DROM</dt><dd>940/18</dd><dt>CDA</dt><dd>24/18</dd><dt>CDU</dt><dd>24/18</dd></dl></div>
-        <div class="reg"><h3>San José Chiapa</h3><div class="who">Obras Públicas y Desarrollo Urbano</div><dl><dt>DRO</dt><dd>MSJC2026/128-002</dd><dt>CDA</dt><dd>MSJC2026/128-011</dd></dl></div>
-      </div>
-      <p class="vig">Registros refrendados, vigentes al <strong>31 de diciembre de 2026</strong>.</p>
-    </div>
-  </div>
-</section>
+    <div class="tablewrap"><table><thead><tr><th>No.</th><th>Periodo</th><th class="num">Estimado</th><th class="num">Amort. anticipo 30 %</th><th class="num">Neto</th><th class="num">Cobrado</th><th>Fecha de cobro</th><th>Nota</th><th></th></tr></thead><tbody id="eBody"></tbody></table></div>
+  </section>
 
-<section id="equipo">
-  <div class="wrap">
-    <h2>Un solo equipo, de la nube de puntos a la entrega</h2>
-    <p class="lead">Una alianza de cuatro firmas para que el modelo, el costo, el campo y el terreno hablen el mismo idioma.</p>
-    <div class="team">
-      <div class="firm lead-firm"><h3>Grupo Alaris</h3><p>Diseño, construcción virtual y dirección responsable de obra.</p></div>
-      <div class="firm"><h3>PICAGED</h3><p>Ingeniería de costos y presupuestos.</p></div>
-      <div class="firm"><h3>LBI Group</h3><p>Construcción y ejecución en campo.</p></div>
-      <div class="firm"><h3>ITASA</h3><p>Topografía y escaneo láser 3D.</p></div>
+  <section class="view" id="v-validacion" hidden>
+    <div class="panel">
+      <h2>Observaciones de validación <small>Constructibilidad dentro del Sistema ALARIS · no es dictamen de DRO</small></h2>
+      <div class="counts" id="oCounts" style="margin:8px 0"></div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="oList"></div>
     </div>
-  </div>
-</section>
-
-<section class="contact" id="contacto">
-  <div class="wrap">
-    <h2>¿Tienes un proyecto en papel? Hagámoslo construible.</h2>
-    <p class="lead">Empieza con la revisión gratuita: mándanos tus planos y en 48 horas hábiles te decimos qué encontramos.</p>
-    <div class="btns">
-      <a class="btn wa" href="https://wa.me/522226184760?text=Hola%2C%20quiero%20solicitar%20la%20revisi%C3%B3n%20gratuita%20de%20mi%20proyecto." target="_blank" rel="noopener noreferrer">Enviar planos por WhatsApp</a>
-    </div>
-    <a class="mail" href="mailto:contacto@grupoalaris.mx?subject=Revisi%C3%B3n%20gratuita%20de%20proyecto">contacto@grupoalaris.mx</a>
-    <div class="cgrid">
-      <div><h3>Teléfono</h3><a href="tel:+522226184760">222 618 4760</a></div>
-      <div><h3>WhatsApp</h3><a href="https://wa.me/522226184760?text=Hola%2C%20quiero%20solicitar%20la%20revisi%C3%B3n%20gratuita%20de%20mi%20proyecto." target="_blank" rel="noopener noreferrer">222 618 4760</a></div>
-      <div><h3>Oficina</h3><p>Villa Universitaria, Puebla<small>Privada 63 D Oriente 1409 Int. 1A, C.P. 72589. Proyectos en todo el país.</small></p></div>
-    </div>
-    <div class="card">
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyCAIAAABnRsZeAAAGoElEQVR42u3cPa4jRwyFUcvoHdmZ1+/M3oUiAW8PzgYTCbD4OJfFPifXX3XrQzVA1OPr9fwN4Pv8bgkAWQFkBZAVAFkBZAWQFQBZAWQFkBUAWQFkBZAVQFYAZAWQFUBWAGQFkBVgn6vy4j/+/GvZcvz7z99Nq1F559Tn9l3fE1fDf8FuBfAQBMgKgKwAsgLICoCsALICyApwK1ffW/dNNFZUpiH7Jikrs6F965ya0E2tRt+E7r7/gt0K4CEIkBUAWQFkBZAVQFYAZAWQFWC9K/XBJ56T2ve5719bmf6srHPqF1XunL6V9F+wWwE8BAGyAiArgKwAsgIgK4CsALIC3MplCb5Lap61YuZ0b+oqYLcCyAogKwCyAsgKICsAsgLICiArAD+Ysv0fKrOw76c/T5xJ7TsX9sTpXuxWAFkBZAWQFQBZAWQFkBUAWQFkBVgmNmWbOr11pr7V6Dut9r2ZJ/umVuNu/wW7FUBWAFkBZAVAVgBZAWQFQFYAWQEWaJyy3XeqaGoKs+9s19TU6cxpV/8FuxVAVgBZAZAVQFYAWQGQFUBWAFkB+KE0Zes82p9VJilnzrP23Rv7pk79F+xWAFkBZAWQFQBZAWQFkBUAWQFkBVimNGV74pmjqXnWmb+oMgu778TZyjr33RupSWi7FcBDECArALICyAogKwCyAsgKICvAzV19bz3znNTUHO3MmdS+a5T6vX1n6PZ9530n+9qtALICyAogKwCyAsgKICsAsgLICrBAacp25txhas7ybnO07o1fc/VPvOvsVgBZAWQFkBUAWQFkBZAVAFkBZAVY4PH1en784pkng54ode5v6lulvnNqYnXfrLPdCiArgKwAyAogK4CsALICICuArADrLTzLduYvmik1kzpzqvhu0719d7vdCiArgKwAsgIgK4CsALICICuArAALNJ5lmzr7c+bnpuYd+8y8RjOne2d+575rZLcCeAgCZAWQFQBZAWQFkBUAWQFkBVigccq2IjUp2yc1R3vijOaJM9aVb7Xv5Ga7FUBWAFkBZAVAVgBZAWQFQFYAWQEWuPreum+yMHUubOrs3so7zzw1tu8Xpe6NmWfZptbKbgXwEATICiArALICyAogKwCyAsgKsMB1tx/cd27ozNnf1Eqmzu5Nze/uW0m7FUBWAFkBkBVAVgBZAZAVQFYAWQFurnHKNnV+53szT5xN/aITr2DfL6qsc+qcY7sVwEMQgKwAsgLICoCsALICyAqArABNGqdsZ57BOfNE0tRaVVYjNQl94tRpaj47tZJ2K4CsALICyAqArACyAsgKgKwAsgIs8Ph6PT9+cd9ZpydOnVbMPI/2RKkzZWeeVpu6vnYrgKwAsgLICoCsALICyAqArACyAixQmrJ9b+a8492mMGfOK++b7u27gjOvr90KICuArADICiArgKwAsgIgK4CsAOs1nmU704kzuCdO2fZJrWTfOu87E9puBZAVQFYAWQGQFUBWAFkBkBVAVoAFrr63njnveOJZtjOlZkP73jk1Nd73rVL3pN0KICuArACyAiArgKwAsgIgK4CsAAtcqQ9OzcL2zdFWpKYh+07JPXE2NHXn9E0V260AHoIAZAWQFUBWAFmxBICsALICyArAxx5fr+fHL5454XfiWbZ3Owe3z8x7su9+7luNyufarQAeggBZAWQFQFYAWQFkBUBWAFkBFihN2d5Nao525mtTTpw6Td1XqXW2WwE8BAGyAsgKgKwAsgLICoCsALICLHBVXny3c0Nnnim7b0bz/beaedfNPI049bl2K4CsALICyAqArACyAsgKgKwAsgIscPW99YkzqanV6PtWfae39s3Cpk6NnXm3p+4NZ9kCHoIAWQGQFUBWAFkBkBVAVgBZAW7uSn3wifOOfSrzrKn5zr7Tameu88wzdCtXoe/OsVsBZAWQFUBWAGQFkBVAVgBkBZAVYIHLEvwalYnVvnnWyufuO622b9Z55lnFfdfIbgXwEATICiArALICyAogKwCyAsgKsIAp22+TOvm1b1J25uxvxd3OObZbATwEAcgKICuArACyYgkAWQFkBZAVgI/FpmxPnHecuVYzz5Tt+0Uz55VPvHPsVgAPQYCsAMgKICuArADICiArgKwAvPH4ej0/fvHMczQrTpz+rKh87onTvamr0LfOqTvWbgXwEATICoCsALICyAogKwCyAsgKsF5pyhbAbgWQFUBWAFkBkBVAVgBZAZAVQFYAWQGQFUBWAFkBkBVAVgBZAWQFQFYAWQFu4T977eXNh86jxQAAAABJRU5ErkJggg==" alt="Código QR de la tarjeta digital de Grupo Alaris" width="132" height="132">
-      <div><h3>Tarjeta digital</h3><p>Escanéala con tu celular o ábrela para guardar nuestros datos en tus contactos.</p>
-      <a class="btn ghost" href="https://dot8.mx/#/qr_info/XU0000x5a55/XU0000x5a55" target="_blank" rel="noopener noreferrer">Guardar mi contacto</a></div>
-    </div>
-  </div>
-</section>
+  </section>
 </main>
-<div class="mbar" aria-label="Contacto rápido"><a class="btn wa" href="https://wa.me/522226184760?text=Hola%2C%20quiero%20solicitar%20la%20revisi%C3%B3n%20gratuita%20de%20mi%20proyecto." target="_blank" rel="noopener noreferrer">Revisión gratis por WhatsApp</a></div>
+<div class="toast" id="toast" hidden></div>
 
-<footer><div class="wrap"><span class="fl"><svg class="flogo" width="85" height="80" xmlns="http://www.w3.org/2000/svg" viewBox="160 54 340 321" role="img" aria-labelledby="flogo-t"><title id="flogo-t">Grupo Alaris</title><path fill="#EC3237" fill-rule="evenodd" d="M312.990 82.067 L283.626 122.619 L283.626 140.250 L218.768 250.161 L204.426 258.724 L168.224 318.136 L312.990 220.163 L312.990 82.067 L312.990 82.067 Z M285.755 208.667 L249.735 236.877 L288.493 172.026 L285.755 208.667 Z"/><path fill="#EDEAE4" fill-rule="evenodd" d="M335.790 82.043 L365.154 122.595 L365.154 140.226 L430.012 250.137 L444.354 258.699 L480.035 318.136 L335.790 220.139 L335.790 82.043 L335.790 82.043 Z M363.025 208.643 L399.045 236.852 L360.287 172.002 L363.025 208.643 Z"/><path fill="#D1AE6C" d="M316.122 82.067 L324.130 62.269 L332.172 82.067 L332.172 233.393 L358.244 248.749 L332.172 248.748 L316.122 248.748 L290.015 248.748 L316.122 233.391 L316.122 82.067 Z"/><path fill="#D1AE6C" d="M275.790 257.116 L372.469 257.116 L480.035 318.136 L168.224 318.136 L275.790 257.116 Z"/><path fill="#EDEAE4" fill-rule="evenodd" d="M226.405 366.611 L213.751 366.611 L208.740 358.197 L185.471 358.197 L180.649 366.611 L168.224 366.611 L190.751 329.653 L203.162 329.653 L226.405 366.611 L226.405 366.611 Z M204.932 351.952 L196.869 338.273 L189.036 351.952 L204.932 351.952 L204.932 351.952 Z M235.832 366.611 L235.832 329.962 L247.582 329.962 L247.582 360.365 L276.672 360.365 L276.672 366.611 L235.832 366.611 L235.832 366.611 Z M340.120 366.611 L327.465 366.611 L322.455 358.197 L299.185 358.197 L294.364 366.611 L281.939 366.611 L304.466 329.653 L316.877 329.653 L340.120 366.611 L340.120 366.611 Z M318.646 351.952 L310.584 338.273 L302.751 351.952 L318.646 351.952 L318.646 351.952 Z M349.222 366.611 L349.222 329.653 L373.897 329.653 C380.095 329.653 384.606 329.988 387.415 330.650 C390.238 331.313 392.480 332.491 394.168 334.186 C395.856 335.890 396.707 337.825 396.707 340.011 C396.707 342.789 395.438 345.078 392.885 346.884 C390.333 348.691 386.524 349.827 381.446 350.300 C383.971 351.238 386.051 352.270 387.685 353.397 C389.333 354.524 391.548 356.528 394.330 359.402 L401.407 366.611 L387.402 366.611 L379.002 358.542 C375.990 355.677 373.924 353.870 372.803 353.122 C371.695 352.382 370.521 351.866 369.277 351.590 C368.022 351.315 366.050 351.177 363.349 351.177 L360.972 351.177 L360.972 366.611 L349.222 366.611 L349.222 366.611 Z M360.972 345.293 L369.642 345.293 C375.261 345.293 378.759 345.138 380.163 344.837 C381.554 344.536 382.662 344.011 383.445 343.271 C384.242 342.531 384.633 341.602 384.633 340.492 C384.633 339.245 384.106 338.247 383.066 337.473 C382.027 336.707 380.555 336.225 378.664 336.027 C377.705 335.941 374.856 335.898 370.115 335.898 L360.972 335.898 L360.972 345.293 L360.972 345.293 Z M410.185 366.611 L410.185 329.653 L421.935 329.653 L421.935 366.611 L410.185 366.611 L410.185 366.611 Z M432.874 354.636 L444.300 353.913 C444.989 356.348 446.366 358.129 448.460 359.273 C450.553 360.417 453.375 360.985 456.927 360.985 C460.682 360.985 463.518 360.477 465.422 359.462 C467.326 358.447 468.285 357.260 468.285 355.901 C468.285 355.023 467.880 354.283 467.083 353.664 C466.287 353.053 464.882 352.519 462.883 352.072 C461.519 351.762 458.413 351.229 453.551 350.455 C447.298 349.457 442.909 348.235 440.384 346.781 C436.832 344.742 435.062 342.256 435.062 339.322 C435.062 337.438 435.900 335.666 437.561 334.023 C439.235 332.380 441.639 331.132 444.786 330.272 C447.933 329.412 451.714 328.982 456.171 328.982 C463.423 328.982 468.893 330.005 472.553 332.061 C476.227 334.117 478.145 336.853 478.333 340.286 L466.584 340.544 C466.084 338.634 465.017 337.266 463.383 336.432 C461.749 335.597 459.291 335.176 456.023 335.176 C452.646 335.176 449.999 335.623 448.095 336.518 C446.866 337.094 446.245 337.860 446.245 338.824 C446.245 339.701 446.825 340.449 447.987 341.069 C449.459 341.869 453.038 342.695 458.724 343.555 C464.409 344.407 468.610 345.301 471.324 346.213 C474.052 347.134 476.186 348.381 477.726 349.973 C479.265 351.564 480.035 353.526 480.035 355.857 C480.035 357.974 479.117 359.961 477.267 361.811 C475.416 363.660 472.810 365.037 469.433 365.932 C466.057 366.835 461.843 367.282 456.806 367.282 C449.473 367.282 443.841 366.207 439.911 364.048 C435.981 361.897 433.644 358.757 432.874 354.636 Z"/><path fill="#EDEAE4" fill-rule="evenodd" d="M481.326 332.182 L481.326 322.949 L485.252 322.949 C486.239 322.949 486.957 323.033 487.404 323.198 C487.853 323.364 488.210 323.658 488.479 324.082 C488.747 324.507 488.883 324.991 488.883 325.537 C488.883 326.231 488.680 326.803 488.274 327.254 C487.868 327.705 487.262 327.989 486.454 328.107 C486.856 328.341 487.187 328.599 487.447 328.881 C487.709 329.163 488.062 329.663 488.504 330.381 L489.631 332.182 L487.402 332.182 L486.065 330.166 C485.586 329.450 485.257 328.999 485.079 328.812 C484.902 328.627 484.715 328.498 484.517 328.430 C484.318 328.361 484.004 328.327 483.574 328.327 L483.196 328.327 L483.196 332.182 L481.326 332.182 L481.326 332.182 Z M483.196 326.856 L484.576 326.856 C485.470 326.856 486.026 326.818 486.250 326.743 C486.471 326.667 486.647 326.536 486.772 326.351 C486.899 326.166 486.961 325.934 486.961 325.657 C486.961 325.345 486.877 325.096 486.712 324.903 C486.546 324.712 486.312 324.591 486.011 324.542 C485.859 324.520 485.405 324.509 484.651 324.509 L483.196 324.509 L483.196 326.856 Z"/><path fill="none" stroke="#EDEAE4" stroke-width="0.5669" d="M485.240 321.326 C488.823 321.326 491.728 324.231 491.728 327.814 C491.728 331.397 488.823 334.302 485.240 334.302 C481.657 334.302 478.752 331.397 478.752 327.814 C478.752 324.231 481.657 321.326 485.240 321.326"/></svg><span>© 2026 Grupo Alaris</span></span><a href="cv/">CV del Arq. Alfonso Leal Vargas</a><a href="socios/">Acceso socios</a></div></footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="application/json" id="data">{"d0":"2026-11-01","acts":[["ACT-01",1,"PROYECTO EJECUTIVO","PE",10,29,533631.66,[533631.66,0,0,0],"—",1],["ACT-02",2,"PRELIMINARES","OC",30,39,185721.39,[0,185721.39,0,0],"1",1],["ACT-03",3,"ESTRUCTURA","OC",40,79,9665897.53,[0,5074596.2,4591301.33,0],"2",1],["ACT-04",4,"ALBAÑILERÍA","OC",40,79,1579951.22,[0,829474.39,750476.83,0],"2, 3 (SS+5d)",0],["ACT-05",5,"ACABADOS","AC",80,99,3350667.82,[0,0,2010400.69,1340267.13],"3, 4",1],["ACT-06",6,"HERRERÍA, CANCELERÍA Y CARPINTERÍA","AC",80,99,3800623.76,[0,0,2280374.26,1520249.5],"3, 4",0],["ACT-07",7,"INSTALACIÓN HIDROSANITARIA","IN",40,99,927369.92,[0,324579.47,479141.13,123649.32],"2, 3 (SS)",0],["ACT-08",8,"INSTALACIÓN PLUVIAL","IN",40,99,143506.1,[0,50227.14,74144.82,19134.14],"2, 3 (SS)",0],["ACT-09",9,"INSTALACIONES ELÉCTRICAS, ALUMBRADO E ILUMINACIÓN","IN",40,99,4645385.67,[0,1625884.98,2400115.94,619384.75],"2, 3 (SS)",0],["ACT-10",10,"INSTALACIONES ESPECIALES","IN",40,99,2762513.28,[0,966879.65,1427298.54,368335.09],"2, 3 (SS)",0],["ACT-11",11,"SEÑALÉTICA INTERIOR","AC",92,99,53453.07,[0,0,0,53453.07],"5",0],["ACT-12",12,"OBRAS INDUCIDAS","OC",30,91,96573.93,[0,48286.97,48286.96,0],"1",0],["ACT-13",13,"LIMPIEZA","OC",30,99,31221.45,[0,13826.64,13826.64,3568.17],"2 (SS)",0]],"obs":[["OTT-001","alta","Plazo","Los Términos de Referencia fijan un plazo total de 150 días naturales con proyecto ejecutivo en máximo 30 días; la propuesta (DP-05, DP-13) programa 90 días (11-nov-26 al 08-feb-27) con proyecto ejecutivo en 20 días.","Confirmar plazo y fechas en el contrato firmado. El tablero usa el programa de la propuesta hasta tenerlo."],["OTT-002","alta","Control por cantidad","Contrato a precio alzado con 13 actividades en unidad ACTIVIDAD (cantidad 1). Sin desglose no se puede controlar por cantidad ejecutada ni ligar el modelo.","Pedir los generadores de obra del proyecto ejecutivo (los exigen los TdR) y la cédula de avance por subactividad; cargarlos como conceptos medibles con ALR_Clave."],["OTT-003","media","Programa","Estructura (40 días) y albañilería corren en paralelo del 11-dic-26 al 19-ene-27, sobre el periodo vacacional. Acabados y herrería concentran .15 M (25.7 % del contrato) en 20 días.","Revisar ruta crítica y carga de personal del periodo dic–ene; pedir programa de suministros de cancelería y acabados."],["OTT-004","media","Insumos","Planos DWG recibidos: arquitectónico, instalación hidráulica, voz y datos, sembrado DI, señalización y accesibilidad. Faltan estructural, eléctrico y alumbrado, pluvial, topografía y mecánica de suelos.","Son entregables de la Actividad 1 (proyecto ejecutivo). Validar constructibilidad al recibirlos."],["OTT-005","media","Anticipo y pagos","Bases: anticipo de 30 % por ejercicio fiscal (2026 y 2027) sobre la proposición; se amortiza proporcionalmente en cada estimación. Estimaciones con periodos no mayores a un mes.","Definir montos de anticipo por ejercicio y fechas de corte en el contrato; registrar estimaciones en el tablero."]],"site":{"lot":[[-28.57,-96.96],[-19.24,-113.78],[-8.03,-132.83],[-7.4,-133.57],[-6.61,-134.15],[-5.71,-134.51],[-4.75,-134.65],[-3.78,-134.56],[-2.86,-134.24],[-2.05,-133.7],[-1.39,-132.99],[-0.92,-132.14],[-0.81,-131.5],[7.75,-91.71],[16.32,-64.21],[24.01,-42.42],[34.8,-16.53],[44.27,3.12],[62.03,34.84],[62.4,35.73],[62.54,36.69],[62.45,37.64],[62.13,38.55],[61.6,39.35],[55.08,46.83],[34.27,73.9],[29.85,79.86],[18.42,96.14],[7.81,82.42],[-1.85,67.52],[-11.33,52.31],[-19.84,36.55],[-27.8,20.51],[-35.18,4.2],[-42.0,-12.36],[-48.23,-29.15],[-53.87,-46.15],[-47.6,-59.55],[-36.0,-82.81],[-28.57,-96.96]],"ang":1.3589},"total":27776516.8}</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 (function(){
-  const nav=document.querySelector('.nav'), btn=nav.querySelector('.menu-btn');
-  const close=()=>{nav.classList.remove('open');btn.setAttribute('aria-expanded','false');};
-  btn.addEventListener('click',()=>{const o=nav.classList.toggle('open');btn.setAttribute('aria-expanded',String(o));});
-  nav.querySelectorAll('#menu-principal a').forEach(a=>a.addEventListener('click',close));
-  addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){close();btn.focus();}});
-})();
-/* Proyecto de muestra: geometría única de la que salen la animación y el tablero */
-window.ALR=(function(){
-  const BX=4, BZ=3, SX=6, SZ=5.5, H=3.4, N=8, SET=2;
-  const W=BX*SX, D=BZ*SZ;
-  const COL=.6, SLAB=.32, CORE_X=SX*.8, CORE_Z=SZ*.75, CORE_T=.25, GH=H-.4;
-  const r2=v=>Math.round(v*100)/100;
-  const niveles=[];
-  for(let f=0;f<N;f++){
-    const set=f>=N-SET?1:0, bays=BX-2*set, sw=bays*SX;
-    const cols=(bays+1)*(BZ+1);
-    const vCol=cols*COL*COL*H;
-    const vCore=2*(CORE_X+CORE_Z)*H*CORE_T;
-    const vSlab=(sw+.8)*(D+.8)*SLAB;
-    const aGlass=(bays*2*(SX-.6)+BZ*2*(SZ-.6))*GH;
-    const panels=bays*2+BZ*2;
-    niveles.push({f,set,bays,sw,cols,vCol,vCore,vSlab,aGlass,panels});
-  }
-  const vFound=(W+2.4)*(D+2.4)*.6;
-  const top=niveles[N-1], wr=top.sw+.8, dr=D+.8, PT=.2, PH=.9, MH=2.2;
-  const vAzo=2*(wr+dr)*PH*PT+2*(CORE_X+CORE_Z)*MH*PT+CORE_X*CORE_Z*.15;
-  const sum=k=>niveles.reduce((a,n)=>a+n[k],0);
-  const partidas=[
-    {id:'cim', nombre:'Losa de cimentación', unidad:'m³', cant:vFound, piezas:1},
-    {id:'col', nombre:'Columnas de concreto', unidad:'m³', cant:sum('vCol'), piezas:sum('cols')},
-    {id:'nuc', nombre:'Muros de núcleo', unidad:'m³', cant:sum('vCore'), piezas:N*4},
-    {id:'los', nombre:'Losas de entrepiso', unidad:'m³', cant:sum('vSlab'), piezas:N},
-    {id:'azo', nombre:'Pretil y cuarto de máquinas', unidad:'m³', cant:vAzo, piezas:2},
-    {id:'fac', nombre:'Fachada de vidrio', unidad:'m²', cant:sum('aGlass'), piezas:sum('panels')}
-  ];
-  partidas.forEach(p=>p.cant=r2(p.cant));
-  /* programa en semanas: cimentación 3; estructura 2 sem por nivel con traslape de 0.5; fachada 2 niveles atrás, 1.5 sem por nivel; azotea 2 */
-  const prog=[{t:'Cimentación',i:0,ini:0,dur:3,tipo:'cim'}];
-  for(let f=0;f<N;f++){
-    const ini=3+f*1.5;
-    prog.push({t:'Nivel '+(f+1),i:f+1,ini,dur:2,tipo:'est'});
-    prog.push({t:'Nivel '+(f+1),i:f+1,ini:ini+3.5,dur:1.5,tipo:'fac'});
-  }
-  const finEst=3+(N-1)*1.5+2;
-  prog.push({t:'Azotea',i:N+1,ini:finEst,dur:2,tipo:'azo'});
-  const dur=Math.ceil(Math.max(...prog.map(p=>p.ini+p.dur)));
-  return {BX,BZ,SX,SZ,H,N,W,D,COL,SLAB,CORE_X,CORE_Z,CORE_T,GH,niveles,partidas,prog,dur,
-    concreto:r2(vFound+sum('vCol')+sum('vCore')+sum('vSlab')+vAzo), vAzo, PT, PH, MH, vidrio:r2(sum('aGlass'))};
-})();
+"use strict";
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const D0 = new Date(2026,10,1);            // día 0 = 1-nov-2026
+const DAY = 86400000, TOL = 0.05;
+const MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const $ = id => document.getElementById(id);
+const el = (tag, cls, txt) => { const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+const dayIdx = d => Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate()) - D0)/DAY);
+const dateOf = i => new Date(D0.getTime()+i*DAY);
+const fmtD = i => { const d=dateOf(i); return d.getDate()+'-'+MESES[d.getMonth()]+'-'+String(d.getFullYear()).slice(2); };
+const fromIso = s => { if(!s) return null; const [y,m,dd]=s.split('-').map(Number); return dayIdx(new Date(y,m-1,dd)); };
+const money = v => '$'+(v/1e6).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' M';
+const moneyFull = v => '$'+v.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = v => (v*100).toLocaleString('es-MX',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+const ST = {ok:['A tiempo','s-ok'],late:['Atrasado','s-late'],done:['Terminado','s-done'],idle:['Por iniciar','s-idle']};
+const chip = s => el('span','chip '+ST[s][1],ST[s][0]);
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const GRUPOS = {PE:'Proyecto ejecutivo',OC:'Obra civil',IN:'Instalaciones',AC:'Acabados y herrería'};
+const ANT = 0.30;
 
-(function(){
-  const M=window.ALR, canvas=document.getElementById('bim'), qto=document.getElementById('qto');
-  const q=k=>qto.querySelector('[data-q="'+k+'"]');
-  const fmt=(v,d)=>v.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
-  const totalPzas=M.partidas.reduce((a,p)=>a+p.piezas,0);
-  function finalPanel(){q('con').textContent=fmt(M.concreto,1);q('vid').textContent=fmt(M.vidrio,1);q('pzas').textContent=fmt(totalPzas,0);q('av').textContent='100';}
-  if(!window.THREE){canvas.style.display='none';finalPanel();return;}
-  let renderer;
-  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){canvas.style.display='none';finalPanel();return;}
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(32,1,0.1,500);
-  const GOLD=0xD1AE6C, DIM=0x4a4440, EDGE=0x1a1819;
-  scene.add(new THREE.HemisphereLight(0xfff4e6,0x2a2627,0.62));
-  const sun=new THREE.DirectionalLight(0xffffff,0.7); sun.position.set(45,36,10); scene.add(sun);
-  const rim=new THREE.DirectionalLight(0xD1AE6C,0.35); rim.position.set(-40,25,-35); scene.add(rim);
-  const root=new THREE.Group(); scene.add(root);
-  const {BX,BZ,SX,SZ,H,N,W,D}=M, ox=-W/2, oz=-D/2;
-  const gold=new THREE.Color(0xC8962E), black=new THREE.Color(0);
-  const lines=(pts,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));return new THREE.LineSegments(g,mat);};
-  const smat=(c,o)=>new THREE.MeshStandardMaterial({color:c,roughness:.82,metalness:0,transparent:true,opacity:o});
-  const lmat=(c,o)=>new THREE.LineBasicMaterial({color:c,transparent:true,opacity:o});
-  const solid=(geo,m,em)=>{const g=new THREE.Group();g.add(new THREE.Mesh(geo,m));g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),em));return g;};
-  const cat={col:[],nuc:[],los:[],fac:[],cim:[]};
+/* ---------- actividades ---------- */
+// meses de la cédula: nov, dic, ene, feb (índices de día)
+const MB = [[0,29],[30,60],[61,91],[92,119]];
+const ACTS = DATA.acts.map(a=>{
+  const t={id:a[0], n:a[1], nombre:a[2], g:a[3], ini:a[4], fin:a[5], imp:a[6], mes:a[7], pred:a[8], crit:!!a[9], cant:1, unidad:'ACTIVIDAD'};
+  // perfil diario programado según DP-14: importe del mes repartido en los días de la actividad dentro del mes
+  const daily=new Map();
+  t.mes.forEach((m,i)=>{ if(!m) return; let a0=Math.max(MB[i][0],t.ini), a1=Math.min(MB[i][1],t.fin); if(a1<a0){a0=MB[i][0];a1=MB[i][1];} const n=a1-a0+1; for(let d=a0;d<=a1;d++) daily.set(d,(daily.get(d)||0)+m/n); });
+  const days=[...daily.keys()].sort((x,y)=>x-y); let c=0; t.cum=new Map(); days.forEach(d=>{c+=daily.get(d); t.cum.set(d,c);}); t.d0=days[0]; t.d1=days[days.length-1];
+  return t;
+});
+const TOTAL = ACTS.reduce((s,t)=>s+t.imp,0);
+const MIN_DAY = Math.min(...ACTS.map(t=>t.ini)), MAX_DAY = Math.max(...ACTS.map(t=>t.fin));
+const W0 = MIN_DAY - ((dateOf(MIN_DAY).getDay()+6)%7);
+const NW = Math.ceil((MAX_DAY - W0 + 1)/7) + 1;
 
-  // retícula de ejes
-  const ap=[];
-  for(let i=-1;i<=BX+1;i++){const x=ox+i*SX;ap.push(x,0,oz-5,x,0,oz+D+5);}
-  for(let j=-1;j<=BZ+1;j++){const z=oz+j*SZ;ap.push(ox-5,0,z,ox+W+5,0,z);}
-  const axM=lmat(DIM,0); root.add(lines(ap,axM));
+/* ---------- estado ---------- */
+const S = { today: dayIdx(new Date()), t: 0, mode:'real', avance:new Map(), hist:new Map(), resp:{}, estim:[], obs:{}, me:null, canEdit:false, canWrite:null, db:null, user:null, sel:false, profiles:{} };
+S.t = Math.min(Math.max(S.today, W0), MAX_DAY+14);
 
-  const fM=smat(0x6E6862,0), fE=lmat(EDGE,0); cat.cim.push(fM);
-  const found=solid(new THREE.BoxGeometry(W+2.4,.6,D+2.4),fM,fE); found.position.y=-.3; root.add(found);
+function progAt(t,d){ if(d<t.d0) return 0; if(d>=t.d1) return 1; let v=0; for(let x=d;x>=t.d0;x--){ if(t.cum.has(x)){ v=t.cum.get(x); break; } } return v/t.imp; }
+function qtyAt(t,d){
+  if (d >= S.today) { const a=S.avance.get(t.id); return a ? +a.q||0 : 0; }
+  let best=null, bw=-1;
+  for (const [w,map] of S.hist) if (w<=d && w>bw && map[t.id]!=null){ bw=w; best=map[t.id]; }
+  return best==null?0:+best;
+}
+function realAt(t,d){ return Math.min(1, qtyAt(t,d)/t.cant); }
+function statusOf(list,d){
+  let imp=0,p=0,r=0,overdue=false;
+  for(const t of list){ const pr=progAt(t,d), re=realAt(t,d); imp+=t.imp; p+=pr*t.imp; r+=re*t.imp; if(d>t.fin && re<0.999) overdue=true; }
+  const pp=imp?p/imp:0, rr=imp?r/imp:0; let s;
+  if(rr>=0.999) s='done'; else if(pp===0&&rr===0) s='idle'; else if(overdue||pp-rr>TOL) s='late'; else s='ok';
+  return {s,prog:pp,real:rr,imp,ejec:r,progImp:p};
+}
+function progStatus(list,d){ const st=statusOf(list,d); return {...st, s: st.prog>=0.999?'done':(st.prog>0?'ok':'idle'), real:st.prog}; }
+const stOf = (list,d) => S.mode==='real' ? statusOf(list,d) : progStatus(list,d);
 
-  const colGeo=new THREE.BoxGeometry(M.COL,H,M.COL); colGeo.translate(0,H/2,0);
-  const wx=new THREE.BoxGeometry(M.CORE_X,H,M.CORE_T); wx.translate(0,H/2,0);
-  const wz=new THREE.BoxGeometry(M.CORE_T,H,M.CORE_Z); wz.translate(0,H/2,0);
-  const floors=[];
-  M.niveles.forEach(n=>{
-    const set=n.set, x0=ox+set*SX, x1=ox+(BX-set)*SX;
-    const g=new THREE.Group(); g.position.y=n.f*H; root.add(g);
-    const cM=smat(0x9A948D,1), kM=smat(0x847E78,1), eM=lmat(EDGE,.55);
-    cat.col.push(cM); cat.nuc.push(kM);
-    const st=new THREE.Group(); g.add(st);
-    for(let i=set;i<=BX-set;i++)for(let j=0;j<=BZ;j++){const c=solid(colGeo,cM,eM);c.position.set(ox+i*SX,0,oz+j*SZ);st.add(c);}
-    const cx=ox+1.5*SX;
-    [[wx,cx,-M.CORE_Z/2],[wx,cx,M.CORE_Z/2],[wz,cx-M.CORE_X/2,0],[wz,cx+M.CORE_X/2,0]].forEach(([geo,x,z])=>{const w=solid(geo,kM,eM);w.position.set(x,0,z);st.add(w);});
-    st.scale.y=.0001;
-    const sM=smat(0x9C958D,0), sE=lmat(EDGE,0); cat.los.push(sM);
-    const slab=solid(new THREE.BoxGeometry(n.sw+.8,M.SLAB,D+.8),sM,sE); slab.position.set((x0+x1)/2,H,0); g.add(slab);
-    const gM=new THREE.MeshStandardMaterial({color:0x3E5260,roughness:.12,metalness:.4,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
-    const mM=lmat(GOLD,0), fac=new THREE.Group(); g.add(fac); cat.fac.push(gM);
-    const gh=M.GH, mp=[];
-    const panel=(px,pz,len,alongX)=>{
-      const p=new THREE.Mesh(new THREE.BoxGeometry(alongX?len:.08,gh,alongX?.08:len),gM); p.position.set(px,.2+gh/2,pz); fac.add(p);
-      for(let k=0;k<=3;k++){const t=-len/2+k*len/3; alongX?mp.push(px+t,.2,pz,px+t,.2+gh,pz):mp.push(px,.2,pz+t,px,.2+gh,pz+t);}
-      alongX?mp.push(px-len/2,1.1,pz,px+len/2,1.1,pz):mp.push(px,1.1,pz-len/2,px,1.1,pz+len/2);
-    };
-    for(let i=set;i<BX-set;i++){const px=ox+(i+.5)*SX;panel(px,oz-.05,SX-.6,true);panel(px,oz+D+.05,SX-.6,true);}
-    for(let j=0;j<BZ;j++){const pz=oz+(j+.5)*SZ;panel(x0-.05,pz,SZ-.6,false);panel(x1+.05,pz,SZ-.6,false);}
-    fac.add(lines(mp,mM));
-    floors.push({n,st,cM,kM,sM,sE,slab,gM,mM,fac,sy:H});
-  });
-  // pretil de azotea
-  const rM=smat(0x6E6862,0), rE=lmat(EDGE,0), top=N*H+.16;
-  const roof=new THREE.Group(); root.add(roof);
-  const lastN=M.niveles[N-1], rx0=ox+lastN.set*SX, rx1=ox+(BX-lastN.set)*SX;
-  const par=solid(new THREE.BoxGeometry(rx1-rx0+.8,.9,D+.8),rM,rE); par.position.set((rx0+rx1)/2,top+.45,0);
-  par.children[0].material=new THREE.MeshStandardMaterial({color:0x6E6862,transparent:true,opacity:0,side:THREE.BackSide});
-  const mach=solid(new THREE.BoxGeometry(M.CORE_X,2.2,M.CORE_Z),rM,rE); mach.position.set(ox+1.5*SX,top+1.1,0);
-  roof.add(par,mach);
+/* ---------- utilidades UI ---------- */
+let toastT;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,3400); }
+function respOf(id){ return S.resp[id]||{}; }
+async function resolveProfiles(ids){ if(!S.user) return; ids=[...new Set(ids.filter(Boolean))]; if(!ids.length) return; try{ Object.assign(S.profiles, await S.user.profiles(ids)); }catch(e){} }
+function personNode(id){ const w=el('span','person'); if(!id){ w.append(el('span','muted','Sin asignar')); return w; } const p=S.profiles[id]; if(p){ const img=el('img'); img.src=p.avatarUrl; img.alt=''; w.append(img); } w.append(el('span',null,(p&&p.name)||'Líder asignado')); return w; }
+function barNode(prog,real,s){ const b=el('div','bar'); const p=el('div','p'); p.style.width=(prog*100)+'%'; const r=el('div','r'); r.style.width=(real*100)+'%'; r.style.background='var(--'+s+')'; b.append(p,r); b.title='Real '+pct(real)+' · Programado '+pct(prog); return b; }
+function canCapture(t){ if(S.canEdit) return true; if(!S.me) return false; return respOf(t.id).l===S.me; }
+function kpi(lab,val,foot,cls){ const k=el('div','kpi'+(cls?' '+cls:'')); k.append(el('div','lab',lab),el('div','val',val),el('div','foot',foot)); return k; }
 
-  function size(){
-    const r=canvas.getBoundingClientRect(), w=Math.max(1,r.width), h=Math.max(1,r.height);
-    renderer.setSize(w,h,false); cam.aspect=w/h;
-    const k=w/h<1.1?1.12:1;
-    const wide=w>1000;cam.position.set(58*k,30*k,58*k); cam.lookAt(wide?5:0,N*H*(wide?.42:.47),wide?-5:0); cam.updateProjectionMatrix();
-  }
-  addEventListener('resize',size); size();
+/* ---------- cabecera ---------- */
+const slider=$('slider'); slider.min=W0; slider.max=MAX_DAY+14; slider.value=S.t;
+function setT(v){ S.t=+v; slider.value=S.t; $('fechaTxt').textContent=fmtD(S.t); renderAll(); }
+slider.addEventListener('input',e=>setT(e.target.value));
+$('hoyBtn').addEventListener('click',()=>setT(Math.min(Math.max(S.today,W0),MAX_DAY+14)));
+function setMode(m){ S.mode=m; $('mReal').setAttribute('aria-pressed',m==='real'); $('mProg').setAttribute('aria-pressed',m==='prog'); renderAll(); }
+$('mReal').addEventListener('click',()=>setMode('real')); $('mProg').addEventListener('click',()=>setMode('prog'));
+$('fechaTxt').textContent=fmtD(S.t);
 
-  let rot=-.55, vel=0, dragging=false, lastX=0;
-  canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId);});
-  canvas.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX;lastX=e.clientX;rot+=dx*.008;vel=dx*.0008;});
-  canvas.addEventListener('pointerup',()=>dragging=false);
-  canvas.addEventListener('pointercancel',()=>dragging=false);
+const VIEWS=['resumen','actividades','captura','responsables','estimaciones','validacion'];
+function route(){ const h=(location.hash||'#resumen').slice(1); const v=VIEWS.includes(h)?h:'resumen';
+  VIEWS.forEach(n=>{ $('v-'+n).hidden = n!==v; });
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.setAttribute('aria-current', a.getAttribute('href')==='#'+v?'page':'false'));
+  S.view=v; renderView(); if(v==='resumen' && G.ready) G.resize(); }
+window.addEventListener('hashchange',route);
 
-  const cl=t=>Math.min(Math.max(t,0),1), ease=t=>1-Math.pow(1-cl(t),3);
-  const T_AX=.7, T_FO=.7, T_FL=.6, LAG=2, F0=T_AX+T_FO;
-  const T_STR=F0+N*T_FL, T_END=F0+(N-1+LAG)*T_FL+.6+.4;
-  const cycle=['col','nuc','los','fac'], CY=2.4;
-  const head=qto.querySelector('.qh'), rows=qto.querySelectorAll('[data-row]');
-  let start=null, lastHead='';
-  const setHead=s=>{if(s!==lastHead){head.textContent=s;lastHead=s;}};
-  const glow=(m,v)=>{m.emissive.copy(gold).multiplyScalar(v);};
+/* ---------- resumen ---------- */
+function estAcum(d){ return S.estim.filter(e=>fromIso(e.fin)!=null && fromIso(e.fin)<=d).reduce((s,e)=>s+(+e.monto||0),0); }
+function cobAcum(d){ return S.estim.filter(e=>fromIso(e.fcobro)!=null && fromIso(e.fcobro)<=d).reduce((s,e)=>s+(+e.cobrado||0),0); }
+function renderKpis(){
+  const st=statusOf(ACTS,S.t); const gap=st.real-st.prog; const box=$('kpis'); box.replaceChildren();
+  const late=ACTS.filter(t=>statusOf([t],S.t).s==='late').length;
+  const rest=Math.max(0,MAX_DAY-S.t); const est=estAcum(S.t), cob=cobAcum(S.t);
+  box.append(
+    kpi('Avance programado',pct(st.prog),money(st.progImp)+' de '+money(TOTAL)),
+    kpi('Avance real',pct(st.real),(gap>=0?'+':'')+(gap*100).toFixed(1)+' pts vs programa',gap< -TOL?'late':(st.real>0?'ok':'')),
+    kpi('Ejecutado',money(st.ejec),'Por ejercer: '+money(TOTAL-st.ejec)),
+    kpi('Actividades atrasadas',String(late),'de 13 actividades',late?'late':''),
+    kpi('Días al término',String(rest),'Fin programado '+fmtD(MAX_DAY)),
+    kpi('Estimado / cobrado',money(est),'Cobrado: '+money(cob),cob>0?'done':''));
+}
+function renderAttn(){
+  const box=$('attn'); box.replaceChildren();
+  const rows=ACTS.map(t=>({t,st:stOf([t],S.t)})).filter(x=>x.st.s!=='done');
+  const late=rows.filter(x=>x.st.s==='late').sort((a,b)=>a.t.fin-b.t.fin);
+  const soon=rows.filter(x=>x.st.s!=='late' && ((x.t.ini>=S.t && x.t.ini<=S.t+21) || (x.t.fin>=S.t && x.t.fin<=S.t+21))).sort((a,b)=>a.t.ini-b.t.ini);
+  $('attnCount').textContent=late.length+' atrasadas · '+soon.length+' inician o vencen en 21 días';
+  const list=[...late,...soon];
+  if(!list.length){ box.append(el('div','notice','Ninguna actividad atrasada ni por iniciar o vencer en los próximos 21 días.')); return; }
+  list.forEach(({t,st})=>{ const li=el('div','li'); li.tabIndex=0; li.setAttribute('role','button');
+    const mid=el('div'); mid.append(el('div','t',t.n+'. '+t.nombre),el('div','d',fmtD(t.ini)+' → '+fmtD(t.fin)+' · real '+pct(st.real)+' / prog '+pct(st.prog)));
+    li.append(chip(st.s),mid,el('div','mono',money(t.imp)));
+    const go=()=>{ location.hash='#captura'; }; li.addEventListener('click',go); li.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+    box.append(li); });
+}
+function renderEdPanel(){
+  const box=$('edpanel'); box.replaceChildren();
+  const st=stOf(ACTS,S.t);
+  const h=el('div','row'); const tt=el('h3',null,'Edificio OTT · 2 niveles · 821.44 m² de desplante'); tt.style.fontSize='16px'; h.append(tt,chip(st.s));
+  const g=el('div','ggrid');
+  Object.keys(GRUPOS).forEach(k=>{ const ls=ACTS.filter(t=>t.g===k); const s=stOf(ls,S.t); const sr=statusOf(ls,S.t); const c=el('div');
+    const r=el('div','row'); r.append(el('b',null,GRUPOS[k]),chip(s.s)); c.append(r,barNode(sr.prog,sr.real,sr.s),el('div','muted mono','Real '+pct(sr.real)+' / prog '+pct(sr.prog)+' · '+money(sr.imp))); c.lastChild.style.fontSize='12px'; g.append(c); });
+  box.append(h,g, el('div','muted','Explanada 229.04 m² · área verde 41.13 m² · estacionamiento y vialidad 2,645.88 m² (48 cajones mín.) · polígono 12,760.80 m² (TdR).'));
+}
 
-  function frame(ts){
-    if(start===null)start=ts;
-    const t=reduce?99:(ts-start)/1000;
-    axM.opacity=.5*ease(t/T_AX);
-    const kf=ease((t-T_AX*.6)/T_FO); fM.opacity=kf; fE.opacity=.6*kf; found.position.y=-.3-(1-kf)*1.2;
-    let con=M.partidas[0].cant*kf, vid=0, pz=kf>.99?1:0, stage='';
-    floors.forEach((F,i)=>{
-      const t0=F0+i*T_FL, n=F.n;
-      const k1=ease((t-t0)/(T_FL*.7)); F.st.scale.y=Math.max(k1,.0001); F.st.visible=k1>.01;
-      const k2=ease((t-t0-T_FL*.45)/(T_FL*.55)); F.sM.opacity=k2; F.sE.opacity=.55*k2; F.slab.position.y=F.sy+(1-k2)*1.6; F.slab.visible=k2>.01;
-      const k3=ease((t-t0-LAG*T_FL)/.6); F.gM.opacity=.6*k3; F.mM.opacity=.85*k3; F.fac.position.y=-(1-k3)*.8; F.fac.visible=k3>.01;
-      const act=Math.max(0,1-Math.abs((t-t0-T_FL*.35)/(T_FL*.6)));
-      if(t<T_END+.2){glow(F.cM,.45*act);glow(F.kM,.45*act);glow(F.sM,.35*Math.max(0,1-Math.abs((t-t0-T_FL*.8)/(T_FL*.5))));}
-      con+=(n.vCol+n.vCore)*k1+n.vSlab*k2; vid+=n.aGlass*k3;
-      pz+=Math.round((n.cols+4)*k1)+(k2>.99?1:0)+Math.round(n.panels*k3);
-      if(t>=t0&&t<t0+T_FL) stage='Modelando nivel '+(i+1)+' de '+N;
-    });
-    const kr=ease((t-T_STR)/.5); rM.opacity=kr; rE.opacity=.6*kr; par.children[0].material.opacity=kr; roof.position.y=(1-kr)*1.2; roof.visible=kr>.01;
-    con+=M.vAzo*kr; pz+=kr>.99?2:0;
-    if(t<T_END){
-      q('con').textContent=fmt(con,1); q('vid').textContent=fmt(vid,1); q('pzas').textContent=fmt(pz,0); q('av').textContent=fmt(Math.min(99,pz/totalPzas*100),0);
-      setHead(t<T_AX?'Trazando ejes':t<F0?'Cimentación':stage||'Montando fachada');
-      rows.forEach(r=>r.classList.remove('on'));
-    }else{
-      finalPanel();
-      const ci=reduce?-1:Math.floor((t-T_END)/CY)%cycle.length, id=cycle[ci];
-      const ph=reduce?0:((t-T_END)%CY)/CY, amp=Math.sin(Math.min(ph*4,1)*Math.PI/2)*Math.min(1,(1-ph)*4);
-      Object.keys(cat).forEach(k=>cat[k].forEach(m=>m.emissive&&glow(m,k===id?.38*amp:0)));
-      const p=M.partidas.find(p=>p.id===id);
-      setHead(p?p.nombre+' · '+fmt(p.cant,2)+' '+p.unidad:'Modelo cuantificado');
-      rows.forEach(r=>r.classList.toggle('on',r.dataset.row===(id==='fac'?'vid':'con')&&amp>.2));
-    }
-    if(!dragging){vel*=.95; rot+=vel+(reduce?0:.0013);}
-    root.rotation.y=rot;
-    renderer.render(scene,cam);
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
-(function(){
-  const M=window.ALR, root=document.getElementById('ejemplo'); if(!root) return;
-  const fmt=(v,d)=>v.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
-  const $=s=>root.querySelector(s);
-  const totalPzas=M.partidas.reduce((a,p)=>a+p.piezas,0);
-  const CORTE=Math.round(M.dur*.55), DELAY=1, REALW=CORTE-DELAY;
-  const CONC=['cim','col','nuc','los','azo'];
-  const vsel=$('.vsel'), vall=$('.vall'), vleg=$('.vleg');
-
-  // ---------- visor 3D ----------
-  const V=(function(){
-    const cv=document.getElementById('v3d'); if(!window.THREE||!cv) return null;
-    let R; try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});}catch(e){return null;}
-    R.setPixelRatio(Math.min(devicePixelRatio,2));
-    const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(30,1,.1,500);
-    scene.add(new THREE.HemisphereLight(0xfff4e6,0x2a2627,.62));
-    const sun=new THREE.DirectionalLight(0xffffff,.7); sun.position.set(45,36,10); scene.add(sun);
-    const rim=new THREE.DirectionalLight(0xD1AE6C,.3); rim.position.set(-40,25,-35); scene.add(rim);
-    const g=new THREE.Group(); scene.add(g);
-    const {BX,BZ,SX,SZ,H,N,W,D}=M, ox=-W/2, oz=-D/2;
-    const std=c=>new THREE.MeshStandardMaterial({color:c,roughness:.82});
-    const base={cim:std(0x6E6862),col:std(0x9A948D),nuc:std(0x847E78),los:std(0x9C958D),azo:std(0x7A746E),
-      fac:new THREE.MeshStandardMaterial({color:0x3E5260,roughness:.12,metalness:.4,transparent:true,opacity:.6,depthWrite:false,side:THREE.DoubleSide})};
-    const hi=new THREE.MeshStandardMaterial({color:0xD1AE6C,roughness:.6,emissive:0x5a3f0c});
-    const hiG=new THREE.MeshStandardMaterial({color:0xD1AE6C,roughness:.3,emissive:0x5a3f0c,transparent:true,opacity:.75,depthWrite:false,side:THREE.DoubleSide});
-    const ghost=new THREE.MeshStandardMaterial({color:0x8E8780,transparent:true,opacity:.07,depthWrite:false});
-    const L=(c,o)=>new THREE.LineBasicMaterial({color:c,transparent:true,opacity:o});
-    const eN=L(0x1a1819,.55), eG=L(0x8E8780,.12), eH=L(0x2a1f08,.8), mN=L(0xD1AE6C,.85), mG=L(0xD1AE6C,.06), mH=L(0xFFE3A6,1);
-    const items=[], picks=[];
-    const EG=new Map(); const edges=geo=>{if(!EG.has(geo))EG.set(geo,new THREE.EdgesGeometry(geo));return EG.get(geo);};
-    function add(geo,p,row,x,y,z){const m=new THREE.Mesh(geo,base[p]);m.position.set(x,y,z);const e=new THREE.LineSegments(edges(geo),eN);m.add(e);m.userData={p,row,e};g.add(m);items.push(m);picks.push(m);}
-    // ejes
-    const ap=[];for(let i=-1;i<=BX+1;i++){const x=ox+i*SX;ap.push(x,0,oz-5,x,0,oz+D+5);}for(let j=-1;j<=BZ+1;j++){const z=oz+j*SZ;ap.push(ox-5,0,z,ox+W+5,0,z);}
-    const ag=new THREE.BufferGeometry();ag.setAttribute('position',new THREE.Float32BufferAttribute(ap,3));g.add(new THREE.LineSegments(ag,L(0x4a4440,.5)));
-    add(new THREE.BoxGeometry(W+2.4,.6,D+2.4),'cim',0,0,-.3,0);
-    const colG=new THREE.BoxGeometry(M.COL,H,M.COL); colG.translate(0,H/2,0);
-    const wx=new THREE.BoxGeometry(M.CORE_X,H,M.CORE_T); wx.translate(0,H/2,0);
-    const wz=new THREE.BoxGeometry(M.CORE_T,H,M.CORE_Z); wz.translate(0,H/2,0);
-    const gh=M.GH, pX=new THREE.BoxGeometry(SX-.6,gh,.08), pZ=new THREE.BoxGeometry(.08,gh,SZ-.6);
-    const slabs={};
-    M.niveles.forEach(n=>{
-      const f=n.f,row=f+1,y=f*H,set=n.set,x0=ox+set*SX,x1=ox+(BX-set)*SX;
-      for(let i=set;i<=BX-set;i++)for(let j=0;j<=BZ;j++)add(colG,'col',row,ox+i*SX,y,oz+j*SZ);
-      const cx=ox+1.5*SX;
-      add(wx,'nuc',row,cx,y,-M.CORE_Z/2);add(wx,'nuc',row,cx,y,M.CORE_Z/2);add(wz,'nuc',row,cx-M.CORE_X/2,y,0);add(wz,'nuc',row,cx+M.CORE_X/2,y,0);
-      const k=n.sw; if(!slabs[k])slabs[k]=new THREE.BoxGeometry(k+.8,M.SLAB,D+.8);
-      add(slabs[k],'los',row,(x0+x1)/2,y+H,0);
-      const mp=[], py=y+.2+gh/2;
-      for(let i=set;i<BX-set;i++){const px=ox+(i+.5)*SX;add(pX,'fac',row,px,py,oz-.05);add(pX,'fac',row,px,py,oz+D+.05);
-        [oz-.05,oz+D+.05].forEach(pz=>{for(let q=0;q<=3;q++){const t=-(SX-.6)/2+q*(SX-.6)/3;mp.push(px+t,y+.2,pz,px+t,y+.2+gh,pz);}});}
-      for(let j=0;j<BZ;j++){const pz=oz+(j+.5)*SZ;add(pZ,'fac',row,x0-.05,py,pz);add(pZ,'fac',row,x1+.05,py,pz);
-        [x0-.05,x1+.05].forEach(px=>{for(let q=0;q<=3;q++){const t=-(SZ-.6)/2+q*(SZ-.6)/3;mp.push(px,y+.2,pz+t,px,y+.2+gh,pz+t);}});}
-      const mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.Float32BufferAttribute(mp,3));
-      const ml=new THREE.LineSegments(mg,mN);ml.userData={p:'fac',row,line:true};g.add(ml);items.push(ml);
-    });
-    // azotea: pretil (4 muros) y cuarto de máquinas
-    const tn=M.niveles[N-1], top=N*H+M.SLAB/2, rx0=ox+tn.set*SX-.4, rx1=ox+(BX-tn.set)*SX+.4, rz0=oz-.4, rz1=oz+D+.4, PT=M.PT, PH=M.PH;
-    const parX=new THREE.BoxGeometry(rx1-rx0,PH,PT), parZ=new THREE.BoxGeometry(PT,PH,rz1-rz0);
-    // el pretil cuenta como una sola pieza: un grupo con sus cuatro muros
-    const par=new THREE.Group();
-    [[parX,(rx0+rx1)/2,rz0+PT/2],[parX,(rx0+rx1)/2,rz1-PT/2],[parZ,rx0+PT/2,(rz0+rz1)/2],[parZ,rx1-PT/2,(rz0+rz1)/2]].forEach(([geo,x,z])=>{
-      const m=new THREE.Mesh(geo,base.azo);m.position.set(x,top+PH/2,z);const e=new THREE.LineSegments(edges(geo),eN);m.add(e);m.userData={p:'azo',row:N+1,e};par.add(m);items.push(m);picks.push(m);});
-    g.add(par);
-    add(new THREE.BoxGeometry(M.CORE_X,M.MH,M.CORE_Z),'azo',N+1,ox+1.5*SX,top+M.MH/2,0);
-
-    function setS(m,s){
-      const u=m.userData;
-      if(u.line){m.material=s==='h'?mH:s==='g'?mG:mN;return;}
-      const gl=u.p==='fac';
-      m.material=s==='n'?base[u.p]:s==='h'?(gl?hiG:hi):ghost;
-      u.e.material=s==='n'?eN:s==='h'?eH:eG;
-    }
-    let need=true, rot=-.55, auto=!matchMedia('(prefers-reduced-motion: reduce)').matches, visible=false;
-    const api={
-      apply(fn){items.forEach(m=>setS(m,fn(m.userData)));need=true;},
-      all(){api.apply(()=>'n');},
-      onPick:null
-    };
-    function size(){const r=cv.getBoundingClientRect(),w=Math.max(1,r.width),h=Math.max(1,r.height);R.setSize(w,h,false);cam.aspect=w/h;
-      const k=w/h<1?1.35:w/h<1.3?1.12:1; cam.position.set(56*k,30*k,56*k);cam.lookAt(0,N*H*.44,0);cam.updateProjectionMatrix();need=true;}
-    new ResizeObserver(size).observe(cv); size();
-    new IntersectionObserver(es=>{visible=es[0].isIntersecting;}).observe(cv);
-    let down=null,lastX=0,moved=0;
-    cv.addEventListener('pointerdown',e=>{down=e.pointerId;lastX=e.clientX;moved=0;auto=false;cv.setPointerCapture(e.pointerId);});
-    cv.addEventListener('pointermove',e=>{if(down===null)return;const dx=e.clientX-lastX;lastX=e.clientX;moved+=Math.abs(dx);rot+=dx*.008;need=true;});
-    const ray=new THREE.Raycaster(), v2=new THREE.Vector2();
-    cv.addEventListener('pointerup',e=>{
-      if(down===null)return; down=null;
-      if(moved>5||!api.onPick)return;
-      const r=cv.getBoundingClientRect(); v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
-      ray.setFromCamera(v2,cam); const hit=ray.intersectObjects(picks,false).find(h=>h.object.material!==ghost);
-      api.onPick(hit?hit.object.userData:null);
-    });
-    cv.addEventListener('pointercancel',()=>{down=null;});
-    (function loop(){ if(visible&&(need||auto)){ if(auto)rot+=.0016; g.rotation.y=rot; R.render(scene,cam); need=false; } requestAnimationFrame(loop); })();
-    return api;
-  })();
-  if(!V){ root.querySelector('.viewer').hidden=true; }
-
-  // ---------- indicadores ----------
-  $('[data-k="con"]').textContent=fmt(M.concreto,1);
-  $('[data-k="vid"]').textContent=fmt(M.vidrio,1);
-  $('[data-k="pzas"]').textContent=fmt(totalPzas,0);
-  $('[data-k="dur"]').textContent=M.dur;
-
-  // ---------- selección ----------
-  let sel=null; // {tipo:'p',ids:[...]} | {tipo:'r',row}
-  const say=t=>{vsel.textContent=t;};
-  function rowInfo(i){
-    const ts=M.prog.filter(p=>p.i===i), w=a=>'S'+fmt(a,1).replace('.0','');
-    if(i===0){const p=M.partidas[0];return 'Cimentación · '+fmt(p.cant,2)+' m³ · semanas '+w(ts[0].ini)+' a '+w(ts[0].ini+ts[0].dur);}
-    if(i===M.N+1){const p=M.partidas.find(p=>p.id==='azo');return 'Azotea · '+fmt(p.cant,2)+' m³ · semanas '+w(ts[0].ini)+' a '+w(ts[0].ini+ts[0].dur);}
-    const n=M.niveles[i-1], e=ts.find(t=>t.tipo==='est'), f=ts.find(t=>t.tipo==='fac');
-    return 'Nivel '+i+' · '+fmt(n.vCol+n.vCore+n.vSlab,2)+' m³ de concreto · '+fmt(n.aGlass,1)+' m² de vidrio · estructura '+w(e.ini)+'–'+w(e.ini+e.dur)+', fachada '+w(f.ini)+'–'+w(f.ini+f.dur);
-  }
-  function select(s){
-    sel=s;
-    root.querySelectorAll('#t-cant tr').forEach(tr=>{const on=!!(s&&s.tipo==='p'&&tr.dataset.ids&&tr.dataset.ids===s.ids.join(','));tr.classList.toggle('sel',on);const b=tr.querySelector('.rowbtn');if(b)b.setAttribute('aria-pressed',on);});
-    root.querySelectorAll('.grow').forEach(gr=>{const on=!!(s&&s.tipo==='r'&&+gr.dataset.row===s.row);gr.classList.toggle('sel',on);gr.setAttribute('aria-pressed',on);});
-    vall.hidden=!s;
-    if(!s){ V&&V.all(); say('Modelo completo · '+fmt(totalPzas,0)+' elementos. Selecciona una partida o un nivel.'); return; }
-    if(s.tipo==='p'){
-      V&&V.apply(u=>s.ids.includes(u.p)?'h':'g');
-      if(s.ids.length>1) say('Concreto total · '+fmt(M.concreto,2)+' m³ · '+fmt(M.partidas.filter(p=>CONC.includes(p.id)).reduce((a,p)=>a+p.piezas,0),0)+' elementos');
-      else{const p=M.partidas.find(p=>p.id===s.ids[0]); say(p.nombre+' · '+fmt(p.cant,2)+' '+p.unidad+' · '+fmt(p.piezas,0)+' '+(p.piezas===1?'pieza':'piezas'));}
-    }else{ V&&V.apply(u=>u.row===s.row?'h':'g'); say(rowInfo(s.row)); }
-  }
-  function estado(){
-    const st=(u)=>{const t=M.prog.find(p=>p.i===u.row&&(u.p==='fac'?p.tipo==='fac':p.tipo!=='fac'));const fin=t.ini+t.dur;return fin<=REALW?'n':t.ini<REALW?'h':'g';};
-    V&&V.apply(st); vall.hidden=true;
-    say('Avance real al corte de la semana '+CORTE+': terminado, en proceso (dorado) y pendiente (transparente).');
-  }
-  vall.addEventListener('click',()=>select(null));
-
-  // ---------- cantidades ----------
-  const conc=M.partidas.filter(p=>p.unidad==='m³'), maxC=Math.max(...conc.map(p=>p.cant));
-  const tb=$('#t-cant tbody');
-  const rowBtn=(txt,ids)=>{const b=document.createElement('button');b.type='button';b.className='rowbtn';b.textContent=txt;b.setAttribute('aria-pressed','false');
-    b.addEventListener('click',()=>select(sel&&sel.tipo==='p'&&sel.ids.join(',')===ids.join(',')?null:{tipo:'p',ids}));return b;};
-  M.partidas.forEach(p=>{
-    const tr=document.createElement('tr'); tr.dataset.ids=p.id;
-    const th=document.createElement('th'); th.scope='row'; th.appendChild(rowBtn(p.nombre,[p.id])); tr.appendChild(th);
-    [p.unidad,fmt(p.cant,2),fmt(p.piezas,0)].forEach(c=>{const td=document.createElement('td');td.textContent=c;tr.appendChild(td);});
-    const td=document.createElement('td'); td.className='barc';
-    if(p.unidad==='m³'){const b=document.createElement('span');b.className='bar';b.style.width=(p.cant/maxC*100).toFixed(1)+'%';td.appendChild(b);const s=document.createElement('span');s.className='pct';s.textContent=fmt(p.cant/M.concreto*100,1)+' % del concreto';td.appendChild(s);}
-    else{const s=document.createElement('span');s.className='pct';s.textContent='Cancelería y vidrio';td.appendChild(s);}
-    tr.appendChild(td); tb.appendChild(tr);
-  });
-  const ft=$('#t-cant tfoot tr'); ft.dataset.ids=CONC.join(',');
-  const fth=ft.querySelector('th'); fth.textContent=''; fth.appendChild(rowBtn('Concreto total',CONC));
-  $('#t-cant tfoot [data-k="tcon"]').textContent=fmt(M.concreto,2);
-
+/* ---------- curva S ---------- */
+function renderCurva(){
+  const box=$('curva'); box.replaceChildren();
+  const W=Math.max(320,box.clientWidth||800), H=Math.round(Math.min(340,Math.max(220,W*0.36)));
+  const m={l:46,r:14,t:12,b:28};
+  const xs=[]; for(let i=0;i<NW;i++) xs.push(W0+i*7+6);
+  const prog=xs.map(d=>ACTS.reduce((s,t)=>s+progAt(t,d)*t.imp,0)/TOTAL);
+  const real=xs.map(d=> d<=S.today+6 ? ACTS.reduce((s,t)=>s+realAt(t,Math.min(d,S.today))*t.imp,0)/TOTAL : null);
+  const estA=xs.map(d=>estAcum(d)/TOTAL), cobA=xs.map(d=>cobAcum(d)/TOTAL); const hasEst=S.estim.length>0;
+  const X=d=>m.l+(d-W0)/((W0+NW*7)-W0)*(W-m.l-m.r), Y=v=>m.t+(1-v)*(H-m.t-m.b);
   const NS='http://www.w3.org/2000/svg';
-  const el=(n,a,txt)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+  const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('width','100%'); svg.setAttribute('role','img'); svg.setAttribute('aria-label','Curva S programado, ejecutado, estimado y cobrado');
+  const mk=(n,a)=>{const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); return e;};
+  [0,.25,.5,.75,1].forEach(v=>{ svg.append(mk('line',{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:cssv('--line'),'stroke-width':1}));
+    const tx=mk('text',{x:m.l-6,y:Y(v)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted'),'font-family':'IBM Plex Mono, monospace'}); tx.textContent=(v*100)+'%'; svg.append(tx); });
+  for(let mth=0;mth<6;mth++){ const d=new Date(2026,10+mth,1); const i=dayIdx(d); if(i<W0||i>W0+NW*7) continue;
+    svg.append(mk('line',{x1:X(i),x2:X(i),y1:H-m.b,y2:H-m.b+4,stroke:cssv('--muted')}));
+    const tx=mk('text',{x:X(i)+2,y:H-m.b+16,'font-size':11,fill:cssv('--muted')}); tx.textContent=MESES[d.getMonth()]+' '+String(d.getFullYear()).slice(2); svg.append(tx); }
+  const line=(arr,color,w,dash)=>{ let ds='',on=false; arr.forEach((v,i)=>{ if(v==null){on=false;return;} ds+=(on?'L':'M')+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1); on=true; }); if(ds) svg.append(mk('path',{d:ds,fill:'none',stroke:color,'stroke-width':w,'stroke-dasharray':dash||'','stroke-linejoin':'round'})); };
+  let area='M'+X(xs[0])+','+Y(0); prog.forEach((v,i)=>area+='L'+X(xs[i]).toFixed(1)+','+Y(v).toFixed(1)); area+='L'+X(xs[xs.length-1])+','+Y(0)+'Z';
+  svg.append(mk('path',{d:area,fill:cssv('--gold'),opacity:.12}));
+  line(prog,cssv('--gold'),2.5); if(hasEst){ line(estA,cssv('--muted'),2,'6 4'); line(cobA,cssv('--done'),2.5); } line(real,cssv('--ok'),2.5);
+  svg.append(mk('line',{x1:X(S.t),x2:X(S.t),y1:m.t,y2:H-m.b,stroke:cssv('--fg'),'stroke-width':1,'stroke-dasharray':'3 3'}));
+  const ct=mk('text',{x:X(S.t)+4,y:m.t+10,'font-size':11,fill:cssv('--fg')}); ct.textContent='Corte '+fmtD(S.t); svg.append(ct);
+  box.append(svg);
+  const lg=$('curvaLegend'); lg.replaceChildren();
+  const sw=(c,t,dash)=>{ const s=el('span','person'); const i=el('span'); i.style.cssText=`display:inline-block;width:18px;height:0;border-top:3px ${dash?'dashed':'solid'} ${c}`; s.append(i,el('span',null,t)); return s; };
+  lg.append(sw(cssv('--gold'),'Programado'),sw(cssv('--ok'),'Ejecutado (capturado)'),sw(cssv('--muted'),'Estimado',1),sw(cssv('--done'),'Cobrado'));
+  if(!hasEst) lg.append(el('span','muted','Estimado y cobrado aparecen al registrar la primera estimación.'));
+  const tip=el('div','tip'); tip.hidden=true; box.append(tip);
+  svg.addEventListener('pointermove',e=>{ const rc=svg.getBoundingClientRect(); const x=(e.clientX-rc.left)/rc.width*W; let best=0; xs.forEach((d,i)=>{ if(Math.abs(X(d)-x)<Math.abs(X(xs[best])-x)) best=i; });
+    const row=(a,b)=>{const r=el('div','r'); r.append(el('span','muted',a),el('span','mono',b)); return r;};
+    tip.replaceChildren(el('b',null,'Semana al '+fmtD(xs[best])), row('Programado',pct(prog[best])+' · '+money(prog[best]*TOTAL)));
+    if(real[best]!=null) tip.append(row('Ejecutado',pct(real[best])+' · '+money(real[best]*TOTAL)));
+    if(hasEst) tip.append(row('Estimado',money(estA[best]*TOTAL)),row('Cobrado',money(cobA[best]*TOTAL)));
+    tip.hidden=false; const px=(X(xs[best])/W)*rc.width; tip.style.left=Math.min(Math.max(0,px+12),rc.width-210)+'px'; tip.style.top='8px'; });
+  svg.addEventListener('pointerleave',()=>tip.hidden=true);
+}
 
-  // ---------- programa ----------
-  (function(){
-    const rows=['Cimentación',...Array.from({length:M.N},(_,i)=>'Nivel '+(i+1)),'Azotea'];
-    const L=96,R=14,T=30,RH=26,Wd=640,Hd=T+rows.length*RH+10,sx=(Wd-L-R)/M.dur;
-    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,'aria-labelledby':'g-t'});
-    s.appendChild(el('title',{id:'g-t'},`Programa de obra de ${M.dur} semanas. Selecciona un renglón para resaltar ese nivel en el modelo.`));
-    for(let w=0;w<=M.dur;w+=2){const x=L+w*sx;s.appendChild(el('line',{x1:x,y1:T-4,x2:x,y2:Hd-6,class:'grid'}));s.appendChild(el('text',{x,y:T-10,class:'tick','text-anchor':'middle'},'S'+w));}
-    rows.forEach((r,i)=>{
-      const y=T+i*RH, gr=el('g',{class:'grow',tabindex:'0',role:'button','aria-pressed':'false','aria-label':r+': resaltar en el modelo','data-row':i});
-      gr.appendChild(el('rect',{x:0,y,width:Wd,height:RH,class:'hit'}));
-      gr.appendChild(el('text',{x:L-10,y:y+RH/2+4,class:'lbl','text-anchor':'end'},r));
-      M.prog.filter(p=>p.i===i).forEach(p=>{const by=y+(p.tipo==='fac'?RH*.52:p.tipo==='est'?RH*.16:RH*.2), h=(p.tipo==='est'||p.tipo==='fac')?RH*.32:RH*.6;
-        gr.appendChild(el('rect',{x:L+p.ini*sx,y:by,width:p.dur*sx,height:h,rx:2,class:'b-'+p.tipo}));});
-      const act=()=>select(sel&&sel.tipo==='r'&&sel.row===i?null:{tipo:'r',row:i});
-      gr.addEventListener('click',act);
-      gr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}});
-      s.appendChild(gr);
-    });
-    $('#g-prog').appendChild(s);
-  })();
+/* ---------- actividades ---------- */
+function renderActividades(){
+  const box=$('aCards'); box.replaceChildren(); const cnt={late:0,ok:0,done:0,idle:0};
+  ACTS.forEach(t=>{ const s=stOf([t],S.t), sr=statusOf([t],S.t); cnt[s.s]++;
+    const c=el('div','hcard '+s.s); const hh=el('div','h'); const b=el('b',null,t.n+'. '+t.nombre); hh.append(b,chip(s.s)); c.append(hh);
+    const m1=el('div','meta'); m1.append(el('span','mono',fmtD(t.ini)+' → '+fmtD(t.fin)+' · '+(t.fin-t.ini+1)+' d'), el('span','mono',money(t.imp)+' · '+pct(t.imp/TOTAL)));
+    const m2=el('div','meta'); const pr=el('span',null,'Predecesoras: '+t.pred); m2.append(pr); if(t.crit) m2.append(el('span','crit','RUTA CRÍTICA'));
+    const m3=el('div','meta'); m3.append(el('span',null,GRUPOS[t.g]),el('span','mono','Real '+pct(sr.real)+' / prog '+pct(sr.prog)));
+    c.append(m1,barNode(sr.prog,sr.real,sr.s),m3,m2); box.append(c); });
+  $('aCounts').replaceChildren(...['late','ok','done','idle'].map(s=>{const c=chip(s); c.textContent=ST[s][0]+': '+cnt[s]; return c;}));
+  const tb=$('cedBody'); tb.replaceChildren(); const tm=[0,0,0,0];
+  ACTS.forEach(t=>{ const tr=el('tr'); tr.append(el('td',null,t.n+'. '+t.nombre)); t.mes.forEach((v,i)=>{ tm[i]+=v; tr.append(el('td','num',v?moneyFull(v):'—')); }); tr.append(el('td','num',moneyFull(t.imp)),el('td','num',pct(t.imp/TOTAL))); tb.append(tr); });
+  const tr=el('tr','tot'); tr.append(el('td',null,'Total sin IVA')); tm.forEach(v=>tr.append(el('td','num',moneyFull(v)))); tr.append(el('td','num',moneyFull(TOTAL)),el('td','num','100%')); tb.append(tr);
+  const tr2=el('tr'); tr2.append(el('td','muted','% del contrato')); tm.forEach(v=>tr2.append(el('td','num',pct(v/TOTAL)))); tr2.append(el('td'),el('td')); tb.append(tr2);
+}
 
-  // ---------- avance ----------
-  (function(){
-    const steps=M.dur*4, plan=[];
-    for(let k=0;k<=steps;k++){const w=k/4;let a=0,tot=0;M.prog.forEach(p=>{tot+=p.dur;a+=Math.min(Math.max(w-p.ini,0),p.dur);});plan.push([w,a/tot*100]);}
-    const at=w=>plan[Math.min(Math.round(Math.max(w,0)*4),steps)][1];
-    const real=plan.filter(([w])=>w<=CORTE).map(([w])=>[w,at(w-DELAY*(w/CORTE))]);
-    const pP=at(CORTE), pR=real[real.length-1][1];
-    const L=44,R=14,T=18,B=30,Wd=640,Hd=280,sx=(Wd-L-R)/M.dur,sy=(Hd-T-B)/100,X=w=>L+w*sx,Y=v=>Hd-B-v*sy;
-    const s=el('svg',{viewBox:`0 0 ${Wd} ${Hd}`,role:'img','aria-labelledby':'s-t'});
-    s.appendChild(el('title',{id:'s-t'},`Curva de avance. Al corte de la semana ${CORTE}: programado ${fmt(pP,0)} %, real ${fmt(pR,0)} %.`));
-    for(let v=0;v<=100;v+=25){s.appendChild(el('line',{x1:L,y1:Y(v),x2:Wd-R,y2:Y(v),class:'grid'}));s.appendChild(el('text',{x:L-6,y:Y(v)+4,class:'tick','text-anchor':'end'},v+'%'));}
-    for(let w=0;w<=M.dur;w+=2)s.appendChild(el('text',{x:X(w),y:Hd-B+16,class:'tick','text-anchor':'middle'},'S'+w));
-    s.appendChild(el('polyline',{points:plan.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-plan'}));
-    s.appendChild(el('polyline',{points:real.map(([w,v])=>X(w)+','+Y(v)).join(' '),class:'c-real'}));
-    s.appendChild(el('line',{x1:X(CORTE),y1:T,x2:X(CORTE),y2:Hd-B,class:'corte'}));
-    s.appendChild(el('text',{x:X(CORTE)+6,y:T+12,class:'lbl'},'Corte S'+CORTE));
-    $('#g-av').appendChild(s);
-    $('[data-k="corte"]').textContent=CORTE;
-    $('[data-k="pp"]').textContent=fmt(pP,0)+' %';
-    $('[data-k="pr"]').textContent=fmt(pR,0)+' %';
-    $('[data-k="dv"]').textContent=fmt(pR-pP,0)+' puntos';
-  })();
+/* ---------- captura ---------- */
+(function(){ const s=$('fGrupo'); Object.entries(GRUPOS).forEach(([k,v])=>{const o=el('option',null,v); o.value=k; s.append(o);}); })();
+async function saveQty(t,input){
+  let v=input.value.trim()===''?0:Number(input.value);
+  if(!isFinite(v)||v<0||v>100){ input.classList.add('err'); toast('Captura un porcentaje entre 0 y 100.'); return; }
+  if(!S.db){ toast('No hay conexión con la base de datos del tablero.'); return; }
+  const q=v/100, at=new Date().toISOString();
+  try{
+    await S.db.doc('avance/'+t.id).set({q,at,by:S.me||''});
+    const wk=S.today-((dateOf(S.today).getDay()+6)%7);
+    await S.db.doc('historial/w'+wk+'_'+t.id).set({w:wk,act:t.id,q,at,by:S.me||''});
+    input.classList.remove('err'); input.classList.add('saved'); toast('Guardado: '+t.nombre+' = '+v+' %');
+  }catch(e){ input.classList.add('err'); if(e&&e.code==='permission-denied') toast('Solo el líder asignado a esta actividad o el administrador pueden capturar.'); else toast('No se pudo guardar. Intenta de nuevo.'); }
+}
+async function renderCaptura(){
+  const g=$('fGrupo').value, es=$('fEstatus').value;
+  const list=ACTS.filter(t=>(!g||t.g===g)&&(!es||statusOf([t],S.t).s===es));
+  await resolveProfiles(list.map(t=>respOf(t.id).l));
+  const tb=$('tBody'); tb.replaceChildren(); const editable=S.t>=S.today; let te=0,ti=0;
+  list.forEach(t=>{ const s=statusOf([t],S.t); const tr=el('tr'); const q=qtyAt(t,S.t); te+=q*t.imp; ti+=t.imp;
+    const c0=el('td'); c0.append(chip(s.s));
+    const c1=el('td'); c1.append(el('div',null,t.n+'. '+t.nombre),el('div','muted mono',t.id+' · '+GRUPOS[t.g]+(t.crit?' · ruta crítica':''))); c1.style.minWidth='220px';
+    const r=respOf(t.id); const c2=el('td'); c2.append(personNode(r.l)); if(r.e) c2.append(el('div','muted',r.e));
+    const c3=el('td','mono',fmtD(t.ini)+' → '+fmtD(t.fin)); c3.style.whiteSpace='nowrap';
+    const c5=el('td','num');
+    if(editable && canCapture(t)){ const inp=el('input','qty'); inp.type='number'; inp.min='0'; inp.max='100'; inp.step='any'; inp.value=q?String(+(q*100).toFixed(2)):''; inp.placeholder='0'; inp.setAttribute('aria-label','Avance ejecutado '+t.nombre); inp.addEventListener('change',()=>saveQty(t,inp)); c5.append(inp); }
+    else c5.textContent=(q*100).toFixed(1)+' %';
+    const c6=el('td'); const bw=el('div'); bw.style.minWidth='120px'; bw.append(barNode(s.prog,s.real,s.s),el('div','muted mono',pct(s.real)+' / '+pct(s.prog))); bw.lastChild.style.fontSize='11px'; c6.append(bw);
+    tr.append(c0,c1,c2,c3,el('td','num',moneyFull(t.imp)),c5,c6,el('td','num',moneyFull(q*t.imp)),el('td','num',moneyFull(t.imp-q*t.imp))); tb.append(tr); });
+  const tr=el('tr','tot'); tr.append(el('td'),el('td',null,'Total'),el('td'),el('td'),el('td','num',moneyFull(ti)),el('td','num',ti?pct(te/ti):'—'),el('td'),el('td','num',moneyFull(te)),el('td','num',moneyFull(ti-te))); tb.append(tr);
+  $('tCountTxt').textContent=list.length+' actividades · corte '+fmtD(S.t);
+  const n=$('capNotice');
+  if(!S.db) n.textContent='Vista de consulta: entra con tu cuenta de Google (arriba a la derecha) para ver lo capturado y capturar avance.';
+  else if(!editable) n.textContent='Estás viendo una fecha pasada: se muestra lo capturado hasta esa semana. Regresa a "Hoy" para capturar.';
+  else if(!S.canEdit && !ACTS.some(t=>respOf(t.id).l===S.me)) n.textContent='Ya estás registrado. Todavía no eres líder de ninguna actividad: pide al administrador que te asigne para poder capturar.';
+  else n.textContent='Captura el AVANCE EJECUTADO ACUMULADO de cada actividad en % (la unidad del catálogo es ACTIVIDAD: 100 % = actividad terminada). Monto ejecutado = % × importe; por ejercer = importe − ejecutado. Cuando lleguen los generadores del proyecto ejecutivo, cada actividad se desglosa en conceptos medibles.';
+}
+['fGrupo','fEstatus'].forEach(id=>$(id).addEventListener('change',renderCaptura));
 
-  // ---------- pestañas ----------
-  const tabs=[...root.querySelectorAll('[role="tab"]')]; let cur='p-cant';
-  const show=t=>{tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
-    cur=t.getAttribute('aria-controls'); vleg.hidden=cur!=='p-av'; if(cur==='p-av')estado(); else select(null);};
-  tabs.forEach((t,i)=>{t.addEventListener('click',()=>show(t));t.addEventListener('keydown',e=>{let j=null;if(e.key==='ArrowRight')j=(i+1)%tabs.length;if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;if(e.key==='Home')j=0;if(e.key==='End')j=tabs.length-1;if(j!==null){e.preventDefault();show(tabs[j]);tabs[j].focus();}});});
+/* ---------- responsables ---------- */
+function makePicker(container,onPick){
+  container.replaceChildren(); const inp=el('input'); inp.type='text'; inp.placeholder='Buscar persona'; inp.setAttribute('aria-label','Buscar líder');
+  const menu=el('div','menu'); menu.hidden=true; container.append(inp,menu);
+  const show=async q=>{ if(!S.user) return; let hits=[]; try{ hits=await S.user.search(q); }catch(e){} menu.replaceChildren();
+    const none=el('button',null,'Quitar líder'); none.type='button'; none.addEventListener('mousedown',e=>{e.preventDefault(); menu.hidden=true; inp.value=''; onPick(null);}); menu.append(none);
+    hits.forEach(h=>{ const b=el('button'); b.type='button'; const img=el('img'); img.src=h.avatarUrl; img.alt=''; b.append(img,el('span',null,h.name)); b.addEventListener('mousedown',e=>{e.preventDefault(); S.profiles[h.id]=h; inp.value=h.name; menu.hidden=true; onPick(h.id);}); menu.append(b); });
+    if(!hits.length) menu.append(el('div','muted','  Sin resultados')); menu.hidden=false; };
+  inp.addEventListener('focus',()=>show(inp.value)); inp.addEventListener('input',()=>show(inp.value)); inp.addEventListener('blur',()=>setTimeout(()=>menu.hidden=true,150));
+  return inp;
+}
+async function writeResp(id,patch){
+  if(!S.db) return; const m={[id]:Object.assign({},S.resp[id]||{},patch)};
+  try{ await S.db.doc('config/resp').set({m},{merge:true}); Object.assign(S.resp,m); toast('Asignación guardada.'); renderResp(); }
+  catch(e){ toast('Solo el administrador del tablero asigna líderes.'); }
+}
+async function renderResp(){
+  await resolveProfiles(Object.values(S.resp).map(r=>r.l));
+  const groups=new Map(); ACTS.forEach(t=>{ const r=respOf(t.id); const k=r.l?('l:'+r.l):'none'; if(!groups.has(k)) groups.set(k,{l:r.l||null,acts:[],eqs:new Set()}); const g=groups.get(k); g.acts.push(t); if(r.e) g.eqs.add(r.e); });
+  const box=$('rCards'); box.replaceChildren();
+  [...groups.values()].sort((a,b)=>(a.l?0:1)-(b.l?0:1)).forEach(g=>{ const c=el('div','rcard'); const st=statusOf(g.acts,S.t); const who=el('div','who');
+    if(g.l){ const p=S.profiles[g.l]; const img=el('img'); img.src=p?p.avatarUrl:''; img.alt=''; who.append(img); }
+    const nm=el('div'); nm.append(el('b',null,g.l?((S.profiles[g.l]&&S.profiles[g.l].name)||'Líder asignado'):'Sin líder asignado'),el('div','muted',[...g.eqs].join(', ')||(g.l?'Sin equipo':'Asigna líderes abajo'))); who.append(nm);
+    const r=el('div'); r.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center'; r.append(chip(st.s),el('span','muted',g.acts.length+' actividades'));
+    c.append(who,r,barNode(st.prog,st.real,st.s),el('div','muted mono','Real '+pct(st.real)+' / prog '+pct(st.prog)+' · '+money(st.imp))); box.append(c); });
+  const admin=S.canEdit&&!!S.db; $('asigHint').textContent=admin?'Escribe el equipo y elige el líder de cada actividad':'Solo el administrador asigna líderes';
+  const tb=$('aBody'); tb.replaceChildren();
+  ACTS.forEach(t=>{ const r=respOf(t.id); const tr=el('tr'); const c2=el('td'), c3=el('td');
+    if(admin){ const ti=el('input','tin'); ti.value=r.e||''; ti.placeholder='Equipo'; ti.setAttribute('aria-label','Equipo '+t.nombre); ti.addEventListener('change',()=>writeResp(t.id,{e:ti.value.trim()})); c2.append(ti);
+      const pk=el('span','picker'); const inp=makePicker(pk,id=>writeResp(t.id,{l:id||''})); inp.value=r.l?((S.profiles[r.l]&&S.profiles[r.l].name)||''):''; c3.append(pk); }
+    else { c2.textContent=r.e||'—'; c3.append(personNode(r.l)); }
+    tr.append(el('td',null,t.n+'. '+t.nombre),el('td',null,GRUPOS[t.g]),c2,c3); tb.append(tr); });
+  const pb=$('pBody'); pb.replaceChildren(); const ps=Object.entries(S.profiles).sort((a,b)=>(a[1].name||'').localeCompare(b[1].name||'','es'));
+  ps.forEach(([id,p])=>{ const tr=el('tr'); const acts=ACTS.filter(t=>respOf(t.id).l===id).map(t=>t.n).join(', ')||'—'; tr.append(el('td',null,p.name||'—'),el('td','mono',p.email||''),el('td','mono',p.at?p.at.slice(0,10):''),el('td',null,acts)); pb.append(tr); });
+  if(!ps.length){ const tr=el('tr'); const td=el('td','muted',S.db?'Aún no hay personas registradas.':'Entra con tu cuenta de Google para ver quién está registrado.'); td.colSpan=4; tr.append(td); pb.append(tr); }
+}
 
-  // ---------- clic en el modelo ----------
-  if(V) V.onPick=u=>{
-    if(!u){select(null);return;}
-    if(cur==='p-prog'){select({tipo:'r',row:u.row});return;}
-    if(cur==='p-av'){show(tabs[0]);}
-    select({tipo:'p',ids:[u.p]});
-  };
-  select(null);
+/* ---------- estimaciones ---------- */
+let editingE=null;
+function renderEstim(){
+  const tb=$('eBody'); tb.replaceChildren(); const rows=[...S.estim].sort((a,b)=>(a.ini||'').localeCompare(b.ini||'')); let tE=0,tC=0;
+  rows.forEach(e=>{ const mo=+e.monto||0, co=+e.cobrado||0; tE+=mo; tC+=co; const tr=el('tr');
+    const st= co>=mo*(1-ANT)-0.5 && co>0 ? 'done' : (co>0?'ok':'idle');
+    const c0=el('td'); c0.append(el('b',null,e.no||'—'),' ',chip(st));
+    const c8=el('td'); if(S.canEdit){ const b1=el('button','linkbtn','Editar'); b1.type='button'; b1.addEventListener('click',()=>loadE(e)); const b2=el('button','linkbtn','Borrar'); b2.type='button';
+      b2.addEventListener('click',()=>{ if(b2.dataset.c){ S.db.doc('estimaciones/'+e._id).delete().then(()=>toast('Estimación '+e.no+' borrada.')).catch(()=>toast('No se pudo borrar.')); } else { b2.dataset.c='1'; b2.textContent='Confirmar borrado'; setTimeout(()=>{b2.dataset.c='';b2.textContent='Borrar';},4000);} }); c8.append(b1,' ',b2); }
+    tr.append(c0,el('td','mono',(e.ini?fmtD(fromIso(e.ini)):'')+' → '+(e.fin?fmtD(fromIso(e.fin)):'')),el('td','num',moneyFull(mo)),el('td','num',moneyFull(mo*ANT)),el('td','num',moneyFull(mo*(1-ANT))),el('td','num',moneyFull(co)),el('td','mono',e.fcobro?fmtD(fromIso(e.fcobro)):'Pendiente'),el('td',null,e.nota||''),c8); tb.append(tr); });
+  if(!rows.length){ const tr=el('tr'); const td=el('td','muted','Aún no hay estimaciones. Registra la primera: número, periodo y monto estimado sin IVA; al pagarse, agrega el monto cobrado y la fecha.'); td.colSpan=9; tr.append(td); tb.append(tr); }
+  const st=statusOf(ACTS,S.today);
+  $('eKpis').replaceChildren(kpi('Estimado total',money(tE),pct(tE/TOTAL)+' del contrato'),kpi('Amortizado de anticipo',money(tE*ANT),'30 % de lo estimado'),kpi('Cobrado',money(tC),'Neto por cobrar: '+money(Math.max(0,tE*(1-ANT)-tC)),tC>0?'done':''),kpi('Ejecutado sin estimar',money(Math.max(0,st.ejec-tE)),'Ejecutado capturado: '+money(st.ejec)));
+  $('eFormPanel').hidden=!S.canEdit;
+}
+function loadE(e){ editingE=e._id; $('eNo').value=e.no||''; $('eIni').value=e.ini||''; $('eFin').value=e.fin||''; $('eMonto').value=e.monto||''; $('eCobrado').value=e.cobrado||''; $('eFCobro').value=e.fcobro||''; $('eNota').value=e.nota||''; $('eCancel').hidden=false; $('eSave').textContent='Guardar cambios'; $('eNo').focus(); }
+function resetE(){ editingE=null; $('eForm').reset(); $('eCancel').hidden=true; $('eSave').textContent='Guardar'; }
+$('eCancel').addEventListener('click',resetE);
+$('eForm').addEventListener('submit',async ev=>{ ev.preventDefault(); if(!S.db) return;
+  const body={no:$('eNo').value.trim(),ini:$('eIni').value,fin:$('eFin').value,monto:+$('eMonto').value||0,cobrado:+$('eCobrado').value||0,fcobro:$('eFCobro').value||'',nota:$('eNota').value.trim(),at:new Date().toISOString(),by:S.me||''};
+  if(body.fin<body.ini){ toast('La fecha final del periodo es anterior a la inicial.'); return; }
+  try{ if(editingE) await S.db.doc('estimaciones/'+editingE).set(body); else await S.db.collection('estimaciones').add(body); toast('Estimación '+body.no+' guardada.'); resetE(); }
+  catch(e){ toast('Solo el administrador del tablero registra estimaciones.'); } });
+
+/* ---------- validación ---------- */
+const SEV={alta:['Alta','s-late'],media:['Media','s-warn'],baja:['Baja','s-idle']};
+const ESTADOS=['Abierta','En atención','Atendida'];
+function renderObs(){
+  const box=$('oList'); box.replaceChildren(); const cnt={Abierta:0,'En atención':0,Atendida:0};
+  DATA.obs.forEach(o=>{ const est=(S.obs[o[0]]&&S.obs[o[0]].estado)||'Abierta'; cnt[est]=(cnt[est]||0)+1;
+    const c=el('div','ocard'); const h=el('div','h'); h.append(el('b',null,o[0]),el('span','chip '+SEV[o[1]][1],'Severidad '+SEV[o[1]][0]),el('span','muted',o[2]));
+    if(S.canEdit&&S.db){ const sel=el('select'); sel.setAttribute('aria-label','Estado '+o[0]); ESTADOS.forEach(x=>{const op=el('option',null,x); op.value=x; sel.append(op);}); sel.value=est;
+      sel.addEventListener('change',async()=>{ try{ await S.db.doc('obs/'+o[0]).set({estado:sel.value,at:new Date().toISOString(),by:S.me||''}); toast(o[0]+': '+sel.value); }catch(e){ toast('Solo el administrador cambia el estado.'); } }); h.append(sel); }
+    else h.append(el('span','chip '+(est==='Atendida'?'s-done':(est==='En atención'?'s-ok':'s-idle')),est));
+    const a=el('div'); a.append(el('span','muted','Acción: '),o[4]);
+    c.append(h,el('div',null,o[3]),a); box.append(c); });
+  $('oCounts').replaceChildren(...ESTADOS.map(x=>el('span','chip '+(x==='Atendida'?'s-done':(x==='En atención'?'s-ok':'s-idle')),x+': '+(cnt[x]||0))));
+}
+
+/* ---------- 3D ---------- */
+const G={ready:false};
+(function init3D(){
+  const host=$('scene');
+  if(!window.THREE||!THREE.OrbitControls){ host.append(el('div','nogl','El modelo 3D no pudo cargarse en este navegador. El resto del tablero funciona normal.')); return; }
+  let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:true}); }catch(e){ host.append(el('div','nogl','Este dispositivo no tiene WebGL; el modelo 3D no está disponible.')); return; }
+  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1)); host.prepend(renderer.domElement);
+  const scene=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(32,2,1,3000);
+  const P=(x,y,z)=>new THREE.Vector3(x, z||0, -y);
+  const HOME=[70,85,120]; cam.position.set(...HOME);
+  const ctl=new THREE.OrbitControls(cam,renderer.domElement); ctl.target.set(0,4,-10); ctl.maxPolarAngle=Math.PI*0.48; ctl.minDistance=20; ctl.maxDistance=600; ctl.screenSpacePanning=true; ctl.update();
+  scene.add(new THREE.HemisphereLight(0xffffff,0x888877,0.85)); const sun=new THREE.DirectionalLight(0xffffff,0.55); sun.position.set(-80,160,100); scene.add(sun);
+  const groundG=new THREE.Group(), dyn=new THREE.Group(); scene.add(groundG,dyn);
+  const mat=(c,o)=>new THREE.MeshLambertMaterial(Object.assign({color:new THREE.Color(c)},o||{}));
+  const ANG=DATA.site.ang; // orientación del lindero más largo
+  const BW=40.0, BD=821.44/40.0, H1=6.3, H2=4.3, BASE=0.6;
+  const pick=[];
+  function buildStatic(){
+    groundG.clear(); scene.background=new THREE.Color(cssv('--panel2'));
+    const sh=new THREE.Shape(); DATA.site.lot.forEach((p,i)=> i?sh.lineTo(p[0],p[1]):sh.moveTo(p[0],p[1]));
+    const m=new THREE.Mesh(new THREE.ShapeGeometry(sh),mat(cssv('--ground'),{side:THREE.DoubleSide})); m.rotation.x=-Math.PI/2; groundG.add(m);
+    const pts=DATA.site.lot.map(p=>P(p[0],p[1],0.05)); groundG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:new THREE.Color(cssv('--gold'))})));
+  }
+  function slab(z0,z1,c,o,inset){ const i=inset||0; const g=new THREE.BoxGeometry(BW-i,z1-z0,BD-i); const me=new THREE.Mesh(g,mat(c,o)); const grp=new THREE.Group(); grp.rotation.y=ANG; me.position.set(0,(z0+z1)/2,0); grp.add(me); grp.userData.mesh=me; return grp; }
+  function buildDyn(){
+    dyn.clear(); pick.length=0; const d=S.t; const C={ok:cssv('--ok'),late:cssv('--late'),done:cssv('--done'),idle:cssv('--idle'),ghost:cssv('--ghost'),fg:cssv('--fg')};
+    const val=t=> S.mode==='real'? realAt(t,d) : progAt(t,d);
+    const pre=ACTS.find(t=>t.n===2), est=ACTS.find(t=>t.n===3);
+    const all=stOf(ACTS,d); const color=S.mode==='real'?C[all.s]:(all.s==='done'?C.done:(all.s==='ok'?cssv('--gold'):C.idle));
+    // plataforma: preliminares
+    const pv=val(pre); dyn.add(slab(0,BASE,pv>=0.999?'#cfc8bb':(pv>0?'#b59a72':C.ghost),{transparent:pv===0,opacity:pv===0?0.35:1},-6));
+    const f=val(est); const fills=[Math.min(1,f*2),Math.max(0,Math.min(1,f*2-1))]; const lv=[[BASE,BASE+H1],[BASE+H1,BASE+H1+H2]];
+    lv.forEach(([z0,z1],i)=>{ const fr=fills[i];
+      if(fr>0.01){ const g=slab(z0,z0+(z1-z0-0.25)*fr,color,{}); dyn.add(g); pick.push(g.userData.mesh); }
+      if(fr<0.999){ const g=slab(z0,z1-0.25,C.ghost,{transparent:true,opacity:0.22}); dyn.add(g); pick.push(g.userData.mesh); } });
+    const eg=new THREE.EdgesGeometry(new THREE.BoxGeometry(BW,H1+H2,BD)); const ln=new THREE.LineSegments(eg,new THREE.LineBasicMaterial({color:new THREE.Color(S.sel?C.fg:color),transparent:true,opacity:S.sel?1:0.6}));
+    const lg=new THREE.Group(); lg.rotation.y=ANG; ln.position.set(0,BASE+(H1+H2)/2,0); lg.add(ln); dyn.add(lg);
+    draw();
+  }
+  function draw(){ renderer.render(scene,cam); }
+  function resize(){ const w=host.clientWidth,h=host.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); draw(); }
+  ctl.addEventListener('change',draw); new ResizeObserver(resize).observe(host);
+  const ray=new THREE.Raycaster(); let down=null;
+  renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
+  renderer.domElement.addEventListener('pointerup',e=>{ if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5) return; const rc=renderer.domElement.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2(((e.clientX-rc.left)/rc.width)*2-1,-((e.clientY-rc.top)/rc.height)*2+1),cam); S.sel=!!ray.intersectObjects(pick,false)[0]; buildDyn(); if(S.sel) $('edpanel').scrollIntoView({block:'nearest',behavior:'smooth'}); });
+  $('homeBtn').addEventListener('click',()=>{cam.position.set(...HOME); ctl.target.set(0,4,-10); ctl.update(); draw();});
+  G.ready=true; G.render=buildDyn; G.restyle=()=>{buildStatic();buildDyn();}; G.resize=resize;
+  buildStatic(); resize(); buildDyn();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{G.restyle(); renderCurva();});
+  new MutationObserver(()=>{G.restyle(); if(S.view==='resumen') renderCurva();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+if(!G.ready){ G.render=()=>{}; G.resize=()=>{}; }
+
+/* ---------- render ---------- */
+function renderView(){
+  if(S.view==='resumen'){ renderKpis(); renderAttn(); renderEdPanel(); renderCurva(); G.render(); }
+  else if(S.view==='actividades') renderActividades();
+  else if(S.view==='captura') renderCaptura();
+  else if(S.view==='responsables') renderResp();
+  else if(S.view==='estimaciones') renderEstim();
+  else if(S.view==='validacion') renderObs();
+}
+let rq=false; function renderAll(){ if(rq) return; rq=true; requestAnimationFrame(()=>{ rq=false; renderView(); }); }
+let cw=0; new ResizeObserver(()=>{ const w=$('curva').clientWidth; if(Math.abs(w-cw)>8){ cw=w; if(S.view==='resumen') renderCurva(); } }).observe($('curva'));
+route();
+
+/* ---------- Firebase (base de datos y acceso con Google) ---------- */
+const FIREBASE_CONFIG = {"apiKey": "AIzaSyCOUfL_ki92-OrbZ-M9PoGM3IcFXmTGZvM", "authDomain": "grupo-alaris-tableros.firebaseapp.com", "projectId": "grupo-alaris-tableros", "storageBucket": "grupo-alaris-tableros.firebasestorage.app", "messagingSenderId": "765715396603", "appId": "1:765715396603:web:a632bf53b1d21df41a7d5e"};
+const ADMINS = ['alv7403@gmail.com','contacto@grupoalaris.mx'];
+(function connect(){
+  const txt=$('authTxt'), btn=$('authBtn');
+  if(!window.firebase || !FIREBASE_CONFIG || !FIREBASE_CONFIG.apiKey){ txt.textContent='Vista de consulta (sin conexión a la base de datos)'; renderAll(); return; }
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const auth=firebase.auth(), fs=firebase.firestore(); const prov=new firebase.auth.GoogleAuthProvider();
+  const unsub=[];
+  btn.addEventListener('click',()=>{ if(auth.currentUser) auth.signOut(); else auth.signInWithPopup(prov).catch(e=>toast('No se pudo entrar: '+(e.message||e.code))); });
+  auth.onAuthStateChanged(async u=>{
+    unsub.splice(0).forEach(f=>f()); btn.hidden=false;
+    if(!u){ S.db=null; S.me=null; S.canEdit=false; S.user=null; S.avance=new Map(); S.hist=new Map(); S.resp={}; S.estim=[]; S.obs={}; S.profiles={};
+      txt.textContent='Entra para capturar o ver el avance'; btn.textContent='Entrar con Google'; renderAll(); return; }
+    S.me=u.uid; S.canEdit=ADMINS.includes((u.email||'').toLowerCase()); S.db=fs;
+    txt.textContent=(u.displayName||u.email)+(S.canEdit?' · administrador':''); btn.textContent='Salir';
+    try{ await fs.doc('personas/'+u.uid).set({name:u.displayName||u.email,email:u.email||'',avatarUrl:u.photoURL||'',at:new Date().toISOString()},{merge:true}); }catch(e){}
+    S.user={ profiles:async ids=>{ const o={}; ids.forEach(id=>{ if(S.profiles[id]) o[id]=S.profiles[id]; }); return o; },
+             search:async q=>{ q=(q||'').toLowerCase(); return Object.entries(S.profiles).filter(([id,p])=>!q||(p.name||'').toLowerCase().includes(q)||(p.email||'').toLowerCase().includes(q)).slice(0,20).map(([id,p])=>Object.assign({id},p)); } };
+    const err=e=>{ if(e&&e.code==='permission-denied') toast('Sin permiso para leer la base de datos.'); };
+    unsub.push(fs.collection('personas').onSnapshot(s=>{ const o={}; s.docs.forEach(d=>{ o[d.id]=d.data(); }); S.profiles=o; renderAll(); },err));
+    unsub.push(fs.collection('avance').onSnapshot(s=>{ const m=new Map(); s.docs.forEach(d=>m.set(d.id,d.data())); S.avance=m; renderAll(); },err));
+    unsub.push(fs.collection('historial').onSnapshot(s=>{ const m=new Map(); s.docs.forEach(d=>{ const b=d.data(); const w=+b.w; if(!m.has(w)) m.set(w,{}); m.get(w)[b.act]=b.q; }); S.hist=m; renderAll(); },err));
+    unsub.push(fs.doc('config/resp').onSnapshot(s=>{ S.resp=(s.exists && s.data().m)||{}; renderAll(); },err));
+    unsub.push(fs.collection('estimaciones').onSnapshot(s=>{ S.estim=s.docs.map(d=>Object.assign({_id:d.id},d.data())); renderAll(); },err));
+    unsub.push(fs.collection('obs').onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.obs=o; renderAll(); },err));
+    renderAll();
+  });
+})();
 })();
 </script>
-</body>
-</html>
+</body></html>
