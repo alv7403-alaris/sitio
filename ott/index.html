@@ -133,6 +133,13 @@ tr.tot td{font-weight:700;background:var(--panel2)}
 .tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.15);min-width:190px;z-index:3}
 .tip .r{display:flex;justify-content:space-between;gap:12px}
 .toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;z-index:30;max-width:min(420px,calc(100vw - 32px))}
+.gate{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px)}
+.gate .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:32px 28px;max-width:440px;width:100%;text-align:center;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.gate .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.gate h2{font-family:var(--f-disp);font-size:24px;font-weight:800}
+.gate .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);border-radius:10px;padding:12px 18px;font-size:16px;font-weight:600;cursor:pointer}
+.gate .gbtn svg{width:20px;height:20px;background:#fff;border-radius:50%;padding:2px}
+.gate small{color:var(--muted);font-size:12px}
 </style></head><body>
 
 <header class="top">
@@ -258,6 +265,16 @@ tr.tot td{font-weight:700;background:var(--panel2)}
     </div>
   </section>
 </main>
+<div class="gate" id="gate" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="gateT">
+    <div class="eyebrow">Grupo Alaris · Construcción virtual</div>
+    <h2 id="gateT">Oficina de Transferencia de Tecnología</h2>
+    <div class="muted">Control de obra · San José Chiapa</div>
+    <div>Entra con tu cuenta de Google. La primera vez quedas registrado y el administrador te asigna tus actividades para que captures equipo y avance.</div>
+    <button class="gbtn" id="gateBtn" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17z"/><path fill="#FBBC05" d="M10.6 28.6A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.1.8-4.6l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.2-8.5 2.2-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>Entrar con Google</button>
+    <small>Solo se guarda tu nombre y correo para identificar quién captura.</small>
+  </div>
+</div>
 <div class="toast" id="toast" hidden></div>
 
 <script type="application/json" id="data">{"d0":"2026-11-01","acts":[["ACT-01",1,"PROYECTO EJECUTIVO","PE",10,29,533631.66,[533631.66,0,0,0],"—",1],["ACT-02",2,"PRELIMINARES","OC",30,39,185721.39,[0,185721.39,0,0],"1",1],["ACT-03",3,"ESTRUCTURA","OC",40,79,9665897.53,[0,5074596.2,4591301.33,0],"2",1],["ACT-04",4,"ALBAÑILERÍA","OC",40,79,1579951.22,[0,829474.39,750476.83,0],"2, 3 (SS+5d)",0],["ACT-05",5,"ACABADOS","AC",80,99,3350667.82,[0,0,2010400.69,1340267.13],"3, 4",1],["ACT-06",6,"HERRERÍA, CANCELERÍA Y CARPINTERÍA","AC",80,99,3800623.76,[0,0,2280374.26,1520249.5],"3, 4",0],["ACT-07",7,"INSTALACIÓN HIDROSANITARIA","IN",40,99,927369.92,[0,324579.47,479141.13,123649.32],"2, 3 (SS)",0],["ACT-08",8,"INSTALACIÓN PLUVIAL","IN",40,99,143506.1,[0,50227.14,74144.82,19134.14],"2, 3 (SS)",0],["ACT-09",9,"INSTALACIONES ELÉCTRICAS, ALUMBRADO E ILUMINACIÓN","IN",40,99,4645385.67,[0,1625884.98,2400115.94,619384.75],"2, 3 (SS)",0],["ACT-10",10,"INSTALACIONES ESPECIALES","IN",40,99,2762513.28,[0,966879.65,1427298.54,368335.09],"2, 3 (SS)",0],["ACT-11",11,"SEÑALÉTICA INTERIOR","AC",92,99,53453.07,[0,0,0,53453.07],"5",0],["ACT-12",12,"OBRAS INDUCIDAS","OC",30,91,96573.93,[0,48286.97,48286.96,0],"1",0],["ACT-13",13,"LIMPIEZA","OC",30,99,31221.45,[0,13826.64,13826.64,3568.17],"2 (SS)",0]],"obs":[["OTT-001","alta","Plazo","Los Términos de Referencia fijan un plazo total de 150 días naturales con proyecto ejecutivo en máximo 30 días; la propuesta (DP-05, DP-13) programa 90 días (11-nov-26 al 08-feb-27) con proyecto ejecutivo en 20 días.","Confirmar plazo y fechas en el contrato firmado. El tablero usa el programa de la propuesta hasta tenerlo."],["OTT-002","alta","Control por cantidad","Contrato a precio alzado con 13 actividades en unidad ACTIVIDAD (cantidad 1). Sin desglose no se puede controlar por cantidad ejecutada ni ligar el modelo.","Pedir los generadores de obra del proyecto ejecutivo (los exigen los TdR) y la cédula de avance por subactividad; cargarlos como conceptos medibles con ALR_Clave."],["OTT-003","media","Programa","Estructura (40 días) y albañilería corren en paralelo del 11-dic-26 al 19-ene-27, sobre el periodo vacacional. Acabados y herrería concentran .15 M (25.7 % del contrato) en 20 días.","Revisar ruta crítica y carga de personal del periodo dic–ene; pedir programa de suministros de cancelería y acabados."],["OTT-004","media","Insumos","Planos DWG recibidos: arquitectónico, instalación hidráulica, voz y datos, sembrado DI, señalización y accesibilidad. Faltan estructural, eléctrico y alumbrado, pluvial, topografía y mecánica de suelos.","Son entregables de la Actividad 1 (proyecto ejecutivo). Validar constructibilidad al recibirlos."],["OTT-005","media","Anticipo y pagos","Bases: anticipo de 30 % por ejercicio fiscal (2026 y 2027) sobre la proposición; se amortiza proporcionalmente en cada estimación. Estimaciones con periodos no mayores a un mes.","Definir montos de anticipo por ejercicio y fechas de corte en el contrato; registrar estimaciones en el tablero."]],"site":{"lot":[[-28.57,-96.96],[-19.24,-113.78],[-8.03,-132.83],[-7.4,-133.57],[-6.61,-134.15],[-5.71,-134.51],[-4.75,-134.65],[-3.78,-134.56],[-2.86,-134.24],[-2.05,-133.7],[-1.39,-132.99],[-0.92,-132.14],[-0.81,-131.5],[7.75,-91.71],[16.32,-64.21],[24.01,-42.42],[34.8,-16.53],[44.27,3.12],[62.03,34.84],[62.4,35.73],[62.54,36.69],[62.45,37.64],[62.13,38.55],[61.6,39.35],[55.08,46.83],[34.27,73.9],[29.85,79.86],[18.42,96.14],[7.81,82.42],[-1.85,67.52],[-11.33,52.31],[-19.84,36.55],[-27.8,20.51],[-35.18,4.2],[-42.0,-12.36],[-48.23,-29.15],[-53.87,-46.15],[-47.6,-59.55],[-36.0,-82.81],[-28.57,-96.96]],"ang":1.3589},"total":27776516.8}</script>
@@ -638,8 +655,9 @@ const ADMINS = ['alv7403@gmail.com','contacto@grupoalaris.mx'];
   const auth=firebase.auth(), fs=firebase.firestore(); const prov=new firebase.auth.GoogleAuthProvider();
   const unsub=[];
   btn.addEventListener('click',()=>{ if(auth.currentUser) auth.signOut(); else auth.signInWithPopup(prov).catch(e=>toast('No se pudo entrar: '+(e.message||e.code))); });
+  $('gateBtn').addEventListener('click',()=>auth.signInWithPopup(prov).catch(e=>toast('No se pudo entrar: '+(e.message||e.code))));
   auth.onAuthStateChanged(async u=>{
-    unsub.splice(0).forEach(f=>f()); btn.hidden=false;
+    unsub.splice(0).forEach(f=>f()); btn.hidden=false; $('gate').hidden=!!u;
     if(!u){ S.db=null; S.me=null; S.canEdit=false; S.user=null; S.avance=new Map(); S.hist=new Map(); S.resp={}; S.estim=[]; S.obs={}; S.profiles={};
       txt.textContent='Entra para capturar o ver el avance'; btn.textContent='Entrar con Google'; renderAll(); return; }
     S.me=u.uid; S.canEdit=ADMINS.includes((u.email||'').toLowerCase()); S.db=fs;
