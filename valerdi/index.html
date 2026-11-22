@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#201E1F">
+<title>VALERDI · Control de obra · Grupo Alaris</title>
+<link rel="icon" href="/marca/alaris-simbolo-oscuro.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/marca/alaris-simbolo-oscuro.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#201E1F;--panel:#2A2728;--line:#3D393A;--ink:#EDEAE4;--muted:#A8A29A;--accent:#D1AE6C;--red-text:#FF5A5F;--red-fill:#C8252B;--rojo:#EC3237;--oro:#D1AE6C;--negro:#201E1F;--ok:#7FB77E;--warn:#E0A44B;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:1rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Archivo,"IBM Plex Sans",sans-serif;line-height:1.15;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.visually{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.saltar{position:absolute;left:-9999px;top:8px;background:var(--oro);color:var(--negro);padding:8px 16px;border-radius:4px;font-weight:600;z-index:20}
+.saltar:focus{left:16px}
+.wrap{width:min(1200px,100% - 32px);margin-inline:auto}
+header.top{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.marca img{height:32px;width:auto}
+.marca b{font-family:Archivo,sans-serif;font-size:1.05rem}
+.marca span{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted)}
+.quien{display:flex;align-items:center;gap:10px;font-size:.875rem;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font:600 .95rem "IBM Plex Sans",sans-serif;padding:12px 14px;min-height:44px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--rojo)}
+main{padding-block:24px 64px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:4px;font:600 .95rem "IBM Plex Sans",sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--accent);background:transparent;color:var(--accent)}
+.btn-p{background:var(--oro);color:var(--negro);border-color:var(--oro)}
+.btn-r{background:var(--red-fill);color:#fff;border-color:var(--red-fill)}
+.btn-sm{min-height:36px;padding:0 10px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;font:inherit;padding:6px;min-height:36px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;margin-bottom:20px}
+.panel h2{font-size:1.25rem;margin-bottom:4px}
+.sub{color:var(--muted);font-size:.875rem;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.kpi span{display:block;font-size:.8rem;color:var(--muted)}
+.kpi strong{display:block;font-family:"IBM Plex Mono",monospace;font-size:1.3rem;font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi small{display:block;color:var(--muted);font-size:.75rem;margin-top:2px}
+.neg{color:var(--red-text)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);font-weight:600;background:var(--bg)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+.estado{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:600;border:1px solid var(--line);white-space:nowrap}
+.e-ok{background:rgba(127,183,126,.15);color:var(--ok);border-color:rgba(127,183,126,.4)}
+.e-warn{background:rgba(224,164,75,.15);color:var(--warn);border-color:rgba(224,164,75,.4)}
+.e-bad{background:rgba(255,90,95,.15);color:var(--red-text);border-color:rgba(255,90,95,.4)}
+.e-muted{color:var(--muted)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:4px;min-width:60px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.bar i.over{background:var(--red-text)}
+form.cap{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px 16px}
+.f label{display:block;font-weight:600;font-size:.875rem;margin-bottom:6px}
+.f .hint{display:block;font-size:.75rem;color:var(--muted);margin-top:4px}
+.f.full{grid-column:1/-1}
+input,select,textarea{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:1rem "IBM Plex Sans",sans-serif}
+textarea{min-height:70px}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.seg button[aria-pressed="true"]{background:var(--oro);color:var(--negro);border-color:var(--oro)}
+.calc{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.875rem;align-self:end;padding-bottom:12px}
+.acciones{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filtros{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.filtros>*{flex:1 1 160px;max-width:260px}
+.who{font-size:.75rem;color:var(--muted)}
+.gate{max-width:440px;margin:40px auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:28px 24px}
+.gate h1{font-size:1.6rem;margin-bottom:6px}
+.gate p{color:var(--muted);margin:0 0 18px}
+.gate .f{margin-bottom:12px}
+.gate .btn{width:100%;margin-top:6px}
+.msg{color:var(--red-text);font-weight:600;min-height:1.2em;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--negro);padding:10px 18px;border-radius:6px;font-weight:600;z-index:50;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+.note{border-left:3px solid var(--accent);background:var(--bg);padding:10px 14px;border-radius:4px;font-size:.875rem;color:var(--muted);margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.cajas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:20px}
+.caja{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:14px 16px}
+.caja h3{font-size:1rem;margin-bottom:8px}
+.caja dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:.9rem}
+.caja dd{margin:0;text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.caja dt{color:var(--muted)}
+.caja .saldo{font-weight:700;color:var(--ink)}
+@media (prefers-reduced-motion: no-preference){.btn,nav.tabs button{transition:background-color .15s,color .15s,border-color .15s}}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="top"><div class="wrap">
+  <a class="marca" href="/panel/" aria-label="Ir al panel de proyectos">
+    <img src="/marca/alaris-simbolo-oscuro.svg" alt="" width="34" height="32">
+    <span><b>VALERDI</b> · ALR-2026-008 · Control de obra</span>
+  </a>
+  <div class="quien" id="quien" hidden><span id="quienTxt"></span><button class="btn btn-sm" type="button" id="salir">Salir</button></div>
+</div></header>
+
+<main id="contenido" tabindex="-1"><div class="wrap">
+
+<!-- Acceso -->
+<section id="gate" class="gate" aria-labelledby="gTit">
+  <h1 id="gTit">Control de obra VALERDI</h1>
+  <p id="gIntro">Entra con tu cuenta para capturar compras, pagos y cobros de la obra.</p>
+  <div id="gLogin">
+    <button class="btn btn-p" type="button" id="gGoogle">Entrar con Google</button>
+    <p style="text-align:center;margin:16px 0 8px">o con tu correo</p>
+    <form id="gForm" novalidate>
+      <div class="f" id="gNomWrap" hidden><label for="gNombre">Nombre completo</label><input id="gNombre" autocomplete="name"></div>
+      <div class="f"><label for="gEmail">Correo</label><input id="gEmail" type="email" autocomplete="email" required></div>
+      <div class="f"><label for="gPass">Contraseña</label><input id="gPass" type="password" autocomplete="current-password" required minlength="6"></div>
+      <button class="btn btn-p" type="submit" id="gSubmit">Entrar</button>
+      <button class="linkbtn" type="button" id="gToggle">Crear cuenta</button>
+    </form>
+  </div>
+  <div id="gPend" hidden><p>Tu cuenta quedó registrada. El Arq. Alfonso Leal debe darte acceso; cuando lo haga, recarga esta página.</p></div>
+  <p class="msg" id="gMsg" role="alert" aria-live="assertive"></p>
+</section>
+
+<div id="app" hidden>
+<nav class="tabs" aria-label="Secciones">
+  <button type="button" data-v="tablero" aria-current="page">Tablero</button>
+  <button type="button" data-v="registrar">Registrar</button>
+  <button type="button" data-v="movs">Movimientos</button>
+  <button type="button" data-v="mo">Mano de obra</button>
+  <button type="button" data-v="facturas">Facturas</button>
+  <button type="button" data-v="bitacora">Bitácora</button>
+  <button type="button" data-v="usuarios" id="tabUsuarios" hidden>Usuarios</button>
+</nav>
+
+<!-- TABLERO -->
+<section data-view="tablero" aria-labelledby="tTit" style="padding-top:20px">
+  <h1 id="tTit" style="font-size:1.6rem;margin-bottom:4px">Tablero de obra</h1>
+  <p class="sub">Locales del 1er nivel · Programa del 9 de noviembre al 20 de diciembre de 2026 · <span id="tDias"></span></p>
+  <div id="importBox" class="note" hidden>No hay movimientos capturados. <button class="btn btn-sm btn-p" type="button" id="btnImport">Importar el Excel de Mariela (18 movimientos y 4 destajos)</button></div>
+  <h2 style="font-size:1.1rem;margin:8px 0 10px">Cajas</h2>
+  <div class="cajas" id="cajas"></div>
+  <h2 style="font-size:1.1rem;margin:8px 0 10px">Costo de la obra contra presupuesto</h2>
+  <div class="kpis" id="kpis"></div>
+  <div class="panel">
+    <h2>Por partida</h2>
+    <p class="sub">Costo real sin IVA (materiales, mano de obra y subcontratos) contra el costo directo presupuestado. Alerta al llegar a 85 %.</p>
+    <div class="tablewrap"><table id="tPartidas"><thead><tr><th scope="col">Partida</th><th class="n" scope="col">Costo directo</th><th class="n" scope="col">Materiales</th><th class="n" scope="col">Mano de obra</th><th class="n" scope="col">Subcontratos</th><th class="n" scope="col">Costo real</th><th class="n" scope="col">Disponible</th><th scope="col">% ejercido</th><th scope="col">Estado</th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h2>Gasto por semana</h2>
+      <p class="sub">Costo de obra sin IVA, sin préstamos ni gastos ajenos.</p>
+      <div class="tablewrap"><table id="tSemanas"><thead><tr><th scope="col">Semana</th><th class="n" scope="col">Materiales</th><th class="n" scope="col">Mano de obra</th><th class="n" scope="col">Otros</th><th class="n" scope="col">Total</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="panel">
+      <h2>Fuera del costo de obra</h2>
+      <p class="sub">Préstamos y gastos ajenos pagados con dinero de VALERDI. No cuentan como costo, pero sí bajan la caja.</p>
+      <div class="tablewrap"><table id="tAjenos"><thead><tr><th scope="col">Fecha</th><th scope="col">Concepto</th><th scope="col">Caja</th><th class="n" scope="col">Monto</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRAR -->
+<section data-view="registrar" hidden aria-labelledby="rTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="rTit">Registrar movimiento</h2>
+    <p class="sub" id="rSub">Se guarda con tu nombre, la fecha y la hora.</p>
+    <div class="seg" role="group" aria-label="Tipo de movimiento" id="rTipo">
+      <button class="btn" type="button" data-t="gasto" aria-pressed="true">Gasto</button>
+      <button class="btn" type="button" data-t="ingreso" aria-pressed="false">Ingreso</button>
+    </div>
+    <form class="cap" id="fMov" novalidate>
+      <div class="f"><label for="mFecha">Fecha</label><input id="mFecha" type="date" required></div>
+      <div class="f"><label for="mCaja">Caja</label><select id="mCaja" required><option value="facturado">Facturado (con factura)</option><option value="sin_factura">Sin factura</option></select></div>
+      <div class="f g-only"><label for="mClase">Tipo de gasto</label><select id="mClase"><option value="material">Material</option><option value="mano_obra">Mano de obra</option><option value="subcontrato">Subcontrato</option><option value="general">Gasto general (gasolina, fletes, estacionamiento)</option><option value="ajeno">Préstamo o gasto ajeno a la obra</option></select></div>
+      <div class="f full"><label for="mConcepto">Concepto</label><input id="mConcepto" required placeholder="Ej. Material eléctrico, M.O. Mtro. Lupe, transferencia del cliente"></div>
+      <div class="f g-only cl-prov"><label for="mProv">Proveedor</label><input id="mProv" list="lProv" autocomplete="off"><datalist id="lProv"></datalist></div>
+      <div class="f g-only cl-part"><label for="mPartida">Partida</label><select id="mPartida"></select></div>
+      <div class="f g-only cl-mo"><label for="mTrab">Trabajador</label><input id="mTrab" list="lTrab" autocomplete="off"><datalist id="lTrab"></datalist><span class="hint">Igual que en Destajos, para llevar su saldo.</span></div>
+      <div class="f g-only cl-mo"><label for="mRecibo">No. de recibo</label><input id="mRecibo"></div>
+      <div class="f i-only"><label for="mOrigen">Origen del dinero</label><input id="mOrigen" list="lOrigen" value="Sra. Valerdi"><datalist id="lOrigen"><option value="Sra. Valerdi"><option value="LBI Group"><option value="Grupo Alaris"></datalist></div>
+      <div class="f"><label for="mMonto" id="lMonto">Monto pagado (total)</label><input id="mMonto" type="number" inputmode="decimal" step="0.01" min="0" required><span class="hint" id="hMonto">Lo que salió de la caja, con IVA si trae factura.</span></div>
+      <div class="f g-only cl-fact"><label for="mFolio">Folio de factura</label><input id="mFolio" placeholder="Serie y folio, o UUID"></div>
+      <div class="f g-only cl-fact"><label for="mFEst">Factura</label><select id="mFEst"><option value="pendiente">Pendiente de recibir</option><option value="recibida">Recibida en el correo</option><option value="cuadrada">Cuadrada (monto revisado)</option></select></div>
+      <div class="f g-only"><label for="mPago">Forma de pago</label><select id="mPago"><option>Transferencia</option><option>Efectivo</option><option>Tarjeta</option><option>Cheque</option></select></div>
+      <div class="f full"><label for="mNotas">Notas</label><textarea id="mNotas"></textarea></div>
+      <div class="acciones">
+        <button class="btn btn-p" type="submit" id="mGuardar">Guardar</button>
+        <button class="btn" type="button" id="mCancelar" hidden>Cancelar edición</button>
+        <span class="calc" id="mCalc"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- MOVIMIENTOS -->
+<section data-view="movs" hidden aria-labelledby="vTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="vTit">Movimientos</h2>
+    <p class="sub">Todo lo capturado. Puedes editar lo que tú registraste; el administrador puede editar y borrar todo.</p>
+    <div class="filtros">
+      <select id="fTipo" aria-label="Filtrar por tipo"><option value="">Ingresos y gastos</option><option value="ingreso">Solo ingresos</option><option value="gasto">Solo gastos</option></select>
+      <select id="fCaja" aria-label="Filtrar por caja"><option value="">Las dos cajas</option><option value="facturado">Facturado</option><option value="sin_factura">Sin factura</option></select>
+      <select id="fClase" aria-label="Filtrar por tipo de gasto"><option value="">Todos los tipos de gasto</option><option value="material">Material</option><option value="mano_obra">Mano de obra</option><option value="subcontrato">Subcontrato</option><option value="general">Gasto general</option><option value="ajeno">Préstamo o ajeno</option></select>
+      <input id="fTxt" type="search" placeholder="Buscar concepto, proveedor o trabajador" aria-label="Buscar">
+    </div>
+    <div class="tablewrap"><table id="tMovs"><thead><tr><th scope="col">Fecha</th><th scope="col">Concepto</th><th scope="col">Tipo</th><th scope="col">Partida</th><th scope="col">Caja</th><th class="n" scope="col">Monto</th><th class="n" scope="col">Sin IVA</th><th scope="col">Capturó</th><th scope="col"><span class="visually">Acciones</span></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+    <p style="margin-top:12px"><button class="btn btn-sm" type="button" id="btnCsv">Descargar en Excel (CSV)</button></p>
+  </div>
+</section>
+
+<!-- MANO DE OBRA -->
+<section data-view="mo" hidden aria-labelledby="oTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="oTit">Destajos de mano de obra</h2>
+    <p class="sub">Lo cotizado a cada trabajador contra lo que ya se le pagó. Los pagos salen de los gastos de mano de obra con el mismo nombre de trabajador.</p>
+    <div class="tablewrap"><table id="tDest"><thead><tr><th scope="col">Trabajador</th><th scope="col">Trabajo</th><th scope="col">Partida</th><th class="n" scope="col">Cotizado</th><th class="n" scope="col">Pagado</th><th class="n" scope="col">Por pagar</th><th scope="col">Avance de pago</th><th scope="col"><span class="visually">Acciones</span></th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="panel" id="dPanel">
+    <h2 id="dTit">Agregar destajo</h2>
+    <form class="cap" id="fDest" novalidate>
+      <div class="f"><label for="dTrab">Trabajador</label><input id="dTrab" required list="lTrab"></div>
+      <div class="f"><label for="dTrabajo">Trabajo</label><input id="dTrabajo" required placeholder="Ej. Plomería"></div>
+      <div class="f"><label for="dPartida">Partida</label><select id="dPartida"></select></div>
+      <div class="f"><label for="dMonto">Monto cotizado</label><input id="dMonto" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+      <div class="acciones"><button class="btn btn-p" type="submit" id="dGuardar">Guardar destajo</button><button class="btn" type="button" id="dCancelar" hidden>Cancelar edición</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- FACTURAS -->
+<section data-view="facturas" hidden aria-labelledby="xTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="xTit">Facturas por cuadrar</h2>
+    <p class="sub">Gastos de la caja facturada. Cuando llegue la factura a contacto@grupoalaris.mx, revisa que el monto coincida, anota el folio y márcala como cuadrada.</p>
+    <div class="kpis" id="xKpis"></div>
+    <div class="filtros"><select id="xEst" aria-label="Filtrar por estado de factura"><option value="abiertas">Pendientes y recibidas</option><option value="">Todas</option><option value="pendiente">Pendientes de recibir</option><option value="recibida">Recibidas sin cuadrar</option><option value="cuadrada">Cuadradas</option></select></div>
+    <div class="tablewrap"><table id="tFact"><thead><tr><th scope="col">Fecha</th><th scope="col">Concepto</th><th scope="col">Proveedor</th><th class="n" scope="col">Monto</th><th scope="col">Folio</th><th scope="col">Estado</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- BITACORA -->
+<section data-view="bitacora" hidden aria-labelledby="bTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="bTit">Bitácora</h2>
+    <p class="sub">Quién capturó, editó o borró cada movimiento, y cuándo. No se puede modificar.</p>
+    <div class="tablewrap"><table id="tBit"><thead><tr><th scope="col">Fecha y hora</th><th scope="col">Usuario</th><th scope="col">Acción</th><th scope="col">Detalle</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- USUARIOS -->
+<section data-view="usuarios" hidden aria-labelledby="uTit" style="padding-top:20px">
+  <div class="panel">
+    <h2 id="uTit">Usuarios</h2>
+    <p class="sub">Roles: <b>Pendiente</b> (no ve nada) · <b>Consulta</b> (solo ve) · <b>Captura</b> (registra y edita lo suyo) · <b>Administrador</b> (todo, y da acceso).</p>
+    <div class="tablewrap"><table id="tUsr"><thead><tr><th scope="col">Nombre</th><th scope="col">Correo</th><th scope="col">Rol</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+</div>
+</div></main>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+/* ===== Datos fijos del proyecto (presupuesto de la propuesta, nov 2026) ===== */
+const ADMIN_EMAIL='alv7403@gmail.com';
+const IVA=0.16, ALERTA=0.85;
+const INICIO='2026-11-09', FIN='2026-12-20';
+const PARTIDAS=[
+ ['Albañilería',35318.24,27919.50],['Acabados',325130.23,257020.40],['Pintura',45915.69,36297.14],
+ ['Cancelería y carpintería',110284.16,87181.13],['Muebles sanitarios',34403.30,27196.28],
+ ['Instalación hidrosanitaria',6038.38,4773.42],['Instalación eléctrica',48436.87,38290.00],
+ ['Ventanería',28838.86,22797.51],['Limpieza',6119.78,4837.73]];
+const VENTA=640485.51, CDIR=506313.11;
+const VARIAS='Varias partidas';
+const CLASES={material:'Material',mano_obra:'Mano de obra',subcontrato:'Subcontrato',general:'Gasto general',ajeno:'Préstamo o ajeno'};
+const CAJAS={facturado:'Facturado',sin_factura:'Sin factura'};
+const FEST={pendiente:'Pendiente',recibida:'Recibida',cuadrada:'Cuadrada'};
+const ROLES={pendiente:'Pendiente',consulta:'Consulta',captura:'Captura',admin:'Administrador'};
+/* Excel de control de Mariela (Ingresos_Egresos_remodelación_Valerdi.xlsx), importación única */
+const SEED_MOV=[
+ ['ingreso','2026-11-06','facturado','','Transferencia a LBI Group',150000,'LBI Group'],
+ ['gasto','2026-11-09','facturado','material','Materiales Brinsa',17941,'Brinsa'],
+ ['gasto','2026-11-09','facturado','material','Materiales Colombres',6506,'Colombres'],
+ ['gasto','2026-11-10','facturado','material','Piso',23500,'POLAD','Acabados'],
+ ['gasto','2026-11-10','facturado','general','Gasolina',1017.46,''],
+ ['gasto','2026-11-11','facturado','material','Material eléctrico',19819.68,'','Instalación eléctrica'],
+ ['gasto','2026-11-11','facturado','material','Material hidráulico y sanitario',2428.71,'','Instalación hidrosanitaria'],
+ ['ingreso','2026-11-06','sin_factura','','Transferencia a LBI Group',100000,'LBI Group'],
+ ['gasto','2026-11-09','sin_factura','ajeno','Préstamo para San Rafael (comac)',5000,''],
+ ['gasto','2026-11-09','sin_factura','material','Materiales Brinsa',5850,'Brinsa'],
+ ['gasto','2026-11-09','sin_factura','material','Materiales Colombres',3289,'Colombres'],
+ ['gasto','2026-11-10','sin_factura','material','10 cajas de bricafix',8000,'','Acabados'],
+ ['gasto','2026-11-10','sin_factura','general','Estacionamiento',35,''],
+ ['gasto','2026-11-12','sin_factura','ajeno','Préstamo para tarjeta de crédito',2000,''],
+ ['gasto','2026-11-14','sin_factura','mano_obra','M.O. Mtro. Lupe',3000,'',VARIAS,'Mtro. Lupe'],
+ ['gasto','2026-11-14','sin_factura','mano_obra','M.O. Carlos plomero',5000,'','Instalación hidrosanitaria','Carlos plomero'],
+ ['gasto','2026-11-21','sin_factura','mano_obra','M.O. Mtro. Lupe',12000,'',VARIAS,'Mtro. Lupe'],
+ ['gasto','2026-11-21','sin_factura','mano_obra','M.O. Carlos plomero',10000,'','Instalación hidrosanitaria','Carlos plomero']];
+const SEED_DEST=[['Mtro. Lupe','Albañilería y acabados',VARIAS,50007.70],['Eléctrico','Instalación eléctrica','Instalación eléctrica',32350],['Carlos plomero','Plomería','Instalación hidrosanitaria',8500],['Piso','Mano de obra de piso','Acabados',30344]];
+
+/* ===== utilidades ===== */
+const $=id=>document.getElementById(id);
+const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+const fmt=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2});
+const $$=n=>fmt.format(n||0);
+const pct=n=>(n*100).toFixed(1)+' %';
+const r2=n=>Math.round((+n||0)*100)/100;
+const fdate=s=>{if(!s)return'';const [y,m,d]=s.split('-');return d+'/'+m+'/'+y;};
+const hoyISO=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10);};
+function toast(t){const x=$('toast');x.textContent=t;x.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>x.hidden=true,2600);}
+const sinIVA=m=>m.caja==='facturado'?r2(m.monto/(1+IVA)):r2(m.monto);
+function lunes(iso){const d=new Date(iso+'T12:00:00');const w=(d.getDay()+6)%7;d.setDate(d.getDate()-w);return d.toISOString().slice(0,10);}
+
+const S={db:null,user:null,perfil:null,movs:[],dest:[],bit:[],usrs:[],view:'tablero',tipo:'gasto',editId:null,editDest:null};
+const puede=()=>S.perfil&&(S.perfil.rol==='captura'||S.perfil.rol==='admin');
+const esAdmin=()=>S.perfil&&S.perfil.rol==='admin';
+const yo=()=>({uid:S.user.uid,nombre:S.perfil.nombre||S.user.displayName||S.user.email,email:S.user.email});
+
+/* ===== listas de captura ===== */
+function fillPartidas(sel,conVarias){sel.replaceChildren();const o0=el('option',null,'Sin asignar');o0.value='';sel.append(o0);PARTIDAS.forEach(p=>{const o=el('option',null,p[0]);o.value=p[0];sel.append(o);});if(conVarias){const o=el('option',null,VARIAS);o.value=VARIAS;sel.append(o);}}
+fillPartidas($('mPartida'),true);fillPartidas($('dPartida'),true);
+
+/* ===== navegación ===== */
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.v)));
+function go(v){S.view=v;document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===v?'page':'false'));document.querySelectorAll('[data-view]').forEach(s=>s.hidden=s.dataset.view!==v);render();}
+
+/* ===== formulario de movimiento ===== */
+$('rTipo').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{S.tipo=b.dataset.t;syncForm();}));
+['mClase','mCaja','mMonto'].forEach(id=>$(id).addEventListener('input',syncForm));
+function syncForm(){
+  const g=S.tipo==='gasto';
+  $('rTipo').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t===S.tipo)));
+  document.querySelectorAll('.g-only').forEach(e=>e.hidden=!g);
+  document.querySelectorAll('.i-only').forEach(e=>e.hidden=g);
+  if(g){const c=$('mClase').value;
+    document.querySelectorAll('.cl-mo').forEach(e=>e.hidden=c!=='mano_obra');
+    document.querySelectorAll('.cl-part').forEach(e=>e.hidden=!(c==='material'||c==='mano_obra'||c==='subcontrato'));
+    document.querySelectorAll('.cl-prov').forEach(e=>e.hidden=c==='mano_obra');
+    document.querySelectorAll('.cl-fact').forEach(e=>e.hidden=$('mCaja').value!=='facturado');}
+  $('lMonto').textContent=g?'Monto pagado (total)':'Monto recibido (total)';
+  $('hMonto').textContent=g?'Lo que salió de la caja, con IVA si trae factura.':'Lo que entró a la caja.';
+  const m=+$('mMonto').value||0;
+  $('mCalc').textContent=(g&&$('mCaja').value==='facturado'&&m)?('Sin IVA: '+$$(m/(1+IVA))+' · IVA: '+$$(m-m/(1+IVA))):'';
+}
+function resetForm(){S.editId=null;$('fMov').reset();$('mFecha').value=hoyISO();$('mOrigen').value='Sra. Valerdi';$('mGuardar').textContent='Guardar';$('mCancelar').hidden=true;$('rTit').textContent='Registrar movimiento';syncForm();}
+$('mCancelar').addEventListener('click',resetForm);
+$('fMov').addEventListener('submit',async ev=>{
+  ev.preventDefault(); if(!puede()) return toast('Tu usuario no puede capturar.');
+  const g=S.tipo==='gasto', monto=r2($('mMonto').value);
+  if(!$('mFecha').value||!$('mConcepto').value.trim()||!(monto>0)) return toast('Llena fecha, concepto y monto.');
+  const clase=g?$('mClase').value:'';
+  const d={tipo:S.tipo,fecha:$('mFecha').value,caja:$('mCaja').value,concepto:$('mConcepto').value.trim(),monto,notas:$('mNotas').value.trim(),
+    clase, proveedor:g&&clase!=='mano_obra'?$('mProv').value.trim():'',
+    partida:g&&['material','mano_obra','subcontrato'].includes(clase)?$('mPartida').value:'',
+    trabajador:g&&clase==='mano_obra'?$('mTrab').value.trim():'', recibo:g&&clase==='mano_obra'?$('mRecibo').value.trim():'',
+    origen:g?'':$('mOrigen').value.trim(), formaPago:g?$('mPago').value:'',
+    factura:g&&$('mCaja').value==='facturado'?{folio:$('mFolio').value.trim(),estado:$('mFEst').value}:null};
+  $('mGuardar').disabled=true;
+  try{
+    if(S.editId){ d.editado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});
+      await S.db.collection('valerdi_mov').doc(S.editId).update(d); await bit('editó',d); toast('Cambios guardados');}
+    else{ d.creado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});
+      await S.db.collection('valerdi_mov').add(d); await bit('registró',d); toast('Movimiento guardado');}
+    resetForm();
+  }catch(e){toast('No se pudo guardar. Revisa tu conexión o tus permisos.');}
+  $('mGuardar').disabled=false;
+});
+function editar(m){
+  S.editId=m.id;S.tipo=m.tipo;go('registrar');
+  $('mFecha').value=m.fecha;$('mCaja').value=m.caja;$('mConcepto').value=m.concepto||'';$('mMonto').value=m.monto;$('mNotas').value=m.notas||'';
+  if(m.tipo==='gasto'){$('mClase').value=m.clase||'material';$('mProv').value=m.proveedor||'';$('mPartida').value=m.partida||'';$('mTrab').value=m.trabajador||'';$('mRecibo').value=m.recibo||'';$('mPago').value=m.formaPago||'Transferencia';$('mFolio').value=(m.factura&&m.factura.folio)||'';$('mFEst').value=(m.factura&&m.factura.estado)||'pendiente';}
+  else $('mOrigen').value=m.origen||'';
+  $('mGuardar').textContent='Guardar cambios';$('mCancelar').hidden=false;$('rTit').textContent='Editar movimiento';syncForm();$('mConcepto').focus();
+}
+async function borrar(m){
+  if(!confirmar('¿Borrar "'+m.concepto+'" por '+$$(m.monto)+'? Queda registrado en la bitácora.'))return;
+  try{await S.db.collection('valerdi_mov').doc(m.id).delete();await bit('borró',m);toast('Movimiento borrado');}catch(e){toast('No se pudo borrar.');}
+}
+function confirmar(t){return window.confirm(t);}
+async function bit(accion,d){
+  const det=(d.tipo==='ingreso'?'Ingreso':'Gasto')+' · '+(d.concepto||'')+' · '+$$(d.monto)+' · '+(CAJAS[d.caja]||'')+(d.fecha?' · '+fdate(d.fecha):'');
+  try{await S.db.collection('valerdi_bitacora').add(Object.assign(yo(),{accion,detalle:det,en:firebase.firestore.FieldValue.serverTimestamp()}));}catch(e){}
+}
+
+/* ===== destajos ===== */
+$('fDest').addEventListener('submit',async ev=>{
+  ev.preventDefault(); if(!puede()) return toast('Tu usuario no puede capturar.');
+  const d={trabajador:$('dTrab').value.trim(),trabajo:$('dTrabajo').value.trim(),partida:$('dPartida').value,monto:r2($('dMonto').value)};
+  if(!d.trabajador||!(d.monto>0)) return toast('Llena trabajador y monto.');
+  try{
+    if(S.editDest){d.editado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});await S.db.collection('valerdi_destajos').doc(S.editDest).update(d);}
+    else{d.creado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});await S.db.collection('valerdi_destajos').add(d);}
+    await S.db.collection('valerdi_bitacora').add(Object.assign(yo(),{accion:S.editDest?'editó destajo':'registró destajo',detalle:d.trabajador+' · '+d.trabajo+' · '+$$(d.monto),en:firebase.firestore.FieldValue.serverTimestamp()}));
+    S.editDest=null;$('fDest').reset();$('dGuardar').textContent='Guardar destajo';$('dCancelar').hidden=true;$('dTit').textContent='Agregar destajo';toast('Destajo guardado');
+  }catch(e){toast('No se pudo guardar.');}
+});
+$('dCancelar').addEventListener('click',()=>{S.editDest=null;$('fDest').reset();$('dGuardar').textContent='Guardar destajo';$('dCancelar').hidden=true;$('dTit').textContent='Agregar destajo';});
+
+/* ===== cálculos ===== */
+function calc(){
+  const gastos=S.movs.filter(m=>m.tipo==='gasto'), ingr=S.movs.filter(m=>m.tipo==='ingreso');
+  const cajas={};Object.keys(CAJAS).forEach(k=>cajas[k]={ing:0,gas:0});
+  S.movs.forEach(m=>{const c=cajas[m.caja];if(!c)return; if(m.tipo==='ingreso')c.ing+=m.monto; else c.gas+=m.monto;});
+  const obra=gastos.filter(m=>m.clase!=='ajeno');
+  const part={};PARTIDAS.forEach(p=>part[p[0]]={cd:p[2],mat:0,mo:0,sub:0});
+  const extra={[VARIAS]:{cd:0,mat:0,mo:0,sub:0},'Sin partida asignada':{cd:0,mat:0,mo:0,sub:0},'Gastos generales':{cd:0,mat:0,mo:0,sub:0}};
+  obra.forEach(m=>{const v=sinIVA(m);let row;
+    if(m.clase==='general'){row=extra['Gastos generales'];row.mat+=v;return;}
+    row=part[m.partida]||extra[m.partida===VARIAS?VARIAS:'Sin partida asignada'];
+    if(m.clase==='material')row.mat+=v; else if(m.clase==='mano_obra')row.mo+=v; else row.sub+=v;});
+  const costo=obra.reduce((a,m)=>a+sinIVA(m),0);
+  const cobrado=ingr.filter(m=>(m.origen||'').toLowerCase().includes('valerdi')).reduce((a,m)=>a+m.monto,0);
+  return {gastos,ingr,cajas,part,extra,costo,cobrado,obra};
+}
+
+/* ===== render ===== */
+function render(){
+  if(!S.perfil)return;
+  const C=calc();
+  const v=S.view;
+  if(v==='tablero')renderTablero(C);
+  if(v==='movs')renderMovs();
+  if(v==='mo')renderDest();
+  if(v==='facturas')renderFact();
+  if(v==='bitacora')renderBit();
+  if(v==='usuarios')renderUsr();
+  // listas de autocompletar
+  const prov=[...new Set(S.movs.map(m=>m.proveedor).filter(Boolean))].sort();$('lProv').replaceChildren(...prov.map(p=>{const o=el('option');o.value=p;return o;}));
+  const trab=[...new Set(S.movs.map(m=>m.trabajador).concat(S.dest.map(d=>d.trabajador)).filter(Boolean))].sort();$('lTrab').replaceChildren(...trab.map(p=>{const o=el('option');o.value=p;return o;}));
+}
+function kpi(lab,val,small,neg){const k=el('div','kpi');k.append(el('span',null,lab));const s=el('strong',neg?'neg':null,val);k.append(s);if(small)k.append(el('small',null,small));return k;}
+function estado(cd,real){
+  if(real===0)return ['Sin gasto','e-muted'];
+  if(cd===0)return ['Sin presupuesto','e-warn'];
+  const p=real/cd; if(p>1)return ['Excedido','e-bad']; if(p>=ALERTA)return ['Por agotarse','e-warn']; return ['En presupuesto','e-ok'];
+}
+function renderTablero(C){
+  const dias=Math.round((new Date(FIN+'T12:00:00')-new Date(hoyISO()+'T12:00:00'))/864e5);
+  $('tDias').textContent=dias>=0?('faltan '+dias+' días para la entrega'):('entrega vencida hace '+(-dias)+' días');
+  $('importBox').hidden=!(esAdmin()&&S.movs.length===0&&S.dest.length===0);
+  const cj=$('cajas');cj.replaceChildren();
+  Object.entries(CAJAS).forEach(([k,lab])=>{const c=C.cajas[k];const b=el('div','caja');b.append(el('h3',null,'Caja '+lab.toLowerCase()));
+    const dl=el('dl');[['Ingresos',c.ing],['Gastos',c.gas]].forEach(([a,b2])=>{dl.append(el('dt',null,a),el('dd',null,$$(b2)));});
+    const s=c.ing-c.gas;const dt=el('dt','saldo','Saldo');const dd=el('dd','saldo'+(s<0?' neg':''),$$(s));dl.append(dt,dd);b.append(dl);cj.append(b);});
+  const tot=Object.values(C.cajas).reduce((a,c)=>a+c.ing-c.gas,0);
+  const k=$('kpis');k.replaceChildren(
+    kpi('Presupuesto contratado',$$(VENTA),'Venta sin IVA'),
+    kpi('Costo directo presupuestado',$$(CDIR),'Venta ÷ 1.265 (indirecto 10 %, utilidad 15 %)'),
+    kpi('Costo real de obra',$$(C.costo),'Sin IVA, sin préstamos ni ajenos'),
+    kpi('Costo directo disponible',$$(CDIR-C.costo),pct(CDIR?C.costo/CDIR:0)+' ejercido',CDIR-C.costo<0),
+    kpi('Saldo total en cajas',$$(tot),'Facturado + sin factura',tot<0),
+    kpi('Facturas sin cuadrar',String(C.gastos.filter(m=>m.caja==='facturado'&&(!m.factura||m.factura.estado!=='cuadrada')).length),'Ver pestaña Facturas'));
+  const tb=$('tPartidas').tBodies[0];tb.replaceChildren();
+  let T={cd:0,mat:0,mo:0,sub:0};
+  const filas=PARTIDAS.map(p=>[p[0],C.part[p[0]]]).concat(Object.entries(C.extra).filter(([n,r])=>r.mat+r.mo+r.sub>0));
+  filas.forEach(([n,r])=>{const real=r.mat+r.mo+r.sub;T.cd+=r.cd;T.mat+=r.mat;T.mo+=r.mo;T.sub+=r.sub;
+    const tr=el('tr');tr.append(el('td',null,n));[r.cd,r.mat,r.mo,r.sub,real].forEach(x=>tr.append(el('td','n',$$(x))));
+    const disp=r.cd-real;tr.append(el('td','n'+(disp<0?' neg':''),$$(disp)));
+    const tdp=el('td');if(r.cd>0){const p=real/r.cd;tdp.append(el('span',null,pct(p)));const bar=el('div','bar');const i=el('i',p>1?'over':null);i.style.width=Math.min(100,p*100)+'%';bar.append(i);tdp.append(bar);}else tdp.textContent='—';tr.append(tdp);
+    const [et,ec]=r.cd===0&&n!=='Gastos generales'&&real>0?['Asignar partida','e-warn']:(n==='Gastos generales'?['Indirecto','e-muted']:estado(r.cd,real));
+    const td=el('td');td.append(el('span','estado '+ec,et));tr.append(td);tb.append(tr);});
+  const tr=el('tr','tot');tr.append(el('td',null,'Total'));const real=T.mat+T.mo+T.sub;[T.cd,T.mat,T.mo,T.sub,real,T.cd-real].forEach(x=>tr.append(el('td','n',$$(x))));tr.append(el('td',null,T.cd?pct(real/T.cd):''),el('td'));tb.append(tr);
+  // semanas
+  const sb=$('tSemanas').tBodies[0];sb.replaceChildren();const wk={};
+  C.obra.forEach(m=>{const w=m.fecha<INICIO?'antes':lunes(m.fecha);wk[w]=wk[w]||{mat:0,mo:0,otr:0};const v=sinIVA(m);if(m.clase==='material')wk[w].mat+=v;else if(m.clase==='mano_obra')wk[w].mo+=v;else wk[w].otr+=v;});
+  const semanas=['antes'];for(let d=new Date(INICIO+'T12:00:00');d<=new Date(FIN+'T12:00:00');d.setDate(d.getDate()+7))semanas.push(d.toISOString().slice(0,10));
+  Object.keys(wk).filter(w=>!semanas.includes(w)).sort().forEach(w=>semanas.push(w));
+  let ST={mat:0,mo:0,otr:0};
+  semanas.forEach(w=>{const x=wk[w]||{mat:0,mo:0,otr:0};ST.mat+=x.mat;ST.mo+=x.mo;ST.otr+=x.otr;const tr=el('tr');tr.append(el('td',null,w==='antes'?'Antes del 9 nov':'Semana del '+fdate(w)));[x.mat,x.mo,x.otr,x.mat+x.mo+x.otr].forEach(v=>tr.append(el('td','n',$$(v))));sb.append(tr);});
+  const st=el('tr','tot');st.append(el('td',null,'Total'));[ST.mat,ST.mo,ST.otr,ST.mat+ST.mo+ST.otr].forEach(v=>st.append(el('td','n',$$(v))));sb.append(st);
+  // ajenos
+  const ab=$('tAjenos').tBodies[0];ab.replaceChildren();const aj=C.gastos.filter(m=>m.clase==='ajeno').sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  if(!aj.length){const tr=el('tr');const td=el('td','e-muted','Sin registros');td.colSpan=4;tr.append(td);ab.append(tr);}
+  let at=0;aj.forEach(m=>{at+=m.monto;const tr=el('tr');tr.append(el('td',null,fdate(m.fecha)),el('td',null,m.concepto),el('td',null,CAJAS[m.caja]),el('td','n',$$(m.monto)));ab.append(tr);});
+  if(aj.length){const tr=el('tr','tot');tr.append(el('td',null,'Total'),el('td'),el('td'),el('td','n',$$(at)));ab.append(tr);}
+}
+function filtrados(){
+  const t=$('fTipo').value,c=$('fCaja').value,cl=$('fClase').value,q=$('fTxt').value.trim().toLowerCase();
+  return S.movs.filter(m=>(!t||m.tipo===t)&&(!c||m.caja===c)&&(!cl||m.clase===cl)&&(!q||[m.concepto,m.proveedor,m.trabajador,m.origen].join(' ').toLowerCase().includes(q)))
+    .sort((a,b)=>b.fecha.localeCompare(a.fecha));
+}
+['fTipo','fCaja','fClase','fTxt'].forEach(id=>$(id).addEventListener('input',renderMovs));
+function renderMovs(){
+  const tb=$('tMovs').tBodies[0];tb.replaceChildren();const L=filtrados();let tI=0,tG=0;
+  L.forEach(m=>{const tr=el('tr');tr.append(el('td',null,fdate(m.fecha)));
+    const c=el('td');c.append(el('div',null,m.concepto));const s=[m.proveedor,m.trabajador,m.origen,m.factura&&m.factura.folio?'Folio '+m.factura.folio:''].filter(Boolean).join(' · ');if(s)c.append(el('div','who',s));tr.append(c);
+    tr.append(el('td',null,m.tipo==='ingreso'?'Ingreso':CLASES[m.clase]||''),el('td',null,m.partida||''),el('td',null,CAJAS[m.caja]||''));
+    tr.append(el('td','n'+(m.tipo==='gasto'?' neg':''),(m.tipo==='gasto'?'−':'')+$$(m.monto)),el('td','n',m.tipo==='gasto'?$$(sinIVA(m)):''));
+    const w=el('td','who');const cr=m.creado||{};w.textContent=(cr.nombre||cr.email||'')+(m.editado?' · editó '+(m.editado.nombre||m.editado.email):'');tr.append(w);
+    const a=el('td');const mio=cr.uid===S.user.uid;
+    if(esAdmin()||(puede()&&mio)){const b=el('button','linkbtn','Editar');b.type='button';b.addEventListener('click',()=>editar(m));a.append(b);}
+    if(esAdmin()){const b=el('button','linkbtn','Borrar');b.type='button';b.addEventListener('click',()=>borrar(m));a.append(b);}
+    tr.append(a);tb.append(tr);if(m.tipo==='ingreso')tI+=m.monto;else tG+=m.monto;});
+  const tf=$('tMovs').tFoot;tf.replaceChildren();const tr=el('tr','tot');const td=el('td',null,L.length+' movimientos · Ingresos '+$$(tI)+' · Gastos '+$$(tG));td.colSpan=9;tr.append(td);tf.append(tr);
+}
+$('btnCsv').addEventListener('click',()=>{
+  const H=['Fecha','Tipo','Caja','Tipo de gasto','Concepto','Proveedor','Partida','Trabajador','Recibo','Origen','Monto','Sin IVA','Folio factura','Estado factura','Forma de pago','Notas','Capturó','Editó'];
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=filtrados().map(m=>[fdate(m.fecha),m.tipo,CAJAS[m.caja],CLASES[m.clase]||'',m.concepto,m.proveedor,m.partida,m.trabajador,m.recibo,m.origen,m.monto,m.tipo==='gasto'?sinIVA(m):'',m.factura&&m.factura.folio,m.factura&&FEST[m.factura.estado],m.formaPago,m.notas,(m.creado||{}).nombre,(m.editado||{}).nombre]);
+  const csv='﻿'+[H].concat(rows).map(r=>r.map(q).join(',')).join('\r\n');
+  const a=el('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='VALERDI_movimientos_'+hoyISO()+'.csv';document.body.append(a);a.click();a.remove();
+});
+function renderDest(){
+  const tb=$('tDest').tBodies[0];tb.replaceChildren();const pag={};
+  S.movs.filter(m=>m.tipo==='gasto'&&m.clase==='mano_obra').forEach(m=>{const k=(m.trabajador||'Sin nombre').trim().toLowerCase();pag[k]=(pag[k]||0)+m.monto;});
+  const vistos=new Set();let T=[0,0];
+  S.dest.slice().sort((a,b)=>a.trabajador.localeCompare(b.trabajador)).forEach(d=>{const k=d.trabajador.trim().toLowerCase();vistos.add(k);const p=pag[k]||0;T[0]+=d.monto;T[1]+=p;
+    const tr=el('tr');tr.append(el('td',null,d.trabajador),el('td',null,d.trabajo||''),el('td',null,d.partida||''),el('td','n',$$(d.monto)),el('td','n',$$(p)));
+    const por=d.monto-p;tr.append(el('td','n'+(por<0?' neg':''),$$(por)));
+    const tdp=el('td');const pr=d.monto?p/d.monto:0;tdp.append(el('span',pr>1?'estado e-bad':null,pr>1?'Pagado de más':pct(pr)));const bar=el('div','bar');const i=el('i',pr>1?'over':null);i.style.width=Math.min(100,pr*100)+'%';bar.append(i);tdp.append(bar);tr.append(tdp);
+    const a=el('td');if(puede()){const b=el('button','linkbtn','Editar');b.type='button';b.addEventListener('click',()=>{S.editDest=d.id;$('dTrab').value=d.trabajador;$('dTrabajo').value=d.trabajo||'';$('dPartida').value=d.partida||'';$('dMonto').value=d.monto;$('dGuardar').textContent='Guardar cambios';$('dCancelar').hidden=false;$('dTit').textContent='Editar destajo';$('dTrab').focus();});a.append(b);}
+    if(esAdmin()){const b=el('button','linkbtn','Borrar');b.type='button';b.addEventListener('click',async()=>{if(!confirmar('¿Borrar el destajo de '+d.trabajador+'?'))return;await S.db.collection('valerdi_destajos').doc(d.id).delete();await S.db.collection('valerdi_bitacora').add(Object.assign(yo(),{accion:'borró destajo',detalle:d.trabajador+' · '+$$(d.monto),en:firebase.firestore.FieldValue.serverTimestamp()}));});a.append(b);}
+    tr.append(a);tb.append(tr);});
+  Object.keys(pag).filter(k=>!vistos.has(k)).forEach(k=>{const m=S.movs.find(x=>(x.trabajador||'Sin nombre').trim().toLowerCase()===k);T[1]+=pag[k];
+    const tr=el('tr');tr.append(el('td',null,(m&&m.trabajador)||'Sin nombre'),el('td','e-muted','Sin destajo registrado'),el('td'),el('td','n','—'),el('td','n',$$(pag[k])),el('td'),el('td'),el('td'));tb.append(tr);});
+  const tr=el('tr','tot');tr.append(el('td',null,'Total'),el('td'),el('td'),el('td','n',$$(T[0])),el('td','n',$$(T[1])),el('td','n',$$(T[0]-T[1])),el('td'),el('td'));tb.append(tr);
+  $('dPanel').hidden=!puede();
+}
+$('xEst').addEventListener('input',renderFact);
+function renderFact(){
+  const f=$('xEst').value;const L=S.movs.filter(m=>m.tipo==='gasto'&&m.caja==='facturado');
+  const st=m=>(m.factura&&m.factura.estado)||'pendiente';
+  const cnt={pendiente:0,recibida:0,cuadrada:0},mon={pendiente:0,recibida:0,cuadrada:0};L.forEach(m=>{cnt[st(m)]++;mon[st(m)]+=m.monto;});
+  $('xKpis').replaceChildren(kpi('Pendientes de recibir',String(cnt.pendiente),$$(mon.pendiente)),kpi('Recibidas sin cuadrar',String(cnt.recibida),$$(mon.recibida)),kpi('Cuadradas',String(cnt.cuadrada),$$(mon.cuadrada)));
+  const tb=$('tFact').tBodies[0];tb.replaceChildren();
+  L.filter(m=>!f||(f==='abiertas'?st(m)!=='cuadrada':st(m)===f)).sort((a,b)=>a.fecha.localeCompare(b.fecha)).forEach(m=>{
+    const tr=el('tr');tr.append(el('td',null,fdate(m.fecha)),el('td',null,m.concepto),el('td',null,m.proveedor||''),el('td','n',$$(m.monto)));
+    const tf=el('td');const inp=el('input');inp.value=(m.factura&&m.factura.folio)||'';inp.setAttribute('aria-label','Folio de factura de '+m.concepto);inp.disabled=!puede();tf.append(inp);tr.append(tf);
+    const te=el('td');const sel=el('select');Object.entries(FEST).forEach(([k,v])=>{const o=el('option',null,v);o.value=k;sel.append(o);});sel.value=st(m);sel.disabled=!puede();sel.setAttribute('aria-label','Estado de la factura de '+m.concepto);te.append(sel);tr.append(te);
+    const save=async()=>{try{await S.db.collection('valerdi_mov').doc(m.id).update({factura:{folio:inp.value.trim(),estado:sel.value},editado:Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()})});await bit('actualizó factura ('+FEST[sel.value]+')',m);toast('Factura actualizada');}catch(e){toast('No se pudo guardar.');}};
+    sel.addEventListener('change',save);inp.addEventListener('change',save);tb.append(tr);});
+}
+function renderBit(){
+  const tb=$('tBit').tBodies[0];tb.replaceChildren();
+  S.bit.forEach(b=>{const tr=el('tr');const d=b.en&&b.en.toDate?b.en.toDate():null;
+    tr.append(el('td',null,d?d.toLocaleString('es-MX',{dateStyle:'short',timeStyle:'short'}):'…'),el('td',null,b.nombre||b.email||''),el('td',null,b.accion||''),el('td',null,b.detalle||''));tb.append(tr);});
+}
+function renderUsr(){
+  const tb=$('tUsr').tBodies[0];tb.replaceChildren();
+  S.usrs.slice().sort((a,b)=>(a.rol==='pendiente'?-1:0)-(b.rol==='pendiente'?-1:0)||(a.nombre||'').localeCompare(b.nombre||'')).forEach(u=>{
+    const tr=el('tr');tr.append(el('td',null,u.nombre||''),el('td',null,u.email||''));
+    const td=el('td');const sel=el('select');Object.entries(ROLES).forEach(([k,v])=>{const o=el('option',null,v);o.value=k;sel.append(o);});sel.value=u.rol;sel.disabled=u.id===S.user.uid;sel.setAttribute('aria-label','Rol de '+(u.nombre||u.email));
+    sel.addEventListener('change',()=>S.db.collection('valerdi_usuarios').doc(u.id).update({rol:sel.value}).then(()=>{toast((u.nombre||u.email)+': '+ROLES[sel.value]);S.db.collection('valerdi_bitacora').add(Object.assign(yo(),{accion:'cambió rol',detalle:(u.nombre||u.email)+' → '+ROLES[sel.value],en:firebase.firestore.FieldValue.serverTimestamp()}));}).catch(()=>toast('No se pudo cambiar el rol.')));
+    td.append(sel);tr.append(td);tb.append(tr);});
+}
+
+/* ===== importación única del Excel ===== */
+$('btnImport').addEventListener('click',async()=>{
+  if(!esAdmin()||S.movs.length)return;
+  if(!confirmar('Se importarán 18 movimientos y 4 destajos del Excel de Mariela. ¿Continuar?'))return;
+  $('btnImport').disabled=true;
+  try{const b=S.db.batch();const now=firebase.firestore.FieldValue.serverTimestamp();const who=Object.assign(yo(),{en:now});
+    SEED_MOV.forEach(([tipo,fecha,caja,clase,concepto,monto,prov,partida,trab])=>{const r=S.db.collection('valerdi_mov').doc();
+      b.set(r,{tipo,fecha,caja,clase:tipo==='gasto'?clase:'',concepto,monto,proveedor:tipo==='gasto'&&clase!=='mano_obra'?(prov||''):'',origen:tipo==='ingreso'?(prov||''):'',partida:partida||'',trabajador:trab||'',recibo:'',formaPago:'',notas:'Importado del Excel de control de Mariela',factura:tipo==='gasto'&&caja==='facturado'?{folio:'',estado:'pendiente'}:null,creado:who});});
+    SEED_DEST.forEach(([t,tr,p,m])=>{b.set(S.db.collection('valerdi_destajos').doc(),{trabajador:t,trabajo:tr,partida:p,monto:m,creado:who});});
+    b.set(S.db.collection('valerdi_bitacora').doc(),Object.assign(yo(),{accion:'importó',detalle:'18 movimientos y 4 destajos del Excel Ingresos_Egresos_remodelación_Valerdi',en:now}));
+    await b.commit();toast('Importación lista');
+  }catch(e){toast('No se pudo importar. Revisa las reglas de Firebase.');$('btnImport').disabled=false;}
+});
+
+/* ===== acceso ===== */
+if(!window.firebase){$('gMsg').textContent='No se pudo cargar el servicio de acceso. Revisa tu conexión y recarga.';return;}
+firebase.initializeApp({"apiKey":"AIzaSyBDGTPF0zIokqDH7VKj6oYASmVRCL3Gt7M","authDomain":"grupo-alaris-obra.firebaseapp.com","projectId":"grupo-alaris-obra","storageBucket":"grupo-alaris-obra.firebasestorage.app","messagingSenderId":"439876810110","appId":"1:439876810110:web:481b62561a4ef861fdef2f"});
+const auth=firebase.auth(),db=firebase.firestore();S.db=db;
+let registrando=false,unsubs=[];
+const errTxt=e=>({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'No existe una cuenta con ese correo. Usa "Crear cuenta".','auth/email-already-in-use':'Ese correo ya tiene cuenta: usa "Entrar".','auth/weak-password':'La contraseña debe tener al menos 6 caracteres.','auth/invalid-email':'El correo no es válido.','auth/popup-closed-by-user':'Se cerró la ventana de Google antes de terminar.','auth/unauthorized-domain':'Este dominio no está autorizado en Firebase.'}[e&&e.code]||'No se pudo completar. Intenta de nuevo.');
+$('gGoogle').addEventListener('click',()=>auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>$('gMsg').textContent=errTxt(e)));
+$('gToggle').addEventListener('click',()=>{registrando=!registrando;$('gNomWrap').hidden=!registrando;$('gSubmit').textContent=registrando?'Crear cuenta':'Entrar';$('gToggle').textContent=registrando?'Ya tengo cuenta':'Crear cuenta';$('gPass').autocomplete=registrando?'new-password':'current-password';});
+$('gForm').addEventListener('submit',async ev=>{ev.preventDefault();$('gMsg').textContent='';const em=$('gEmail').value.trim(),pw=$('gPass').value;
+  try{if(registrando){const c=await auth.createUserWithEmailAndPassword(em,pw);const n=$('gNombre').value.trim();if(n)await c.user.updateProfile({displayName:n});}else await auth.signInWithEmailAndPassword(em,pw);}catch(e){$('gMsg').textContent=errTxt(e);}});
+$('salir').addEventListener('click',()=>auth.signOut());
+function showGate(modo){$('gate').hidden=false;$('app').hidden=true;$('gLogin').hidden=modo!=='login';$('gPend').hidden=modo!=='pend';$('quien').hidden=modo==='login';}
+auth.onAuthStateChanged(async u=>{
+  unsubs.forEach(f=>f());unsubs=[];S.user=u;S.perfil=null;
+  if(!u){$('quien').hidden=true;showGate('login');return;}
+  const ref=db.collection('valerdi_usuarios').doc(u.uid);
+  let snap;try{snap=await ref.get();}catch(e){$('gMsg').textContent='No hay permiso para leer los usuarios. Falta pegar las reglas de Firebase.';showGate('login');return;}
+  if(!snap.exists){const em=(u.email||'').toLowerCase();const rol=em===ADMIN_EMAIL?'admin':(em==='aracel80@gmail.com'?'captura':'pendiente');
+    try{await ref.set({nombre:u.displayName||'',email:u.email||'',rol,creadoEn:firebase.firestore.FieldValue.serverTimestamp()});snap=await ref.get();}catch(e){$('gMsg').textContent='No se pudo registrar la cuenta.';return;}}
+  S.perfil=snap.data();
+  $('quienTxt').textContent=(S.perfil.nombre||u.email)+' · '+ROLES[S.perfil.rol];$('quien').hidden=false;
+  if(S.perfil.rol==='pendiente'){showGate('pend');return;}
+  $('gate').hidden=true;$('app').hidden=false;$('tabUsuarios').hidden=!esAdmin();
+  document.querySelectorAll('[data-view="registrar"]').forEach(s=>s.dataset.ro=puede()?'':'1');
+  if(!puede()){document.querySelector('nav.tabs [data-v="registrar"]').hidden=true;}
+  unsubs.push(db.collection('valerdi_mov').onSnapshot(s=>{S.movs=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();},e=>toast('Sin permiso para leer movimientos.')));
+  unsubs.push(db.collection('valerdi_destajos').onSnapshot(s=>{S.dest=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();},()=>{}));
+  unsubs.push(db.collection('valerdi_bitacora').orderBy('en','desc').limit(300).onSnapshot(s=>{S.bit=s.docs.map(d=>d.data());render();},()=>{}));
+  if(esAdmin())unsubs.push(db.collection('valerdi_usuarios').onSnapshot(s=>{S.usrs=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();},()=>{}));
+  resetForm();go('tablero');
+});
+})();
+</script>
+</body>
+</html>
