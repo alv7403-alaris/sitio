@@ -291,12 +291,12 @@ const ROLES={pendiente:'Pendiente',consulta:'Consulta',captura:'Captura',admin:'
 /* Excel de control de Mariela (Ingresos_Egresos_remodelación_Valerdi.xlsx), importación única */
 const SEED_MOV=[
  ['ingreso','2026-11-06','facturado','','Transferencia a LBI Group',150000,'LBI Group'],
- ['gasto','2026-11-09','facturado','material','Materiales Brinsa',17941,'Brinsa'],
- ['gasto','2026-11-09','facturado','material','Materiales Colombres',6506,'Colombres'],
- ['gasto','2026-11-10','facturado','material','Piso',23500,'POLAD','Acabados'],
- ['gasto','2026-11-10','facturado','general','Gasolina',1017.46,''],
- ['gasto','2026-11-11','facturado','material','Material eléctrico',19819.68,'','Instalación eléctrica'],
- ['gasto','2026-11-11','facturado','material','Material hidráulico y sanitario',2428.71,'','Instalación hidrosanitaria'],
+ ['gasto','2026-11-09','facturado','material','Materiales Brinsa',17941,'Brinsa','','','','pendiente','No llegó factura de Brinsa a contacto@grupoalaris.mx (revisado 21/11/2026)'],
+ ['gasto','2026-11-09','facturado','material','Materiales Colombres (block macizo y cemento)',6506,'Materiales Colombres','Albañilería','','T41593','cuadrada','CFDI T41593 del 12/11/2026, UUID 46C8A336-AB97-4E4B-A0CD-890AA9C41ABB'],
+ ['gasto','2026-11-10','facturado','material','Piso cerámico 60x60 (60 cajas)',23500,'POLAD · Pamela Denisse López Acosta','Acabados','','2026114','recibida','La factura 2026114 (UUID AC48A597-22E2-4C74-B3BC-F772954350A5) es por $23,950.00 y el Excel dice $23,500.00: diferencia de $450.00 por aclarar'],
+ ['gasto','2026-11-10','facturado','general','Gasolina',1017.46,'Gasolinera Aries','','','612950','cuadrada','CFDI 612950 del 12/11/2026, UUID 5815a218-6da0-4654-8c98-b738b8bcb637'],
+ ['gasto','2026-11-11','facturado','material','Material eléctrico',19819.68,'Distribuidora Tamex','Instalación eléctrica','','4133634','cuadrada','CFDI 4133634 del 11/11/2026, UUID 58db05bb-5ed8-4129-9591-a74e53adfbf4'],
+ ['gasto','2026-11-11','facturado','material','Material hidráulico y sanitario',2428.71,'Tuberías de Oriente','Instalación hidrosanitaria','','FVQ7161','cuadrada','CFDI FVQ7161 del 11/11/2026, UUID 2607F93D-BD6D-4979-87D6-200A4BB95C61'],
  ['ingreso','2026-11-06','sin_factura','','Transferencia a LBI Group',100000,'LBI Group'],
  ['gasto','2026-11-09','sin_factura','ajeno','Préstamo para San Rafael (comac)',5000,''],
  ['gasto','2026-11-09','sin_factura','material','Materiales Brinsa',5850,'Brinsa'],
@@ -562,8 +562,8 @@ $('btnImport').addEventListener('click',async()=>{
   if(!confirmar('Se importarán 18 movimientos y 4 destajos del Excel de Mariela. ¿Continuar?'))return;
   $('btnImport').disabled=true;
   try{const b=S.db.batch();const now=firebase.firestore.FieldValue.serverTimestamp();const who=Object.assign(yo(),{en:now});
-    SEED_MOV.forEach(([tipo,fecha,caja,clase,concepto,monto,prov,partida,trab])=>{const r=S.db.collection('valerdi_mov').doc();
-      b.set(r,{tipo,fecha,caja,clase:tipo==='gasto'?clase:'',concepto,monto,proveedor:tipo==='gasto'&&clase!=='mano_obra'?(prov||''):'',origen:tipo==='ingreso'?(prov||''):'',partida:partida||'',trabajador:trab||'',recibo:'',formaPago:'',notas:'Importado del Excel de control de Mariela',factura:tipo==='gasto'&&caja==='facturado'?{folio:'',estado:'pendiente'}:null,creado:who});});
+    SEED_MOV.forEach(([tipo,fecha,caja,clase,concepto,monto,prov,partida,trab,folio,fest,nota])=>{const r=S.db.collection('valerdi_mov').doc();
+      b.set(r,{tipo,fecha,caja,clase:tipo==='gasto'?clase:'',concepto,monto,proveedor:tipo==='gasto'&&clase!=='mano_obra'?(prov||''):'',origen:tipo==='ingreso'?(prov||''):'',partida:partida||'',trabajador:trab||'',recibo:'',formaPago:'',notas:'Importado del Excel de control de Mariela'+(nota?'. '+nota:''),factura:tipo==='gasto'&&caja==='facturado'?{folio:folio||'',estado:fest||'pendiente'}:null,creado:who});});
     SEED_DEST.forEach(([t,tr,p,m])=>{b.set(S.db.collection('valerdi_destajos').doc(),{trabajador:t,trabajo:tr,partida:p,monto:m,creado:who});});
     b.set(S.db.collection('valerdi_bitacora').doc(),Object.assign(yo(),{accion:'importó',detalle:'18 movimientos y 4 destajos del Excel Ingresos_Egresos_remodelación_Valerdi',en:now}));
     await b.commit();toast('Importación lista');
