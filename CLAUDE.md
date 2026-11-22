@@ -27,6 +27,7 @@ Léelo completo antes de cualquier cambio. El diseño visual está en `DESIGN.md
 | `/dro/` | Cuaderno del DRO (beta) + `kit-normativa.zip` | Lleva GoatCounter; ver sección 6 |
 | `/9y13/`, `/arboleda/`, `/depas/modelo/` | Páginas de proyecto con visor 3D (.glb) | |
 | `/sitio/…` | Tableros privados para clientes (DEPAS, UMMANA, revisión de proyecto) | Excluidos en `robots.txt` |
+| `/panel/` | Panel de proyectos del Director: acceso único a tableros, modelos y carpetas | Ligas cifradas con contraseña (PBKDF2-SHA256 + AES-GCM, igual que `/socios/`); `noindex`. Al agregar un proyecto se regenera el cofre |
 
 Cada página es una carpeta con su `index.html`. Las ligas internas usan rutas relativas a la raíz (`/dro/`), terminadas en `/`.
 

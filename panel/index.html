@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#201E1F">
+<title>Panel de proyectos · Grupo Alaris</title>
+<link rel="icon" href="/marca/alaris-simbolo-oscuro.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/marca/alaris-simbolo-oscuro.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#201E1F;--panel:#2A2728;--line:#3D393A;--ink:#EDEAE4;--muted:#A8A29A;--accent:#D1AE6C;--red-text:#FF5A5F;--red-fill:#C8252B;--rojo:#EC3237;--oro:#D1AE6C;--negro:#201E1F;color-scheme:dark}
+@media (prefers-color-scheme: light){:root{--bg:#EDEAE4;--panel:#E2DED6;--line:#CFC9BF;--ink:#201E1F;--muted:#5B5652;--accent:#7A5F2A;--red-text:#B8161C;color-scheme:light}}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Archivo,"IBM Plex Sans",sans-serif;line-height:1.15;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.saltar{position:absolute;left:-9999px;top:8px;background:var(--accent);color:var(--negro);padding:8px 16px;border-radius:4px;font-weight:600;z-index:10}
+.saltar:focus{left:16px}
+.wrap{width:min(1200px,100% - 32px);margin-inline:auto}
+@media (min-width:600px){.wrap{width:min(1200px,100% - 48px)}}
+@media (min-width:900px){.wrap{width:min(1200px,100% - 64px)}}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.marca img{height:36px;width:auto}
+.marca span{font-family:"IBM Plex Mono",monospace;font-size:.875rem;color:var(--muted)}
+main{padding-block:32px 64px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:4px;font:600 1rem "IBM Plex Sans",sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--accent)}
+.btn-p{background:var(--oro);color:var(--negro);border-color:var(--oro)}
+.btn-s{background:transparent;color:var(--accent)}
+.btn-s:hover{background:var(--panel)}
+.acceso{max-width:420px;margin:48px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:32px 24px}
+.acceso h1{font-size:1.75rem;margin-bottom:8px}
+.acceso p{color:var(--muted);margin:0 0 24px}
+label{display:block;font-weight:600;margin-bottom:8px}
+input[type=password],input[type=search]{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:1rem "IBM Plex Sans",sans-serif}
+.check{display:flex;align-items:center;gap:12px;margin:16px 0 24px;font-weight:400;min-height:44px}
+.check input{width:22px;height:22px;accent-color:var(--oro)}
+.error{color:var(--red-text);margin:12px 0 0;font-weight:600}
+.acceso .btn{width:100%}
+.barra{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:32px}
+.barra h1{font-size:clamp(1.75rem,4vw,2.25rem)}
+.barra p{color:var(--muted);margin:4px 0 0}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtros [aria-pressed="true"]{background:var(--oro);color:var(--negro);border-color:var(--oro)}
+.buscar{flex:1 1 220px;max-width:320px}
+.buscar label{position:absolute;left:-9999px}
+section{margin-bottom:40px}
+section h2{font-size:1.375rem;margin-bottom:16px;padding-left:12px;border-left:3px solid var(--rojo)}
+.generales{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.gen{display:block;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;text-decoration:none;color:var(--ink);min-height:44px}
+.gen:hover{border-color:var(--accent)}
+.gen strong{display:block;font-family:Archivo,sans-serif;font-size:1.125rem;color:var(--accent)}
+.gen span{display:block;color:var(--muted);font-size:.875rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.clave{font-family:"IBM Plex Mono",monospace;font-size:.875rem;color:var(--muted)}
+.card h3{font-size:1.375rem}
+.etapa{font-size:.875rem;color:var(--muted)}
+.etiqueta{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink);width:max-content}
+.ligas{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ligas .btn{flex:1 1 auto;font-size:.9375rem}
+.vacio{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.875rem}
+@media (prefers-reduced-motion: no-preference){.btn,.gen{transition:background-color .15s,border-color .15s}}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="top"><div class="wrap">
+  <a class="marca" href="/" aria-label="Grupo Alaris, ir al sitio">
+    <picture><source srcset="/marca/alaris-logo-claro.svg" media="(prefers-color-scheme: light)"><img src="/marca/alaris-logo-oscuro.svg" alt="Grupo Alaris" width="38" height="36"></picture>
+    <span>Panel de proyectos</span>
+  </a>
+  <button id="salir" class="btn btn-s" type="button" hidden>Salir</button>
+</div></header>
+
+<main id="contenido" tabindex="-1">
+<div class="wrap">
+
+<form id="acceso" class="acceso" autocomplete="on">
+  <h1>Panel de proyectos</h1>
+  <p>Acceso único a los tableros, modelos y carpetas de los proyectos activos.</p>
+  <input type="text" name="username" value="panel-alaris" autocomplete="username" hidden>
+  <label for="clave">Contraseña</label>
+  <input id="clave" name="password" type="password" autocomplete="current-password" required aria-describedby="error">
+  <label class="check"><input id="recordar" type="checkbox"> Recordar en este equipo</label>
+  <button class="btn btn-p" type="submit" id="entrar">Entrar</button>
+  <p id="error" class="error" role="alert" aria-live="assertive"></p>
+</form>
+
+<div id="panel" hidden>
+  <div class="barra">
+    <div>
+      <h1>Proyectos activos</h1>
+      <p id="resumen"></p>
+    </div>
+    <div class="filtros" role="group" aria-label="Filtrar por línea de negocio">
+      <button class="btn btn-s" type="button" data-f="todos" aria-pressed="true">Todos</button>
+      <button class="btn btn-s" type="button" data-f="propio" aria-pressed="false">Proyectos propios</button>
+      <button class="btn btn-s" type="button" data-f="consultoria" aria-pressed="false">Consultoría</button>
+    </div>
+    <div class="buscar"><label for="q">Buscar proyecto</label><input id="q" type="search" placeholder="Buscar proyecto o clave"></div>
+  </div>
+
+  <section aria-labelledby="h-gen"><h2 id="h-gen">Accesos generales</h2><div id="generales" class="generales"></div></section>
+  <section aria-labelledby="h-pro" data-linea="propio"><h2 id="h-pro">Proyectos propios del despacho</h2><div id="g-propio" class="grid"></div></section>
+  <section aria-labelledby="h-con" data-linea="consultoria"><h2 id="h-con">Consultoría en control de obra</h2><div id="g-consultoria" class="grid"></div></section>
+  <p id="sinres" class="vacio" hidden>No hay proyectos que coincidan con la búsqueda.</p>
+</div>
+
+</div>
+</main>
+<footer><div class="wrap">Grupo Alaris · contacto@grupoalaris.mx · Uso interno. Para agregar o quitar un proyecto, pídelo a Claude.</div></footer>
+
+<script>
+const COFRE = {"salt": "IF1T+UZx0GYJ8c3/+PZAhg==", "iv": "PSCm68YwCqR/97zK", "iter": 310000, "data": "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"};
+(function(){
+  const $=id=>document.getElementById(id);
+  const enc=new TextEncoder(), dec=new TextDecoder();
+  const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+  const LLAVE='alaris-panel-clave';
+  let fallos=0, bloqueo=0, datos=null, filtro='todos';
+
+  async function abrir(pw){
+    const base=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+    const k=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:b64(COFRE.salt),iterations:COFRE.iter},base,{name:'AES-GCM',length:256},false,['decrypt']);
+    const plano=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(COFRE.iv)},k,b64(COFRE.data));
+    return JSON.parse(dec.decode(plano));
+  }
+  function el(tag,attrs,txt){const e=document.createElement(tag);if(attrs)for(const a in attrs)e.setAttribute(a,attrs[a]);if(txt!=null)e.textContent=txt;return e;}
+  function liga(texto,url,clase){
+    const a=el('a',{href:url,class:clase,target:'_blank',rel:'noopener noreferrer'},texto);
+    a.setAttribute('aria-label',texto+' (se abre en otra pestaña)');return a;
+  }
+  function pintar(){
+    const g=$('generales');g.replaceChildren();
+    datos.generales.forEach(x=>{const a=liga(x.t,x.u,'gen');a.textContent='';a.append(el('strong',null,x.t),el('span',null,x.d));a.setAttribute('aria-label',x.t+'. '+x.d+' (se abre en otra pestaña)');g.append(a);});
+    ['propio','consultoria'].forEach(l=>$('g-'+l).replaceChildren());
+    datos.proyectos.forEach(p=>{
+      const c=el('article',{class:'card','data-linea':p.l,'data-busca':(p.c+' '+p.n).toLowerCase()});
+      c.append(el('span',{class:'clave'},p.c),el('h3',null,p.n),el('span',{class:'etapa'},p.e),
+               el('span',{class:'etiqueta'},p.l==='propio'?'Proyecto propio':'Consultoría'));
+      const d=el('div',{class:'ligas'});
+      p.links.forEach(([t,u],i)=>{const a=liga(t,u,'btn '+(i===0&&t!=='Carpeta'?'btn-p':'btn-s'));a.setAttribute('aria-label',t+' de '+p.n+' (se abre en otra pestaña)');d.append(a);});
+      c.append(d);$('g-'+p.l).append(c);
+    });
+    const np=datos.proyectos.filter(p=>p.l==='propio').length;
+    $('resumen').textContent=datos.proyectos.length+' proyectos · '+np+' propios · '+(datos.proyectos.length-np)+' de consultoría';
+    aplicar();
+  }
+  function aplicar(){
+    const q=$('q').value.trim().toLowerCase();let vis=0;
+    document.querySelectorAll('.card').forEach(c=>{
+      const ok=(filtro==='todos'||c.dataset.linea===filtro)&&(!q||c.dataset.busca.includes(q));
+      c.hidden=!ok;if(ok)vis++;
+    });
+    document.querySelectorAll('section[data-linea]').forEach(s=>{
+      s.hidden=!(filtro==='todos'||s.dataset.linea===filtro)||!s.querySelector('.card:not([hidden])');
+    });
+    $('sinres').hidden=vis>0;
+  }
+  function mostrar(){ $('acceso').hidden=true;$('panel').hidden=false;$('salir').hidden=false;pintar();$('contenido').focus(); }
+  async function entrar(pw,guardar){
+    try{
+      datos=await abrir(pw);
+      if(guardar){try{localStorage.setItem(LLAVE,pw)}catch(e){}}
+      mostrar();return true;
+    }catch(e){return false;}
+  }
+  $('acceso').addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    const err=$('error');err.textContent='';
+    if(Date.now()<bloqueo){err.textContent='Demasiados intentos. Espera unos segundos.';return;}
+    $('entrar').disabled=true;$('entrar').textContent='Abriendo…';
+    const ok=await entrar($('clave').value,$('recordar').checked);
+    $('entrar').disabled=false;$('entrar').textContent='Entrar';
+    if(!ok){fallos++;if(fallos>=5){bloqueo=Date.now()+30000;fallos=0;}
+      err.textContent='Contraseña incorrecta.';$('clave').select();}
+  });
+  document.querySelectorAll('.filtros button').forEach(b=>b.addEventListener('click',()=>{
+    filtro=b.dataset.f;document.querySelectorAll('.filtros button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));aplicar();
+  }));
+  $('q').addEventListener('input',aplicar);
+  $('salir').addEventListener('click',()=>{
+    try{localStorage.removeItem(LLAVE)}catch(e){}
+    datos=null;$('panel').hidden=true;$('salir').hidden=true;$('acceso').hidden=false;$('clave').value='';$('clave').focus();
+  });
+  let guardada=null;try{guardada=localStorage.getItem(LLAVE)}catch(e){}
+  if(guardada){entrar(guardada,false).then(ok=>{if(!ok){try{localStorage.removeItem(LLAVE)}catch(e){}}});}
+})();
+</script>
+</body>
+</html>
