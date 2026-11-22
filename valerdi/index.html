@@ -572,7 +572,7 @@ $('btnImport').addEventListener('click',async()=>{
 
 /* ===== acceso ===== */
 if(!window.firebase){$('gMsg').textContent='No se pudo cargar el servicio de acceso. Revisa tu conexión y recarga.';return;}
-firebase.initializeApp({"apiKey":"AIzaSyBDGTPF0zIokqDH7VKj6oYASmVRCL3Gt7M","authDomain":"grupo-alaris-obra.firebaseapp.com","projectId":"grupo-alaris-obra","storageBucket":"grupo-alaris-obra.firebasestorage.app","messagingSenderId":"439876810110","appId":"1:439876810110:web:481b62561a4ef861fdef2f"});
+firebase.initializeApp({"apiKey":"AIzaSyCOUfL_ki92-OrbZ-M9PoGM3IcFXmTGZvM","authDomain":"grupo-alaris-tableros.firebaseapp.com","projectId":"grupo-alaris-tableros","storageBucket":"grupo-alaris-tableros.firebasestorage.app","messagingSenderId":"765715396603","appId":"1:765715396603:web:a632bf53b1d21df41a7d5e"});
 const auth=firebase.auth(),db=firebase.firestore();S.db=db;
 let registrando=false,unsubs=[];
 const errTxt=e=>({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'No existe una cuenta con ese correo. Usa "Crear cuenta".','auth/email-already-in-use':'Ese correo ya tiene cuenta: usa "Entrar".','auth/weak-password':'La contraseña debe tener al menos 6 caracteres.','auth/invalid-email':'El correo no es válido.','auth/popup-closed-by-user':'Se cerró la ventana de Google antes de terminar.','auth/unauthorized-domain':'Este dominio no está autorizado en Firebase.'}[e&&e.code]||'No se pudo completar. Intenta de nuevo.');
