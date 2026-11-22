@@ -142,11 +142,13 @@ textarea{min-height:70px}
   <button type="button" data-v="usuarios" id="tabUsuarios" hidden>Usuarios</button>
 </nav>
 
+<div id="antAlerta" class="note" role="alert" hidden style="margin-top:16px;border-left-color:var(--red-text);color:var(--ink)"></div>
 <!-- TABLERO -->
 <section data-view="tablero" aria-labelledby="tTit" style="padding-top:20px">
   <h1 id="tTit" style="font-size:1.6rem;margin-bottom:4px">Tablero de obra</h1>
   <p class="sub">Locales del 1er nivel · Programa del 9 de noviembre al 20 de diciembre de 2026 · <span id="tDias"></span></p>
   <div id="importBox" class="note" hidden>No hay movimientos capturados. <button class="btn btn-sm btn-p" type="button" id="btnImport">Importar el Excel de Mariela (18 movimientos y 4 destajos)</button></div>
+  <div class="panel" id="antPanel" aria-labelledby="antTit"><h2 id="antTit">Anticipo del cliente</h2><p class="sub">$250,000.00 recibidos como anticipo, no se amortiza. Alerta al ejercer el 85 %.</p><div id="antBody"></div></div>
   <h2 style="font-size:1.1rem;margin:8px 0 10px">Cajas</h2>
   <div class="cajas" id="cajas"></div>
   <h2 style="font-size:1.1rem;margin:8px 0 10px">Costo de la obra contra presupuesto</h2>
@@ -181,7 +183,7 @@ textarea{min-height:70px}
     </div>
     <form class="cap" id="fMov" novalidate>
       <div class="f"><label for="mFecha">Fecha</label><input id="mFecha" type="date" required></div>
-      <div class="f"><label for="mCaja">Caja</label><select id="mCaja" required><option value="facturado">Facturado (con factura)</option><option value="sin_factura">Sin factura</option></select></div>
+      <div class="f"><label for="mCaja">Caja</label><select id="mCaja" required><option value="facturado">Cuenta LBI Group · con factura</option><option value="sin_factura">Efectivo · sin factura</option></select></div>
       <div class="f g-only"><label for="mClase">Tipo de gasto</label><select id="mClase"><option value="material">Material</option><option value="mano_obra">Mano de obra</option><option value="subcontrato">Subcontrato</option><option value="general">Gasto general (gasolina, fletes, estacionamiento)</option><option value="ajeno">Préstamo o gasto ajeno a la obra</option></select></div>
       <div class="f full"><label for="mConcepto">Concepto</label><input id="mConcepto" required placeholder="Ej. Material eléctrico, M.O. Mtro. Lupe, transferencia del cliente"></div>
       <div class="f g-only cl-prov"><label for="mProv">Proveedor</label><input id="mProv" list="lProv" autocomplete="off"><datalist id="lProv"></datalist></div>
@@ -210,7 +212,7 @@ textarea{min-height:70px}
     <p class="sub">Todo lo capturado. Puedes editar lo que tú registraste; el administrador puede editar y borrar todo.</p>
     <div class="filtros">
       <select id="fTipo" aria-label="Filtrar por tipo"><option value="">Ingresos y gastos</option><option value="ingreso">Solo ingresos</option><option value="gasto">Solo gastos</option></select>
-      <select id="fCaja" aria-label="Filtrar por caja"><option value="">Las dos cajas</option><option value="facturado">Facturado</option><option value="sin_factura">Sin factura</option></select>
+      <select id="fCaja" aria-label="Filtrar por caja"><option value="">Las dos cajas</option><option value="facturado">Cuenta LBI Group</option><option value="sin_factura">Efectivo</option></select>
       <select id="fClase" aria-label="Filtrar por tipo de gasto"><option value="">Todos los tipos de gasto</option><option value="material">Material</option><option value="mano_obra">Mano de obra</option><option value="subcontrato">Subcontrato</option><option value="general">Gasto general</option><option value="ajeno">Préstamo o ajeno</option></select>
       <input id="fTxt" type="search" placeholder="Buscar concepto, proveedor o trabajador" aria-label="Buscar">
     </div>
@@ -284,20 +286,22 @@ const PARTIDAS=[
  ['Ventanería',28838.86,22797.51],['Limpieza',6119.78,4837.73]];
 const VENTA=640485.51, CDIR=506313.11;
 const VARIAS='Varias partidas';
+/* Anticipo del cliente: $250,000 sin amortizar. $150,000 a la cuenta de LBI Group (Grupo Alaris) para lo facturado y $100,000 en efectivo para lo que no lleva factura */
+const ANTICIPO={facturado:150000,sin_factura:100000}, ANT_TOTAL=250000;
 const CLASES={material:'Material',mano_obra:'Mano de obra',subcontrato:'Subcontrato',general:'Gasto general',ajeno:'Préstamo o ajeno'};
-const CAJAS={facturado:'Facturado',sin_factura:'Sin factura'};
+const CAJAS={facturado:'Cuenta LBI Group (facturado)',sin_factura:'Efectivo (sin factura)'};
 const FEST={pendiente:'Pendiente',recibida:'Recibida',cuadrada:'Cuadrada'};
 const ROLES={pendiente:'Pendiente',consulta:'Consulta',captura:'Captura',admin:'Administrador'};
 /* Excel de control de Mariela (Ingresos_Egresos_remodelación_Valerdi.xlsx), importación única */
 const SEED_MOV=[
- ['ingreso','2026-11-06','facturado','','Transferencia a LBI Group',150000,'LBI Group'],
+ ['ingreso','2026-11-06','facturado','','Anticipo · transferencia a LBI Group',150000,'Sra. Valerdi'],
  ['gasto','2026-11-09','facturado','material','Materiales Brinsa',17941,'Brinsa','','','','pendiente','No llegó factura de Brinsa a contacto@grupoalaris.mx (revisado 21/11/2026)'],
  ['gasto','2026-11-09','facturado','material','Materiales Colombres (block macizo y cemento)',6506,'Materiales Colombres','Albañilería','','T41593','cuadrada','CFDI T41593 del 12/11/2026, UUID 46C8A336-AB97-4E4B-A0CD-890AA9C41ABB'],
  ['gasto','2026-11-10','facturado','material','Piso cerámico 60x60 (60 cajas)',23500,'POLAD · Pamela Denisse López Acosta','Acabados','','2026114','recibida','La factura 2026114 (UUID AC48A597-22E2-4C74-B3BC-F772954350A5) es por $23,950.00 y el Excel dice $23,500.00: diferencia de $450.00 por aclarar'],
  ['gasto','2026-11-10','facturado','general','Gasolina',1017.46,'Gasolinera Aries','','','612950','cuadrada','CFDI 612950 del 12/11/2026, UUID 5815a218-6da0-4654-8c98-b738b8bcb637'],
  ['gasto','2026-11-11','facturado','material','Material eléctrico',19819.68,'Distribuidora Tamex','Instalación eléctrica','','4133634','cuadrada','CFDI 4133634 del 11/11/2026, UUID 58db05bb-5ed8-4129-9591-a74e53adfbf4'],
  ['gasto','2026-11-11','facturado','material','Material hidráulico y sanitario',2428.71,'Tuberías de Oriente','Instalación hidrosanitaria','','FVQ7161','cuadrada','CFDI FVQ7161 del 11/11/2026, UUID 2607F93D-BD6D-4979-87D6-200A4BB95C61'],
- ['ingreso','2026-11-06','sin_factura','','Transferencia a LBI Group',100000,'LBI Group'],
+ ['ingreso','2026-11-06','sin_factura','','Anticipo en efectivo',100000,'Sra. Valerdi'],
  ['gasto','2026-11-09','sin_factura','ajeno','Préstamo para San Rafael (comac)',5000,''],
  ['gasto','2026-11-09','sin_factura','material','Materiales Brinsa',5850,'Brinsa'],
  ['gasto','2026-11-09','sin_factura','material','Materiales Colombres',3289,'Colombres'],
@@ -372,7 +376,7 @@ $('fMov').addEventListener('submit',async ev=>{
     if(S.editId){ d.editado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});
       await S.db.collection('valerdi_mov').doc(S.editId).update(d); await bit('editó',d); toast('Cambios guardados');}
     else{ d.creado=Object.assign(yo(),{en:firebase.firestore.FieldValue.serverTimestamp()});
-      await S.db.collection('valerdi_mov').add(d); await bit('registró',d); toast('Movimiento guardado');}
+      await S.db.collection('valerdi_mov').add(d); await bit('registró',d); const A=antEstado(calc()); toast(A.p>=ALERTA?'Guardado · Anticipo al '+pct(A.p):'Movimiento guardado');}
     resetForm();
   }catch(e){toast('No se pudo guardar. Revisa tu conexión o tus permisos.');}
   $('mGuardar').disabled=false;
@@ -429,6 +433,7 @@ function calc(){
 function render(){
   if(!S.perfil)return;
   const C=calc();
+  alertaAnticipo(C);
   const v=S.view;
   if(v==='tablero')renderTablero(C);
   if(v==='movs')renderMovs();
@@ -449,9 +454,10 @@ function estado(cd,real){
 function renderTablero(C){
   const dias=Math.round((new Date(FIN+'T12:00:00')-new Date(hoyISO()+'T12:00:00'))/864e5);
   $('tDias').textContent=dias>=0?('faltan '+dias+' días para la entrega'):('entrega vencida hace '+(-dias)+' días');
+  renderAnticipo(C);
   $('importBox').hidden=!(esAdmin()&&S.movs.length===0&&S.dest.length===0);
   const cj=$('cajas');cj.replaceChildren();
-  Object.entries(CAJAS).forEach(([k,lab])=>{const c=C.cajas[k];const b=el('div','caja');b.append(el('h3',null,'Caja '+lab.toLowerCase()));
+  Object.entries(CAJAS).forEach(([k,lab])=>{const c=C.cajas[k];const b=el('div','caja');b.append(el('h3',null,lab));
     const dl=el('dl');[['Ingresos',c.ing],['Gastos',c.gas]].forEach(([a,b2])=>{dl.append(el('dt',null,a),el('dd',null,$$(b2)));});
     const s=c.ing-c.gas;const dt=el('dt','saldo','Saldo');const dd=el('dd','saldo'+(s<0?' neg':''),$$(s));dl.append(dt,dd);b.append(dl);cj.append(b);});
   const tot=Object.values(C.cajas).reduce((a,c)=>a+c.ing-c.gas,0);
@@ -485,6 +491,27 @@ function renderTablero(C){
   if(!aj.length){const tr=el('tr');const td=el('td','e-muted','Sin registros');td.colSpan=4;tr.append(td);ab.append(tr);}
   let at=0;aj.forEach(m=>{at+=m.monto;const tr=el('tr');tr.append(el('td',null,fdate(m.fecha)),el('td',null,m.concepto),el('td',null,CAJAS[m.caja]),el('td','n',$$(m.monto)));ab.append(tr);});
   if(aj.length){const tr=el('tr','tot');tr.append(el('td',null,'Total'),el('td'),el('td'),el('td','n',$$(at)));ab.append(tr);}
+}
+function antEstado(C){
+  const g={facturado:C.cajas.facturado.gas,sin_factura:C.cajas.sin_factura.gas};const tot=g.facturado+g.sin_factura;
+  const p=tot/ANT_TOTAL;return {g,tot,p,est:p>1?['Anticipo rebasado','e-bad']:(p>=ALERTA?['Por agotarse','e-warn']:['Con anticipo disponible','e-ok'])};
+}
+function renderAnticipo(C){
+  const A=antEstado(C);const b=$('antBody');b.replaceChildren();
+  const t=el('table');const th=el('thead');const hr=el('tr');['Origen','Anticipo','Gastado','Disponible','% ejercido','Estado'].forEach((h,i)=>{const x=el('th',i&&i<4?'n':null,h);x.scope='col';hr.append(x);});th.append(hr);t.append(th);
+  const tb=el('tbody');
+  const fila=(lab,ant,gas)=>{const tr=el('tr');tr.append(el('td',null,lab),el('td','n',$$(ant)),el('td','n',$$(gas)));const d=ant-gas;tr.append(el('td','n'+(d<0?' neg':''),$$(d)));
+    const p=ant?gas/ant:0;const tdp=el('td');tdp.append(el('span',null,pct(p)));const bar=el('div','bar');const i=el('i',p>1?'over':null);i.style.width=Math.min(100,p*100)+'%';bar.append(i);tdp.append(bar);tr.append(tdp);
+    const e=p>1?['Rebasado','e-bad']:(p>=ALERTA?['Por agotarse','e-warn']:['Disponible','e-ok']);const td=el('td');td.append(el('span','estado '+e[1],e[0]));tr.append(td);return tr;};
+  tb.append(fila('Cuenta LBI Group (Grupo Alaris) · facturado',ANTICIPO.facturado,A.g.facturado),fila('Efectivo · sin factura',ANTICIPO.sin_factura,A.g.sin_factura));
+  const tr=fila('Total del anticipo',ANT_TOTAL,A.tot);tr.className='tot';tb.append(tr);t.append(tb);
+  const w=el('div','tablewrap');w.append(t);b.append(w);
+}
+function alertaAnticipo(C){
+  const A=antEstado(C);const x=$('antAlerta');
+  const partes=[];Object.keys(ANTICIPO).forEach(k=>{const p=A.g[k]/ANTICIPO[k];if(p>=ALERTA)partes.push(CAJAS[k]+' al '+pct(p));});
+  if(A.p>=ALERTA||partes.length){x.hidden=false;x.textContent=(A.p>1?'⚠ Se rebasó el anticipo de $250,000: se ha gastado '+$$(A.tot)+'. ':'⚠ El anticipo de $250,000 va al '+pct(A.p)+' ('+$$(A.tot)+' gastado, quedan '+$$(ANT_TOTAL-A.tot)+'). ')+(partes.length?'Revisar: '+partes.join(' · ')+'. ':'')+'Conviene gestionar el siguiente pago del cliente.';}
+  else x.hidden=true;
 }
 function filtrados(){
   const t=$('fTipo').value,c=$('fCaja').value,cl=$('fClase').value,q=$('fTxt').value.trim().toLowerCase();
